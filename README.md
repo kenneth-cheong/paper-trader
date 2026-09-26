@@ -19,7 +19,7 @@ Practice trading Singapore (SGX) and US stocks with virtual cash at real market 
 - **Net profit/loss** = cash + value of holdings − starting cash. It's split into realized (closed trades) and unrealized (open positions).
 - **Short selling:** selling more than you hold opens a short. Like a margin account, each short sets aside 150% of its sale value from your buying power until you buy it back ("cover").
 - No fees and whole shares only. Orders fill at the latest fetched price, which is the last close when the market is shut.
-- **Your portfolio and rules live in your browser** (localStorage). Use *Settings → Export* to back them up or move them to another device.
+- **Your portfolio and rules** are saved to your account when accounts are on (see *Accounts* below); otherwise they live in your browser, and *Settings → Export* backs them up or moves them to another device.
 
 ### Auto-trading rules
 
@@ -50,6 +50,21 @@ The page reloads everything every 5 minutes. Prices can be 20–30 minutes old, 
 5. **Actions → Update prices, AI picks and AI fund → Run workflow.** When it finishes, the site is at `https://<your-username>.github.io/paper-trader/`.
 
 For the **AI strategist** and the **Refresh now** button on AI picks, add your API key in the app under *Settings*. It is stored only in that browser and sent straight to Anthropic.
+
+### Accounts (invite-only sign-in)
+
+With accounts on, people must sign in with Google or with an email and password, and only emails you've invited can get in. Each person's portfolio, rules and trades are saved to their account, so they follow them across devices. Until `config.js` is filled in, the app runs without accounts and keeps the portfolio in the browser.
+
+1. Create a free project at [supabase.com](https://supabase.com). A Singapore region is closest.
+2. **SQL Editor → New query:** paste `supabase/setup.sql`, change `you@example.com` on the last line to the address you'll sign in with, and press **Run**. This creates the invite list, with you as admin, plus the portfolio table, locked so each person can reach only their own row.
+3. **Authentication → Hooks → Before User Created:** turn it on and choose the Postgres function `public.hook_before_user_created`. Uninvited emails then can't create an account at all. Even without this step, uninvited users get no access to data; they just see a "Not invited yet" screen.
+4. **Authentication → URL Configuration:** set *Site URL* to `https://<your-username>.github.io/paper-trader/` and add the same address under *Redirect URLs*.
+5. **Google sign-in:** in [Google Cloud Console](https://console.cloud.google.com/apis/credentials), go to *Create credentials → OAuth client ID → Web application*. Under *Authorized redirect URIs*, add `https://<your-project>.supabase.co/auth/v1/callback`. Then, in Supabase, open **Authentication → Sign In / Providers → Google**, turn it on, and paste the client ID and secret.
+6. **Project Settings → API Keys:** copy the project URL and the *publishable* (anon) key into `config.js` and push. Both are meant to be public; the database's row-level security is what protects the data.
+
+To invite someone, sign in and press **Invites** at the top. No email is sent, so tell them to sign up with that address. Password sign-ups get a confirmation email from Supabase; its built-in email service only sends a few per hour, which is fine for a small group.
+
+Note that the site's static files are public, including the shared prices, AI picks and AI fund. Signing in protects each person's own portfolio and the app screens.
 
 ### Starting, stopping or replacing the AI fund
 
@@ -100,6 +115,8 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `fund.js` | The AI fund: budget limit, order execution, protections, decision schedule. |
 | `ai.js` | Every Claude call: the Haiku news digest, then picks, strategies and fund decisions, each answered through a validated "submit" tool. |
 | `markets.js` | Exchange trading hours. |
+| `auth.js`, `login.js`, `config.js` | Sign-in, invites and saving portfolios to Supabase. |
+| `supabase/setup.sql` | Database tables, access rules and the invite-only sign-up check. |
 | `app.js`, `index.html`, `styles.css` | The web app. |
 | `scripts/` | The scheduled jobs: prices, AI picks, AI fund. |
 

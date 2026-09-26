@@ -15,6 +15,12 @@
       <h1>Paper Trader</h1>
     </div>
     <div class="top-actions">
+      <span id="user-chip" class="user-chip" hidden>
+        <span id="user-email" class="small"></span>
+        <span id="sync-status" class="small muted"></span>
+        <button id="open-invites" class="ghost small-btn" hidden>Invites</button>
+        <button id="sign-out" class="ghost small-btn">Sign out</button>
+      </span>
       <span id="updated" class="muted small"></span>
       <button id="refresh" class="ghost" title="Reload prices">Refresh</button>
       <button id="open-settings" class="ghost">Settings</button>
@@ -213,6 +219,31 @@
       </div>
     </form>
   </dialog>
+
+  <dialog id="invites-dialog">
+    <form id="invites-form">
+      <h3>Invites</h3>
+      <p class="small">Only these email addresses can create an account and use Paper Trader. Each person gets their own portfolio.</p>
+      <div class="qty-row">
+        <input id="invite-email" type="email" placeholder="friend@example.com" required aria-label="Email to invite">
+        <button type="submit" class="primary">Invite</button>
+      </div>
+      <p class="error" id="invites-error" role="alert"></p>
+      <ul id="invites-list" class="invites-list"></ul>
+      <p class="muted small">They sign up with that address (Google or email and password). There's no email sent, so let them know.</p>
+      <div class="dialog-actions"><button type="button" class="ghost" id="invites-close">Done</button></div>
+    </form>
+  </dialog>
+
+  <div id="auth" class="auth" hidden>
+    <div class="auth-card">
+      <div class="brand">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 12l4-4 3 3 6-7" /></svg>
+        <h1>Paper Trader</h1>
+      </div>
+      <div id="auth-body"></div>
+    </div>
+  </div>
 
   <div id="tooltip" class="tooltip" hidden></div>
   <script type="module" src="app.js"></script>

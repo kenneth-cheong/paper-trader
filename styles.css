@@ -218,6 +218,23 @@ select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border
 .chart .hit { fill: transparent; cursor: crosshair; }
 .tooltip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 13px; box-shadow: 0 4px 14px rgb(0 0 0 / .12); }
 
+/* accounts */
+.user-chip { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+body.locked { overflow: hidden; }
+.auth { position: fixed; inset: 0; z-index: 20; background: var(--bg); display: flex; align-items: flex-start; justify-content: center; padding: 10vh 16px 16px; overflow-y: auto; }
+.auth-card { width: min(380px, 100%); background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 24px; }
+.auth-card .brand { margin-bottom: 16px; }
+.auth-card h2 { font-size: 18px; margin: 0 0 4px; }
+.auth-card form { display: grid; gap: 10px; margin-top: 8px; }
+.auth-card .links { margin-top: 12px; }
+.auth-card a { color: var(--accent); }
+.wide-btn { width: 100%; padding: 9px; }
+.google { width: 100%; display: flex; gap: 10px; align-items: center; justify-content: center; padding: 9px; margin-top: 12px; }
+.or { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; margin: 14px 0 4px; }
+.or::before, .or::after { content: ""; flex: 1; border-top: 1px solid var(--border); }
+.invites-list { list-style: none; padding: 0; margin: 8px 0; max-height: 280px; overflow-y: auto; }
+.invites-list li { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
+
 @media (max-width: 560px) {
   .pick-cols { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }

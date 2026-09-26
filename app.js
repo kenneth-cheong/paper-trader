@@ -2,6 +2,8 @@ import { newPortfolio, applyTrade, summarize, validatePortfolio, buyingPower, DE
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest } from './rules.js';
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
 import { MARKETS, isOpen, marketForCurrency } from './markets.js';
+import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio } from './auth.js';
+import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
 
 const KEYS = { portfolio: 'paper-trader:portfolio', ai: 'paper-trader:ai', picks: 'paper-trader:picks', strategist: 'paper-trader:strategist' };
 const PRICE_REFRESH_MS = 5 * 60 * 1000;
@@ -10,7 +12,9 @@ const $ = (id) => document.getElementById(id);
 const state = {
   prices: { quotes: {}, fx: {} },
   sample: false,
-  portfolio: loadPortfolio(),
+  portfolio: newPortfolio(),
+  user: null, // { id, email, isAdmin } when signed in (accounts on)
+  cloud: { updatedAt: null, timer: null, saving: false, failed: false },
   ai: readStore(KEYS.ai) ?? { key: '', model: TIERS.advanced }, // model = the one that makes decisions
   sitePicks: null,
   localPicks: readStore(KEYS.picks),
@@ -37,9 +41,12 @@ function writeStore(key, value) {
   }
 }
 
+// Each signed-in user gets their own local copy; without accounts there's one per browser.
+const portfolioKey = () => (state.user ? `${KEYS.portfolio}:${state.user.id}` : KEYS.portfolio);
+
 function loadPortfolio() {
   try {
-    const saved = readStore(KEYS.portfolio);
+    const saved = readStore(portfolioKey());
     if (saved) return validatePortfolio(saved);
   } catch (err) {
     console.warn('Could not read saved portfolio', err);
@@ -48,9 +55,110 @@ function loadPortfolio() {
 }
 
 function savePortfolio() {
-  if (!writeStore(KEYS.portfolio, state.portfolio)) {
+  if (!writeStore(portfolioKey(), state.portfolio) && !state.user) {
     showBanner('This browser is not letting the page save, so trades will be lost when you close it. Export your portfolio to keep it.');
   }
+  if (state.user) scheduleCloudSave();
+}
+
+// ---------- account sync ----------
+
+// Saves to the user's account a moment after the last change, retrying if it fails.
+function scheduleCloudSave(delay = 1000) {
+  clearTimeout(state.cloud.timer);
+  state.cloud.timer = setTimeout(async () => {
+    state.cloud.timer = null;
+    if (!state.user) return;
+    state.cloud.saving = true;
+    renderSync();
+    try {
+      state.cloud.updatedAt = await saveCloudPortfolio(state.user.id, state.portfolio);
+      state.cloud.failed = false;
+    } catch (err) {
+      console.warn('Saving to account failed', err);
+      state.cloud.failed = true;
+      scheduleCloudSave(30000);
+    } finally {
+      state.cloud.saving = false;
+      renderSync();
+    }
+  }, delay);
+}
+
+function renderSync() {
+  $('sync-status').textContent = state.cloud.saving ? 'Saving…' : state.cloud.failed ? 'Not saved, retrying' : 'Saved';
+  $('sync-status').className = `small ${state.cloud.failed ? 'down' : 'muted'}`;
+}
+
+// Loads the user's saved portfolio. On their first sign-in, this browser's existing portfolio
+// (from before accounts) is carried over, so nothing is lost.
+async function loadAccountPortfolio() {
+  const row = await loadCloudPortfolio(state.user.id);
+  if (row) {
+    state.portfolio = validatePortfolio(row.data);
+    state.cloud.updatedAt = row.updated_at;
+  } else {
+    let local = null;
+    try { local = validatePortfolio(readStore(KEYS.portfolio)); } catch { /* nothing usable */ }
+    state.portfolio = local ?? newPortfolio();
+    state.cloud.updatedAt = await saveCloudPortfolio(state.user.id, state.portfolio);
+  }
+  writeStore(portfolioKey(), state.portfolio);
+}
+
+// Picks up changes made on another device when this tab comes back into view.
+async function refreshFromAccount() {
+  if (!state.user || state.cloud.timer || state.cloud.saving) return;
+  try {
+    const row = await loadCloudPortfolio(state.user.id);
+    if (row && row.updated_at !== state.cloud.updatedAt && Date.parse(row.updated_at) > Date.parse(state.cloud.updatedAt ?? 0)) {
+      state.portfolio = validatePortfolio(row.data);
+      state.cloud.updatedAt = row.updated_at;
+      writeStore(portfolioKey(), state.portfolio);
+      render();
+    }
+  } catch (err) {
+    console.warn('Could not check account for changes', err);
+  }
+}
+
+async function handleAuth(event, session) {
+  if (event === 'PASSWORD_RECOVERY') { showAuth('newpass'); return; }
+  if (!session) {
+    state.user = null;
+    state.portfolio = newPortfolio();
+    $('user-chip').hidden = true;
+    showAuth('signin');
+    return;
+  }
+  if (state.user?.id === session.user.id) return; // token refresh or a repeat event
+  const email = session.user.email ?? '';
+  try {
+    const invite = await myInvite(email);
+    if (!invite) { showAuth('notinvited', email); return; }
+    state.user = { id: session.user.id, email, isAdmin: invite.is_admin };
+    await loadAccountPortfolio();
+  } catch (err) {
+    state.user = null;
+    showAuth('error', err.message);
+    return;
+  }
+  $('user-email').textContent = email;
+  $('open-invites').hidden = !state.user.isAdmin;
+  $('user-chip').hidden = false;
+  renderSync();
+  hideAuth();
+  startApp();
+}
+
+async function doSignOut() {
+  clearTimeout(state.cloud.timer);
+  if (state.cloud.timer || state.cloud.failed) {
+    try { await saveCloudPortfolio(state.user.id, state.portfolio); } catch { /* best effort */ }
+  }
+  state.cloud.timer = null;
+  try { localStorage.removeItem(portfolioKey()); } catch { /* ignore */ }
+  await signOut(); // the sign-out event shows the sign-in screen
 }
 
 // ---------- data loading ----------
@@ -86,8 +194,9 @@ const quote = (symbol) => state.prices.quotes?.[symbol];
 
 // Runs auto-trading rules over any prices they haven't seen. Re-reads storage first so two open tabs don't double-trade.
 function runAutomation() {
+  if (authEnabled && !state.user) return; // signed out: nothing to trade for
   try {
-    const saved = readStore(KEYS.portfolio);
+    const saved = readStore(portfolioKey());
     if (saved) state.portfolio = validatePortfolio(saved);
   } catch { /* keep the in-memory copy */ }
   if (!state.portfolio.rules.some((r) => r.enabled)) return;
@@ -133,9 +242,9 @@ const fmtDateTime = (t) => new Date(t).toLocaleString(undefined, { dateStyle: 'm
 const fmtDate = (t) => new Date(t).toLocaleDateString(undefined, { dateStyle: 'medium' });
 const domain = (url) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; } };
 const MODEL_NAMES = { 'claude-haiku-4-5': 'Haiku 4.5', 'claude-sonnet-5': 'Sonnet 5', 'claude-opus-5': 'Opus 5' };
-const modelName = (id) => MODEL_NAMES[id] ?? id ?? '';
+const modelName = (id) => { const base = String(id ?? '').replace(/-\d{8}$/, ''); return MODEL_NAMES[base] ?? base; };
 // "Sonnet 5, news by Haiku 4.5"
-const madeBy = (x) => x.newsModel && x.newsModel !== x.model ? `${modelName(x.model)}, news by ${modelName(x.newsModel)}` : modelName(x.model);
+const madeBy = (x) => x.newsModel && modelName(x.newsModel) !== modelName(x.model) ? `${modelName(x.model)}, news by ${modelName(x.newsModel)}` : modelName(x.model);
 const safeUrl = (url) => /^https?:\/\//i.test(url) ? url : '#';
 const shares = (n) => `${n.toLocaleString()} share${n === 1 ? '' : 's'}`;
 
@@ -933,10 +1042,29 @@ $('refresh').addEventListener('click', () => { loadPrices(); loadSideData(); });
 
 // Another tab traded or changed rules: pick up its changes.
 window.addEventListener('storage', (e) => {
-  if (e.key === KEYS.portfolio) { state.portfolio = loadPortfolio(); render(); }
+  if (e.key === portfolioKey()) { state.portfolio = loadPortfolio(); render(); }
 });
 
-render();
-loadPrices();
-loadSideData();
-setInterval(() => { loadPrices(); loadSideData(); }, PRICE_REFRESH_MS);
+$('sign-out').addEventListener('click', doSignOut);
+$('open-invites').addEventListener('click', () => openInvites(state.user?.email));
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') refreshFromAccount(); });
+
+let started = false;
+function startApp() {
+  render();
+  if (started) { loadPrices(); return; }
+  started = true;
+  loadPrices();
+  loadSideData();
+  setInterval(() => { loadPrices(); loadSideData(); }, PRICE_REFRESH_MS);
+}
+
+if (authEnabled) {
+  wireAuthScreen();
+  wireInvites(() => state.user?.email);
+  showAuth('loading');
+  onAuthChange(handleAuth).catch((err) => showAuth('error', `Could not load sign-in: ${err.message}`));
+} else {
+  state.portfolio = loadPortfolio();
+  startApp();
+}
