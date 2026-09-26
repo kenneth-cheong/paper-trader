@@ -2,7 +2,7 @@ import { newPortfolio, applyTrade, summarize, validatePortfolio, buyingPower, DE
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest } from './rules.js';
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
 import { MARKETS, isOpen, marketForCurrency } from './markets.js';
-import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio } from './auth.js';
+import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus } from './auth.js';
 import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
 
 const KEYS = { portfolio: 'paper-trader:portfolio', ai: 'paper-trader:ai', picks: 'paper-trader:picks', strategist: 'paper-trader:strategist' };
@@ -20,6 +20,7 @@ const state = {
   localPicks: readStore(KEYS.picks),
   strategist: readStore(KEYS.strategist),
   fund: undefined, // undefined = not loaded yet, null = no fund
+  fundCmd: null, // the admin's latest start/stop request: { id, action, createdAt, phase, message }
   marketFilter: 'all',
   trade: null, // { symbol, side }
   editingRule: null, // rule id, or null for a new rule
@@ -339,7 +340,7 @@ function render() {
   if (view === 'markets') renderMarkets();
   if (view === 'auto') renderRules();
   if (view === 'strategist') renderStrategist();
-  if (view === 'fund') renderFund();
+  if (view === 'fund') { renderFundControls(); renderFund(); }
   if (view === 'history') renderTrades();
   if ($('trade-dialog').open) updateTradeDialog();
 
@@ -834,6 +835,115 @@ function repoActionsUrl() {
   return m && repo ? `https://github.com/${m[1]}/${repo}/actions/workflows/prices.yml` : null;
 }
 
+// Start/stop buttons for admins. Rebuilt only when something they show changes, so typing isn't lost
+// when prices refresh.
+let fundControlsKey = null;
+function renderFundControls() {
+  const el = $('fund-controls');
+  const f = state.fund;
+  const running = f && !f.stoppedAt;
+  const cmd = state.fundCmd;
+  const key = JSON.stringify([authEnabled, state.user?.isAdmin, f === undefined, running, cmd?.phase, cmd?.message]);
+  if (key === fundControlsKey) return;
+  fundControlsKey = key;
+  el.hidden = !authEnabled || f === undefined;
+  if (el.hidden) return;
+  if (!state.user?.isAdmin) {
+    el.innerHTML = '<p class="muted small">Only admins can start or stop the AI fund.</p>';
+    return;
+  }
+  const busy = cmd && ['sending', 'sent', 'accepted'].includes(cmd.phase);
+  const form = `<form id="fund-start-form" class="form-grid fund-form">
+      <label>Amount <input id="fund-amount" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="e.g. 10000"></label>
+      <label>Currency
+        <select id="fund-currency"><option value="USD">USD · trades US stocks</option><option value="SGD">SGD · trades SGX stocks</option></select>
+      </label>
+      <label>Decisions per trading day
+        <select id="fund-decisions"><option value="1">1 (cheapest)</option><option value="2">2</option><option value="4">4</option></select>
+      </label>
+      <div class="row"><button type="submit" class="primary" ${busy ? 'disabled' : ''}>${running ? 'Start new fund' : 'Start AI fund'}</button></div>
+    </form>`;
+  el.innerHTML = `
+    <div class="panel-head"><h2>${running ? 'Control the AI fund' : 'Start an AI fund'}</h2></div>
+    ${running
+      ? `<div class="row">
+          <button type="button" class="danger" data-fund-stop ${busy ? 'disabled' : ''}>Stop fund and close positions</button>
+        </div>
+        <details class="fund-new"><summary>Start a new fund instead</summary>
+          <p class="small">This closes the current fund's record and starts fresh with the new amount.</p>${form}</details>`
+      : form}
+    ${cmd?.message ? `<p class="small ${cmd.phase === 'failed' ? 'down' : 'muted'}" role="status">${esc(cmd.message)}</p>` : ''}`;
+}
+
+async function submitFundCommand(action, fields = {}) {
+  const what = action === 'stop' ? 'Stopping the fund' : 'Starting the fund';
+  state.fundCmd = { phase: 'sending', action, message: `${what}: sending the request…` };
+  render();
+  try {
+    const row = await sendFundCommand({ action, ...fields });
+    state.fundCmd = { id: row.id, action, createdAt: row.created_at, phase: 'sent', message: `${what}: asking GitHub to run it…` };
+  } catch (err) {
+    state.fundCmd = { phase: 'failed', action, message: err.message };
+  }
+  render();
+  if (state.fundCmd.id) watchFundCommand(state.fundCmd);
+}
+
+// Follows a request until GitHub accepts it and the fund shows the change (usually 3-5 minutes).
+async function watchFundCommand(cmd) {
+  const what = cmd.action === 'stop' ? 'Stopping the fund' : 'Starting the fund';
+  const started = Date.now();
+  while (state.fundCmd === cmd && Date.now() - started < 20 * 60 * 1000) {
+    await new Promise((r) => setTimeout(r, cmd.phase === 'sent' ? 4000 : 20000));
+    try {
+      if (cmd.phase === 'sent') {
+        const st = await fundCommandStatus(cmd.id);
+        if (st.state === 'failed') {
+          cmd.phase = 'failed';
+          cmd.message = `GitHub didn't accept the request (${st.status ?? 'no response'}${st.detail ? `: ${st.detail}` : ''}). Check the GitHub token in Supabase Vault.`;
+        } else if (st.state === 'accepted') {
+          cmd.phase = 'accepted';
+          cmd.message = `${what}: GitHub is running it now. This page updates by itself in about 3–5 minutes.`;
+        }
+      } else {
+        await loadSideData();
+        const f = state.fund;
+        const since = Date.parse(cmd.createdAt);
+        const done = cmd.action === 'stop' ? f?.stoppedAt && Date.parse(f.stoppedAt) >= since : f && Date.parse(f.startedAt) >= since;
+        if (done) {
+          cmd.phase = 'done';
+          cmd.message = cmd.action === 'stop' ? 'The fund is stopped and its positions are closed.' : 'The fund is running. Its first decision comes 15 minutes after its market opens.';
+        }
+      }
+    } catch (err) {
+      console.warn('Checking the fund request failed', err);
+    }
+    if (currentView() === 'fund') render();
+    if (['done', 'failed'].includes(cmd.phase)) return;
+  }
+  if (state.fundCmd === cmd && cmd.phase !== 'done') {
+    cmd.phase = 'failed';
+    cmd.message = 'No change after 20 minutes. Check the latest run on GitHub (Actions tab) for errors.';
+    render();
+  }
+}
+
+document.addEventListener('submit', (e) => {
+  if (e.target.id !== 'fund-start-form') return;
+  e.preventDefault();
+  const amount = Math.round(Number($('fund-amount').value) * 100) / 100;
+  const currency = $('fund-currency').value;
+  const decisionsPerDay = Number($('fund-decisions').value);
+  if (!(amount > 0)) return;
+  const replacing = state.fund && !state.fund.stoppedAt ? ' This replaces the current fund.' : '';
+  if (!confirm(`Start an AI fund with ${money(amount, currency)}, deciding ${decisionsPerDay} time${decisionsPerDay > 1 ? 's' : ''} a trading day?${replacing}`)) return;
+  submitFundCommand('start', { amount, currency, decisionsPerDay });
+});
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('[data-fund-stop]')) return;
+  if (confirm('Stop the AI fund? It sells and covers everything at the latest prices and stops trading.')) submitFundCommand('stop');
+});
+
 function renderFund() {
   const el = $('fund');
   const f = state.fund;
@@ -846,11 +956,11 @@ function renderFund() {
     el.innerHTML = `<section class="panel">
       <h2>AI fund</h2>
       <p>Give Claude an amount and let it trade on its own, aiming for the biggest profit it can make. It runs on GitHub, so it keeps trading while this page is closed.</p>
-      <ol>
+      ${authEnabled ? '' : `<ol>
         <li>Add your Anthropic API key to the GitHub repo as a secret named <code>ANTHROPIC_API_KEY</code> (Settings → Secrets and variables → Actions).</li>
         <li>Open ${runLink}, press <strong>Run workflow</strong>, and fill in <em>Start a NEW AI fund with this amount</em>, its currency (USD trades US stocks, SGD trades SGX stocks) and how many decisions a day.</li>
         <li>Come back here in a few minutes.</li>
-      </ol>
+      </ol>`}
       <p class="small"><strong>Hard limit:</strong> the fund's ledger starts with exactly that amount and nothing is ever added, so any order costing more than its buying power is rejected. Shorts need 150% collateral and are closed automatically at a 40% loss, so the fund can't lose more than its amount.</p>
       <p class="muted small">Cost: each decision is one Claude call with web search, roughly US$0.05–0.15: Claude Haiku 4.5 reads the news and Claude Sonnet 5 decides.</p>
     </section>`;
@@ -906,7 +1016,7 @@ function renderFund() {
     ${f.events.length ? `<section class="panel"><div class="panel-head"><h2>Automatic closes</h2></div><ul class="orders">
       ${f.events.slice().reverse().slice(0, 20).map((e) => `<li>${fmtDateTime(e.time)}: ${esc(e.action)} ${e.shares.toLocaleString()} ${esc(e.symbol)} at ${price(e.price)} <span class="muted small">(${esc(e.why)})</span></li>`).join('')}
     </ul></section>` : ''}
-    <p class="muted small">To stop the fund and close its positions, or to start a new one, use ${runLink} → Run workflow.</p>`;
+    ${authEnabled ? '' : `<p class="muted small">To stop the fund and close its positions, or to start a new one, use ${runLink} → Run workflow.</p>`}`;
   lineChart($('fund-chart'), (f.history ?? []).map(([t, v]) => ({ label: fmtDateTime(t), axis: fmtDate(t), value: v })), { ref: f.budget, refLabel: 'Budget', fmt: (v) => money(v, f.currency) });
 }
 
@@ -1052,6 +1162,7 @@ document.addEventListener('visibilitychange', () => { if (document.visibilitySta
 
 let started = false;
 function startApp() {
+  if (authEnabled) $('foot').textContent = 'Virtual money only; nothing here is financial advice. Prices come from Yahoo Finance via a scheduled job and may be delayed. Your portfolio and rules are saved to your account.';
   render();
   if (started) { loadPrices(); return; }
   started = true;

@@ -69,3 +69,17 @@ export async function saveCloudPortfolio(userId, data) {
   check(await (await client()).from('portfolios').upsert({ user_id: userId, data, updated_at }));
   return updated_at;
 }
+
+// ---------- AI fund control (admins; see supabase/fund-control.sql) ----------
+
+// Asks GitHub (through Supabase) to start or stop the AI fund, or to refresh the AI picks.
+export async function sendFundCommand({ action, amount = null, currency = null, decisionsPerDay = null }) {
+  return check(await (await client()).from('fund_commands')
+    .insert({ action, amount, currency, decisions_per_day: decisionsPerDay })
+    .select('id, action, created_at').single());
+}
+
+// { state: 'pending' | 'accepted' | 'failed', status, detail }
+export async function fundCommandStatus(id) {
+  return check(await (await client()).rpc('fund_command_status', { command_id: id }));
+}

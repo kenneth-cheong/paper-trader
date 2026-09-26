@@ -218,6 +218,11 @@ select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border
 .chart .hit { fill: transparent; cursor: crosshair; }
 .tooltip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 13px; box-shadow: 0 4px 14px rgb(0 0 0 / .12); }
 
+/* AI fund controls */
+.fund-form { grid-template-columns: repeat(3, 1fr) auto; }
+.fund-new { margin-top: 12px; }
+.fund-new summary { cursor: pointer; color: var(--accent); font-size: 14px; }
+
 /* accounts */
 .user-chip { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 body.locked { overflow: hidden; }
@@ -236,6 +241,7 @@ body.locked { overflow: hidden; }
 .invites-list li { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 0; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
 
 @media (max-width: 560px) {
+  .fund-form { grid-template-columns: 1fr; }
   .pick-cols { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
   .form-grid .unit { padding-top: 0; }

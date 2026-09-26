@@ -68,7 +68,16 @@ Note that the site's static files are public, including the shared prices, AI pi
 
 ### Starting, stopping or replacing the AI fund
 
-Go to **Actions → Update prices, AI picks and AI fund → Run workflow** and fill in:
+**From the app (accounts on, admins only):** the AI fund tab has *Start AI fund* and *Stop fund* buttons. They need a one-time setup, because Supabase starts the GitHub workflow for you:
+
+1. In GitHub, go to **Settings → Developer settings → Personal access tokens → Fine-grained tokens → Generate new token**. Choose *Only select repositories → paper-trader*, and under *Repository permissions* set **Actions** to **Read and write**.
+2. In Supabase's **SQL Editor**, run `supabase/fund-control.sql`.
+3. Still in the SQL Editor, store the token in Supabase's encrypted Vault:
+   `select vault.create_secret('github_pat_…your token…', 'github_actions_token');`
+
+The token never reaches the browser. Only admins can send start or stop requests, and the fund appears or changes within about 3–5 minutes.
+
+**From GitHub:** go to **Actions → Update prices, AI picks and AI fund → Run workflow** and fill in:
 
 - *Start a NEW AI fund with this amount*: e.g. `10000`. This replaces any current fund.
 - *New fund's currency*: `USD` (US stocks) or `SGD` (SGX stocks).
@@ -117,6 +126,7 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `markets.js` | Exchange trading hours. |
 | `auth.js`, `login.js`, `config.js` | Sign-in, invites and saving portfolios to Supabase. |
 | `supabase/setup.sql` | Database tables, access rules and the invite-only sign-up check. |
+| `supabase/fund-control.sql` | Lets admins start and stop the AI fund from the app. |
 | `app.js`, `index.html`, `styles.css` | The web app. |
 | `scripts/` | The scheduled jobs: prices, AI picks, AI fund. |
 
