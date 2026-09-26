@@ -1,0 +1,11 @@
+name: Check Supabase setup (temporary)
+on: push
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          U=https://xpbtecmatqfhkoedtazy.supabase.co; K=sb_publishable_-HqKD6o1q8_XNxdxPKZXeg_evI9OMZs
+          echo "== auth settings"; curl -sS "$U/auth/v1/settings" -H "apikey: $K"; echo
+          for t in invites portfolios; do echo "== $t"; curl -sS "$U/rest/v1/$t?select=*&limit=1" -H "apikey: $K" -w " (HTTP %{http_code})"; echo; done
+          echo "== rpc is_invited"; curl -sS -X POST "$U/rest/v1/rpc/is_invited" -H "apikey: $K" -H "Content-Type: application/json" -d '{}' -w " (HTTP %{http_code})"; echo
