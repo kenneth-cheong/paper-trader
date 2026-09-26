@@ -73,7 +73,7 @@ The page reloads everything every 5 minutes. Prices can be 20–30 minutes old, 
 4. Optional: choose the models on the same page's **Variables** tab (see *Which model does what* below).
 5. **Actions → Update prices, AI picks and AI fund → Run workflow.** When it finishes, the site is at `https://<your-username>.github.io/paper-trader/`.
 
-For the **AI strategist** and the **Refresh now** button on AI picks, add your API key in the app under *Settings*. It is stored only in that browser and sent straight to Anthropic.
+For the **AI strategist** and the **Refresh now** button on AI picks, add your API key in the app with the **Settings & API keys** button (top right) → *Anthropic API key*. It is stored only in that browser and sent straight to Anthropic. The same dialog's *Connections* list shows whether each connection (your browser key, the scheduled AI jobs' key, Tiger, your account) is working. Tiger's keys are never typed into the app: the site is public, so they live only in GitHub secrets (below).
 
 ### Accounts (invite-only sign-in)
 

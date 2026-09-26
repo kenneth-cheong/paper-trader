@@ -88,6 +88,15 @@ label input { margin-top: 4px; color: var(--text); }
 .brand { display: flex; gap: 8px; align-items: center; }
 .brand svg { width: 22px; height: 22px; fill: none; stroke: var(--up); stroke-width: 2; }
 .top-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.settings-btn { display: inline-flex; gap: 6px; align-items: center; }
+.settings-btn svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.connections { list-style: none; padding: 0; margin: 0 0 8px; display: grid; gap: 8px; }
+.connections li { border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px; font-size: 14px; }
+.connections .conn-head { display: flex; flex-wrap: wrap; gap: 4px 10px; justify-content: space-between; align-items: baseline; }
+.connections .ok { color: var(--up); font-weight: 600; }
+.connections .off { color: var(--warn-text); font-weight: 600; }
+.connections p { margin: 4px 0 0; }
+.connections code { font-size: 12px; overflow-wrap: anywhere; }
 
 .banner { padding: 10px 16px; background: var(--warn-bg); color: var(--warn-text); font-size: 14px; }
 

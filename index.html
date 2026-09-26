@@ -23,7 +23,10 @@
       </span>
       <span id="updated" class="muted small"></span>
       <button id="refresh" class="ghost" title="Reload prices">Refresh</button>
-      <button id="open-settings" class="ghost">Settings</button>
+      <button id="open-settings" class="ghost settings-btn" title="Settings: API keys, trading fees, starting cash">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+        Settings &amp; API keys
+      </button>
     </div>
   </header>
   <nav class="tabs" role="tablist" id="tabs">
@@ -194,7 +197,10 @@
   <dialog id="settings-dialog">
     <form method="dialog" id="settings-form">
       <h3>Settings</h3>
-      <h4>AI (Claude)</h4>
+      <h4>Connections</h4>
+      <ul class="connections" id="connections"></ul>
+
+      <h4 id="api-key-heading">Anthropic API key (AI)</h4>
       <p class="small">The AI strategist and "Refresh now" on AI picks use your own Anthropic API key, sent straight from this browser to Anthropic.
         It is stored only in this browser. Use a key with a spending limit. Get one at console.anthropic.com.</p>
       <label>Anthropic API key <input id="api-key" type="password" autocomplete="off" placeholder="sk-ant-..."></label>

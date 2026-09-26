@@ -829,7 +829,7 @@ function renderStrategist() {
     $('st-focus').innerHTML = `<option value="all">Whole watchlist</option>${symbolOptions(keep)}`;
     $('st-focus').dataset.count = count;
   }
-  if (!$('st-run').disabled) $('st-status').textContent = state.ai.key ? '' : 'Add your Anthropic API key in Settings first.';
+  if (!$('st-run').disabled) $('st-status').innerHTML = state.ai.key ? '' : 'Needs your Anthropic API key. <button type="button" class="ghost small-btn" data-open-settings>Add API key</button>';
   const a = state.strategist;
   if (!a) { $('strategist').innerHTML = ''; return; }
   a.strategies.forEach((s, i) => { state.backtests[`s${i}`] ??= s.rules.length ? backtest(s.rules, quote(s.symbol), btOptions()) : null; });
@@ -888,11 +888,12 @@ function adoptStrategy(i) {
 
 // ---------- AI fund ----------
 
-function repoActionsUrl() {
+function repoUrl() {
   const m = location.hostname.match(/^([^.]+)\.github\.io$/);
   const repo = location.pathname.split('/').filter(Boolean)[0];
-  return m && repo ? `https://github.com/${m[1]}/${repo}/actions/workflows/prices.yml` : null;
+  return m && repo ? `https://github.com/${m[1]}/${repo}` : null;
 }
+const repoActionsUrl = () => repoUrl() && `${repoUrl()}/actions/workflows/prices.yml`;
 
 // ----- AI fund: admin controls -----
 
@@ -1250,7 +1251,38 @@ function openSettings() {
   $('fee-us-pct').value = c.pct.US; $('fee-us-min').value = c.min.US;
   $('fee-sgx-pct').value = c.pct.SGX; $('fee-sgx-min').value = c.min.SGX;
   showFeeSummary();
+  renderConnections();
   if (!$('settings-dialog').open) $('settings-dialog').showModal();
+}
+
+// What this app connects to and where each one's keys live. Keys that must stay secret (Tiger's
+// private key, the key the scheduled jobs use) are GitHub secrets, never fields on this public page.
+function renderConnections() {
+  const repo = repoUrl();
+  const secretsLink = repo ? `<a href="${repo}/settings/secrets/actions" target="_blank" rel="noopener">GitHub → Settings → Secrets and variables → Actions</a>` : 'the GitHub repo → Settings → Secrets and variables → Actions';
+  const status = (ok, text) => `<span class="${ok ? 'ok' : 'off'}">${esc(text)}</span>`;
+  const row = (name, badge, body) => `<li><div class="conn-head"><strong>${name}</strong>${badge}</div>${body}</li>`;
+  const f = state.fund;
+  const tiger = f?.settings?.broker === 'tiger';
+  const tigerOk = tiger && f.broker?.accountType && !f.broker?.error;
+  const picksAt = state.sitePicks?.createdAt;
+  const rows = [
+    row('Anthropic (AI strategist, "Refresh now" on picks)',
+      status(!!state.ai.key, state.ai.key ? 'Key saved in this browser' : 'No key yet'),
+      `<p class="muted small">${state.ai.key ? 'Change or remove it below.' : '<a href="#api-key-heading" data-focus-key>Add it below</a>.'} Stored only in this browser.</p>`),
+    row('Anthropic (scheduled AI picks and AI fund)',
+      status(!!picksAt, picksAt ? `Working, last picks ${fmtDateTime(picksAt)}` : 'No AI picks yet'),
+      `<p class="muted small">Uses the <code>ANTHROPIC_API_KEY</code> secret in ${secretsLink}.</p>`),
+    row('Tiger Brokers (AI fund orders)',
+      status(tigerOk, tigerOk ? brokerLabel(f) : tiger ? 'Not connected' : 'Not in use (the fund uses the simulator)'),
+      `<p class="muted small">Tiger's keys are not typed in here: anything on this page is public, and Tiger's private key must stay secret.
+        Add them as secrets in ${secretsLink}: <code>TIGEROPEN_TIGER_ID</code>, <code>TIGEROPEN_ACCOUNT</code> (your paper account first),
+        <code>TIGEROPEN_PRIVATE_KEY</code> and <code>TIGEROPEN_LICENSE</code> (<code>TBSG</code>). Then start the AI fund with Tiger as the broker.</p>
+        ${tiger && f.broker?.error ? `<p class="small">${esc(f.broker.error)}</p>` : ''}`),
+  ];
+  if (authEnabled) rows.push(row('Account (Supabase)', status(!!state.user, state.user ? `Signed in as ${state.user.email}` : 'Signed out'),
+    '<p class="muted small">Your portfolio syncs to your account.</p>'));
+  $('connections').innerHTML = rows.join('');
 }
 
 function showFeeSummary() {
@@ -1385,6 +1417,10 @@ $('strategist-form').addEventListener('submit', runStrategist);
 $('picks-refresh').addEventListener('click', refreshPicks);
 
 $('open-settings').addEventListener('click', openSettings);
+document.addEventListener('click', (e) => {
+  if (e.target.closest('[data-open-settings]')) { openSettings(); $('api-key').focus(); }
+  if (e.target.closest('[data-focus-key]')) { e.preventDefault(); $('api-key').focus(); }
+});
 $('api-key').addEventListener('change', saveAiSettings);
 for (const id of ['fee-plan', 'fee-us-pct', 'fee-us-min', 'fee-sgx-pct', 'fee-sgx-min']) $(id).addEventListener('change', saveFeeSettings);
 $('ai-model').addEventListener('change', saveAiSettings);
