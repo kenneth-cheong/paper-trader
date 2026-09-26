@@ -27,7 +27,7 @@ test('Tiger symbols and limit prices follow each exchange', () => {
 
 test('settings: approval and limits can change, the broker only at the start', () => {
   const f = tiger();
-  assert.deepEqual(f.settings, { broker: 'tiger', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5, feePlan: 'tiger', allowShorts: true, model: null });
+  assert.deepEqual(f.settings, { broker: 'tiger', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5, feePlan: 'tiger', allowShorts: true, model: null, learning: true, skipQuiet: true });
   applySettings(f, { approval: 'auto', maxOrderPct: 10, dailyLossPct: 3 });
   assert.equal(f.settings.approval, 'auto');
   assert.throws(() => applySettings(f, { broker: 'simulator' }), /only be chosen when starting/);

@@ -29,7 +29,7 @@ export const SHORT_MAX_LOSS = 0.4;
 export const LIMIT_BAND = 0.01; // Tiger limit orders: at most 1% worse than the latest price
 export const PROPOSAL_MINUTES = 60;
 export const PROPOSAL_MAX_DRIFT = 0.02;
-export const DEFAULT_SETTINGS = { broker: 'simulator', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5, feePlan: 'tiger', allowShorts: true, model: null };
+export const DEFAULT_SETTINGS = { broker: 'simulator', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5, feePlan: 'tiger', allowShorts: true, model: null, learning: true, skipQuiet: true };
 
 const OPEN_BROKER = ['queued', 'sent', 'partial'];
 const isGuard = (o) => o.source === 'guard';
@@ -96,6 +96,8 @@ export function applySettings(fund, s = {}, { atStart = false } = {}) {
     next.dailyLossPct = v;
   }
   if (s.allowShorts !== undefined) next.allowShorts = Boolean(s.allowShorts);
+  if (s.learning !== undefined) next.learning = Boolean(s.learning);
+  if (s.skipQuiet !== undefined) next.skipQuiet = Boolean(s.skipQuiet);
   if (s.model !== undefined) {
     if (s.model && !/^claude-[a-z0-9.-]+$/.test(s.model)) throw new Error(`Unknown model ${s.model}.`);
     next.model = s.model || null; // null: the default model
@@ -206,7 +208,7 @@ export function applyOrders(fund, orders, quotes, now = new Date(), { send = fal
   let ledger = broker ? committedLedger(fund) : fund.portfolio;
   const results = [];
   for (const o of sorted) {
-    const res = { symbol: o.symbol, action: o.action, shares: o.shares, reason: o.reason ?? '' };
+    const res = { symbol: o.symbol, action: o.action, shares: o.shares, reason: o.reason ?? '', ideaType: o.idea_type ?? o.ideaType ?? null, conviction: o.conviction ?? null };
     try {
       const q = quotes[o.symbol];
       if (!q || q.currency !== fund.currency) throw new Error(`${o.symbol} is not tradable in this ${fund.currency} fund.`);
@@ -260,7 +262,7 @@ export function executeDecision(fund, orders, quotes, now = new Date(), { others
     if (r.status === 'awaiting approval') {
       const p = {
         id: newId('p'), createdAt: now.toISOString(), expiresAt: new Date(now.getTime() + PROPOSAL_MINUTES * 60000).toISOString(),
-        symbol: r.symbol, action: r.action, shares: r.shares, refPrice: r.refPrice, limitPrice: r.limitPrice, reason: r.reason, status: 'awaiting',
+        symbol: r.symbol, action: r.action, shares: r.shares, refPrice: r.refPrice, limitPrice: r.limitPrice, reason: r.reason, ideaType: r.ideaType, conviction: r.conviction, status: 'awaiting',
       };
       (fund.proposals ??= []).push(p);
       r.proposalId = p.id;

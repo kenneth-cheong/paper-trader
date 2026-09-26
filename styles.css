@@ -286,3 +286,8 @@ body.locked { overflow: hidden; }
 .leaderboard tbody tr:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .fund-title { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; margin: 18px 0 8px; }
 .fund-title h2 { margin: 0; }
+.lessons { padding-left: 18px; display: grid; gap: 8px; margin: 8px 0; }
+.lessons li { font-size: 14px; }
+.lesson-form { margin: 8px 0; }
+.lesson-form input { flex: 1; min-width: 0; }
+.decision-skip { margin: 6px 0; }

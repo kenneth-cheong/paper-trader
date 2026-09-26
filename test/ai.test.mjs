@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import {
   askClaude, gatherNews, analyze, recommend, decideFund, buildContext, fundContext, stockStats, parseStrategies, parsePicks,
+  BACKFILL_TOOL, REVIEW_TOOL, backfillNews,
   AIError, STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL,
 } from '../ai.js';
 import { newPortfolio, applyTrade } from '../portfolio.js';
@@ -235,5 +236,44 @@ test('every tool schema forbids extra properties and requires every field (stric
     }
     if (s.type === 'array') walk(s.items);
   };
-  for (const t of [STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL]) walk(t.input_schema);
+  for (const t of [STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL, BACKFILL_TOOL, REVIEW_TOOL]) walk(t.input_schema);
+});
+
+test('a fund decision puts the shared market data first, cached only when asked, with the playbook in the fund part', async () => {
+  const fund = newFund({ budget: 10000, currency: 'USD', now: new Date('2026-01-02T15:00:00Z') });
+  const news = { market_summary: 'm', items: [], model: 'claude-haiku-4-5', createdAt: 'x' };
+  const answer = () => decisionMsg(FUND_TOOL.name, { outlook: 'o', orders: [], considered: [{ symbol: 'AAPL', stance: 'long', idea_type: 'news', why_not: 'wait' }], protections: [], source_urls: [] });
+  const client = fakeClient(answer(), answer());
+  const d = await decideFund({ client, fund, quotes: prices.quotes, news, playbook: { lessons: [{ lesson: 'Cut losers.' }] }, cacheShared: true });
+  const [shared, own] = client.calls[0].messages[0].content;
+  assert.deepEqual(shared.cache_control, { type: 'ephemeral' });
+  assert.match(shared.text, /AAPL/);
+  assert.doesNotMatch(shared.text, /Cut losers/);
+  assert.match(own.text, /Cut losers/);
+  assert.equal(d.considered[0].symbol, 'AAPL');
+  await decideFund({ client, fund, quotes: prices.quotes, news });
+  assert.equal(client.calls[1].messages[0].content[0].cache_control, undefined);
+});
+
+test('cached input is priced at its real rate', async () => {
+  const client = fakeClient(msg([toolUse('t', { a: 1 })], { usage: { input_tokens: 1000, cache_creation_input_tokens: 8000, cache_read_input_tokens: 0, output_tokens: 1000 } }),
+    msg([toolUse('t', { a: 1 })], { usage: { input_tokens: 1000, cache_creation_input_tokens: 0, cache_read_input_tokens: 8000, output_tokens: 1000 } }));
+  const tool = { name: 't', input_schema: { type: 'object', additionalProperties: false, required: ['a'], properties: { a: { type: 'number' } } } };
+  const first = await askClaude({ client, model: 'claude-sonnet-5', system: 's', content: 'c', tool, maxSearches: 0 });
+  const second = await askClaude({ client, model: 'claude-sonnet-5', system: 's', content: 'c', tool, maxSearches: 0 });
+  assert.equal(first.usage.costUsd, 0.032); // (1000 + 8000 x 1.25) x $2/M + 1000 x $10/M
+  assert.equal(second.usage.costUsd, 0.0136); // (1000 + 8000 x 0.1) x $2/M + 1000 x $10/M
+});
+
+test('the news backfill keeps only dated events in the period with a source it really read', async () => {
+  const good = 'https://example.com/dbs-results';
+  const search = { type: 'web_search_tool_result', content: [{ type: 'web_search_result', url: good, title: 'DBS results' }] };
+  const client = fakeClient(msg([search, toolUse(BACKFILL_TOOL.name, { events: [
+    { date: '2026-02-10', headline: 'DBS profit beats', type: 'earnings', tone: 'positive', source_url: good },
+    { date: '2026-02-11', headline: 'Made up', type: 'deal', tone: 'positive', source_url: 'https://invented.example' },
+    { date: '2024-01-01', headline: 'Too old', type: 'deal', tone: 'negative', source_url: good },
+  ] })]));
+  const r = await backfillNews({ client, symbol: 'D05.SI', name: 'DBS Group', from: '2025-10-01', to: '2026-09-01' });
+  assert.deepEqual(r.events.map((e) => [e.symbol, e.headline, e.from]), [['D05.SI', 'DBS profit beats', 'backfill']]);
+  assert.equal(client.calls[0].model, 'claude-haiku-4-5');
 });

@@ -11,6 +11,7 @@ import { dirname, join } from 'node:path';
 import { recommend, TIERS } from '../ai.js';
 import { addSpend, capReached, monthSpend } from '../spend.js';
 import { recordPicks } from '../scorecard.js';
+import { mergeEvents, eventsFromDigest } from '../memory.js';
 
 const file = process.argv[2];
 const readJson = async (path) => { try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; } };
@@ -44,6 +45,9 @@ if (process.env.FORCE_PICKS !== 'true' && ageH < maxAgeH && previous?.picks?.len
     // Every set of picks is kept, with the prices when picked, for the home page's track record.
     const historyFile = join(dirname(file), 'picks-history.json');
     await writeFile(historyFile, JSON.stringify(recordPicks(await readJson(historyFile), picks)));
+    // Company news from the digest, for the AI funds' market memory (price moves after it are measured later).
+    const eventsFile = join(dirname(file), 'news-events.json');
+    await writeFile(eventsFile, JSON.stringify(mergeEvents(await readJson(eventsFile), eventsFromDigest(news), prices.quotes)));
     // The AI fund reuses this digest instead of searching again.
     await writeFile(join(dirname(file), 'news.json'), JSON.stringify(news, null, 1));
     console.log(`Wrote ${picks.picks.length} picks (${picks.model}, news by ${picks.newsModel} from ${picks.sources.length} sources, ~US$${picks.usage.costUsd}).`);

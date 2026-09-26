@@ -7,6 +7,7 @@ import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRul
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
 import { MARKETS, marketForCurrency, tradingStatus, STATUS_LABELS } from './markets.js';
 import { loadFunds, reconcileAll, STYLES, DEFAULT_STYLE, MAX_ACTIVE_FUNDS } from './funds.js';
+import { activeLessons, OUTCOME_LABELS, IDEA_LABELS, MIN_CASES, REVIEW_MIN_NEW } from './learning.js';
 import { calcFee, planFor, fxSpreadFor, FEE_PLANS } from './fees.js';
 import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus, loadPrivateFund } from './auth.js';
 import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
@@ -1057,10 +1058,15 @@ const mandateFields = (p, v) => `
   <label>AI model <select id="${p}-model">${modelOptions(v.model)}</select></label>
   <label>Largest single order, % of budget <input id="${p}-max-order" type="number" min="1" max="100" step="1" value="${v.maxOrderPct}"></label>
   <label>Pause after losing in a day, % <input id="${p}-daily-loss" type="number" min="0.5" max="50" step="0.5" value="${v.dailyLossPct}"></label>
-  <label class="check"><input type="checkbox" id="${p}-shorts" ${v.allowShorts !== false ? 'checked' : ''}> Short selling allowed</label>`;
+  <label class="check"><input type="checkbox" id="${p}-shorts" ${v.allowShorts !== false ? 'checked' : ''}> Short selling allowed</label>
+  <label class="check"><input type="checkbox" id="${p}-learning" ${v.learning !== false ? 'checked' : ''}> Learns from its results (leave one fund off to compare)</label>
+  <label class="check"><input type="checkbox" id="${p}-skip-quiet" ${v.skipQuiet !== false ? 'checked' : ''}> Save AI cost: skip a decision when nothing has changed</label>`;
 const readMandate = (p) => ({
   name: $(`${p}-name`).value.trim(), style: $(`${p}-style`).value, focus: $(`${p}-focus`).value.trim(),
-  settings: { model: $(`${p}-model`).value || null, maxOrderPct: numberOf(`${p}-max-order`), dailyLossPct: numberOf(`${p}-daily-loss`), allowShorts: $(`${p}-shorts`).checked },
+  settings: {
+    model: $(`${p}-model`).value || null, maxOrderPct: numberOf(`${p}-max-order`), dailyLossPct: numberOf(`${p}-daily-loss`),
+    allowShorts: $(`${p}-shorts`).checked, learning: $(`${p}-learning`).checked, skipQuiet: $(`${p}-skip-quiet`).checked,
+  },
 });
 
 // Start/stop/pause buttons and settings for admins. Rebuilt only when something they show changes,
@@ -1120,7 +1126,7 @@ function renderFundControls() {
     </div>
     ${f.stoppedAt ? '' : `<details class="fund-new"><summary>Mandate, approval and limits</summary>
       <form id="fund-settings-form" class="form-grid fund-form">
-        ${mandateFields('set', { name: f.name, style: f.style, focus: f.focus, model: s.model, maxOrderPct: s.maxOrderPct ?? 25, dailyLossPct: s.dailyLossPct ?? 5, allowShorts: s.allowShorts })}
+        ${mandateFields('set', { name: f.name, style: f.style, focus: f.focus, model: s.model, maxOrderPct: s.maxOrderPct ?? 25, dailyLossPct: s.dailyLossPct ?? 5, allowShorts: s.allowShorts, learning: s.learning, skipQuiet: s.skipQuiet })}
         <label>Approval
           <select id="set-approval"><option value="manual" ${s.approval === 'manual' ? 'selected' : ''}>I approve each trade</option><option value="auto" ${s.approval === 'auto' ? 'selected' : ''}>Automatic</option></select>
         </label>
@@ -1260,6 +1266,11 @@ document.addEventListener('submit', (e) => {
     if (!confirm(`Start ${label} (${STYLES[m.style].label}) with ${money(amount, currency)}, trading ${where}, deciding ${decisionsPerDay} time${decisionsPerDay > 1 ? 's' : ''} a trading day? Funds already running keep going.`)) return;
     submitFundCommand('start', { amount, currency, decisionsPerDay, payload: { name: m.name, style: m.style, focus: m.focus, settings } });
   }
+  if (e.target.id === 'lesson-form') {
+    e.preventDefault();
+    const text = $('lesson-text').value.trim();
+    if (text) submitFundCommand('settings', { payload: { fund: e.target.dataset.fund, playbook: { add: text } } });
+  }
   if (e.target.id === 'fund-settings-form') {
     e.preventDefault();
     const m = readMandate('set');
@@ -1267,10 +1278,14 @@ document.addEventListener('submit', (e) => {
   }
 });
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-fund-stop], [data-fund-cmd], [data-proposal], [data-fund-select]');
+  const t = e.target.closest('[data-fund-stop], [data-fund-cmd], [data-proposal], [data-fund-select], [data-lesson-remove], [data-lesson-restore]');
   if (!t) return;
   const f = selectedFund();
-  if (t.matches('[data-fund-select]')) {
+  if (t.dataset.lessonRemove) {
+    if (confirm('Remove this lesson? The AI stops seeing it. You can restore it later.')) submitFundCommand('settings', { payload: { fund: f.id, playbook: { remove: t.dataset.lessonRemove } } });
+  } else if (t.dataset.lessonRestore) {
+    submitFundCommand('settings', { payload: { fund: f.id, playbook: { restore: t.dataset.lessonRestore } } });
+  } else if (t.matches('[data-fund-select]')) {
     selectFund(t.dataset.fundSelect);
   } else if (t.matches('[data-fund-stop]')) {
     const tiger = f?.settings?.broker === 'tiger';
@@ -1342,6 +1357,64 @@ function renderBrokerOrders(f) {
   </section>`;
 }
 
+// ----- AI fund: what it has learned -----
+
+const LESSON_SOURCE = { results: 'from its results', 'weekly review': 'weekly review', owner: 'added by you', 'market memory': 'market memory' };
+const moveCell = (h) => (h ? `<span class="${tone(h.move)}">${pct(h.move)}</span>${h.index != null ? ` <span class="muted small">(${pct(h.move - h.index)} vs index)</span>` : ''}` : '<span class="muted small">not yet</span>');
+const rate = (x) => (x == null ? '–' : `${Math.round(x * 100)}%`);
+
+function renderLearning(f, c) {
+  const pb = f.playbook;
+  const on = f.settings?.learning !== false;
+  const admin = authEnabled && state.user?.isAdmin;
+  const market = marketForCurrency(f.currency);
+  const memory = c.marketMemory?.[market];
+  const hidden = new Set(pb?.hidden ?? []);
+  const lessons = activeLessons(pb);
+  const marketLessons = (memory?.lessons ?? []).filter((l) => !hidden.has(l.id));
+  const lessonItem = (l) => `<li><strong>${esc(l.text)}</strong><span class="chip">${esc(LESSON_SOURCE[l.source] ?? l.source)}</span>
+    ${l.evidence ? `<br><span class="muted small">${esc(l.evidence)}</span>` : ''}
+    ${admin ? ` <button type="button" class="ghost small-btn" data-lesson-remove="${esc(l.id)}">Remove</button>` : ''}</li>`;
+  const outcomes = Object.entries(pb?.stats?.byOutcome ?? {}).filter(([, v]) => v.week);
+  const known = new Map([...(pb?.lessons ?? []), ...(pb?.review ?? []), ...(memory?.lessons ?? [])].map((l) => [l.id, l.text]));
+  const hiddenList = [...hidden].filter((id) => known.has(id));
+  return `<section class="panel">
+    <div class="panel-head"><h2>What it has learned</h2><span class="chip">${on ? 'learning on' : 'learning off (for comparison)'}</span></div>
+    <p class="small muted">Every idea is graded against what prices did afterwards: trades it made, trades you declined or its limits blocked, ideas it passed on, and its exits and stop-losses.
+      ${on ? 'These lessons are shown to the AI at every decision.' : 'This fund doesn\'t use them, so it shows whether learning helps.'}
+      ${pb ? `${pb.graded} idea${pb.graded === 1 ? '' : 's'} graded so far${pb.reviewedAt ? `; last weekly review ${fmtDate(pb.reviewedAt)}` : ''}. Lessons need at least ${MIN_CASES} cases; the weekly review needs ${REVIEW_MIN_NEW} newly graded ideas.` : ''}</p>
+    ${lessons.length ? `<ul class="lessons">${lessons.map(lessonItem).join('')}</ul>` : `<p class="muted">No lessons yet: ideas are graded once a week of trading has passed, and a lesson needs ${MIN_CASES} similar cases.</p>`}
+    ${admin ? `<form id="lesson-form" class="row lesson-form" data-fund="${esc(f.id)}"><input id="lesson-text" maxlength="300" placeholder="Add your own lesson, e.g. Avoid airlines before their results"><button type="submit" class="ghost small-btn">Add</button></form>` : ''}
+    ${hiddenList.length && admin ? `<p class="small muted">Removed lessons: ${hiddenList.map((id) => `<button type="button" class="ghost small-btn" data-lesson-restore="${esc(id)}" title="${esc(known.get(id))}">Restore: ${esc(known.get(id).slice(0, 50))}${known.get(id).length > 50 ? '…' : ''}</button>`).join(' ')}</p>` : ''}
+    ${outcomes.length ? `<h3 class="col-head">Its ideas, a week later</h3>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Ideas</th><th class="num">Cases</th><th class="num">Right</th><th class="num">Average</th><th class="num hide-sm">vs index</th></tr></thead>
+        <tbody>${outcomes.map(([k, v]) => `<tr><td>${esc(OUTCOME_LABELS[k] ?? k)}</td><td class="num">${v.week.n}</td><td class="num">${rate(v.week.hitRate)}</td>
+          <td class="num ${tone(v.week.avgMove)}">${pct(v.week.avgMove)}</td><td class="num hide-sm">${v.week.avgExcess == null ? '–' : pct(v.week.avgExcess)}</td></tr>`).join('')}</tbody>
+      </table></div>
+      <p class="muted small">"Right" for an exit or stop-loss means the price kept going the position's way afterwards, so it was early.</p>` : ''}
+    ${pb?.recent?.length ? `<details class="fund-new"><summary>Latest graded ideas</summary><ul class="orders">${pb.recent.slice(0, 15).map((g) => `<li>${fmtDate(g.time)}:
+      <span class="chip ${g.action === 'buy' || g.action === 'cover' ? 'buy' : 'sell'}">${esc(g.action)}</span> ${esc(g.symbol)} <span class="muted small">(${esc(OUTCOME_LABELS[g.outcome] ?? g.outcome)}, ${esc(IDEA_LABELS[g.ideaType] ?? g.ideaType)})</span>
+      · a week later ${moveCell(g.week)} · a month later ${moveCell(g.month)}${g.reason ? `<br><span class="muted small">${esc(g.reason)}</span>` : ''}</li>`).join('')}</ul></details>` : ''}
+  </section>
+  <section class="panel">
+    <div class="panel-head"><h2>${esc(MARKETS[market].label)} market memory</h2></div>
+    <p class="small muted">How ${esc(MARKETS[market].label)} stocks have moved after company news and after big one-day moves over the past year, measured from prices (not the AI's opinion). Every fund trading ${esc(MARKETS[market].label)} stocks sees these.
+      ${memory ? `${memory.events} news event${memory.events === 1 ? '' : 's'} and ${memory.bigMoves} big moves measured.` : ''}</p>
+    ${marketLessons.length ? `<ul class="lessons">${marketLessons.map(lessonItem).join('')}</ul>` : '<p class="muted small">No clear patterns yet.</p>'}
+    ${memory ? `<div class="table-wrap"><table>
+      <thead><tr><th>After</th><th class="num">Cases</th><th class="num">Kept going</th><th class="num">Next week vs index</th></tr></thead>
+      <tbody>${[['bigUp', `a one-day jump of 4%+`], ['bigDown', 'a one-day drop of 4%+'], ['positive', 'good company news'], ['negative', 'bad company news']]
+        .filter(([k]) => memory.stats[k]).map(([k, label]) => `<tr><td>${label}</td><td class="num">${memory.stats[k].n}</td><td class="num">${rate(memory.stats[k].continued)}</td>
+          <td class="num">${memory.stats[k].vsIndex == null ? '–' : pct(memory.stats[k].vsIndex)}</td></tr>`).join('')}</tbody>
+    </table></div>` : ''}
+    ${memory?.recent?.length ? `<details class="fund-new"><summary>Latest news measured</summary><ul class="orders">${memory.recent.slice(0, 15).map((e) => `<li>${esc(e.date)} <strong>${esc(e.symbol)}</strong> ${esc(e.headline)}
+      <span class="muted small">(${esc(e.tone)} ${esc(e.type)})</span> · on the day ${e.day ? `<span class="${tone(e.day.move)}">${pct(e.day.move)}</span>` : '–'} · next week ${moveCell(e.week)}</li>`).join('')}</ul>
+      <p class="muted small">Moves are shown in the direction of the news: + means the price went the way the news pointed.</p></details>` : ''}
+    ${!memory?.events ? `<p class="small">To fill this in from the past year's news (one-off, about US$1–2), run ${repoActionsUrl() ? `<a href="${repoActionsUrl()}" target="_blank" rel="noopener">Actions → Update prices, AI picks and AI fund</a>` : 'Actions → Update prices, AI picks and AI fund'} → Run workflow with <em>Learning: look up the past year of news</em> ticked. New news is added every day by itself.</p>` : ''}
+  </section>`;
+}
+
 // The funds side by side, best first: return, against the index, and after the AI's cost.
 function renderLeaderboard(c, selected) {
   const quotes = state.prices.quotes ?? {};
@@ -1360,7 +1433,7 @@ function renderLeaderboard(c, selected) {
       <thead><tr><th>Fund</th><th class="num">Value</th><th class="num">Return</th><th class="num">vs index</th><th class="num hide-sm">After AI cost</th><th class="hide-sm">Status</th></tr></thead>
       <tbody>${rows.map(({ f, a, bench, afterCost }) => `<tr data-fund-select="${esc(f.id)}" class="${f.id === selected?.id ? 'selected' : ''}" tabindex="0">
         <td><strong>${esc(f.name)}</strong><span class="chip">${esc(STYLES[f.style]?.label ?? f.style)}</span>
-          <span class="name">${esc(f.currency)} · ${f.settings?.broker === 'tiger' ? 'Tiger' : 'simulator'}${f.settings?.model ? ` · ${esc(modelName(f.settings.model))}` : ''}${f.focus ? ` · ${esc(f.focus)}` : ''}</span></td>
+          <span class="name">${esc(f.currency)} · ${f.settings?.broker === 'tiger' ? 'Tiger' : 'simulator'}${f.settings?.model ? ` · ${esc(modelName(f.settings.model))}` : ''}${f.settings?.learning === false ? ' · not learning' : ''}${f.focus ? ` · ${esc(f.focus)}` : ''}</span></td>
         <td class="num">${money(a.equity, f.currency)}</td>
         <td class="num ${tone(a.netPct)}">${pct(a.netPct)}</td>
         <td class="num ${bench ? tone(a.netPct - bench.pct) : ''}">${bench ? `${a.netPct - bench.pct >= 0 ? '+' : '−'}${Math.abs((a.netPct - bench.pct) * 100).toFixed(2)} pts` : '–'}</td>
@@ -1466,10 +1539,11 @@ function renderFund() {
         }).join('')}</tbody>` : '<tr><td class="empty">All in cash.</td></tr>'}</table></div>
     </section>
     ${renderBrokerOrders(f)}
+    ${renderLearning(f, c)}
     <section class="panel">
       <div class="panel-head"><h2>Decisions</h2></div>
-      ${f.decisions.slice().reverse().slice(0, 30).map((d) => `<article class="decision">
-        <header><strong>${fmtDateTime(d.time)}</strong>${d.usage ? ` <span class="muted small">${esc(madeBy(d))} · about US$${d.usage.costUsd.toFixed(2)}</span>` : ''}</header>
+      ${f.decisions.slice().reverse().slice(0, 30).map((d) => d.skipped ? `<p class="muted small decision-skip">${fmtDateTime(d.time)}: ${esc(d.outlook)}</p>` : `<article class="decision">
+        <header><strong>${fmtDateTime(d.time)}</strong>${d.usage ? ` <span class="muted small">${esc(madeBy(d))} · about US$${d.usage.costUsd.toFixed(2)}</span>` : ''}${d.learned ? ' <span class="chip">used its lessons</span>' : ''}</header>
         <p>${esc(d.outlook)}</p>
         ${d.orders.length ? `<ul class="orders">${d.orders.map((o) => `<li><span class="chip ${o.action === 'buy' || o.action === 'cover' ? 'buy' : 'sell'}">${esc(o.action)}</span>
           ${Number(o.shares).toLocaleString()} ${esc(o.symbol)}
@@ -1477,6 +1551,7 @@ function renderFund() {
             : o.status === 'rejected' ? `<span class="down">rejected: ${esc(o.message)}</span>`
             : `<span class="muted">${esc(o.status)}${o.limitPrice ? `, limit ${price(o.limitPrice)}` : ''}</span>`}
           <span class="muted small">${esc(o.reason)}</span></li>`).join('')}</ul>` : '<p class="muted small">No trades this round.</p>'}
+        ${d.considered?.length ? `<p class="small muted">Also considered: ${d.considered.map((c) => `${esc(c.stance)} ${esc(c.symbol)} (${esc(c.why_not)})`).join('; ')}.</p>` : ''}
         ${sources(d.source_urls)}
       </article>`).join('') || '<p class="muted">No decisions yet. The first one happens 15 minutes after the market opens.</p>'}
     </section>

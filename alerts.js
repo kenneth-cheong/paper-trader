@@ -43,6 +43,8 @@ function candidates(fund, { prices = null, now = new Date() } = {}) {
     const filled = (d.orders ?? []).filter((o) => o.status === 'filled');
     if (filled.length) out[`d:${d.time}`] = `🤖 <b>AI traded</b>: ${filled.map((o) => `${esc(o.action.toUpperCase())} ${o.shares} ${esc(o.symbol)} at ${num(o.price)}`).join(', ')}. ${esc(d.outlook)}`;
   }
+  const review = fund.playbook?.review;
+  if (fund.playbook?.reviewedAt && review?.length) out[`learn:${fund.playbook.reviewedAt}`] = `🧠 <b>What it learned this week</b>:\n${review.map((l) => `• ${esc(l.text)} <i>(${esc(l.evidence)})</i>`).join('\n')}`;
   if (fund.paused) out[`pause:${fund.paused.at}`] = `⛔ <b>Trading paused</b>: ${esc(fund.paused.reason)} Stop-losses still work.`;
   if (fund.stoppedAt) out[`stop:${fund.stoppedAt}`] = '⏹️ <b>The AI fund was stopped</b> and its positions are being closed.';
   if (fund.lastError) out[`err:${fund.lastError.time}`] = `⚠️ An AI decision failed (it retries next run): ${esc(fund.lastError.message)}`;

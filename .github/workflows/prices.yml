@@ -32,6 +32,10 @@ on:
         description: Stop the AI fund and close its positions (only when one fund is running; with several, use the app)
         type: boolean
         default: false
+      backfill_news:
+        description: 'Learning: look up the past year of news for every stock (one-off, about US$1-2) for the AI funds'' market memory'
+        type: boolean
+        default: false
       fund_command:
         description: 'Advanced, sent by the app: JSON such as {"pause":true} or {"approve":["id"]}'
         type: string
@@ -112,6 +116,10 @@ jobs:
         env:
           FORCE_PICKS: ${{ inputs.refresh_picks }}
         run: node scripts/fetch-picks.mjs state/picks.json
+      - name: 'Learning: backfill past news (one-off)'
+        if: inputs.backfill_news
+        continue-on-error: true
+        run: node scripts/backfill-news.mjs state/news-events.json
       # With FUND_STATE_TOKEN the fund lives privately in Supabase; if it can't be read, the fund's steps
       # are skipped (running from an old copy could forget orders sent to Tiger).
       - name: Load the AI fund

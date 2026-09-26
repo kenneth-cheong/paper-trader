@@ -114,6 +114,22 @@ The AI fund page ranks the funds by return after the AI's cost, and shows each o
 
 Funds trading through Tiger share your one Tiger account. Each fund keeps its own record, and the check that Tiger holds what the funds think covers all of them together. One account can't be long and short the same stock, so a fund can't open a position on the other side of another Tiger fund's position in that stock. Each fund's decisions cost separately, and the monthly AI cap is shared.
 
+### How the AI funds learn
+
+Each fund keeps a **playbook** of lessons from its own results, shown on its page under *What it has learned* and given to the AI at every decision.
+
+- **Every idea is graded, not just trades:** trades it made, trades you declined, proposals that expired, orders its limits blocked, stocks it considered but passed on (it lists up to 3 each decision), and its exits, stop-losses and take-profits. A week and a month later, the code measures what the price did, in the idea's direction and against the index. For an exit, it checks whether the stock kept going the position's way (sold too early?), and for stop-losses whether the price recovered (stop too tight?).
+- **Lessons by rule, with evidence:** for example, *trades based on news have lagged the index (7 cases, 29% right, −3.0% vs the index)*, *ideas you passed on did better than your trades*, *stop-losses were mostly followed by a recovery*. A lesson needs at least 5 cases. This costs nothing: no AI is involved.
+- **Weekly review:** about once a week, after the market closes and only when there are at least 5 newly graded ideas, Claude Haiku reads the numbers and the most telling examples and writes up to 6 sharper lessons. Each review costs well under 1 US cent, and Telegram tells you what it learned.
+- **You're in charge:** remove any lesson (and restore it later), or add your own, from the fund's page. Lessons never override the hard limits.
+- **Market memory**, shared by every fund in a market: how its stocks moved after good or bad company news, and after one-day moves of 4% or more, over the past year, measured from prices. Every daily news summary adds to it at no extra cost. To fill in the past year straight away, run **Actions → Update prices, AI picks and AI fund → Run workflow** with *Learning: look up the past year of news* ticked. That is a one-off costing about US$1–2 (Claude Haiku searches for each stock's main news of the year); running it again only fills gaps. The AI only supplies what happened; the price moves are measured in code. It may still favour memorable events, so treat these as tendencies, not rules.
+- **Is it working?** Untick *Learns from its results* on one fund to keep it as a control. The leaderboard then shows whether learning helps.
+
+**Saving AI cost:**
+- A fund **skips a decision** when nothing has changed since its last one: no new news or picks, no fills, its stocks within 2.5% and the index within 1%. It skips at most twice in a row. You can turn this off per fund.
+- Funds in the same market deciding in the same run on the same model **share a cached copy** of the market data (news, picks and price statistics, most of the prompt). The extra funds pay a tenth of the normal price for it.
+- Costs shown count cached input at its real, cheaper rate.
+
 ### Starting, stopping or replacing the AI fund
 
 **From the app (accounts on, admins only):** the AI fund tab has *Start AI fund* and *Stop fund* buttons. They need a one-time setup, because Supabase starts the GitHub workflow for you:
@@ -226,6 +242,8 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `alerts.js`, `scripts/notify.mjs` | Telegram alerts. |
 | `scripts/fund-store.mjs`, `supabase/private-fund.sql` | Keeping the AI fund private in Supabase. |
 | `funds.js` | Several AI funds: styles, starting, removing, and sharing one Tiger account. |
+| `learning.js` | Grading every idea, the rule-made lessons, the playbook and skipping quiet decisions. |
+| `memory.js`, `scripts/backfill-news.mjs` | The market memory: price moves after news and big moves, and the one-off news backfill. |
 | `rules.js` | Auto-trading rules engine and backtester. |
 | `fund.js` | The AI fund: budget limit, order execution, protections, decision schedule. |
 | `ai.js` | Every Claude call: the Haiku news digest, then picks, strategies and fund decisions, each answered through a validated "submit" tool. |

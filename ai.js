@@ -12,6 +12,7 @@ import { CONDITIONS, UNITS, REPEATS, newRule, checkRule, describeRule } from './
 import { summarize, buyingPower, SHORT_MARGIN } from './portfolio.js';
 import { describeFees, planFor } from './fees.js';
 import { STYLES, DEFAULT_STYLE } from './funds.js';
+import { EVENT_TYPES, TONES } from './memory.js';
 
 const SDK_URL = 'https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.128.0/+esm';
 
@@ -52,7 +53,7 @@ export async function askClaude({ client, Anthropic, model = DEFAULT_MODEL, syst
 
   const messages = [{ role: 'user', content }];
   const sources = new Map();
-  const usage = { input: 0, output: 0, searches: 0 };
+  const usage = { input: 0, output: 0, searches: 0, cacheWrite: 0, cacheRead: 0 };
   let servedBy = model;
 
   for (let round = 0; round < maxRounds; round++) {
@@ -64,7 +65,9 @@ export async function askClaude({ client, Anthropic, model = DEFAULT_MODEL, syst
     }
     servedBy = message.model ?? servedBy;
     const u = message.usage ?? {};
-    usage.input += (u.input_tokens ?? 0) + (u.cache_read_input_tokens ?? 0) + (u.cache_creation_input_tokens ?? 0);
+    usage.input += u.input_tokens ?? 0;
+    usage.cacheWrite += u.cache_creation_input_tokens ?? 0;
+    usage.cacheRead += u.cache_read_input_tokens ?? 0;
     usage.output += u.output_tokens ?? 0;
     usage.searches += u.server_tool_use?.web_search_requests ?? 0;
     for (const block of message.content) {
@@ -81,7 +84,7 @@ export async function askClaude({ client, Anthropic, model = DEFAULT_MODEL, syst
         input: typeof call.input === 'string' ? parseJson(call.input) : call.input,
         sources: [...sources.values()],
         model: servedBy,
-        usage: { ...usage, costUsd: round2((usage.input * price.inPerM + usage.output * price.outPerM) / 1e6 + usage.searches * SEARCH_COST) },
+        usage: { ...usage, costUsd: costOf(usage, price) },
       };
     }
     if (message.stop_reason === 'max_tokens') throw new AIError('The answer was cut off before it finished. Try again with a narrower focus.');
@@ -108,11 +111,15 @@ function friendlyError(err, Anthropic) {
 }
 
 const round2 = (n) => Math.round(n * 100) / 100;
+const round4 = (n) => Math.round(n * 10000) / 10000;
+// US$ for a call: cache writes cost 1.25x the input price and cache reads 0.1x (5-minute cache).
+const costOf = (u, price) => round4(((u.input + u.cacheWrite * 1.25 + u.cacheRead * 0.1) * price.inPerM + u.output * price.outPerM) / 1e6 + u.searches * SEARCH_COST);
 
 // Adds up the cost of the news step and the decision step.
 export const addUsage = (...us) => us.filter(Boolean).reduce((a, u) => ({
-  input: a.input + u.input, output: a.output + u.output, searches: a.searches + u.searches, costUsd: round2(a.costUsd + u.costUsd),
-}), { input: 0, output: 0, searches: 0, costUsd: 0 });
+  input: a.input + u.input, output: a.output + u.output, searches: a.searches + u.searches,
+  cacheWrite: a.cacheWrite + (u.cacheWrite ?? 0), cacheRead: a.cacheRead + (u.cacheRead ?? 0), costUsd: round4(a.costUsd + u.costUsd),
+}), { input: 0, output: 0, searches: 0, cacheWrite: 0, cacheRead: 0, costUsd: 0 });
 const pct = (x) => Math.round(x * 1000) / 10; // 0.1234 -> 12.3
 
 // Keeps only source links Claude actually got from its searches.
@@ -183,12 +190,14 @@ export const NEWS_TOOL = {
         items: {
           type: 'object',
           additionalProperties: false,
-          required: ['symbols', 'date', 'headline', 'summary', 'source_url'],
+          required: ['symbols', 'date', 'headline', 'summary', 'type', 'tone', 'source_url'],
           properties: {
             symbols: { type: 'array', items: { type: 'string' }, description: 'Watchlist symbols affected; empty for market-wide news.' },
             date: { type: 'string', description: 'When it happened, e.g. 2026-09-24.' },
             headline: { type: 'string' },
             summary: { type: 'string', description: 'One or two sentences of facts and figures.' },
+            type: { type: 'string', enum: EVENT_TYPES },
+            tone: { type: 'string', enum: TONES, description: 'Good or bad news for the stocks named, as reported.' },
             source_url: { type: 'string' },
           },
         },
@@ -452,7 +461,12 @@ Hard limits, enforced by the simulator (orders that break them are rejected):
 - No single order may be worth more than max_order_value.
 - Every trade pays broker fees (see trading_fees), and they come out of the fund's money. Only trade when the expected gain clearly beats the round-trip cost; frequent small trades lose money to fees.
 
-${NEWS} Use the price statistics, your positions and your earlier decisions (you are called again at the next decision time; stop-loss and take-profit levels you set are checked every 15 minutes in between). Doing nothing is a valid decision when nothing is compelling. Keep reasons short and specific. Finish by calling submit_decision.`;
+${NEWS} Use the price statistics, your positions and your earlier decisions (you are called again at the next decision time; stop-loss and take-profit levels you set are checked every 15 minutes in between). Doing nothing is a valid decision when nothing is compelling. Keep reasons short and specific.
+
+If the context has a playbook, it holds lessons from grading all your earlier ideas against what prices did afterwards: trades made, trades the owner declined or your limits blocked, ideas you passed on, and your exits. Weigh each lesson by its evidence (a handful of cases is weak), and never let one override the hard limits. Finish by calling submit_decision.`;
+
+// The kinds of reasoning behind a trade idea, so results can be graded by kind (learning.js).
+export const IDEA_TYPES = ['news', 'earnings', 'momentum', 'value', 'technical', 'analyst_pick', 'risk_reduction', 'other'];
 
 export const FUND_TOOL = {
   name: 'submit_decision',
@@ -460,7 +474,7 @@ export const FUND_TOOL = {
   input_schema: {
     type: 'object',
     additionalProperties: false,
-    required: ['outlook', 'orders', 'protections', 'source_urls'],
+    required: ['outlook', 'orders', 'considered', 'protections', 'source_urls'],
     properties: {
       outlook: { type: 'string', description: 'Your current view and plan, in two to four sentences.' },
       orders: {
@@ -468,12 +482,29 @@ export const FUND_TOOL = {
         items: {
           type: 'object',
           additionalProperties: false,
-          required: ['symbol', 'action', 'shares', 'reason'],
+          required: ['symbol', 'action', 'shares', 'reason', 'idea_type', 'conviction'],
           properties: {
             symbol: { type: 'string' },
             action: { type: 'string', enum: ['buy', 'sell', 'short', 'cover'], description: 'buy/sell for long positions; short opens or adds to a short; cover buys a short back.' },
             shares: { type: 'integer' },
             reason: { type: 'string' },
+            idea_type: { type: 'string', enum: IDEA_TYPES, description: 'The main kind of reasoning behind this order.' },
+            conviction: { type: 'string', enum: ['low', 'medium', 'high'] },
+          },
+        },
+      },
+      considered: {
+        type: 'array',
+        description: 'Up to 3 other trades you seriously considered this round but did not make (so they can be graded later too). Empty if none.',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['symbol', 'stance', 'idea_type', 'why_not'],
+          properties: {
+            symbol: { type: 'string' },
+            stance: { type: 'string', enum: ['long', 'short'] },
+            idea_type: { type: 'string', enum: IDEA_TYPES },
+            why_not: { type: 'string', description: 'A few words.' },
           },
         },
       },
@@ -496,15 +527,31 @@ export const FUND_TOOL = {
   },
 };
 
-export function fundContext({ fund, quotes, picks, news, now = new Date() }) {
+// The market data every fund in that market sees (identical for them, so it can be cached).
+export function marketContext({ currency, quotes, picks, news }) {
+  const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === currency);
+  return {
+    analyst_picks: picks?.picks?.filter((p) => quotes[p.symbol]?.currency === currency)
+      .map((p) => ({ symbol: p.symbol, stance: p.stance, conviction: p.conviction, thesis: p.thesis, as_of: picks.createdAt })) ?? [],
+    news: newsForPrompt(news, symbols),
+    stocks: stockList(quotes, symbols, false),
+  };
+}
+
+// The fund's own part: mandate, money, positions, recent decisions and (if learning) its playbook.
+export function fundContext({ fund, quotes, picks, news, playbook = null, now = new Date() }) {
+  return { ...ownContext({ fund, quotes, playbook, now }), ...marketContext({ currency: fund.currency, quotes, picks, news }) };
+}
+
+function ownContext({ fund, quotes, playbook, now }) {
   const ccy = fund.currency;
   const market = ccy === 'SGD' ? 'SGX' : 'US';
-  const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === ccy);
   const { accounts, positions } = summarize(fund.portfolio, quotes);
   const a = accounts[ccy];
   const style = STYLES[fund.style] ?? STYLES[DEFAULT_STYLE];
   return {
     now: now.toISOString(),
+    ...(playbook ? { playbook } : {}),
     mandate: {
       name: fund.name ?? 'AI fund', style: style.label, style_brief: style.brief, owner_focus: fund.focus || null,
       short_selling_allowed: fund.settings?.allowShorts !== false,
@@ -520,31 +567,30 @@ export function fundContext({ fund, quotes, picks, news, now = new Date() }) {
       symbol: p.symbol, shares: p.qty, side: p.short ? 'short' : 'long', avg_price: round2(p.avgCost), price: p.price,
       value: round2(p.marketValue), unrealized_pl_pct: pct(p.unrealizedPct), protection: fund.protections[p.symbol] ?? null,
     })),
-    recent_decisions: fund.decisions.slice(-5).map((d) => ({
+    recent_decisions: fund.decisions.filter((d) => !d.skipped).slice(-5).map((d) => ({
       time: d.time, outlook: d.outlook,
       orders: d.orders.map((o) => `${o.action} ${o.shares} ${o.symbol}: ${o.status}${o.message ? ` (${o.message})` : ''}`),
     })),
     recent_automatic_events: fund.events.slice(-10),
-    analyst_picks: picks?.picks?.filter((p) => quotes[p.symbol]?.currency === ccy)
-      .map((p) => ({ symbol: p.symbol, stance: p.stance, conviction: p.conviction, thesis: p.thesis, as_of: picks.createdAt })) ?? [],
-    news: newsForPrompt(news, symbols),
-    stocks: stockList(quotes, symbols, false),
   };
 }
 
 // `news` should be a recent digest (the scheduled job shares one between picks and the fund);
 // without one, a digest for the fund's market is gathered first with the cheap model.
-export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, now = new Date() }) {
+// `cacheShared`: several funds in this market decide now on the same model, so the market data (the
+// bulk of the prompt) is marked for caching and the others read it at a tenth of the price.
+export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, playbook = null, cacheShared = false, now = new Date() }) {
   const fresh = !news;
   if (fresh) {
     const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === fund.currency);
     news = await gatherNews({ client, Anthropic, model: newsModel, quotes, symbols, now, maxSearches: 3 });
   }
-  const context = fundContext({ fund, quotes, picks, news, now });
+  const shared = { type: 'text', text: `Market data as JSON: news, analyst picks and price statistics for the ${fund.currency} market.\n\n${JSON.stringify(marketContext({ currency: fund.currency, quotes, picks, news }))}` };
+  if (cacheShared) shared.cache_control = { type: 'ephemeral' };
   const res = await askClaude({
     client, Anthropic, model,
     system: FUND_SYSTEM,
-    content: `Decision time. Here is the fund's state, the latest news and the market data as JSON.\n\n${JSON.stringify(context)}`,
+    content: [shared, { type: 'text', text: `Decision time. The fund's state as JSON:\n\n${JSON.stringify(ownContext({ fund, quotes, playbook, now }))}` }],
     tool: FUND_TOOL,
     maxSearches: 0,
   });
@@ -552,4 +598,84 @@ export async function decideFund({ client, Anthropic, model = TIERS.advanced, ne
     ...res.input, source_urls: knownUrls(res.input.source_urls, newsUrls(news)),
     model: res.model, newsModel: news.model, usage: addUsage(fresh ? news.usage : null, res.usage), news: fresh ? news : undefined,
   };
+}
+
+// ---------- learning: the one-off news backfill and the weekly review (both on the cheap model) ----------
+
+const BACKFILL_SYSTEM = `You research company news history for a trading simulator. Search the web and list the most important company-specific news events for one stock over the period given: earnings results, guidance changes, deals, products, legal or regulatory news, management changes and big analyst moves. Give each event's date as first reported, a factual headline, its type, and whether it was good or bad news for the company as reported at the time. Do not describe how the share price reacted; that is measured separately. Only include events you found a source for. Finish by calling submit_events.`;
+
+export const BACKFILL_TOOL = {
+  name: 'submit_events',
+  description: 'Submit the news events found.',
+  input_schema: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['events'],
+    properties: {
+      events: {
+        type: 'array',
+        description: 'Up to 8 events, most important first.',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['date', 'headline', 'type', 'tone', 'source_url'],
+          properties: {
+            date: { type: 'string', description: 'YYYY-MM-DD, when first reported.' },
+            headline: { type: 'string' },
+            type: { type: 'string', enum: EVENT_TYPES },
+            tone: { type: 'string', enum: TONES },
+            source_url: { type: 'string' },
+          },
+        },
+      },
+    },
+  },
+};
+
+// Past news events for one stock between `from` and `to` (YYYY-MM-DD), for the market memory.
+export async function backfillNews({ client, Anthropic, model = TIERS.simple, symbol, name, from, to, maxSearches = 3 }) {
+  const res = await askClaude({
+    client, Anthropic, model, system: BACKFILL_SYSTEM, tool: BACKFILL_TOOL, maxSearches,
+    content: `Stock: ${name} (${symbol}). Period: ${from} to ${to}. List its most important news events in that period.`,
+  });
+  const ok = new Set(res.sources.map((x) => x.url));
+  const events = (res.input.events ?? []).filter((e) => e.date >= from && e.date <= to && ok.has(e.source_url))
+    .map((e) => ({ ...e, symbol, from: 'backfill' }));
+  return { events, usage: res.usage, model: res.model };
+}
+
+const REVIEW_SYSTEM = `You coach the AI manager of a paper-trading fund. You get statistics that grade all of its earlier ideas against what prices did afterwards (trades it made, trades its owner declined, orders its limits blocked, ideas it passed on, and its exits and stop-losses), plus the most telling examples with the manager's own reasons, and lessons already derived from the numbers. Write up to 6 short, specific, practical lessons the manager should apply to future decisions, each citing its evidence from the data (numbers of cases and results). Only draw a lesson from 5 or more cases; say nothing rather than guess. Don't repeat lessons already derived unless you sharpen them. Finish by calling submit_lessons.`;
+
+export const REVIEW_TOOL = {
+  name: 'submit_lessons',
+  description: 'Submit the lessons.',
+  input_schema: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['lessons'],
+    properties: {
+      lessons: {
+        type: 'array',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['text', 'evidence'],
+          properties: {
+            text: { type: 'string', description: 'One or two sentences addressed to the manager.' },
+            evidence: { type: 'string', description: 'The numbers behind it.' },
+          },
+        },
+      },
+    },
+  },
+};
+
+// The weekly review: a few written lessons on top of the rule-made ones (learning.js).
+export async function reviewPlaybook({ client, Anthropic, model = TIERS.simple, fund, stats, examples, lessons }) {
+  const style = STYLES[fund.style] ?? STYLES[DEFAULT_STYLE];
+  const res = await askClaude({
+    client, Anthropic, model, system: REVIEW_SYSTEM, tool: REVIEW_TOOL, maxSearches: 0,
+    content: `The fund: "${fund.name ?? 'AI fund'}", ${style.label} style${fund.focus ? `, focus: ${fund.focus}` : ''}, trading ${fund.currency === 'SGD' ? 'SGX' : 'US'} stocks.\n\n${JSON.stringify({ stats, examples, lessons_already_derived: lessons.map((l) => l.text) })}`,
+  });
+  return { lessons: res.input.lessons ?? [], usage: res.usage, model: res.model };
 }
