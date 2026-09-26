@@ -15,19 +15,38 @@ test('a new fund holds exactly its budget', () => {
   assert.throws(() => newFund({ budget: 10, currency: 'EUR' }), /Unsupported/);
 });
 
+// Prices as the page and the job see them: the newest quote per market was at `quoteAt`.
+const pricesAt = (quoteAt, market = 'US', updatedAt = quoteAt) => ({
+  updatedAt: updatedAt.toISOString(),
+  quotes: { X: { market, currency: market === 'US' ? 'USD' : 'SGD', price: 1, time: quoteAt.toISOString() } },
+});
+const live = (now, market = 'US') => pricesAt(new Date(now.getTime() - 20 * 60000), market, now);
+
 test('decisions are due 15 minutes after the open, then spaced through the session', () => {
   const f = newFund({ budget: 5000, currency: 'USD', decisionsPerDay: 2, now: at('10:00') });
-  assert.equal(decisionDue(f, at('14:40')), false); // 10 min after open
-  assert.equal(decisionDue(f, at('14:45')), true);
+  const due = (t, fund = f) => decisionDue(fund, at(t), live(at(t)));
+  assert.equal(decisionDue(f, at('14:40'), pricesAt(at('14:35'))), false); // 10 min after open
+  assert.equal(decisionDue(f, at('14:45'), pricesAt(at('14:40'))), true);
   f.lastDecisionAt = at('14:45').toISOString();
-  assert.equal(decisionDue(f, at('16:30')), false);
-  assert.equal(decisionDue(f, at('18:00')), true); // 195-minute gap for 2 a day
-  assert.equal(decisionDue(f, at('22:00')), false); // closed
+  assert.equal(due('16:30'), false);
+  assert.equal(due('18:00'), true); // 195-minute gap for 2 a day
+  assert.equal(due('22:00'), false); // closed
   const sgx = newFund({ budget: 5000, currency: 'SGD', now: at('00:00') });
-  assert.equal(decisionDue(sgx, at('01:20')), true);
-  assert.equal(decisionDue(sgx, at('04:30')), false); // lunch break
+  assert.equal(decisionDue(sgx, at('01:20'), pricesAt(at('01:15'), 'SGX')), true);
+  assert.equal(decisionDue(sgx, at('04:30'), pricesAt(at('04:00'), 'SGX')), false); // lunch break
   f.stoppedAt = at('15:00').toISOString();
-  assert.equal(decisionDue(f, at('18:00')), false);
+  assert.equal(due('18:00'), false);
+});
+
+test('no decision on a holiday or after an early close, when the clock says open but prices stopped', () => {
+  const f = newFund({ budget: 5000, currency: 'USD', now: at('10:00') });
+  const yesterdayClose = new Date('2026-01-06T21:00:00Z');
+  // A US holiday: the price job runs, but the newest US price is from yesterday.
+  assert.equal(decisionDue(f, at('18:00'), pricesAt(yesterdayClose, 'US', at('17:55'))), false);
+  // No prices at all
+  assert.equal(decisionDue(f, at('18:00'), null), false);
+  // An early close at 13:00 New York (18:00 UTC): by 19:30 UTC the newest price is 90 minutes old.
+  assert.equal(decisionDue(f, at('19:30'), pricesAt(at('18:00'), 'US', at('19:25'))), false);
 });
 
 test('the fund can never spend more than its budget', () => {

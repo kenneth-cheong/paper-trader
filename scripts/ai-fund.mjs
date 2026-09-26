@@ -6,6 +6,7 @@
 //   FUND_DECISIONS_PER_DAY  1, 2 or 4, with FUND_START_AMOUNT
 //   FUND_STOP=true          close every position and stop the fund
 //   ANTHROPIC_API_KEY, AI_MODEL (decisions, default Sonnet), AI_NEWS_MODEL (news, default Haiku)
+// Decisions only happen while the fund's market is actually trading (not on holidays or after an early close).
 // Every run checks stop-loss / take-profit / forced-cover levels against the new prices. When a
 // decision is due (spread through the market's trading day), Claude reads the news and decides.
 
@@ -22,7 +23,8 @@ const readJson = async (path) => { try { return JSON.parse(await readFile(path, 
 const now = new Date();
 
 let fund = await readJson(file);
-const quotes = (await readJson('data/prices.json'))?.quotes ?? {};
+const prices = await readJson('data/prices.json');
+const quotes = prices?.quotes ?? {};
 
 if (Number(env.FUND_START_AMOUNT) > 0) {
   const old = fund;
@@ -43,7 +45,7 @@ if (env.FUND_STOP === 'true' && !fund.stoppedAt) {
 if (!fund.stoppedAt) {
   for (const e of checkProtections(fund, quotes)) console.log(`Protection: ${e.action} ${e.shares} ${e.symbol} at ${e.price} (${e.why})`);
 
-  if (decisionDue(fund, now)) {
+  if (decisionDue(fund, now, prices)) {
     if (!Object.keys(quotes).length) {
       console.log('A decision is due but there are no prices this run; waiting for the next one.');
     } else if (!env.ANTHROPIC_API_KEY) {

@@ -142,3 +142,22 @@ test('backtest refuses to run on too little history', () => {
   const r = backtest([rule({ when: { type: 'price_below', value: 1 }, action: { side: 'buy', unit: 'shares', amount: 1 } })], { currency: 'USD', daily: [[T0, 1]] });
   assert.match(r.error, /Not enough/);
 });
+
+test('an order placed while the market is closed fills at the first price after the open', async () => {
+  const { placeOrder, cancelOrder } = await import('../portfolio.js');
+  const { fillPendingOrders } = await import('../rules.js');
+  const placedAt = new Date(T0 * 1000).toISOString();
+  let p = placeOrder(newPortfolio({ USD: 1000 }), { symbol: 'X', side: 'buy', qty: 5, currency: 'USD', time: placedAt });
+  p = placeOrder(p, { symbol: 'X', side: 'buy', qty: 1000, currency: 'USD', time: placedAt }); // too big
+  p = placeOrder(p, { symbol: 'Y', side: 'buy', qty: 1, currency: 'USD', time: placedAt }); // no price yet
+  const q = { currency: 'USD', intraday: [[T0 - 900, 90], [T0 + 900, 100], [T0 + 1800, 110]], time: null };
+  const { portfolio, log } = fillPendingOrders(p, { X: q, Y: { currency: 'USD', intraday: [[T0 - 60, 5]] } });
+  assert.equal(log.length, 2);
+  assert.equal(log[0].trade.price, 100); // the first price after it was placed, not the one before
+  assert.equal(log[0].trade.time, new Date((T0 + 900) * 1000).toISOString());
+  assert.match(log[1].error, /Not enough USD cash/);
+  assert.deepEqual(portfolio.pendingOrders.map((o) => o.symbol), ['Y']); // still waiting
+  assert.equal(portfolio.positions.X.qty, 5);
+  assert.deepEqual(cancelOrder(portfolio, portfolio.pendingOrders[0].id).pendingOrders, []);
+  assert.throws(() => placeOrder(p, { symbol: 'X', side: 'buy', qty: 0, currency: 'USD' }), /whole number/);
+});

@@ -1,7 +1,7 @@
-import { newPortfolio, applyTrade, summarize, validatePortfolio, buyingPower, DEFAULT_START, SHORT_MARGIN } from './portfolio.js';
-import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest } from './rules.js';
+import { newPortfolio, applyTrade, placeOrder, cancelOrder, summarize, validatePortfolio, buyingPower, DEFAULT_START, SHORT_MARGIN } from './portfolio.js';
+import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest, fillPendingOrders } from './rules.js';
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
-import { MARKETS, isOpen, marketForCurrency } from './markets.js';
+import { MARKETS, marketForCurrency, tradingStatus, STATUS_LABELS } from './markets.js';
 import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus } from './auth.js';
 import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
 
@@ -190,6 +190,8 @@ async function loadSideData() {
 }
 
 const quote = (symbol) => state.prices.quotes?.[symbol];
+// Open only when today's prices are arriving (so holidays and early closes count as closed).
+const marketStatus = (market) => (state.sample ? 'open' : tradingStatus(market, state.prices));
 
 // ---------- automation ----------
 
@@ -200,8 +202,22 @@ function runAutomation() {
     const saved = readStore(portfolioKey());
     if (saved) state.portfolio = validatePortfolio(saved);
   } catch { /* keep the in-memory copy */ }
+  const quotes = state.prices.quotes ?? {};
+  if (state.portfolio.pendingOrders?.length) {
+    const before = state.portfolio.pendingOrders.length;
+    const filled = fillPendingOrders(state.portfolio, quotes);
+    if (filled.portfolio.pendingOrders.length !== before) {
+      state.portfolio = filled.portfolio;
+      savePortfolio();
+    }
+    for (const { order, trade, error, time } of filled.log) {
+      const verb = order.side === 'buy' ? 'Buy' : 'Sell';
+      if (trade) notify(`${verb} order filled: ${shares(trade.qty)} of ${trade.symbol} at ${price(trade.price)} ${trade.currency}, the first price after the open (${fmtDateTime(trade.time)}).`);
+      else notify(`${verb} order for ${shares(order.qty)} of ${order.symbol} couldn't fill at the open (${fmtDateTime(time)}): ${error}`, null, true);
+    }
+  }
   if (!state.portfolio.rules.some((r) => r.enabled)) return;
-  const { portfolio, log } = runRules(state.portfolio, state.prices.quotes ?? {});
+  const { portfolio, log } = runRules(state.portfolio, quotes);
   state.portfolio = portfolio;
   savePortfolio();
   for (const entry of log) {
@@ -449,7 +465,21 @@ async function refreshPicks() {
   }
 }
 
+function renderPendingOrders() {
+  const orders = state.portfolio.pendingOrders ?? [];
+  $('pending').hidden = !orders.length;
+  $('pending').innerHTML = orders.length ? `
+    <h3 class="col-head">Waiting for the market to open</h3>
+    <ul class="orders">${orders.map((o) => {
+      const q = quote(o.symbol);
+      return `<li><span class="chip ${o.side}">${o.side}</span> ${shares(o.qty)} of <strong>${esc(o.symbol)}</strong>
+        <span class="muted small">placed ${fmtDateTime(o.placedAt)} · fills at the first ${esc(MARKETS[q?.market]?.label ?? '')} price after the open${q ? ` (last ${price(q.price)} ${esc(q.currency)})` : ''}</span>
+        <button class="small-btn ghost" data-cancel-order="${esc(o.id)}">Cancel</button></li>`;
+    }).join('')}</ul>` : '';
+}
+
 function renderHoldings(positions) {
+  renderPendingOrders();
   if (!positions.length) {
     $('holdings').innerHTML = '<tr><td class="empty">No holdings yet. Pick a stock under Markets or from the AI picks above.</td></tr>';
     return;
@@ -479,8 +509,8 @@ function renderHoldings(positions) {
 // ----- markets -----
 
 function renderMarkets() {
-  const status = Object.keys(MARKETS).map((m) => `${MARKETS[m].label} ${isOpen(m) ? 'open' : 'closed'}`).join(' · ');
-  $('market-status').textContent = `${status}. Prices may be delayed; outside trading hours, orders fill at the last price.`;
+  const status = Object.keys(MARKETS).map((m) => `${MARKETS[m].label} ${STATUS_LABELS[marketStatus(m)]}`).join(' · ');
+  $('market-status').textContent = `${status}. Prices may be delayed. Orders placed while a market is closed wait and fill at the first price after it opens.`;
 
   const rows = Object.entries(state.prices.quotes ?? {})
     .filter(([, q]) => state.marketFilter === 'all' || q.market === state.marketFilter);
@@ -565,11 +595,13 @@ function updateTradeDialog() {
 
   for (const b of $('side').querySelectorAll('button')) b.setAttribute('aria-pressed', b.dataset.side === side);
   const label = side === 'buy' ? (held < 0 ? 'Cover' : 'Buy') : (held > 0 && opening === 0 ? 'Sell' : 'Short');
-  $('trade-submit').textContent = label;
+  const status = marketStatus(q.market);
+  const trading = status === 'open';
+  $('trade-submit').textContent = trading ? label : `Place ${label.toLowerCase()} order`;
   $('trade-submit').className = side === 'buy' ? 'primary' : 'danger';
 
   const facts = [
-    ['Price', `${price(q.price)} ${ccy}`],
+    [trading ? 'Price' : 'Last price', `${price(q.price)} ${ccy}`],
     ['You hold', held < 0 ? `${shares(-held)} short` : shares(held)],
     ['Buying power', money(buyingPower(state.portfolio, ccy), ccy)],
   ];
@@ -577,15 +609,18 @@ function updateTradeDialog() {
     const pl = (q.price - avg) * closing * Math.sign(held);
     facts.push(['Profit / loss on what you close', `<span class="${tone(pl)}">${money(pl, ccy, { sign: true })}</span>`]);
   }
-  facts.push([side === 'buy' ? 'Total cost' : 'You receive', `<strong>${money(qty * q.price, ccy)}</strong>`]);
+  facts.push([`${side === 'buy' ? 'Total cost' : 'You receive'}${trading ? '' : ' (estimate)'}`, `<strong>${money(qty * q.price, ccy)}</strong>`]);
   $('trade-facts').innerHTML = facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
 
   const notes = [];
   if (side === 'sell' && opening > 0) {
     notes.push(`${closing ? `This sells your ${shares(closing)} and shorts` : 'This shorts'} ${shares(opening)}: you profit if the price falls and lose if it rises. A short sets aside ${SHORT_MARGIN * 100}% of its value from your buying power until you cover it.`);
   }
-  if (q.time) notes.push(`Fills at the last price, from ${fmtDateTime(q.time)}.`);
-  if (!isOpen(q.market)) notes.push(`${MARKETS[q.market].label} is closed now, so that is the latest close.`);
+  if (trading) {
+    if (q.time) notes.push(`Fills now at the latest price, from ${fmtDateTime(q.time)}.`);
+  } else {
+    notes.push(`${MARKETS[q.market].label} is ${STATUS_LABELS[status]}. Your order waits and fills at the first price after it opens, like a real broker; the actual price may differ from the last one shown. If you can't afford it by then, it's cancelled.`);
+  }
   $('trade-note').textContent = notes.join(' ');
 }
 
@@ -594,7 +629,12 @@ function submitTrade(e) {
   const { symbol, side } = state.trade;
   const q = quote(symbol);
   try {
-    state.portfolio = applyTrade(state.portfolio, { symbol, side, qty: $('qty').value, price: q.price, currency: q.currency });
+    if (marketStatus(q.market) === 'open') {
+      state.portfolio = applyTrade(state.portfolio, { symbol, side, qty: $('qty').value, price: q.price, currency: q.currency });
+    } else {
+      state.portfolio = placeOrder(state.portfolio, { symbol, side, qty: $('qty').value, currency: q.currency });
+      notify(`Order placed: ${side} ${shares(Number($('qty').value))} of ${symbol}. It fills at the first price after ${MARKETS[q.market].label} opens.`);
+    }
     savePortfolio();
     $('trade-dialog').close();
     render();
@@ -972,7 +1012,7 @@ function renderFund() {
   const market = marketForCurrency(f.currency);
   const status = f.stoppedAt
     ? `Stopped ${fmtDateTime(f.stoppedAt)}`
-    : `Running · ${f.decisionsPerDay} decision${f.decisionsPerDay > 1 ? 's' : ''} per trading day · ${MARKETS[market].label} ${isOpen(market) ? 'open' : 'closed'}`;
+    : `Running · ${f.decisionsPerDay} decision${f.decisionsPerDay > 1 ? 's' : ''} per trading day · ${MARKETS[market].label} ${STATUS_LABELS[marketStatus(market)]}`;
   el.innerHTML = `
     <section class="cards">
       <div class="card"><div class="label">AI fund · profit / loss</div>
@@ -1087,7 +1127,13 @@ document.addEventListener('click', (e) => {
   if (!t) return;
   const d = t.dataset;
   if (d.trade) openTrade(d.trade, d.side);
-  else if (d.editRule) openRuleEditor(d.editRule);
+  else if (d.cancelOrder) {
+    if (confirm('Cancel this order?')) {
+      state.portfolio = cancelOrder(state.portfolio, d.cancelOrder);
+      savePortfolio();
+      render();
+    }
+  } else if (d.editRule) openRuleEditor(d.editRule);
   else if (d.testRule) {
     const r = state.portfolio.rules.find((x) => x.id === d.testRule);
     state.backtests[r.id] = backtest([r], quote(r.symbol));

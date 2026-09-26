@@ -239,3 +239,31 @@ export function backtest(rules, quote, { startCash = 10000 } = {}) {
     curve,
   };
 }
+
+// Fills orders that were placed while their market was closed, each at the first price point after
+// it was placed. Price points only exist while a market trades, so that's the first price after the
+// open. An order that can't be afforded (or has nothing left to sell) at that price is dropped and
+// reported. Returns { portfolio, log } with log entries { order, trade } or { order, error }.
+export function fillPendingOrders(portfolio, quotes) {
+  let p = structuredClone(portfolio);
+  const log = [];
+  const keep = [];
+  const orders = [...(p.pendingOrders ?? [])].sort((a, b) => a.placedAt.localeCompare(b.placedAt));
+  p.pendingOrders = [];
+  for (const order of orders) {
+    const placed = Date.parse(order.placedAt) / 1000;
+    const point = pricePoints(quotes[order.symbol]).find(([t]) => t > placed);
+    if (!point) { keep.push(order); continue; }
+    const [t, price] = point;
+    const time = new Date(t * 1000).toISOString();
+    try {
+      p = applyTrade(p, { symbol: order.symbol, side: order.side, qty: order.qty, price, currency: order.currency, time });
+      p.trades.at(-1).order = order.id;
+      log.push({ order, trade: p.trades.at(-1) });
+    } catch (err) {
+      log.push({ order, error: err.message, time });
+    }
+  }
+  p.pendingOrders = keep;
+  return { portfolio: p, log };
+}

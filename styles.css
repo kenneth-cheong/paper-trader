@@ -218,6 +218,11 @@ select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border
 .chart .hit { fill: transparent; cursor: crosshair; }
 .tooltip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 13px; box-shadow: 0 4px 14px rgb(0 0 0 / .12); }
 
+/* orders waiting for the open */
+.pending { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px; }
+.pending li { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.pending li button { margin-left: auto; }
+
 /* AI fund controls */
 .fund-form { grid-template-columns: repeat(3, 1fr) auto; }
 .fund-new { margin-top: 12px; }

@@ -14,7 +14,7 @@ export function newPortfolio(start = DEFAULT_START) {
   for (const [ccy, amount] of Object.entries(start)) {
     accounts[ccy] = { start: amount, cash: amount, realized: 0 };
   }
-  return { version: 1, createdAt: new Date().toISOString(), accounts, positions: {}, trades: [], rules: [] };
+  return { version: 1, createdAt: new Date().toISOString(), accounts, positions: {}, trades: [], rules: [], pendingOrders: [] };
 }
 
 // Keeps money at 1/10000 of a unit so repeated trades don't drift from floating-point error.
@@ -71,6 +71,27 @@ export function applyTrade(portfolio, { symbol, side, qty, price, currency, time
   return p;
 }
 
+// ---------- orders placed while a market is closed ----------
+
+// Queues an order to fill at the first price after its market reopens (see fillPendingOrders in rules.js).
+// Whether it can be afforded is checked when it fills, at that price.
+export function placeOrder(portfolio, { symbol, side, qty, currency, time = new Date().toISOString() }) {
+  qty = Number(qty);
+  if (!Number.isInteger(qty) || qty <= 0) throw new Error('Quantity must be a whole number of shares.');
+  if (side !== 'buy' && side !== 'sell') throw new Error(`Unknown side "${side}".`);
+  if (!portfolio.accounts[currency]) throw new Error(`There is no ${currency} account.`);
+  const p = structuredClone(portfolio);
+  p.pendingOrders ??= [];
+  p.pendingOrders.push({ id: `o${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`, symbol, side, qty, currency, placedAt: time });
+  return p;
+}
+
+export function cancelOrder(portfolio, id) {
+  const p = structuredClone(portfolio);
+  p.pendingOrders = (p.pendingOrders ?? []).filter((o) => o.id !== id);
+  return p;
+}
+
 // Values the portfolio at the given quotes ({ [symbol]: { price } }).
 // A holding with no quote is valued at its cost and flagged `unpriced`.
 export function summarize(portfolio, quotes = {}) {
@@ -114,8 +135,11 @@ export function validatePortfolio(p) {
     && p.positions && typeof p.positions === 'object' && Array.isArray(p.trades)
     && Object.values(p.accounts).every((a) => Number.isFinite(a.start) && Number.isFinite(a.cash) && Number.isFinite(a.realized))
     && Object.values(p.positions).every((x) => Number.isInteger(x.qty) && x.qty !== 0 && Number.isFinite(x.avgCost) && p.accounts[x.currency])
-    && (p.rules === undefined || (Array.isArray(p.rules) && p.rules.every((r) => r && r.id && r.symbol && r.when && r.action && r.state)));
+    && (p.rules === undefined || (Array.isArray(p.rules) && p.rules.every((r) => r && r.id && r.symbol && r.when && r.action && r.state)))
+    && (p.pendingOrders === undefined || (Array.isArray(p.pendingOrders)
+      && p.pendingOrders.every((o) => o && o.id && o.symbol && ['buy', 'sell'].includes(o.side) && Number.isInteger(o.qty) && o.qty > 0 && p.accounts[o.currency] && o.placedAt)));
   if (!ok) throw new Error('That file is not a paper-trader portfolio export.');
   p.rules ??= []; // exports from before auto-trading existed
+  p.pendingOrders ??= []; // ...and from before orders could wait for the open
   return p;
 }

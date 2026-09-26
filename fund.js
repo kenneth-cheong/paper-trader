@@ -9,7 +9,7 @@
 
 import { newPortfolio, applyTrade, summarize } from './portfolio.js';
 import { pricePoints } from './rules.js';
-import { marketForCurrency, isOpen, minutesSinceOpen, sessionMinutes } from './markets.js';
+import { marketForCurrency, minutesSinceOpen, sessionMinutes, tradingStatus } from './markets.js';
 
 export const SHORT_MAX_LOSS = 0.4;
 
@@ -34,10 +34,13 @@ export function newFund({ budget, currency, decisionsPerDay = 2, now = new Date(
   };
 }
 
-// Decisions are spread evenly through the market's trading day, starting 15 minutes after the open.
-export function decisionDue(fund, now = new Date()) {
+// Decisions are spread evenly through the market's trading day, starting 15 minutes after the open,
+// and only while the market is really trading (`prices` shows today's prices arriving), so the fund
+// never decides, or fills at stale prices, on a public holiday or after an early close.
+export function decisionDue(fund, now = new Date(), prices = null) {
   if (fund.stoppedAt) return false;
   const market = marketForCurrency(fund.currency);
+  if (tradingStatus(market, prices, now) !== 'open') return false;
   const since = minutesSinceOpen(market, now);
   if (since == null || since < 15) return false;
   if (!fund.lastDecisionAt) return true;
@@ -45,7 +48,6 @@ export function decisionDue(fund, now = new Date()) {
   return (now - new Date(fund.lastDecisionAt)) / 60000 >= gapMin - 10;
 }
 
-export const fundMarketOpen = (fund, now = new Date()) => isOpen(marketForCurrency(fund.currency), now);
 
 // Executes the AI's orders against current prices. Sells and covers go first so they free up money.
 // Returns the orders with a status: filled (with price) or rejected (with the reason).
