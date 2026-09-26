@@ -1,0 +1,25 @@
+name: Market memory report
+
+# Run by hand (Actions → Market memory report → Run workflow). Prints how each market's stocks moved
+# after past news and after big one-day moves, and the lessons the AI funds get from it. Read-only:
+# no AI calls, nothing private.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  report:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          ref: ai-state
+          path: state
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: curl -sf "https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/data/prices.json" -o prices.json
+      - run: node scripts/memory-report.mjs state/news-events.json prices.json
