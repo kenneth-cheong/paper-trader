@@ -9,6 +9,7 @@
 //                           { pause: true } or { resume: true }. With FUND_START_AMOUNT, its settings
 //                           (broker, approval, limits) apply to the new fund.
 //   ANTHROPIC_API_KEY, AI_MODEL (decisions, default Sonnet), AI_NEWS_MODEL (news, default Haiku)
+//   AI_MONTHLY_CAP_USD      skip AI decisions once the month's scheduled AI spend reaches this (ai-spend.json)
 // Every run records Tiger fills (scripts/tiger_broker.py sync runs just before), checks stop-loss /
 // take-profit / forced-cover levels and the daily loss limit, and, when a decision is due, lets
 // Claude decide. Decisions only happen while the fund's market is actually trading. With Tiger,
@@ -19,11 +20,16 @@ import { dirname, join } from 'node:path';
 import { decideFund, TIERS } from '../ai.js';
 import {
   newFund, decisionDue, executeDecision, setProtections, checkProtections, recordValue, stopFund, applySettings,
-  approveProposals, rejectProposals, expireProposals, applyBrokerFills, pauseFund, resumeFund, checkDailyLoss,
+  approveProposals, rejectProposals, expireProposals, applyBrokerFills, pauseFund, resumeFund, checkDailyLoss, syncGuards,
 } from '../fund.js';
+import { applyCorporateActions, describeAction } from '../actions.js';
+import { addSpend, capReached, monthSpend } from '../spend.js';
 
 const [file, picksFile] = process.argv.slice(2);
+// A private fund's trades stay out of the (public) Actions log: only warnings are printed.
+if (process.env.FUND_PRIVATE === 'true') console.log = () => {};
 const newsFile = join(dirname(file), 'news.json');
+const spendFile = join(dirname(file), 'ai-spend.json');
 const NEWS_MAX_AGE_MS = 4 * 3600 * 1000; // reuse the picks job's digest when it's this fresh
 const env = process.env;
 const readJson = async (path) => { try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; } };
@@ -60,6 +66,16 @@ if (!fund) {
   process.exit(0);
 }
 
+// Splits and dividends on what the fund holds (with Tiger, Tiger adjusts the real account itself)
+{
+  const { portfolio, applied } = applyCorporateActions(fund.portfolio, quotes, now);
+  fund.portfolio = portfolio;
+  for (const a of applied) {
+    fund.events.push({ time: a.time, symbol: a.symbol, action: a.kind, shares: a.qty, price: a.perShare ?? null, why: describeAction(a) });
+    console.log(`Corporate action: ${describeAction(a)}`);
+  }
+}
+
 // Tiger fills that scripts/tiger_broker.py sync just brought back
 for (const e of applyBrokerFills(fund, now)) console.log(`Tiger fill: ${e.action} ${e.shares} ${e.symbol} at ${e.price}`);
 expireProposals(fund, now);
@@ -93,7 +109,12 @@ if (!fund.stoppedAt) {
       console.log('A decision is due but there are no prices this run; waiting for the next one.');
     } else if (!env.ANTHROPIC_API_KEY) {
       console.log('A decision is due but ANTHROPIC_API_KEY is not set.');
+    } else if (capReached(await readJson(spendFile), env.AI_MONTHLY_CAP_USD, now)) {
+      const message = `This month's AI spend (about US$${monthSpend(await readJson(spendFile), now)}) reached the US$${env.AI_MONTHLY_CAP_USD} cap, so the AI isn't deciding until next month. Stop-losses still work. Raise the cap with the AI_MONTHLY_CAP_USD repository variable.`;
+      if (fund.aiCapped?.message !== message) fund.aiCapped = { time: now.toISOString(), message };
+      console.log(message);
     } else {
+      fund.aiCapped = null;
       try {
         const { default: Anthropic } = await import('@anthropic-ai/sdk');
         const cached = await readJson(newsFile);
@@ -103,6 +124,7 @@ if (!fund.stoppedAt) {
           model: env.AI_MODEL || TIERS.advanced, newsModel: env.AI_NEWS_MODEL || TIERS.simple,
         });
         if (d.news) await writeFile(newsFile, JSON.stringify(d.news, null, 1));
+        await writeFile(spendFile, JSON.stringify(addSpend(await readJson(spendFile), 'fund', d.usage?.costUsd, now)));
         const orders = executeDecision(fund, d.orders ?? [], quotes, now);
         setProtections(fund, d.protections);
         fund.decisions.push({ time: now.toISOString(), outlook: d.outlook, orders, protections: d.protections, source_urls: d.source_urls, model: d.model, newsModel: d.newsModel, usage: d.usage });
@@ -118,7 +140,14 @@ if (!fund.stoppedAt) {
   }
 }
 
+// Stop orders held by Tiger, matched to what the fund now holds (Tiger funds only)
+for (const c of syncGuards(fund, quotes, now)) {
+  console.log(c.change === 'place' ? `Tiger stop order: ${c.symbol} ${c.qty} shares at ${c.stopPrice}` : `Tiger stop order for ${c.symbol}: cancelling the old one`);
+}
+
 fund.proposals = (fund.proposals ?? []).slice(-200);
-fund.brokerOrders = (fund.brokerOrders ?? []).slice(-500);
+// Keep the last 500 Tiger orders, and always every open one (a stop order can stand for months).
+const orders = fund.brokerOrders ?? [];
+fund.brokerOrders = orders.filter((o, i) => i >= orders.length - 500 || ['queued', 'sent', 'partial'].includes(o.status));
 console.log(`AI fund value: ${recordValue(fund, quotes, now)} ${fund.currency} (budget ${fund.budget}).`);
 await writeFile(file, JSON.stringify(fund));

@@ -159,3 +159,104 @@ test('stopping a Tiger fund sends closing orders and cancels the rest', () => {
   const close = f.brokerOrders.find((o) => o.source === 'stop');
   assert.deepEqual([close.symbol, close.side, close.qty], ['A', 'sell', 10]);
 });
+
+// ---------- stop orders held by Tiger ----------
+import { syncGuards, stopPriceFor, guardAtTiger } from '../fund.js';
+
+const held = (f, symbol, qty, avgCost) => { f.portfolio.positions[symbol] = { qty, avgCost, currency: 'USD' }; };
+const guards = (f) => f.brokerOrders.filter((o) => o.source === 'guard');
+
+test('stop prices sit on the price grid, rounded away from the price', () => {
+  assert.equal(stopPriceFor('sell', 100, 5, 'US'), 95);
+  assert.equal(stopPriceFor('sell', 38.47, 7, 'SGX'), 35.77); // 35.7771 rounded down
+  assert.equal(stopPriceFor('buy', 100, 40, 'US'), 140);
+});
+
+test('a protected position gets one standing stop order at Tiger, resized when the position changes', () => {
+  const f = tiger({ approval: 'auto' });
+  held(f, 'A', 10, 100);
+  setProtections(f, [{ symbol: 'A', stop_loss_pct: 5, take_profit_pct: 20 }]);
+  const quotes = { A: q(100) };
+  syncGuards(f, quotes, at('15:50'));
+  const [g] = guards(f);
+  assert.deepEqual([g.type, g.side, g.action, g.qty, g.stopPrice, g.timeInForce, g.status], ['stop', 'sell', 'sell', 10, 95, 'GTC', 'queued']);
+  assert.equal(syncGuards(f, quotes, at('16:00')).length, 0); // nothing to change
+  g.status = 'sent';
+  held(f, 'A', 15, 100);
+  syncGuards(f, quotes, at('16:15'));
+  assert.equal(g.cancelRequested, true);
+  assert.equal(guards(f).at(-1).qty, 15);
+  setProtections(f, [{ symbol: 'A', stop_loss_pct: 0, take_profit_pct: 0 }]);
+  guards(f).at(-1).status = 'sent';
+  syncGuards(f, quotes, at('16:30'));
+  assert.ok(guards(f).every((o) => o.cancelRequested || o.status !== 'sent'));
+});
+
+test('shorts always get a stop order at the 40% forced-cover level', () => {
+  const f = tiger();
+  held(f, 'A', -10, 100);
+  syncGuards(f, { A: q(100) }, at('15:50'));
+  assert.deepEqual(guards(f).map((o) => [o.side, o.action, o.qty, o.stopPrice]), [['buy', 'cover', 10, 140]]);
+});
+
+test('no stop order while another order is closing the position; kept while one adds to it', () => {
+  const f = tiger({ approval: 'auto', maxOrderPct: 100 });
+  held(f, 'A', 10, 100);
+  setProtections(f, [{ symbol: 'A', stop_loss_pct: 5 }]);
+  syncGuards(f, { A: q(100) }, at('15:50'));
+  guards(f)[0].status = 'sent';
+  executeDecision(f, [buy('A', 5)], { A: q(100) }, at('15:55'));
+  syncGuards(f, { A: q(100) }, at('15:55'));
+  assert.equal(guards(f)[0].cancelRequested, undefined); // buying more: keep it until the buy fills
+  executeDecision(f, [{ symbol: 'A', action: 'sell', shares: 10, reason: 'r' }], { A: q(100) }, at('16:00'));
+  syncGuards(f, { A: q(100) }, at('16:00'));
+  assert.equal(guards(f)[0].cancelRequested, true);
+  assert.equal(guards(f).length, 1);
+});
+
+test('while Tiger holds the stop, this code skips its own stop-loss but still takes profits', () => {
+  const f = tiger();
+  held(f, 'A', 10, 100);
+  setProtections(f, [{ symbol: 'A', stop_loss_pct: 5, take_profit_pct: 10 }]);
+  syncGuards(f, { A: q(100) }, at('15:30'));
+  guards(f)[0].status = 'sent';
+  assert.ok(guardAtTiger(f, 'A'));
+  const t = (hhmm) => at(hhmm).getTime() / 1000;
+  checkProtections(f, { A: q(94, { intraday: [[t('15:35'), 94]] }) }, at('15:40'));
+  assert.equal(f.brokerOrders.filter((o) => o.source === 'protection').length, 0);
+  checkProtections(f, { A: q(111, { intraday: [[t('15:45'), 111]] }) }, at('15:50'));
+  assert.equal(f.brokerOrders.filter((o) => o.source === 'protection').length, 1);
+});
+
+test('pausing keeps stop orders; stopping the fund cancels them; a refused stop is not retried at once', () => {
+  const f = tiger();
+  held(f, 'A', 10, 100);
+  setProtections(f, [{ symbol: 'A', stop_loss_pct: 5 }]);
+  syncGuards(f, { A: q(100) }, at('15:30'));
+  const g = guards(f)[0];
+  g.status = 'sent';
+  pauseFund(f, 'test', at('15:40'));
+  assert.equal(g.cancelRequested, undefined);
+  resumeFund(f);
+  Object.assign(g, { status: 'rejected' });
+  syncGuards(f, { A: q(100) }, at('15:50'));
+  assert.equal(guards(f).length, 1); // not retried within 6 hours
+  syncGuards(f, { A: q(100) }, new Date(at('15:30').getTime() + 7 * 3600000));
+  assert.equal(guards(f).length, 2);
+  guards(f)[1].status = 'sent';
+  stopFund(f, { A: q(100) }, at('23:00'));
+  assert.equal(guards(f)[1].cancelRequested, true);
+});
+
+test('a triggered stop order is recorded at Tiger\'s price and its protection cleared', () => {
+  const f = tiger();
+  held(f, 'A', 10, 100);
+  setProtections(f, [{ symbol: 'A', stop_loss_pct: 5 }]);
+  syncGuards(f, { A: q(100) }, at('15:30'));
+  Object.assign(guards(f)[0], { status: 'filled', filledQty: 10, avgFillPrice: 94.8, fee: 2.2 });
+  const [fill] = applyBrokerFills(f, at('16:00'));
+  assert.match(fill.why, /stop-loss order held by Tiger triggered at 95/);
+  assert.equal(f.portfolio.positions.A, undefined);
+  assert.equal(f.protections.A, undefined);
+  assert.equal(syncGuards(f, { A: q(94) }, at('16:05')).length, 0);
+});

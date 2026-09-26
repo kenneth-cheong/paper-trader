@@ -84,3 +84,10 @@ export async function sendFundCommand({ action, amount = null, currency = null, 
 export async function fundCommandStatus(id) {
   return check(await (await client()).rpc('fund_command_status', { command_id: id }));
 }
+
+// The AI fund when it's kept privately (see supabase/private-fund.sql): admins only. Null when it
+// isn't stored there (not set up, or no fund yet), so the app falls back to the public copy.
+export async function loadPrivateFund() {
+  const { data, error } = await (await client()).from('fund_state').select('data').eq('id', 1).maybeSingle();
+  return error ? null : data?.data ?? null;
+}

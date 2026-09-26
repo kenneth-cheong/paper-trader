@@ -4,7 +4,9 @@ Usage: python scripts/tiger_broker.py sync|send <ai-fund.json>
        python scripts/tiger_broker.py check
   sync  cancels orders the fund asked to cancel, refreshes the status and fills of open orders,
         and records the account's positions (runs before the fund's JavaScript step).
-  send  places queued orders as DAY limit orders (runs after it).
+  send  places queued orders (runs after it): DAY limit orders, and standing (GTC) stop orders for the
+        fund's stop-losses. Cancellations the fund asked for go first, and a closing order waits until
+        any other closing order for the same stock is gone, so the same shares are never sold twice.
   check only reads: connects, and prints the account type, cash and number of positions. No orders.
 
 Credentials come from environment variables read by Tiger's SDK (tigeropen): TIGEROPEN_TIGER_ID,
@@ -68,6 +70,14 @@ class Broker:
                             limit_price=limit_price, time_in_force='DAY')
         return self.client.place_order(order) or order.id
 
+    def place_stop(self, symbol, currency, side, qty, stop_price):
+        from tigeropen.common.util.contract_utils import stock_contract
+        from tigeropen.common.util.order_utils import stop_order
+        order = stop_order(account=self.account, contract=stock_contract(symbol=symbol, currency=currency),
+                           action='BUY' if side == 'buy' else 'SELL', quantity=qty,
+                           aux_price=stop_price, time_in_force='GTC')
+        return self.client.place_order(order) or order.id
+
     def get_order(self, order_id):
         return self.client.get_order(account=self.account, id=order_id, show_charges=True)
 
@@ -108,6 +118,26 @@ def account_type(broker):
     return 'paper' if broker.is_paper else 'live'
 
 
+def refresh(o, broker):
+    """Sends a requested cancel (once) and brings the order's status, fills and fee up to date."""
+    if o.get('cancelRequested') and not o.get('cancelSent'):
+        broker.cancel(o['tigerOrderId'])
+        o['cancelSent'] = True
+    t = broker.get_order(o['tigerOrderId'])
+    filled = int(getattr(t, 'filled', 0) or 0)
+    if filled > (o.get('filledQty') or 0):
+        o['filledAt'] = now_iso()
+    o['filledQty'] = filled
+    if getattr(t, 'avg_fill_price', None):
+        o['avgFillPrice'] = float(t.avg_fill_price)
+    o['status'] = status_of(t)
+    fee = fee_of(t)
+    if fee is not None:
+        o['fee'] = fee
+    if o['status'] == 'rejected':
+        o['error'] = getattr(t, 'reason', None) or 'Rejected by Tiger.'
+
+
 def sync(fund, broker, error=None):
     """Cancels, refreshes open orders and records positions. Changes `fund` in place."""
     snap = {'time': now_iso(), 'accountType': None, 'positions': [], 'error': error}
@@ -119,22 +149,7 @@ def sync(fund, broker, error=None):
         if o.get('status') not in OPEN or not o.get('tigerOrderId'):
             continue
         try:
-            if o.get('cancelRequested') and not o.get('cancelSent'):
-                broker.cancel(o['tigerOrderId'])
-                o['cancelSent'] = True
-            t = broker.get_order(o['tigerOrderId'])
-            filled = int(getattr(t, 'filled', 0) or 0)
-            if filled > (o.get('filledQty') or 0):
-                o['filledAt'] = now_iso()
-            o['filledQty'] = filled
-            if getattr(t, 'avg_fill_price', None):
-                o['avgFillPrice'] = float(t.avg_fill_price)
-            o['status'] = status_of(t)
-            fee = fee_of(t)
-            if fee is not None:
-                o['fee'] = fee
-            if o['status'] == 'rejected':
-                o['error'] = getattr(t, 'reason', None) or 'Rejected by Tiger.'
+            refresh(o, broker)
         except Exception as err:  # noqa: BLE001
             o['error'] = f'Could not check this order with Tiger: {err}'
     try:
@@ -144,8 +159,37 @@ def sync(fund, broker, error=None):
     fund['broker'] = snap
 
 
+def closing(o):
+    return o.get('action') in ('sell', 'cover')
+
+
+def clear_way(fund, broker, o):
+    """Before a closing order is placed: other closing orders for the same stock that are live at Tiger.
+    Stop orders ("guards") among them are cancelled now; anything else must finish first.
+    Returns None to go ahead, 'wait' to try next run, or 'skip' if an earlier order already sold."""
+    others = [c for c in fund.get('brokerOrders', []) if c is not o and c.get('symbol') == o.get('symbol')
+              and closing(c) and c.get('status') in OPEN and c.get('tigerOrderId')]
+    for c in others:
+        if c.get('source') == 'guard' or c.get('cancelRequested'):
+            c['cancelRequested'] = True
+            try:
+                refresh(c, broker)
+            except Exception as err:  # noqa: BLE001
+                c['error'] = f'Could not cancel this order with Tiger: {err}'
+    if any((c.get('filledQty') or 0) > (c.get('appliedQty') or 0) for c in others):
+        return 'skip'
+    return 'wait' if any(c.get('status') in OPEN for c in others) else None
+
+
 def send(fund, broker, error=None, allow_live=False):
     """Places queued orders. Changes `fund` in place."""
+    if broker is not None:  # cancellations the fund asked for go before anything new
+        for o in fund.get('brokerOrders', []):
+            if o.get('cancelRequested') and o.get('status') in OPEN and o.get('tigerOrderId'):
+                try:
+                    refresh(o, broker)
+                except Exception as err:  # noqa: BLE001
+                    o['error'] = f'Could not cancel this order with Tiger: {err}'
     for o in fund.get('brokerOrders', []):
         if o.get('status') != 'queued':
             continue
@@ -158,8 +202,20 @@ def send(fund, broker, error=None, allow_live=False):
         if not broker.is_paper and not allow_live:
             o.update(status='failed', error=LIVE_BLOCKED)
             continue
+        if closing(o):
+            way = clear_way(fund, broker, o)
+            if way == 'skip':
+                o.update(status='cancelled', error='Not sent: another order for these shares filled first.')
+                continue
+            if way == 'wait':
+                o['note'] = 'Waiting for an earlier order for this stock to finish at Tiger.'
+                continue
         try:
-            o['tigerOrderId'] = broker.place_limit(o['tigerSymbol'], o['currency'], o['side'], int(o['qty']), float(o['limitPrice']))
+            if o.get('type') == 'stop':
+                o['tigerOrderId'] = broker.place_stop(o['tigerSymbol'], o['currency'], o['side'], int(o['qty']), float(o['stopPrice']))
+            else:
+                o['tigerOrderId'] = broker.place_limit(o['tigerSymbol'], o['currency'], o['side'], int(o['qty']), float(o['limitPrice']))
+            o.pop('note', None)
             o.update(status='sent', sentAt=now_iso(), accountType=account_type(broker))
         except Exception as err:  # noqa: BLE001
             o.update(status='failed', error=f'Tiger refused the order: {err}')

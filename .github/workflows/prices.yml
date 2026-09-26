@@ -56,12 +56,16 @@ jobs:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       AI_MODEL: ${{ vars.AI_MODEL }}           # decisions; default claude-sonnet-5
       AI_NEWS_MODEL: ${{ vars.AI_NEWS_MODEL }} # news gathering; default claude-haiku-4-5
+      AI_MONTHLY_CAP_USD: ${{ vars.AI_MONTHLY_CAP_USD || '30' }} # scheduled AI stops for the month at this spend; 0 = no cap
       # Tiger Brokers, for an AI fund that trades through Tiger (see README → Tiger Brokers)
       TIGEROPEN_TIGER_ID: ${{ secrets.TIGEROPEN_TIGER_ID }}
       TIGEROPEN_ACCOUNT: ${{ secrets.TIGEROPEN_ACCOUNT }}
       TIGEROPEN_PRIVATE_KEY: ${{ secrets.TIGEROPEN_PRIVATE_KEY }}
       TIGEROPEN_LICENSE: ${{ secrets.TIGEROPEN_LICENSE }}
       TIGER_LIVE_TRADING: ${{ vars.TIGER_LIVE_TRADING }} # must be "yes" before a live (real-money) account can trade
+      FUND_STATE_TOKEN: ${{ secrets.FUND_STATE_TOKEN }} # keeps the AI fund private in Supabase (supabase/private-fund.sql)
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }} # Telegram alerts (README → Telegram alerts)
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -108,14 +112,22 @@ jobs:
         env:
           FORCE_PICKS: ${{ inputs.refresh_picks }}
         run: node scripts/fetch-picks.mjs state/picks.json
+      # With FUND_STATE_TOKEN the fund lives privately in Supabase; if it can't be read, the fund's steps
+      # are skipped (running from an old copy could forget orders sent to Tiger).
+      - name: Load the AI fund
+        id: fundstore
+        run: node scripts/fund-store.mjs load state/ai-fund.json
       - name: 'Tiger: check orders and positions'
+        if: steps.fundstore.outputs.ok == 'true'
         continue-on-error: true
         run: |
           if [ -n "$TIGEROPEN_TIGER_ID" ]; then pip install --quiet tigeropen; fi
           python scripts/tiger_broker.py sync state/ai-fund.json
       - name: AI fund
+        if: steps.fundstore.outputs.ok == 'true'
         continue-on-error: true
         env:
+          FUND_PRIVATE: ${{ steps.fundstore.outputs.private }}
           FUND_START_AMOUNT: ${{ inputs.fund_start_amount }}
           FUND_CURRENCY: ${{ inputs.fund_currency }}
           FUND_DECISIONS_PER_DAY: ${{ inputs.fund_decisions_per_day }}
@@ -123,15 +135,30 @@ jobs:
           FUND_COMMAND: ${{ inputs.fund_command }}
         run: node scripts/ai-fund.mjs state/ai-fund.json state/picks.json
       - name: 'Tiger: send orders'
+        if: steps.fundstore.outputs.ok == 'true'
         continue-on-error: true
         run: python scripts/tiger_broker.py send state/ai-fund.json
+      - name: Telegram alerts
+        if: steps.fundstore.outputs.ok == 'true'
+        continue-on-error: true
+        run: APP_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/" node scripts/notify.mjs state/ai-fund.json
+      - name: Store the AI fund
+        id: fundsave
+        if: steps.fundstore.outputs.ok == 'true'
+        run: node scripts/fund-store.mjs save state/ai-fund.json
       - name: Save AI state
         run: |
           cd state
           git add -A
-          if ! git diff --cached --quiet; then
-            git -c user.name="paper-trader bot" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
-              commit --quiet -m "AI state $(date -u +%FT%TZ)"
+          as_bot() { git -c user.name="paper-trader bot" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" "$@"; }
+          if [ "${{ steps.fundsave.outputs.saved }}" = "true" ] && git cat-file -e HEAD:ai-fund.json 2>/dev/null; then
+            # The fund just moved to Supabase: restart this public branch so its history no longer holds it.
+            git checkout --quiet --orphan fresh
+            git add -A
+            as_bot commit --quiet -m "AI state (the AI fund is now kept privately)"
+            git push --quiet --force origin fresh:ai-state
+          elif ! git diff --cached --quiet; then
+            as_bot commit --quiet -m "AI state $(date -u +%FT%TZ)"
             git push --quiet origin ai-state
           fi
 
@@ -142,7 +169,12 @@ jobs:
           cp data/sample-prices.json _site/data/
           cp data/prices.json _site/data/ 2>/dev/null || echo "::warning::No prices this run; the site shows sample prices."
           cp state/picks.json _site/data/ 2>/dev/null || true
-          node scripts/public-fund.mjs state/ai-fund.json _site/data/ai-fund.json
+          cp state/picks-history.json _site/data/ 2>/dev/null || true
+          node -e "const fs=require('fs');let l={months:{}};try{l=JSON.parse(fs.readFileSync('state/ai-spend.json','utf8'))}catch{}l.cap=Number(process.env.AI_MONTHLY_CAP_USD)||null;fs.writeFileSync('_site/data/ai-spend.json',JSON.stringify(l))"
+          # The public copy of the AI fund, unless it's kept private (then only admins see it, from Supabase)
+          if [ "${{ steps.fundstore.outputs.private }}" != "true" ]; then
+            node scripts/public-fund.mjs state/ai-fund.json _site/data/ai-fund.json
+          fi
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site

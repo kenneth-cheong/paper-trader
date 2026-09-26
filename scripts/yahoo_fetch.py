@@ -51,6 +51,8 @@ def main():
     jobs = [(s, r, i) for s in symbols for r, i in REQUESTS] + [(FX_SYMBOL, "5d", "1d")]
     for symbol, range_, interval in jobs:
         params = {"range": range_, "interval": interval}
+        if interval == "1d" and symbol != FX_SYMBOL:
+            params["events"] = "div,splits"  # dividends and stock splits (see actions.js)
         if crumb:
             params["crumb"] = crumb
         body = None

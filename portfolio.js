@@ -7,6 +7,10 @@
 // what the shares cost; a sale's fee comes out of what you receive. So average prices, realized
 // profit and cash are all after fees, and `fees` on each account adds up what was paid.
 //
+// Cash can be converted between the currency accounts (convertCash). The money moved is tracked as a
+// transfer, at the market rate, so each account's profit and loss is unaffected by the move and only
+// the conversion's cost (the spread) shows as a loss in the receiving account.
+//
 // Positions have a signed quantity: positive is long, negative is short. Selling more than you hold
 // opens a short; buying while short covers it. Like a margin account, every open short sets aside
 // 150% of its sale value (at the price it was shorted), and that collateral can't be spent on buys.
@@ -84,6 +88,31 @@ export function applyTrade(portfolio, { symbol, side, qty, price, currency, mark
   return p;
 }
 
+// ---------- moving cash between currencies ----------
+
+// Converts `amount` of `from` into `to`. `rate` is the market rate in `to` per 1 `from`; the broker's
+// spread (spreadPct, in percent) is taken off what you receive. Returns a new portfolio.
+export function convertCash(portfolio, { from, to, amount, rate, spreadPct = 0, time = new Date().toISOString() }) {
+  amount = money(Number(amount));
+  if (from === to) throw new Error('Choose two different currencies.');
+  if (!portfolio.accounts[from] || !portfolio.accounts[to]) throw new Error(`There is no ${!portfolio.accounts[from] ? from : to} account.`);
+  if (!(amount > 0)) throw new Error('Enter an amount above 0.');
+  if (!(rate > 0)) throw new Error('There is no exchange rate yet.');
+  if (!(spreadPct >= 0 && spreadPct < 100)) throw new Error('The spread must be between 0% and 100%.');
+  const available = buyingPower(portfolio, from);
+  if (amount > available) throw new Error(`Not enough ${from} available: you have ${Math.max(0, available).toFixed(2)}.`);
+  const p = structuredClone(portfolio);
+  const atMarket = money(amount * rate);
+  const received = money(atMarket * (1 - spreadPct / 100));
+  const a = p.accounts[from], b = p.accounts[to];
+  a.cash = money(a.cash - amount);
+  a.transfers = money((a.transfers ?? 0) - amount);
+  b.cash = money(b.cash + received);
+  b.transfers = money((b.transfers ?? 0) + atMarket);
+  (p.conversions ??= []).push({ time, from, to, amount, rate, spreadPct, received, cost: money(atMarket - received) });
+  return p;
+}
+
 // ---------- orders placed while a market is closed ----------
 
 // Queues an order to fill at the first price after its market reopens (see fillPendingOrders in rules.js).
@@ -112,6 +141,7 @@ export function summarize(portfolio, quotes = {}) {
   for (const [ccy, a] of Object.entries(portfolio.accounts)) {
     accounts[ccy] = {
       currency: ccy, start: a.start, cash: a.cash, realized: a.realized, fees: a.fees ?? 0,
+      transfers: a.transfers ?? 0, dividends: a.dividends ?? 0,
       marketValue: 0, unrealized: 0, buyingPower: buyingPower(portfolio, ccy), hasShorts: false,
     };
   }
@@ -136,8 +166,9 @@ export function summarize(portfolio, quotes = {}) {
 
   for (const a of Object.values(accounts)) {
     a.equity = a.cash + a.marketValue;
-    a.net = a.equity - a.start;
-    a.netPct = a.start ? a.net / a.start : 0;
+    a.invested = a.start + a.transfers; // what was put in, counting money converted in or out
+    a.net = a.equity - a.invested;
+    a.netPct = a.invested > 0 ? a.net / a.invested : 0;
   }
   return { accounts, positions };
 }
@@ -154,5 +185,6 @@ export function validatePortfolio(p) {
   if (!ok) throw new Error('That file is not a paper-trader portfolio export.');
   p.rules ??= []; // exports from before auto-trading existed
   p.pendingOrders ??= []; // ...and from before orders could wait for the open
+  if (!Object.values(p.accounts).every((a) => a.transfers === undefined || Number.isFinite(a.transfers))) throw new Error('That file is not a paper-trader portfolio export.');
   return p;
 }

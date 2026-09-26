@@ -20,6 +20,9 @@ Practice trading Singapore (SGX) and US stocks with virtual cash at real market 
 - **Short selling:** selling more than you hold opens a short. Like a margin account, each short sets aside 150% of its sale value from your buying power until you buy it back ("cover").
 - **Trading fees** are charged on every trade (see *Trading fees* below). Whole shares only. While a market is trading, orders fill at the latest fetched price. **Orders placed while it's closed wait** (listed under Holdings, where you can cancel them) and fill at the first price after it reopens, as with a real broker.
 - **Market hours:** SGX 9:00am–12:00pm and 1:00pm–5:00pm Singapore time; US 9:30am–4:00pm New York time (daylight saving is handled). A market only counts as open when the clock says so *and* today's prices are arriving, so public holidays and early closes show as closed with no holiday calendar to maintain.
+- **Converting currency:** the *Convert SGD ↔ USD* button on the combined card moves cash between your accounts at the latest rate, less your fee plan's conversion spread (Tiger about 0.1%, Standard Chartered about 0.5%: estimates; set your own under *My own rates*). Each account's profit and loss counts money converted in or out, so only the spread shows as a cost.
+- **Dividends and splits** are applied automatically. A split changes your share count, not what you paid (10 shares at $300 become 30 at $100). Dividends are credited on the ex-date for shares held before it: US dividends lose 30% to US withholding tax (the rate for a Singapore resident), SGX dividends are paid in full, and a short pays the dividend. They show on the account cards and in History.
+- **Index comparison:** each account card shows what the same starting money would have made in an index fund over the same period (SPY for USD, ES3 for SGD), after the buying fee.
 - **Your portfolio and rules** are saved to your account when accounts are on (see *Accounts* below); otherwise they live in your browser, and *Settings → Export* backs them up or moves them to another device.
 
 ### Trading fees
@@ -45,6 +48,10 @@ Choose the fees in *Settings → Trading fees*:
 
 The **AI fund** uses the Tiger, Standard Chartered or no-fee plan you choose when starting it. When trading through Tiger, it records the fees Tiger actually charged, using the Tiger plan only as an estimate until Tiger reports them. The AI is told what a round trip costs, so it avoids trades too small to cover their fees.
 
+### AI picks' track record
+
+Every scheduled set of picks is kept with each stock's price when it was picked. Under the picks, the **track record** scores each one after a week and a month of trading: whether it made money in its direction (a short gains when the price falls), and whether it beat the index over the same days (the S&P 500 for US stocks, the STI for SGX). Before fees. If the picks can't beat the index, don't follow them.
+
 ### Auto-trading rules
 
 Rules run whenever the page is open. When you come back after being away, they replay the last 5 trading days of 15-minute prices, so a rule still fires at the time and price it would have. If you're away longer than that, the gap is skipped. Rules only manage long positions; they never open shorts.
@@ -52,6 +59,8 @@ Rules run whenever the page is open. When you come back after being away, they r
 ### The AI fund's hard limit
 
 The fund's ledger starts with exactly the amount you give it, and nothing is ever added. The code, not the AI, rejects any order that costs more than the fund's buying power. Shorts need 150% collateral and are covered automatically at a 40% loss, so the fund can't lose more than its amount. The fund trades one market, set by the currency you choose: USD for US stocks, SGD for SGX stocks. It can hold long and short positions and set its own stop-loss and take-profit levels, which are checked every 15 minutes. It only makes decisions while its market is actually trading, never on a holiday or after an early close.
+
+The fund page compares the fund with **the same money in the index** (SPY or ES3, bought when the fund started, after fees), draws the index as a dashed line on the value chart, and shows **what the AI has cost** next to the profit after that cost. Dividends and splits on its holdings are applied as for your portfolio.
 
 ## How it runs
 
@@ -116,6 +125,7 @@ The AI fund can trade through your Tiger Brokers account instead of the simulato
 - **Orders:** always DAY limit orders, at most 1% worse than the latest price, and only while the market is actually trading.
 - **Fills:** the fund records Tiger's actual fill prices.
 - **Approval (the default):** the AI's trades wait under *Waiting for your approval* until you tap **Approve**. A proposal expires after an hour, or if the price moves more than 2% first. Stop-losses and take-profits don't wait, because they reduce risk.
+- **Stop-losses held by Tiger:** each stop-loss is also placed at Tiger as a standing (good-till-cancelled) stop order, so it triggers straight away even if GitHub runs the job late or not at all. Shorts always get one at the 40% forced-cover level. When the position changes size, the stop order is replaced; before any other order sells the same shares, the stop order is cancelled first, so shares are never sold twice. If Tiger refuses a stop order, the app's own 15-minute check covers that stock instead.
 - **Limits, enforced in code:** the fund's budget (open orders count as spent), a maximum size per order, and a daily-loss limit that pauses the fund.
 - **Kill switch:** **Pause all trading** stops new trades and cancels open orders.
 - **Mismatch check:** if the fund's positions and your Tiger account disagree, the page warns you.
@@ -135,6 +145,27 @@ The AI fund can trade through your Tiger Brokers account instead of the simulato
 
 **Privacy:** the website is public. Its copy of the fund leaves out your Tiger account's full positions and Tiger's order numbers, but the fund's own trades and value are visible to anyone with the link.
 
+### Keeping the AI fund private
+
+By default the AI fund's trades, value and positions are on the public website and the public `ai-state` branch, and its trades appear in the public Actions logs. To keep them private (only admins see the fund, in the app, after signing in):
+
+1. In Supabase → **SQL Editor**, run `supabase/private-fund.sql`. Its last line shows a long random token.
+2. Add that token as a GitHub repository secret named **`FUND_STATE_TOKEN`**.
+
+From the next run, the fund is stored in Supabase instead (readable only by admins), the website stops publishing it, the `ai-state` branch is restarted without it (its old history is gone), and the Actions logs stop printing its trades. If Supabase can't be reached, the fund skips that run rather than working from an old copy; if a save fails, that run's copy goes on the branch so no Tiger order is ever forgotten, and moves back to Supabase next run. Invited members who aren't admins no longer see the fund.
+
+### Telegram alerts
+
+Get a Telegram message when trades are waiting for your approval (with the deadline), orders fill, stop-losses or take-profits trigger, Tiger refuses an order, the fund pauses, an AI decision fails, the monthly AI cap is reached, the fund and your Tiger account disagree, or a dividend or split lands, plus a short summary after each trading day's close (value, the day's change, the index and the AI cost).
+
+1. In Telegram, message **@BotFather**, send `/newbot`, and pick a name. It replies with a **token**.
+2. Add it as a GitHub repository secret named **`TELEGRAM_BOT_TOKEN`**.
+3. In Telegram, open your new bot and press **Start**.
+4. In GitHub, go to **Actions → Set up Telegram alerts → Run workflow**. Your bot messages you your **chat id**.
+5. Add it as a secret named **`TELEGRAM_CHAT_ID`**, then run *Set up Telegram alerts* again for a test message.
+
+Alerts are checked on every scheduled run (every 15 minutes while markets trade). Their content never appears in the Actions log. The message links to the app, where you approve trades.
+
 ### Which model does what
 
 The work is split by difficulty to keep costs down:
@@ -149,6 +180,8 @@ One news summary per run is shared by the picks and the AI fund. To change the m
 ### Costs
 
 A picks refresh (news plus picks) typically costs about US$0.10–0.30, and an AI fund decision about US$0.05–0.15 when it reuses that news. Web searches are US$0.01 each. The picks refresh about twice a day, and a new fund makes 1 decision a day unless you choose more, so expect well under US$1 per trading day. For comparison, a picks refresh done entirely on Opus 5 cost US$1.50. Every AI result in the app shows its approximate cost.
+
+**Monthly cap:** the scheduled AI (picks and the AI fund) stops for the rest of the month once its estimated spend reaches **US$30**. Stop-losses keep working, and the fund page and your Telegram say so. Change the cap with the repository variable `AI_MONTHLY_CAP_USD` (`0` means no cap). *Settings → Connections* shows this month's spend, and what this browser has spent with your own key.
 
 GitHub turns off scheduled workflows in a public repo after 60 days with no commits. The `ai-state` commits count toward that, but if everything stops, re-enable the workflow on the Actions tab.
 
@@ -170,7 +203,13 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 
 | File | Purpose |
 |---|---|
-| `portfolio.js` | The ledger: cash accounts, long and short positions, buying power, profit/loss. |
+| `portfolio.js` | The ledger: cash accounts, long and short positions, buying power, profit/loss, currency conversion. |
+| `actions.js` | Dividends and stock splits. |
+| `benchmark.js` | Comparisons with an index fund bought at the same time. |
+| `scorecard.js` | The AI picks' track record. |
+| `spend.js` | The AI's monthly spend and cap. |
+| `alerts.js`, `scripts/notify.mjs` | Telegram alerts. |
+| `scripts/fund-store.mjs`, `supabase/private-fund.sql` | Keeping the AI fund private in Supabase. |
 | `rules.js` | Auto-trading rules engine and backtester. |
 | `fund.js` | The AI fund: budget limit, order execution, protections, decision schedule. |
 | `ai.js` | Every Claude call: the Haiku news digest, then picks, strategies and fund decisions, each answered through a validated "submit" tool. |

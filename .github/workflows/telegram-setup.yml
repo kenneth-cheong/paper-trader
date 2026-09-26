@@ -1,0 +1,23 @@
+name: Set up Telegram alerts
+
+# Run by hand (Actions → Set up Telegram alerts → Run workflow), see README → Telegram alerts.
+# Without TELEGRAM_CHAT_ID it finds the chat that last messaged your bot and sends it its chat id;
+# with it, it sends a test message. Nothing personal is printed to this (public) log.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    env:
+      TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/notify.mjs --setup

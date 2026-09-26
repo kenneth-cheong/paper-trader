@@ -15,6 +15,11 @@
 //     open Tiger orders are cancelled.
 // With Tiger and approval 'manual', the AI's trades wait as proposals until an admin approves them;
 // a proposal expires after PROPOSAL_MINUTES or if the price moves more than PROPOSAL_MAX_DRIFT.
+//
+// With Tiger, stop-losses are also held by Tiger itself as standing (GTC) stop orders ("guards", see
+// syncGuards), so they trigger at once even if the scheduled job runs late or not at all. Shorts
+// always get one at the 40% forced-cover level. While a guard is live at Tiger, this code doesn't
+// run its own stop-loss check for that stock (take-profits are still checked here).
 
 import { newPortfolio, applyTrade, summarize } from './portfolio.js';
 import { pricePoints } from './rules.js';
@@ -27,6 +32,8 @@ export const PROPOSAL_MAX_DRIFT = 0.02;
 export const DEFAULT_SETTINGS = { broker: 'simulator', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5, feePlan: 'tiger' };
 
 const OPEN_BROKER = ['queued', 'sent', 'partial'];
+const isGuard = (o) => o.source === 'guard';
+const isOpen = (o) => OPEN_BROKER.includes(o.status);
 const newId = (p) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 
 export function newFund({ budget, currency, decisionsPerDay = 2, settings = {}, now = new Date() }) {
@@ -114,6 +121,15 @@ export function limitPrice(side, price, market) {
   return Math.round(steps * tick * 1e6) / 1e6;
 }
 
+// A stop price `pct`% from `avgCost` on the price grid: below it for a sell stop (a long), above it
+// for a buy stop (a short), rounded away from the price.
+export function stopPriceFor(side, avgCost, pct, market) {
+  const raw = side === 'sell' ? avgCost * (1 - pct / 100) : avgCost * (1 + pct / 100);
+  const tick = tickSize(market, raw);
+  const steps = side === 'sell' ? Math.floor(raw / tick + 1e-9) : Math.ceil(raw / tick - 1e-9);
+  return Math.round(steps * tick * 1e6) / 1e6;
+}
+
 // ---------- schedule ----------
 
 // Decisions are spread evenly through the market's trading day, starting 15 minutes after the open,
@@ -138,7 +154,7 @@ function committedLedger(fund) {
   let p = fund.portfolio;
   for (const o of fund.brokerOrders ?? []) {
     const left = o.qty - (o.appliedQty ?? 0);
-    if (!OPEN_BROKER.includes(o.status) || left <= 0) continue;
+    if (!isOpen(o) || isGuard(o) || left <= 0) continue; // a guard only ever closes what's held
     try {
       p = applyTrade(p, { symbol: o.symbol, side: o.side, qty: left, price: o.limitPrice, currency: fund.currency, market: o.market, time: o.createdAt });
     } catch { /* already over-committed; new orders will be refused below */ }
@@ -293,7 +309,9 @@ export function applyBrokerFills(fund, now = new Date()) {
       });
       o.appliedQty = o.filledQty;
       const fee = fund.portfolio.trades.at(-1).fee;
-      const e = { time: now.toISOString(), symbol: o.symbol, action: o.action, shares: fresh, price: o.avgFillPrice, fee, why: `Tiger fill (${o.source}); fees ${fee.toFixed(2)}${o.fee == null ? ' (estimated)' : ''}` };
+      if (!fund.portfolio.positions[o.symbol]) delete fund.protections?.[o.symbol];
+      const what = isGuard(o) ? `stop-loss order held by Tiger triggered at ${o.stopPrice}` : `Tiger fill (${o.source})`;
+      const e = { time: now.toISOString(), symbol: o.symbol, action: o.action, shares: fresh, price: o.avgFillPrice, fee, why: `${what}; fees ${fee.toFixed(2)}${o.fee == null ? ' (estimated)' : ''}` };
       fund.events.push(e);
       fills.push(e);
     } catch (err) {
@@ -308,7 +326,7 @@ export function applyBrokerFills(fund, now = new Date()) {
 // Stops new trades and asks for open Tiger orders to be cancelled. Stop-losses still work.
 export function pauseFund(fund, reason, now = new Date()) {
   if (!fund.paused) fund.paused = { at: now.toISOString(), reason };
-  for (const o of fund.brokerOrders ?? []) if (OPEN_BROKER.includes(o.status) && o.source !== 'protection' && o.source !== 'stop') o.cancelRequested = true;
+  for (const o of fund.brokerOrders ?? []) if (isOpen(o) && !['protection', 'stop', 'guard'].includes(o.source)) o.cancelRequested = true;
   for (const p of fund.proposals ?? []) if (p.status === 'awaiting') Object.assign(p, { status: 'expired', message: 'The fund was paused.' });
 }
 
@@ -347,7 +365,9 @@ export function setProtections(fund, protections = []) {
   }
 }
 
-const hasOpenClose = (fund, symbol) => (fund.brokerOrders ?? []).some((o) => o.symbol === symbol && OPEN_BROKER.includes(o.status) && (o.action === 'sell' || o.action === 'cover'));
+const hasOpenClose = (fund, symbol) => (fund.brokerOrders ?? []).some((o) => o.symbol === symbol && isOpen(o) && !isGuard(o) && (o.action === 'sell' || o.action === 'cover'));
+// A stop order placed at Tiger and not being cancelled: Tiger watches the stop-loss for this stock.
+export const guardAtTiger = (fund, symbol) => (fund.brokerOrders ?? []).find((o) => isGuard(o) && o.symbol === symbol && ['sent', 'partial'].includes(o.status) && !o.cancelRequested);
 
 // Replays price points since the last check and closes positions that hit a stop-loss, a take-profit
 // or (for shorts) the 40% forced-cover limit. In the simulator they close at that price; with Tiger a
@@ -365,9 +385,10 @@ export function checkProtections(fund, quotes, now = new Date()) {
     if (!pos || (broker && hasOpenClose(fund, symbol))) continue;
     const move = (price - pos.avgCost) / pos.avgCost * Math.sign(pos.qty); // + is profit
     const prot = fund.protections[symbol] ?? {};
+    const guarded = broker && guardAtTiger(fund, symbol); // Tiger's stop order handles the losses
     let why = null;
-    if (pos.qty < 0 && move <= -SHORT_MAX_LOSS) why = 'forced cover: short down 40%';
-    else if (prot.stop_loss_pct && move <= -prot.stop_loss_pct / 100) why = `stop-loss at -${prot.stop_loss_pct}%`;
+    if (!guarded && pos.qty < 0 && move <= -SHORT_MAX_LOSS) why = 'forced cover: short down 40%';
+    else if (!guarded && prot.stop_loss_pct && move <= -prot.stop_loss_pct / 100) why = `stop-loss at -${prot.stop_loss_pct}%`;
     else if (prot.take_profit_pct && move >= prot.take_profit_pct / 100) why = `take-profit at +${prot.take_profit_pct}%`;
     if (!why) continue;
     const time = new Date(t * 1000).toISOString();
@@ -386,6 +407,51 @@ export function checkProtections(fund, quotes, now = new Date()) {
   }
   if (points.length) fund.cursor = points.at(-1).t;
   return events;
+}
+
+// Keeps one standing stop order at Tiger per protected position, matching its size and stop level:
+// cancels ones that no longer match and queues replacements (scripts/tiger_broker.py send places them,
+// cancelling the old one first). A position being closed by another order gets no guard meanwhile, and
+// one with an open order adding to it keeps its current guard until that order finishes. A stop Tiger
+// refused isn't retried for GUARD_RETRY_HOURS; this code's own stop-loss check covers it meanwhile.
+export const GUARD_RETRY_HOURS = 6;
+export function syncGuards(fund, quotes = {}, now = new Date()) {
+  if (!usesBroker(fund) || fund.stoppedAt) return [];
+  const orders = (fund.brokerOrders ??= []);
+  const changes = [];
+  const symbols = new Set([...Object.keys(fund.portfolio.positions), ...orders.filter((o) => isGuard(o) && isOpen(o)).map((o) => o.symbol)]);
+  for (const symbol of symbols) {
+    const pos = fund.portfolio.positions[symbol];
+    const live = orders.filter((o) => isGuard(o) && o.symbol === symbol && isOpen(o) && !o.cancelRequested);
+    let want = null;
+    if (pos) {
+      const side = pos.qty > 0 ? 'sell' : 'buy';
+      const others = orders.filter((o) => !isGuard(o) && o.symbol === symbol && isOpen(o));
+      const closingNow = others.some((o) => o.side === side);
+      if (!closingNow && others.length && live.length) continue; // adding to the position: keep the guard until it fills
+      let pct = Number(fund.protections?.[symbol]?.stop_loss_pct) || 0;
+      if (pos.qty < 0) pct = Math.min(pct || Infinity, SHORT_MAX_LOSS * 100);
+      if (pct > 0 && !closingNow) {
+        const market = quotes[symbol]?.market ?? marketForCurrency(fund.currency);
+        want = { side, action: pos.qty > 0 ? 'sell' : 'cover', qty: Math.abs(pos.qty), stopPrice: stopPriceFor(side, pos.avgCost, pct, market), pct, market };
+      }
+    }
+    const keep = want && live.find((o) => o.side === want.side && o.qty === want.qty && o.stopPrice === want.stopPrice && o.status !== 'partial');
+    for (const o of live) {
+      if (o === keep) continue;
+      o.cancelRequested = true;
+      changes.push({ symbol, change: 'cancel', orderId: o.id });
+    }
+    if (!want || keep) continue;
+    const refused = orders.some((o) => isGuard(o) && o.symbol === symbol && ['rejected', 'failed'].includes(o.status)
+      && o.qty === want.qty && o.stopPrice === want.stopPrice && now - new Date(o.createdAt) < GUARD_RETRY_HOURS * 3600000);
+    if (refused) continue;
+    const why = pos.qty < 0 && want.pct === SHORT_MAX_LOSS * 100 ? 'forced cover at a 40% loss' : `stop-loss at -${want.pct}%`;
+    const o = queueBrokerOrder(fund, { symbol, action: want.action, side: want.side, shares: want.qty, refPrice: quotes[symbol]?.price ?? null, limitPrice: null, market: want.market, reason: `${why}, held by Tiger` }, 'guard', now);
+    Object.assign(o, { type: 'stop', stopPrice: want.stopPrice, timeInForce: 'GTC' });
+    changes.push({ symbol, change: 'place', orderId: o.id, stopPrice: want.stopPrice, qty: want.qty });
+  }
+  return changes;
 }
 
 export function recordValue(fund, quotes, now = new Date()) {
@@ -421,4 +487,18 @@ export function stopFund(fund, quotes, now = new Date()) {
   fund.stoppedAt = now.toISOString();
   fund.decisions.push({ time: fund.stoppedAt, outlook: `Fund stopped by its owner; ${broker ? 'closing orders sent to Tiger' : 'all positions closed'}.`, orders: results, source_urls: [] });
   return results;
+}
+
+// Whether Tiger holds what the fund thinks it holds: { checkedAt, ok, mismatches: [{ symbol, fund, tiger }] },
+// or null without a Tiger snapshot. Tiger may hold more (your own shares), never less or the other side.
+export function reconcile(f) {
+  const tiger = f.broker?.positions;
+  if (!Array.isArray(tiger) || f.broker?.error) return null;
+  const held = Object.fromEntries(tiger.map((p) => [p.symbol, Number(p.qty) || 0]));
+  const mismatches = [];
+  for (const [symbol, pos] of Object.entries(f.portfolio?.positions ?? {})) {
+    const t = held[tigerSymbol(symbol)] ?? 0;
+    if (pos.qty > 0 ? t < pos.qty : t > pos.qty) mismatches.push({ symbol, fund: pos.qty, tiger: t });
+  }
+  return { checkedAt: f.broker.time, ok: mismatches.length === 0, mismatches };
 }

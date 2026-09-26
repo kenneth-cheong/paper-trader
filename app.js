@@ -1,12 +1,17 @@
-import { newPortfolio, applyTrade, placeOrder, cancelOrder, summarize, validatePortfolio, buyingPower, DEFAULT_START, SHORT_MARGIN } from './portfolio.js';
+import { newPortfolio, applyTrade, placeOrder, cancelOrder, convertCash, summarize, validatePortfolio, buyingPower, DEFAULT_START, SHORT_MARGIN } from './portfolio.js';
+import { applyCorporateActions, describeAction } from './actions.js';
+import { BENCHMARKS, benchmarkFor, benchmarkSeries } from './benchmark.js';
+import { scorePicks, summarizeScores } from './scorecard.js';
+import { addSpend, monthSpend, fundAiCost } from './spend.js';
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest, fillPendingOrders } from './rules.js';
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
 import { MARKETS, marketForCurrency, tradingStatus, STATUS_LABELS } from './markets.js';
-import { calcFee, planFor, FEE_PLANS } from './fees.js';
-import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus } from './auth.js';
+import { reconcile } from './fund.js';
+import { calcFee, planFor, fxSpreadFor, FEE_PLANS } from './fees.js';
+import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus, loadPrivateFund } from './auth.js';
 import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
 
-const KEYS = { portfolio: 'paper-trader:portfolio', ai: 'paper-trader:ai', picks: 'paper-trader:picks', strategist: 'paper-trader:strategist' };
+const KEYS = { portfolio: 'paper-trader:portfolio', ai: 'paper-trader:ai', picks: 'paper-trader:picks', strategist: 'paper-trader:strategist', spend: 'paper-trader:ai-spend' };
 const PRICE_REFRESH_MS = 5 * 60 * 1000;
 const $ = (id) => document.getElementById(id);
 
@@ -18,6 +23,9 @@ const state = {
   cloud: { updatedAt: null, timer: null, saving: false, failed: false },
   ai: readStore(KEYS.ai) ?? { key: '', model: TIERS.advanced }, // model = the one that makes decisions
   sitePicks: null,
+  picksHistory: null, // every scheduled set of picks, for the track record
+  spend: null, // the scheduled AI jobs' spend ledger, with its monthly cap
+  browserSpend: readStore(KEYS.spend), // what this browser spent with your own key
   localPicks: readStore(KEYS.picks),
   strategist: readStore(KEYS.strategist),
   fund: undefined, // undefined = not loaded yet, null = no fund
@@ -184,8 +192,14 @@ async function loadPrices() {
 }
 
 async function loadSideData() {
-  const [picks, fund] = await Promise.allSettled([fetchJson('data/picks.json'), fetchJson('data/ai-fund.json')]);
+  // A private fund (admins, from Supabase) wins over the public copy.
+  const fundSource = async () => (authEnabled && state.user?.isAdmin && (await loadPrivateFund().catch(() => null))) || fetchJson('data/ai-fund.json');
+  const [picks, fund, history, spend] = await Promise.allSettled([
+    fetchJson('data/picks.json'), fundSource(), fetchJson('data/picks-history.json'), fetchJson('data/ai-spend.json'),
+  ]);
   state.sitePicks = picks.status === 'fulfilled' ? picks.value : null;
+  state.picksHistory = history.status === 'fulfilled' ? history.value : null;
+  state.spend = spend.status === 'fulfilled' ? spend.value : null;
   state.fund = fund.status === 'fulfilled' ? fund.value : null;
   render();
 }
@@ -208,6 +222,14 @@ function runAutomation() {
     if (saved) state.portfolio = validatePortfolio(saved);
   } catch { /* keep the in-memory copy */ }
   const quotes = state.prices.quotes ?? {};
+  if (!state.sample) {
+    const actions = applyCorporateActions(state.portfolio, quotes);
+    if (actions.portfolio !== state.portfolio) {
+      state.portfolio = actions.portfolio;
+      savePortfolio();
+      for (const a of actions.applied) notify(describeAction(a, (n) => money(n, a.currency)));
+    }
+  }
   if (state.portfolio.pendingOrders?.length) {
     const before = state.portfolio.pendingOrders.length;
     const filled = fillPendingOrders(state.portfolio, quotes);
@@ -257,7 +279,7 @@ function money(n, ccy, { sign = false } = {}) {
   return fmtCache[key].format(n);
 }
 const price = (n) => n == null ? '–' : n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: n < 1 ? 4 : 2 });
-const pct = (n) => (n > 0 ? '+' : '') + (n * 100).toFixed(2) + '%';
+const pct = (n) => { const v = Math.abs(n) < 0.00005 ? 0 : n; return (v > 0 ? '+' : '') + (v * 100).toFixed(2) + '%'; };
 const tone = (n) => (n > 0.00001 ? 'up' : n < -0.00001 ? 'down' : '');
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const fmtDateTime = (t) => new Date(t).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
@@ -296,10 +318,12 @@ const sources = (urls) => urls?.length
 // Axis labels are plain numbers (the currency is in the tooltip and the text around the chart).
 const axisNumber = (v) => v.toLocaleString(undefined, { maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2 });
 
-function lineChart(el, points, { ref = null, refLabel = '', fmt = (v) => v, height = 180 } = {}) {
+// points: [{ label, axis?, value, compare? }]; `compare` values (e.g. an index) draw a second, dashed line.
+function lineChart(el, points, { ref = null, refLabel = '', fmt = (v) => v, height = 180, compareLabel = '' } = {}) {
   if (points.length < 2) { el.innerHTML = '<p class="muted small">Not enough data for a chart yet.</p>'; return; }
   const W = Math.max(280, el.clientWidth || 600), H = height, L = 56, R = 12, T = 10, B = 22;
-  const vals = points.map((p) => p.value).concat(ref == null ? [] : [ref]);
+  const hasCompare = points.filter((p) => p.compare != null).length >= 2;
+  const vals = points.map((p) => p.value).concat(ref == null ? [] : [ref], hasCompare ? points.map((p) => p.compare).filter((v) => v != null) : []);
   let lo = Math.min(...vals), hi = Math.max(...vals);
   const pad = (hi - lo) * 0.08 || Math.abs(hi) * 0.02 || 1;
   lo -= pad; hi += pad;
@@ -307,17 +331,25 @@ function lineChart(el, points, { ref = null, refLabel = '', fmt = (v) => v, heig
   const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
   const ticks = [lo + pad, (lo + hi) / 2, hi - pad];
   const path = points.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join('');
+  let drawing = false;
+  const path2 = hasCompare ? points.map((p, i) => {
+    if (p.compare == null) { drawing = false; return ''; }
+    const cmd = drawing ? 'L' : 'M';
+    drawing = true;
+    return `${cmd}${x(i).toFixed(1)},${y(p.compare).toFixed(1)}`;
+  }).join('') : '';
   el.innerHTML = `
     <svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Line chart of value over time">
       ${ticks.map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="axis" x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${esc(axisNumber(v))}</text>`).join('')}
       ${ref == null ? '' : `<line class="ref" x1="${L}" x2="${W - R}" y1="${y(ref)}" y2="${y(ref)}"/><text class="axis" x="${W - R}" y="${y(ref) - 5}" text-anchor="end">${esc(refLabel)}</text>`}
       <text class="axis" x="${L}" y="${H - 4}">${esc(points[0].axis ?? points[0].label)}</text>
       <text class="axis" x="${W - R}" y="${H - 4}" text-anchor="end">${esc(points.at(-1).axis ?? points.at(-1).label)}</text>
+      ${path2 ? `<path class="line2" d="${path2}"/>` : ''}
       <path class="line" d="${path}"/>
       <line class="cross" y1="${T}" y2="${H - B}" visibility="hidden"/>
       <circle class="dot" r="4" visibility="hidden"/>
       <rect class="hit" x="${L}" y="0" width="${W - L - R}" height="${H}"/>
-    </svg>`;
+    </svg>${path2 ? `<p class="legend small"><span class="key key-main"></span>Value <span class="key key-compare"></span>${esc(compareLabel)}</p>` : ''}`;
   const svg = el.querySelector('svg'), cross = svg.querySelector('.cross'), dot = svg.querySelector('.dot'), tip = $('tooltip');
   const hit = svg.querySelector('.hit');
   hit.addEventListener('pointermove', (e) => {
@@ -327,7 +359,7 @@ function lineChart(el, points, { ref = null, refLabel = '', fmt = (v) => v, heig
     const p = points[i];
     cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible');
     dot.setAttribute('cx', x(i)); dot.setAttribute('cy', y(p.value)); dot.setAttribute('visibility', 'visible');
-    tip.innerHTML = `<div class="muted">${esc(p.label)}</div><strong>${esc(fmt(p.value))}</strong>`;
+    tip.innerHTML = `<div class="muted">${esc(p.label)}</div><strong>${esc(fmt(p.value))}</strong>${p.compare != null ? `<div class="muted">${esc(compareLabel)}: ${esc(fmt(p.compare))}</div>` : ''}`;
     tip.hidden = false;
     tip.style.left = `${Math.max(8, Math.min(e.clientX + 12, innerWidth - tip.offsetWidth - 8))}px`;
     tip.style.top = `${e.clientY - tip.offsetHeight - 10}px`;
@@ -357,7 +389,7 @@ function render() {
 
   const { accounts, positions } = summarize(state.portfolio, state.prices.quotes);
   renderCards(accounts);
-  if (view === 'home') { renderPicks(); renderHoldings(positions); }
+  if (view === 'home') { renderPicks(); renderScorecard(); renderHoldings(positions); }
   if (view === 'markets') renderMarkets();
   if (view === 'auto') renderRules();
   if (view === 'strategist') renderStrategist();
@@ -372,18 +404,27 @@ function render() {
     : '');
 }
 
+// "Index, same period": what the account's starting money would have made in the index fund.
+function indexLine(a) {
+  if (state.sample) return '';
+  const b = benchmarkFor({ currency: a.currency, amount: a.start, since: state.portfolio.createdAt, quotes: state.prices.quotes, plan: planFor(state.portfolio.feePlan, state.portfolio.customFees) });
+  return b ? `<span title="${esc(`${b.label} bought with ${money(a.start, a.currency)} on ${fmtDate(b.since)}, after fees`)}">Index, same period</span><span class="${tone(b.pct)}">${pct(b.pct)}</span>` : '';
+}
+
 function renderCards(accounts) {
   const cards = Object.values(accounts).map((a) => `
     <div class="card">
       <div class="label">${a.currency} account · net profit / loss</div>
       <div class="big ${tone(a.net)}">${money(a.net, a.currency, { sign: true })}</div>
-      <div class="${tone(a.net)}">${pct(a.netPct)} on ${money(a.start, a.currency)}</div>
+      <div class="${tone(a.net)}">${pct(a.netPct)} on ${money(a.invested, a.currency)}${a.transfers ? ` <span class="muted small">(incl. ${money(a.transfers, a.currency, { sign: true })} converted)</span>` : ''}</div>
       <div class="sub">
         <span>Cash</span><span>${money(a.cash, a.currency)}</span>
         ${a.hasShorts ? `<span>Buying power</span><span>${money(a.buyingPower, a.currency)}</span>` : ''}
         <span>Holdings</span><span>${money(a.marketValue, a.currency)}</span>
         <span>Realized</span><span class="${tone(a.realized)}">${money(a.realized, a.currency, { sign: true })}</span>
         <span>Unrealized</span><span class="${tone(a.unrealized)}">${money(a.unrealized, a.currency, { sign: true })}</span>
+        ${indexLine(a)}
+        ${a.dividends ? `<span>Dividends</span><span class="${tone(a.dividends)}">${money(a.dividends, a.currency, { sign: true })}</span>` : ''}
         <span>Fees paid</span><span>${money(a.fees ?? 0, a.currency)}</span>
       </div>
     </div>`);
@@ -391,13 +432,14 @@ function renderCards(accounts) {
   const fx = state.prices.fx?.USDSGD;
   if (fx && accounts.SGD && accounts.USD) {
     const net = accounts.SGD.net + accounts.USD.net * fx;
-    const start = accounts.SGD.start + accounts.USD.start * fx;
+    const start = accounts.SGD.invested + accounts.USD.invested * fx;
     cards.push(`
       <div class="card">
         <div class="label">Combined, in SGD</div>
         <div class="big ${tone(net)}">${money(net, 'SGD', { sign: true })}</div>
         <div class="${tone(net)}">${pct(start ? net / start : 0)}</div>
         <p class="muted small">USD converted at today's rate of ${fx.toFixed(4)}. Each account's own figure ignores exchange rates.</p>
+        ${authEnabled && !state.user ? '' : '<button class="ghost small-btn" id="open-convert">Convert SGD ↔ USD</button>'}
       </div>`);
   }
   $('cards').innerHTML = cards.join('');
@@ -462,6 +504,7 @@ async function refreshPicks() {
     const { client, Anthropic } = await loadClient(state.ai.key);
     state.localPicks = await recommend({ client, Anthropic, model: state.ai.model, prices: state.prices });
     writeStore(KEYS.picks, state.localPicks);
+    trackBrowserSpend('picks', state.localPicks.usage?.costUsd);
     render();
   } catch (err) {
     $('picks-error').textContent = err.message;
@@ -469,6 +512,38 @@ async function refreshPicks() {
     btn.disabled = false;
     btn.textContent = 'Refresh now';
   }
+}
+
+function trackBrowserSpend(task, cost) {
+  state.browserSpend = addSpend(state.browserSpend, task, cost);
+  writeStore(KEYS.spend, state.browserSpend);
+}
+
+// ----- home: the AI picks' track record -----
+
+function renderScorecard() {
+  const el = $('scorecard');
+  const history = state.picksHistory;
+  if (!history?.length || state.sample) { el.innerHTML = ''; return; }
+  const scores = scorePicks(history, state.prices.quotes ?? {});
+  const sum = summarizeScores(scores);
+  const since = fmtDate(history[0].createdAt);
+  if (!scores.length) {
+    el.innerHTML = `<p class="muted small"><strong>Track record:</strong> ${history.reduce((n, h) => n + h.picks.length, 0)} picks recorded since ${since}. Each is scored once a week of trading has passed.</p>`;
+    return;
+  }
+  const rate = (x) => (x == null ? '–' : `${Math.round(x * 100)}%`);
+  const row = (h) => h.n ? `<tr><td>After ${esc(h.label)}</td><td class="num">${h.n}</td><td class="num">${rate(h.right)}</td><td class="num">${rate(h.beat)}</td>
+    <td class="num ${tone(h.avgRet)}">${pct(h.avgRet)}</td><td class="num hide-sm ${tone(h.avgIndex ?? 0)}">${h.avgIndex == null ? '–' : pct(h.avgIndex)}</td></tr>` : '';
+  const recent = scores.filter((x) => x.horizon === 'week').slice(-8).reverse();
+  el.innerHTML = `
+    <h3 class="col-head">Track record since ${since}</h3>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Scored</th><th class="num">Picks</th><th class="num">Right</th><th class="num">Beat index</th><th class="num">Avg return</th><th class="num hide-sm">Same bet on index</th></tr></thead>
+      <tbody>${row(sum.week)}${row(sum.month)}</tbody>
+    </table></div>
+    <p class="muted small">"Right" means the pick made money in its direction (a short gains when the price falls). "Beat index" compares it with the S&P 500 (US) or STI (SGX) over the same days. Before fees.
+      ${recent.length ? `Latest after a week: ${recent.map((x) => `<span class="${tone(x.ret)}">${esc(x.symbol)} ${x.stance} ${pct(x.ret)}</span>`).join(', ')}.` : ''}</p>`;
 }
 
 function renderPendingOrders() {
@@ -544,7 +619,57 @@ function renderMarkets() {
 
 // ----- history -----
 
+function renderCashMoves() {
+  const p = state.portfolio;
+  const items = [
+    ...(p.actions ?? []).filter((a) => a.qty).map((a) => ({ time: a.time, html: esc(describeAction(a, (n) => money(n, a.currency))) })),
+    ...(p.conversions ?? []).map((c) => ({ time: c.time, html: `Converted ${money(c.amount, c.from)} to ${money(c.received, c.to)} at ${c.rate.toFixed(4)} <span class="muted small">(spread ${c.spreadPct}%: ${money(c.cost, c.to)})</span>` })),
+  ].sort((a, b) => b.time.localeCompare(a.time));
+  $('cash-moves-panel').hidden = !items.length;
+  $('cash-moves').innerHTML = items.map((i) => `<li>${fmtDate(i.time)}: ${i.html}</li>`).join('');
+}
+
+// ----- converting cash between currencies -----
+
+const convertRate = (from) => {
+  const fx = state.prices.fx?.USDSGD;
+  return fx > 0 ? (from === 'USD' ? fx : 1 / fx) : null;
+};
+
+function openConvert() {
+  $('convert-amount').value = '';
+  $('convert-error').textContent = '';
+  updateConvert();
+  $('convert-dialog').showModal();
+  $('convert-amount').focus();
+}
+
+function updateConvert() {
+  const from = $('convert-from').value, to = from === 'USD' ? 'SGD' : 'USD';
+  const rate = convertRate(from), spread = fxSpreadFor(state.portfolio), amount = Number($('convert-amount').value) || 0;
+  const received = amount * (rate ?? 0) * (1 - spread / 100);
+  $('convert-facts').innerHTML = `
+    <dt>Available</dt><dd>${money(Math.max(0, buyingPower(state.portfolio, from)), from)}</dd>
+    <dt>Rate</dt><dd>${rate ? `1 ${from} = ${rate.toFixed(4)} ${to}` : 'No rate yet'}</dd>
+    <dt>Spread</dt><dd>${spread}%${amount && rate ? ` (${money(amount * rate - received, to)})` : ''}</dd>
+    <dt>You receive</dt><dd><strong>${money(received, to)}</strong></dd>`;
+}
+
+function submitConvert(e) {
+  e.preventDefault();
+  const from = $('convert-from').value;
+  try {
+    state.portfolio = convertCash(state.portfolio, { from, to: from === 'USD' ? 'SGD' : 'USD', amount: $('convert-amount').value, rate: convertRate(from), spreadPct: fxSpreadFor(state.portfolio) });
+    savePortfolio();
+    $('convert-dialog').close();
+    render();
+  } catch (err) {
+    $('convert-error').textContent = err.message;
+  }
+}
+
 function renderTrades() {
+  renderCashMoves();
   const trades = state.portfolio.trades.slice().sort((a, b) => b.time.localeCompare(a.time));
   if (!trades.length) {
     $('trades').innerHTML = '<tr><td class="empty">No trades yet.</td></tr>';
@@ -866,6 +991,7 @@ async function runStrategist(e) {
     const { client, Anthropic } = await loadClient(state.ai.key);
     const context = buildContext({ prices: state.prices, portfolio: state.portfolio, focus: $('st-focus').value, risk: $('st-risk').value, question: $('st-question').value });
     state.strategist = await analyze({ client, Anthropic, model: state.ai.model, context, quotes: state.prices.quotes });
+    trackBrowserSpend('strategist', state.strategist.usage?.costUsd);
     for (const k of Object.keys(state.backtests)) if (k.startsWith('s')) delete state.backtests[k];
     writeStore(KEYS.strategist, state.strategist);
     $('st-status').textContent = '';
@@ -1124,17 +1250,22 @@ function renderProposals(f) {
   </section>`;
 }
 
+const ORDER_SOURCE = { decision: 'AI decision', approved: 'AI decision', protection: 'stop-loss / take-profit', guard: 'stop-loss held by Tiger', stop: 'fund stopped' };
+
 function renderBrokerOrders(f) {
   const orders = (f.brokerOrders ?? []).slice().reverse().slice(0, 30);
   if (!orders.length) return '';
+  const guards = (f.brokerOrders ?? []).filter((o) => o.source === 'guard' && ['sent', 'partial'].includes(o.status) && !o.cancelRequested);
   return `<section class="panel">
     <div class="panel-head"><h2>Tiger orders</h2></div>
+    ${guards.length ? `<p class="small">Standing stop-loss orders at Tiger (they trigger even if this app's scheduled job is late):
+      ${guards.map((o) => `<strong>${esc(o.symbol)}</strong> ${o.side === 'sell' ? 'sells' : 'buys back'} ${Number(o.qty).toLocaleString()} if the price ${o.side === 'sell' ? 'falls to' : 'rises to'} ${price(o.stopPrice)}`).join('; ')}.</p>` : ''}
     <div class="table-wrap"><table>
-      <thead><tr><th>Placed</th><th>Order</th><th class="num">Limit</th><th>Status</th><th class="num hide-sm">Filled</th></tr></thead>
+      <thead><tr><th>Placed</th><th>Order</th><th class="num">Limit / stop</th><th>Status</th><th class="num hide-sm">Filled</th></tr></thead>
       <tbody>${orders.map((o) => `<tr>
-        <td>${fmtDateTime(o.createdAt)}<br><span class="muted small">${esc(o.source === 'decision' || o.source === 'approved' ? 'AI decision' : o.source === 'protection' ? 'stop-loss / take-profit' : 'fund stopped')}</span></td>
-        <td><span class="chip ${o.side === 'buy' ? 'buy' : 'sell'}">${esc(o.action)}</span> ${Number(o.qty).toLocaleString()} ${esc(o.symbol)}</td>
-        <td class="num">${price(o.limitPrice)}</td>
+        <td>${fmtDateTime(o.createdAt)}<br><span class="muted small">${esc(ORDER_SOURCE[o.source] ?? o.source)}</span></td>
+        <td><span class="chip ${o.side === 'buy' ? 'buy' : 'sell'}">${esc(o.action)}</span> ${Number(o.qty).toLocaleString()} ${esc(o.symbol)}${o.note && o.status === 'queued' ? `<br><span class="muted small">${esc(o.note)}</span>` : ''}</td>
+        <td class="num">${o.type === 'stop' ? `stop ${price(o.stopPrice)}` : price(o.limitPrice)}</td>
         <td class="${['rejected', 'failed'].includes(o.status) ? 'down' : ''}">${esc(ORDER_STATUS[o.status] ?? o.status)}${o.cancelRequested && ['queued', 'sent', 'partial'].includes(o.status) ? ' · cancelling' : ''}
           ${o.error ? `<br><span class="small">${esc(o.error)}</span>` : ''}</td>
         <td class="num hide-sm">${o.filledQty ? `${o.filledQty} at ${price(o.avgFillPrice)}` : '–'}</td>
@@ -1175,8 +1306,14 @@ function renderFund() {
     : f.paused
       ? 'Paused'
       : `Running · ${f.decisionsPerDay} decision${f.decisionsPerDay > 1 ? 's' : ''} per trading day · ${MARKETS[market].label} ${STATUS_LABELS[marketStatus(market)]}`;
-  const check = f.broker?.check;
+  const check = f.broker?.check ?? reconcile(f); // the private copy has Tiger's positions; the public one only the check
+  const bench = benchmarkFor({ currency: f.currency, amount: f.budget, since: f.startedAt, quotes, plan: planFor(s.feePlan ?? 'tiger') });
+  const fx = state.prices.fx?.USDSGD;
+  const aiCostUsd = fundAiCost(f);
+  const aiCost = f.currency === 'USD' ? aiCostUsd : fx ? aiCostUsd * fx : null; // in the fund's currency
+  const cap = state.spend?.cap, month = monthSpend(state.spend);
   el.innerHTML = `
+    ${f.aiCapped ? `<div class="notice warn fund-alert"><span><strong>AI paused for the month:</strong> ${esc(f.aiCapped.message)}</span></div>` : ''}
     ${f.paused ? `<div class="notice warn fund-alert"><span><strong>Trading is paused</strong> (${fmtDateTime(f.paused.at)}): ${esc(f.paused.reason)} Stop-losses still work.</span></div>` : ''}
     ${f.broker?.error && s.broker === 'tiger' ? `<div class="notice warn fund-alert"><span><strong>Tiger:</strong> ${esc(f.broker.error)}</span></div>` : ''}
     ${check && !check.ok ? `<div class="notice warn fund-alert"><span><strong>The fund and your Tiger account disagree:</strong> ${check.mismatches.map((m) => `${esc(m.symbol)}: fund ${m.fund}, Tiger ${m.tiger}`).join('; ')}. Check the Tiger app before trading further.</span></div>` : ''}
@@ -1188,6 +1325,16 @@ function renderFund() {
       <div class="card"><div class="label">Value now</div><div class="big">${money(a.equity, f.currency)}</div>
         <div class="sub"><span>Cash</span><span>${money(a.cash, f.currency)}</span><span>Buying power</span><span>${money(a.buyingPower, f.currency)}</span>
           <span>Fees paid</span><span>${money(a.fees ?? 0, f.currency)}</span></div></div>
+      <div class="card"><div class="label">Versus the index</div>
+        ${bench ? `<div class="big ${tone(a.net - bench.net)}">${money(a.net - bench.net, f.currency, { sign: true })}</div>
+          <div class="small">${a.net >= bench.net ? 'ahead of' : 'behind'} ${esc(bench.label)} bought with the same ${money(f.budget, f.currency)} ${bench.partial ? `on ${fmtDate(bench.since)}` : 'when the fund started'}</div>
+          <div class="sub"><span>Index</span><span class="${tone(bench.pct)}">${pct(bench.pct)} (${money(bench.value, f.currency)})</span><span>AI fund</span><span class="${tone(a.netPct)}">${pct(a.netPct)}</span></div>`
+          : '<p class="muted small">No index prices yet.</p>'}</div>
+      <div class="card"><div class="label">AI cost (estimated)</div>
+        <div class="big">US$${aiCostUsd.toFixed(2)}</div>
+        <div class="small">for this fund's ${f.decisions.filter((d) => d.usage).length} decisions</div>
+        <div class="sub">${aiCost != null ? `<span>Profit after AI cost</span><span class="${tone(a.net - aiCost)}">${money(a.net - aiCost, f.currency, { sign: true })}</span>` : ''}
+          <span>All scheduled AI, ${new Date().toLocaleDateString(undefined, { month: 'long' })}</span><span>US$${month.toFixed(2)}${cap ? ` of US$${cap} cap` : ''}</span></div></div>
       <div class="card"><div class="label">Status</div><p>${esc(status)}</p>
         <p class="small">Trades through: <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? `<br>${s.approval === 'manual' ? 'You approve each trade' : 'Trades automatically'}` : ''}</p>
         <p class="muted small">Limits: ${s.maxOrderPct ?? 25}% of the budget per order; pauses after losing ${s.dailyLossPct ?? 5}% in a day.<br>
@@ -1229,10 +1376,13 @@ function renderFund() {
       </article>`).join('') || '<p class="muted">No decisions yet. The first one happens 15 minutes after the market opens.</p>'}
     </section>
     ${f.events.length ? `<section class="panel"><div class="panel-head"><h2>Automatic events</h2></div><ul class="orders">
-      ${f.events.slice().reverse().slice(0, 20).map((e) => `<li>${fmtDateTime(e.time)}: ${esc(e.action)} ${Number(e.shares).toLocaleString()} ${esc(e.symbol)} at ${price(e.price)} <span class="muted small">(${esc(e.why)})</span></li>`).join('')}
+      ${f.events.slice().reverse().slice(0, 20).map((e) => `<li>${fmtDateTime(e.time)}: ${['split', 'dividend'].includes(e.action) ? esc(e.why) : `${esc(e.action)} ${Number(e.shares).toLocaleString()} ${esc(e.symbol)} at ${price(e.price)} <span class="muted small">(${esc(e.why)})</span>`}</li>`).join('')}
     </ul></section>` : ''}
     ${authEnabled ? '' : `<p class="muted small">To stop the fund and close its positions, or to start a new one, use ${runLink} → Run workflow.</p>`}`;
-  lineChart($('fund-chart'), (f.history ?? []).map(([t, v]) => ({ label: fmtDateTime(t), axis: fmtDate(t), value: v })), { ref: f.budget, refLabel: 'Budget', fmt: (v) => money(v, f.currency) });
+  const hist = f.history ?? [];
+  const idx = bench && !bench.partial ? benchmarkSeries(bench, quotes[bench.symbol], hist.map(([t]) => t)) : [];
+  lineChart($('fund-chart'), hist.map(([t, v], i) => ({ label: fmtDateTime(t), axis: fmtDate(t), value: v, compare: idx[i] ?? null })),
+    { ref: f.budget, refLabel: 'Budget', fmt: (v) => money(v, f.currency), compareLabel: bench ? `${bench.symbol} (same money)` : '' });
 }
 
 // ---------- settings ----------
@@ -1250,6 +1400,7 @@ function openSettings() {
   $('fee-plan').value = state.portfolio.feePlan ?? 'tiger';
   $('fee-us-pct').value = c.pct.US; $('fee-us-min').value = c.min.US;
   $('fee-sgx-pct').value = c.pct.SGX; $('fee-sgx-min').value = c.min.SGX;
+  $('fee-fx').value = c.fx ?? 0.2;
   showFeeSummary();
   renderConnections();
   if (!$('settings-dialog').open) $('settings-dialog').showModal();
@@ -1269,10 +1420,12 @@ function renderConnections() {
   const rows = [
     row('Anthropic (AI strategist, "Refresh now" on picks)',
       status(!!state.ai.key, state.ai.key ? 'Key saved in this browser' : 'No key yet'),
-      `<p class="muted small">${state.ai.key ? 'Change or remove it below.' : '<a href="#api-key-heading" data-focus-key>Add it below</a>.'} Stored only in this browser.</p>`),
+      `<p class="muted small">${state.ai.key ? 'Change or remove it below.' : '<a href="#api-key-heading" data-focus-key>Add it below</a>.'} Stored only in this browser.
+        Spent from this browser this month: about US$${monthSpend(state.browserSpend).toFixed(2)}.</p>`),
     row('Anthropic (scheduled AI picks and AI fund)',
       status(!!picksAt, picksAt ? `Working, last picks ${fmtDateTime(picksAt)}` : 'No AI picks yet'),
-      `<p class="muted small">Uses the <code>ANTHROPIC_API_KEY</code> secret in ${secretsLink}.</p>`),
+      `<p class="muted small">Uses the <code>ANTHROPIC_API_KEY</code> secret in ${secretsLink}.
+        This month: about US$${monthSpend(state.spend).toFixed(2)}${state.spend?.cap ? ` of the US$${state.spend.cap} monthly cap (change it with the <code>AI_MONTHLY_CAP_USD</code> repository variable)` : ' (no monthly cap)'}.</p>`),
     row('Tiger Brokers (AI fund orders)',
       status(tigerOk, tigerOk ? brokerLabel(f) : tiger ? 'Not connected' : 'Not in use (the fund uses the simulator)'),
       `<p class="muted small">Tiger's keys are not typed in here: anything on this page is public, and Tiger's private key must stay secret.
@@ -1297,7 +1450,7 @@ function saveFeeSettings() {
   const num = (id) => Math.max(0, Number($(id).value) || 0);
   state.portfolio = structuredClone(state.portfolio);
   state.portfolio.feePlan = plan;
-  if (plan === 'custom') state.portfolio.customFees = { pct: { US: num('fee-us-pct'), SGX: num('fee-sgx-pct') }, min: { US: num('fee-us-min'), SGX: num('fee-sgx-min') } };
+  if (plan === 'custom') state.portfolio.customFees = { pct: { US: num('fee-us-pct'), SGX: num('fee-sgx-pct') }, min: { US: num('fee-us-min'), SGX: num('fee-sgx-min') }, fx: num('fee-fx') };
   savePortfolio();
   showFeeSummary();
 }
@@ -1416,13 +1569,18 @@ $('rule-cancel').addEventListener('click', () => $('rule-dialog').close());
 $('strategist-form').addEventListener('submit', runStrategist);
 $('picks-refresh').addEventListener('click', refreshPicks);
 
+$('cards').addEventListener('click', (e) => { if (e.target.id === 'open-convert') openConvert(); });
+$('convert-form').addEventListener('submit', submitConvert);
+$('convert-form').addEventListener('input', () => { $('convert-error').textContent = ''; updateConvert(); });
+$('convert-cancel').addEventListener('click', () => $('convert-dialog').close());
+
 $('open-settings').addEventListener('click', openSettings);
 document.addEventListener('click', (e) => {
   if (e.target.closest('[data-open-settings]')) { openSettings(); $('api-key').focus(); }
   if (e.target.closest('[data-focus-key]')) { e.preventDefault(); $('api-key').focus(); }
 });
 $('api-key').addEventListener('change', saveAiSettings);
-for (const id of ['fee-plan', 'fee-us-pct', 'fee-us-min', 'fee-sgx-pct', 'fee-sgx-min']) $(id).addEventListener('change', saveFeeSettings);
+for (const id of ['fee-plan', 'fee-us-pct', 'fee-us-min', 'fee-sgx-pct', 'fee-sgx-min', 'fee-fx']) $(id).addEventListener('change', saveFeeSettings);
 $('ai-model').addEventListener('change', saveAiSettings);
 $('forget-key').addEventListener('click', () => { $('api-key').value = ''; saveAiSettings(); });
 $('settings-form').addEventListener('submit', () => { saveAiSettings(); render(); });
@@ -1444,7 +1602,7 @@ let started = false;
 function startApp() {
   if (authEnabled) $('foot').textContent = 'Virtual money only; nothing here is financial advice. Prices come from Yahoo Finance via a scheduled job and may be delayed. Your portfolio and rules are saved to your account.';
   render();
-  if (started) { loadPrices(); return; }
+  if (started) { loadPrices(); loadSideData(); return; } // signed in again, maybe as someone else
   started = true;
   loadPrices();
   loadSideData();

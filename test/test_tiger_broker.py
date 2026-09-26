@@ -22,6 +22,10 @@ class FakeBroker:
         self.placed.append((symbol, currency, side, qty, limit_price))
         return 9000 + len(self.placed)
 
+    def place_stop(self, symbol, currency, side, qty, stop_price):
+        self.placed.append(('STOP', symbol, currency, side, qty, stop_price))
+        return 9000 + len(self.placed)
+
     def get_order(self, order_id):
         return self.orders[order_id]
 
@@ -80,6 +84,54 @@ class SendTests(unittest.TestCase):
         tb.send(fund, b)
         self.assertEqual(b.placed, [])
         self.assertEqual(fund['brokerOrders'][0]['status'], 'cancelled')
+
+
+class StopOrderTests(unittest.TestCase):
+    def guard(self, **kw):
+        return order(id='g1', source='guard', type='stop', action='sell', side='sell', stopPrice=95.0, limitPrice=None, **kw)
+
+    def test_places_a_standing_stop_order(self):
+        fund = {'brokerOrders': [self.guard()]}
+        b = FakeBroker()
+        tb.send(fund, b)
+        self.assertEqual(b.placed, [('STOP', 'AAPL', 'USD', 'sell', 10, 95.0)])
+        self.assertEqual(fund['brokerOrders'][0]['status'], 'sent')
+
+    def test_a_sale_cancels_the_stop_order_first(self):
+        guard = self.guard(status='sent', tigerOrderId=5, cancelRequested=True)
+        fund = {'brokerOrders': [guard, order(id='s1', action='sell', side='sell', limitPrice=99.0)]}
+        b = FakeBroker(orders={5: tiger_order('Cancelled')})
+        tb.send(fund, b)
+        self.assertEqual(b.cancelled, [5])
+        self.assertEqual(guard['status'], 'cancelled')
+        self.assertEqual(b.placed, [('AAPL', 'USD', 'sell', 10, 99.0)])
+
+    def test_a_sale_waits_while_the_stop_order_is_still_being_cancelled(self):
+        guard = self.guard(status='sent', tigerOrderId=5)  # the fund hasn't asked yet: cancelled anyway
+        fund = {'brokerOrders': [guard, order(id='s1', action='sell', side='sell', limitPrice=99.0, source='protection')]}
+        b = FakeBroker(orders={5: tiger_order('PendingCancel')})
+        tb.send(fund, b)
+        self.assertEqual(b.cancelled, [5])
+        self.assertEqual(b.placed, [])
+        self.assertEqual(fund['brokerOrders'][1]['status'], 'queued')
+        self.assertIn('Waiting', fund['brokerOrders'][1]['note'])
+
+    def test_a_sale_is_dropped_if_the_stop_order_sold_first(self):
+        guard = self.guard(status='sent', tigerOrderId=5)
+        fund = {'brokerOrders': [guard, order(id='s1', action='sell', side='sell', limitPrice=99.0)]}
+        b = FakeBroker(orders={5: tiger_order('Filled', 10, 94.9)})
+        tb.send(fund, b)
+        self.assertEqual(b.placed, [])
+        self.assertEqual(guard['status'], 'filled')
+        self.assertEqual(fund['brokerOrders'][1]['status'], 'cancelled')
+
+    def test_a_buy_does_not_touch_the_stop_order(self):
+        guard = self.guard(status='sent', tigerOrderId=5)
+        fund = {'brokerOrders': [guard, order(id='b9')]}
+        b = FakeBroker(orders={5: tiger_order('Submitted')})
+        tb.send(fund, b)
+        self.assertEqual(b.cancelled, [])
+        self.assertEqual(len(b.placed), 1)
 
 
 class FeeTests(unittest.TestCase):

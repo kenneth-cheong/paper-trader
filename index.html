@@ -56,6 +56,7 @@
         </div>
         <p class="error" id="picks-error" role="alert"></p>
         <div id="picks"></div>
+        <div id="scorecard" class="scorecard"></div>
       </section>
       <section class="panel">
         <div class="panel-head"><h2>Holdings</h2></div>
@@ -136,6 +137,10 @@
         <div class="panel-head"><h2>Trade history</h2></div>
         <div class="table-wrap"><table id="trades"></table></div>
       </section>
+      <section class="panel" id="cash-moves-panel" hidden>
+        <div class="panel-head"><h2>Dividends, splits and currency conversions</h2></div>
+        <ul class="orders" id="cash-moves"></ul>
+      </section>
     </div>
 
     <p class="muted small foot" id="foot">
@@ -163,6 +168,23 @@
       <div class="dialog-actions">
         <button type="button" class="ghost" id="trade-cancel">Cancel</button>
         <button type="submit" id="trade-submit" class="primary">Buy</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="convert-dialog">
+    <form method="dialog" id="convert-form">
+      <h3>Convert currency</h3>
+      <p class="small">Moves cash between your SGD and USD accounts at today's rate, less your broker's conversion spread (set under Settings → Trading fees).</p>
+      <div class="two">
+        <label>From <select id="convert-from"><option value="USD">USD</option><option value="SGD">SGD</option></select></label>
+        <label>Amount <input id="convert-amount" type="number" min="0.01" step="0.01" inputmode="decimal" required></label>
+      </div>
+      <dl class="facts" id="convert-facts"></dl>
+      <p class="error" id="convert-error" role="alert"></p>
+      <div class="dialog-actions">
+        <button type="button" class="ghost" id="convert-cancel">Cancel</button>
+        <button type="submit" class="primary">Convert</button>
       </div>
     </form>
   </dialog>
@@ -222,6 +244,7 @@
         <label>US minimum, USD <input id="fee-us-min" type="number" min="0" step="0.01" inputmode="decimal"></label>
         <label>SGX fee, % <input id="fee-sgx-pct" type="number" min="0" step="0.01" inputmode="decimal"></label>
         <label>SGX minimum, SGD <input id="fee-sgx-min" type="number" min="0" step="0.01" inputmode="decimal"></label>
+        <label>Currency conversion spread, % <input id="fee-fx" type="number" min="0" max="10" step="0.01" inputmode="decimal"></label>
       </div>
 
       <h4>Start over</h4>

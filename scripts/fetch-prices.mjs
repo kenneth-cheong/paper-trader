@@ -56,7 +56,8 @@ async function fetchChart(symbol, range, interval) {
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const { cookie, crumb } = await yahooSession();
-      const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}&crumb=${encodeURIComponent(crumb)}`;
+      const events = interval === '1d' ? '&events=div%2Csplits' : '';
+      const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}${events}&crumb=${encodeURIComponent(crumb)}`;
       const res = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json', Cookie: cookie } });
       if (res.status === 401 || res.status === 403) session = null; // stale crumb: get a new one next attempt
       if (!res.ok) throw new Error(`HTTP ${res.status} ${(await res.text()).slice(0, 120).replace(/\s+/g, ' ')}`);
@@ -81,6 +82,16 @@ export function bars(result) {
   return out;
 }
 
+// Dividends and splits in the daily data: { dividends: [[unixSeconds, perShare]], splits: [[unixSeconds, ratio]] }
+// (ratio = new shares per old share, so 3 for a 3-for-1 split), or undefined when there are none.
+export function events(result) {
+  const ev = result?.events ?? {};
+  const dividends = Object.values(ev.dividends ?? {}).filter((d) => d.amount > 0).map((d) => [d.date, round(d.amount)]);
+  const splits = Object.values(ev.splits ?? {}).filter((x) => x.numerator > 0 && x.denominator > 0).map((x) => [x.date, round(x.numerator / x.denominator)]);
+  const byDate = (a, b) => a[0] - b[0];
+  return dividends.length || splits.length ? { dividends: dividends.sort(byDate), splits: splits.sort(byDate) } : undefined;
+}
+
 // daily: ~1 year of daily bars (for charts, moving averages, backtests and the AI);
 // intraday: ~5 days of 15-minute bars (so auto-trading rules can catch up on missed moves).
 export function toQuote(daily, intraday) {
@@ -97,6 +108,7 @@ export function toQuote(daily, intraday) {
     time: meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000).toISOString() : null,
     daily: d,
     intraday: intraday ? bars(intraday) : [],
+    events: events(daily),
   };
 }
 

@@ -22,7 +22,8 @@ const SGX_EXCHANGE = [
 export const FEE_PLANS = {
   tiger: {
     label: 'Tiger Brokers (Singapore)',
-    summary: 'US: US$0.005/share + US$0.005/share platform fee (US$1.99 minimum). SGX: 0.03% + 0.03% platform fee (S$1.99 minimum) + SGX fees. Plus 9% GST.',
+    summary: 'US: US$0.005/share + US$0.005/share platform fee (US$1.99 minimum). SGX: 0.03% + 0.03% platform fee (S$1.99 minimum) + SGX fees. Plus 9% GST. Currency conversion: about 0.1% spread (estimate).',
+    fxSpreadPct: 0.1,
     US: [
       { label: 'Commission', perShare: 0.005, min: 0.99, maxPct: 0.005, gst: true },
       { label: 'Platform fee', perShare: 0.005, min: 1, maxPct: 0.005, gst: true },
@@ -36,11 +37,12 @@ export const FEE_PLANS = {
   },
   scb: {
     label: 'Standard Chartered Online Trading',
-    summary: 'SGX: 0.20% (S$10 minimum) + SGX fees. US: 0.20% (US$10 minimum; check your rate). Plus 9% GST. Priority and accredited customers pay less.',
+    summary: 'SGX: 0.20% (S$10 minimum) + SGX fees. US: 0.20% (US$10 minimum; check your rate). Plus 9% GST. Priority and accredited customers pay less. Currency conversion: about 0.5% spread (estimate).',
+    fxSpreadPct: 0.5,
     US: [{ label: 'Commission', pct: 0.002, min: 10, gst: true }, ...US_REG],
     SGX: [{ label: 'Commission', pct: 0.002, min: 10, gst: true }, ...SGX_EXCHANGE],
   },
-  none: { label: 'No fees', summary: 'Trades cost nothing extra (unrealistic, but simple).', US: [], SGX: [] },
+  none: { label: 'No fees', summary: 'Trades and currency conversions cost nothing extra (unrealistic, but simple).', US: [], SGX: [], fxSpreadPct: 0 },
 };
 export const DEFAULT_FEE_PLAN = 'tiger';
 
@@ -48,7 +50,8 @@ export const DEFAULT_FEE_PLAN = 'tiger';
 export function planFor(id = DEFAULT_FEE_PLAN, custom = null) {
   if (id === 'custom' && custom) {
     const market = (m) => [{ label: 'Commission', pct: (Number(custom.pct?.[m]) || 0) / 100, min: Number(custom.min?.[m]) || 0, gst: false }];
-    return { label: 'Custom', summary: `US: ${custom.pct?.US ?? 0}% (minimum ${custom.min?.US ?? 0}). SGX: ${custom.pct?.SGX ?? 0}% (minimum ${custom.min?.SGX ?? 0}).`, US: market('US'), SGX: market('SGX') };
+    const fx = Number(custom.fx ?? 0.2) || 0;
+    return { label: 'Custom', summary: `US: ${custom.pct?.US ?? 0}% (minimum ${custom.min?.US ?? 0}). SGX: ${custom.pct?.SGX ?? 0}% (minimum ${custom.min?.SGX ?? 0}). Currency conversion: ${fx}% spread.`, US: market('US'), SGX: market('SGX'), fxSpreadPct: fx };
   }
   return FEE_PLANS[id] ?? FEE_PLANS[DEFAULT_FEE_PLAN];
 }
@@ -73,6 +76,9 @@ export function calcFee(plan, market, side, qty, price) {
   if (gstBase > 0) parts.push({ label: 'GST 9%', amount: cents(gstBase * GST) });
   return { total: cents(parts.reduce((s, p) => s + p.amount, 0)), parts };
 }
+
+// The spread, in percent, taken when a portfolio converts cash between currencies.
+export const fxSpreadFor = (portfolio) => planFor(portfolio.feePlan, portfolio.customFees).fxSpreadPct ?? 0;
 
 // The fee for a trade in a portfolio, using the portfolio's own plan.
 export const feeFor = (portfolio, market, side, qty, price) =>
