@@ -1,22 +1,22 @@
--- Paper Trader: keep the AI fund private. Run once in Supabase → SQL Editor, after setup.sql.
--- Safe to run again.
+-- Paper Trader: keep the AI fund private. Run this whole file once in Supabase SQL Editor, after
+-- setup.sql. It is safe to run again.
 --
--- The AI fund's state (its trades, positions and your Tiger account's holdings) is then stored here,
--- where only admins can read it, instead of on the public website and the public ai-state branch.
--- The scheduled GitHub job reads and writes it with a random token kept in Supabase Vault; the last
--- query below shows that token so you can add it to GitHub as the FUND_STATE_TOKEN secret.
+-- The AI fund (its trades, positions and Tiger holdings) is then stored in this database, where only
+-- admins can read it, instead of on the public website and the public ai-state branch. The GitHub
+-- job reads and writes it with a random token kept in Supabase Vault. The query at the end shows the
+-- token: copy it into a GitHub repository secret named FUND_STATE_TOKEN.
 
 create table if not exists public.fund_state (
-  id int primary key default 1 check (id = 1), -- one fund
+  id int primary key default 1 check (id = 1),
   data jsonb not null,
   updated_at timestamptz not null default now()
 );
 alter table public.fund_state enable row level security;
 
-drop policy if exists "admins read the fund" on public.fund_state;
-create policy "admins read the fund" on public.fund_state for select to authenticated using (public.is_admin());
+drop policy if exists admins_read_fund on public.fund_state;
+create policy admins_read_fund on public.fund_state for select to authenticated using (public.is_admin());
 
--- The job's token check. Constant work either way; the token is 64 random hex characters.
+-- Checks the token sent by the GitHub job
 create or replace function public.fund_token_ok(token text) returns boolean
 language sql stable security definer set search_path = '' as $$
   select exists (select 1 from vault.decrypted_secrets where name = 'fund_state_token' and decrypted_secret = token);
@@ -51,7 +51,7 @@ revoke execute on function public.save_fund_state(text, jsonb) from public;
 grant execute on function public.load_fund_state(text) to anon;
 grant execute on function public.save_fund_state(text, jsonb) to anon;
 
--- Make the token once (running this file again keeps it).
+-- Makes the token the first time (running this file again keeps it)
 do $$
 begin
   if not exists (select 1 from vault.secrets where name = 'fund_state_token') then
@@ -60,7 +60,5 @@ begin
 end;
 $$;
 
--- LAST STEP: copy the value this shows into a GitHub repository secret named FUND_STATE_TOKEN
--- (repo → Settings → Secrets and variables → Actions → New repository secret).
-select decrypted_secret as "Copy this into the FUND_STATE_TOKEN GitHub secret"
-  from vault.decrypted_secrets where name = 'fund_state_token';
+-- Shows the token to copy into the FUND_STATE_TOKEN GitHub secret
+select decrypted_secret as fund_state_token from vault.decrypted_secrets where name = 'fund_state_token';
