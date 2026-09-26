@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { newPortfolio, applyTrade, summarize, validatePortfolio } from '../portfolio.js';
+import { newPortfolio, applyTrade, summarize, validatePortfolio, buyingPower } from '../portfolio.js';
 import { toQuote } from '../scripts/fetch-prices.mjs';
 
 const buy = (p, symbol, qty, price, currency = 'USD') => applyTrade(p, { symbol, side: 'buy', qty, price, currency });
@@ -50,7 +50,6 @@ test('bad trades throw and leave the portfolio untouched', () => {
   const p = buy(newPortfolio({ USD: 1000 }), 'AAPL', 1, 100);
   const before = JSON.stringify(p);
   assert.throws(() => buy(p, 'AAPL', 100, 100), /Not enough USD cash/);
-  assert.throws(() => sell(p, 'AAPL', 2, 100), /only hold 1/);
   assert.throws(() => buy(p, 'AAPL', 1.5, 100), /whole number/);
   assert.throws(() => buy(p, 'AAPL', 1, 0), /no price/);
   assert.throws(() => buy(p, 'D05.SI', 1, 10, 'SGD'), /no SGD account/);
@@ -68,17 +67,55 @@ test('validatePortfolio accepts its own output and rejects junk', () => {
   const p = buy(newPortfolio(), 'AAPL', 1, 100);
   assert.deepEqual(validatePortfolio(JSON.parse(JSON.stringify(p))), p);
   assert.throws(() => validatePortfolio({ foo: 1 }), /not a paper-trader/);
-  assert.throws(() => validatePortfolio({ ...p, positions: { X: { qty: -1, avgCost: 1, currency: 'USD' } } }));
+  assert.throws(() => validatePortfolio({ ...p, positions: { X: { qty: 0, avgCost: 1, currency: 'USD' } } }));
 });
 
-test('toQuote reads price, previous close and history from a Yahoo chart result', () => {
-  const q = toQuote({
-    meta: { currency: 'SGD', regularMarketPrice: 41.5, regularMarketTime: 1_758_800_000, chartPreviousClose: 38 },
-    indicators: { quote: [{ close: [40, null, 41, 41.5] }] },
-  });
+test('toQuote reads price, previous close and bars from Yahoo chart results', () => {
+  const daily = {
+    meta: { currency: 'SGD', regularMarketPrice: 41.4, regularMarketTime: 1_758_800_000, chartPreviousClose: 38 },
+    timestamp: [1, 2, 3, 4],
+    indicators: { quote: [{ close: [40, null, 41, 41.4] }] },
+  };
+  const intraday = { meta: { ...daily.meta, regularMarketPrice: 41.5 }, timestamp: [10, 11], indicators: { quote: [{ close: [41.45, 41.5] }] } };
+  const q = toQuote(daily, intraday);
   assert.equal(q.price, 41.5);
   assert.equal(q.prevClose, 41);
-  assert.deepEqual(q.history, [40, 41, 41.5]);
+  assert.deepEqual(q.daily, [[1, 40], [3, 41], [4, 41.4]]);
+  assert.deepEqual(q.intraday, [[10, 41.45], [11, 41.5]]);
   assert.equal(q.currency, 'SGD');
-  assert.throws(() => toQuote({ meta: {}, indicators: { quote: [{ close: [] }] } }), /no price/);
+  assert.throws(() => toQuote({ meta: {}, timestamp: [], indicators: { quote: [{ close: [] }] } }), /no price/);
 });
+
+test('selling more than you hold opens a short that profits when the price falls', () => {
+  let p = newPortfolio({ USD: 10000 });
+  p = sell(p, 'TSLA', 10, 200);
+  assert.deepEqual(p.positions.TSLA, { qty: -10, avgCost: 200, currency: 'USD' });
+  assert.equal(p.accounts.USD.cash, 12000);
+  assert.equal(buyingPower(p, 'USD'), 12000 - 3000);
+  let s = summarize(p, { TSLA: { price: 150 } });
+  assert.equal(s.accounts.USD.net, 500);
+  assert.equal(s.positions[0].unrealized, 500);
+  assert.equal(s.positions[0].unrealizedPct, 0.25);
+  p = buy(p, 'TSLA', 10, 150);
+  assert.equal(p.positions.TSLA, undefined);
+  assert.equal(p.accounts.USD.realized, 500);
+  assert.equal(p.accounts.USD.cash, 10500);
+});
+
+test('a sale bigger than a long position flips it to short at the sale price', () => {
+  let p = buy(newPortfolio({ USD: 10000 }), 'A', 10, 100);
+  p = sell(p, 'A', 15, 120);
+  assert.equal(p.accounts.USD.realized, 200);
+  assert.deepEqual(p.positions.A, { qty: -5, avgCost: 120, currency: 'USD' });
+});
+
+test('shorting needs 150% collateral, and short collateral cannot be spent on buys', () => {
+  let p = newPortfolio({ USD: 1000 });
+  assert.throws(() => sell(p, 'A', 21, 100), /buying power to short/); // 2100 short needs 1050 free
+  p = sell(p, 'A', 20, 100); // uses exactly all 1000 of buying power
+  assert.equal(buyingPower(p, 'USD'), 0);
+  assert.throws(() => buy(p, 'B', 1, 1), /Not enough USD cash/);
+  p = buy(p, 'A', 20, 130); // covering is always allowed, even at a loss
+  assert.equal(p.accounts.USD.cash, 400);
+});
+

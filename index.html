@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Paper Trader</title>
-  <meta name="description" content="Simulate trading SGX and US stocks with virtual cash and see whether you end up with a net profit or loss.">
+  <meta name="description" content="Simulate trading SGX and US stocks with virtual cash, with AI picks, auto-trading rules and an autonomous AI fund.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M1 12l4-4 3 3 6-7' fill='none' stroke='%2316a34a' stroke-width='2'/></svg>">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -17,45 +17,119 @@
     <div class="top-actions">
       <span id="updated" class="muted small"></span>
       <button id="refresh" class="ghost" title="Reload prices">Refresh</button>
-      <button id="open-settings" class="ghost">Portfolio settings</button>
+      <button id="open-settings" class="ghost">Settings</button>
     </div>
   </header>
+  <nav class="tabs" role="tablist" id="tabs">
+    <a role="tab" href="#home">Home</a>
+    <a role="tab" href="#markets">Markets</a>
+    <a role="tab" href="#auto">Auto-trading</a>
+    <a role="tab" href="#strategist">AI strategist</a>
+    <a role="tab" href="#fund">AI fund</a>
+    <a role="tab" href="#history">History</a>
+  </nav>
 
   <div id="banner" class="banner" hidden></div>
+  <div id="notices" class="notices" aria-live="polite"></div>
 
   <main>
     <section class="cards" id="cards" aria-label="Profit and loss"></section>
 
-    <section class="panel">
-      <div class="panel-head">
-        <h2>Holdings</h2>
-      </div>
-      <div class="table-wrap"><table id="holdings"></table></div>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head">
-        <h2>Markets</h2>
-        <div class="seg" role="tablist" id="market-filter">
-          <button role="tab" data-market="all" aria-selected="true">All</button>
-          <button role="tab" data-market="SGX">SGX</button>
-          <button role="tab" data-market="US">US</button>
+    <!-- Home -->
+    <div class="view" data-view="home">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>AI picks: what to long and short</h2>
+          <div class="row">
+            <span class="muted small" id="picks-meta"></span>
+            <button id="picks-refresh" class="ghost small-btn">Refresh now</button>
+          </div>
         </div>
-      </div>
-      <p class="muted small" id="market-status"></p>
-      <div class="table-wrap"><table id="markets"></table></div>
-    </section>
+        <p class="error" id="picks-error" role="alert"></p>
+        <div id="picks"></div>
+      </section>
+      <section class="panel">
+        <div class="panel-head"><h2>Holdings</h2></div>
+        <div class="table-wrap"><table id="holdings"></table></div>
+      </section>
+    </div>
 
-    <section class="panel">
-      <div class="panel-head">
-        <h2>Trade history</h2>
-      </div>
-      <div class="table-wrap"><table id="trades"></table></div>
-    </section>
+    <!-- Markets -->
+    <div class="view" data-view="markets">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Markets</h2>
+          <div class="seg" role="tablist" id="market-filter">
+            <button role="tab" data-market="all" aria-selected="true">All</button>
+            <button role="tab" data-market="SGX">SGX</button>
+            <button role="tab" data-market="US">US</button>
+          </div>
+        </div>
+        <p class="muted small" id="market-status"></p>
+        <div class="table-wrap"><table id="markets"></table></div>
+      </section>
+    </div>
+
+    <!-- Auto-trading -->
+    <div class="view" data-view="auto">
+      <section class="panel">
+        <div class="panel-head">
+          <h2>Auto-trading rules</h2>
+          <button id="new-rule" class="primary">New rule</button>
+        </div>
+        <p class="muted small">
+          Rules buy and sell for you when their condition is met. They run while this page is open, and when you come back
+          they replay the last 5 trading days of 15-minute prices, so a rule still fires at the time and price it would have.
+          Rules only manage long holdings; they never open shorts.
+        </p>
+        <div id="rules"></div>
+      </section>
+    </div>
+
+    <!-- AI strategist -->
+    <div class="view" data-view="strategist">
+      <section class="panel">
+        <div class="panel-head"><h2>AI strategist</h2></div>
+        <p class="muted small">
+          Claude reads the last year of prices, today's news and your own trades, then proposes strategies as auto-trading
+          rules. Each one is backtested on the past year before you decide to use it. Runs with your Anthropic API key.
+        </p>
+        <form id="strategist-form" class="form-grid">
+          <label>Focus <select id="st-focus"></select></label>
+          <label>Risk
+            <select id="st-risk">
+              <option value="cautious">Cautious</option>
+              <option value="balanced" selected>Balanced</option>
+              <option value="aggressive">Aggressive</option>
+            </select>
+          </label>
+          <label class="wide">Question (optional) <input id="st-question" placeholder="e.g. How do I protect my Nvidia gains?"></label>
+          <div class="wide row">
+            <button type="submit" class="primary" id="st-run">Analyse</button>
+            <span class="muted small" id="st-status"></span>
+          </div>
+        </form>
+        <p class="error" id="st-error" role="alert"></p>
+        <div id="strategist"></div>
+      </section>
+    </div>
+
+    <!-- AI fund -->
+    <div class="view" data-view="fund">
+      <div id="fund"></div>
+    </div>
+
+    <!-- History -->
+    <div class="view" data-view="history">
+      <section class="panel">
+        <div class="panel-head"><h2>Trade history</h2></div>
+        <div class="table-wrap"><table id="trades"></table></div>
+      </section>
+    </div>
 
     <p class="muted small foot">
-      Virtual money only. Prices come from Yahoo Finance via a scheduled job and may be delayed.
-      Your portfolio is saved in this browser; use Portfolio settings to export it or move it to another device.
+      Virtual money only; nothing here is financial advice. Prices come from Yahoo Finance via a scheduled job and may be delayed.
+      Your portfolio and rules are saved in this browser; use Settings to export them or move them to another device.
     </p>
   </main>
 
@@ -64,7 +138,7 @@
       <h3 id="trade-title"></h3>
       <div class="seg wide" id="side">
         <button type="button" data-side="buy" aria-pressed="true">Buy</button>
-        <button type="button" data-side="sell" aria-pressed="false">Sell</button>
+        <button type="button" data-side="sell" aria-pressed="false">Sell / short</button>
       </div>
       <label>Shares
         <div class="qty-row">
@@ -72,7 +146,7 @@
           <button type="button" id="qty-max" class="ghost">Max</button>
         </div>
       </label>
-      <dl class="trade-facts" id="trade-facts"></dl>
+      <dl class="facts" id="trade-facts"></dl>
       <p class="note" id="trade-note"></p>
       <p class="error" id="trade-error" role="alert"></p>
       <div class="dialog-actions">
@@ -82,12 +156,46 @@
     </form>
   </dialog>
 
+  <dialog id="rule-dialog">
+    <form method="dialog" id="rule-form">
+      <h3 id="rule-title">New rule</h3>
+      <div class="form-grid">
+        <label class="wide">Stock <select id="rule-symbol"></select></label>
+        <label class="wide">When <select id="rule-when"></select></label>
+        <label id="rule-value-label">Value <input id="rule-value" type="number" step="any" min="0" required></label>
+        <span class="muted small unit" id="rule-value-unit"></span>
+        <label>Then <select id="rule-side"><option value="buy">Buy</option><option value="sell">Sell</option></select></label>
+        <label>How much <select id="rule-unit"></select></label>
+        <label id="rule-amount-label">Amount <input id="rule-amount" type="number" step="any" min="0"></label>
+        <label>How often <select id="rule-repeat"></select></label>
+        <label class="check wide"><input type="checkbox" id="rule-enabled" checked> Switched on</label>
+      </div>
+      <p class="sentence" id="rule-sentence"></p>
+      <p class="muted small">Saving starts the rule from now; it won't act on earlier prices.</p>
+      <p class="error" id="rule-error" role="alert"></p>
+      <div id="rule-test"></div>
+      <div class="dialog-actions">
+        <button type="button" class="ghost" id="rule-backtest">Test on past year</button>
+        <span class="spacer"></span>
+        <button type="button" class="ghost" id="rule-cancel">Cancel</button>
+        <button type="submit" class="primary">Save rule</button>
+      </div>
+    </form>
+  </dialog>
+
   <dialog id="settings-dialog">
     <form method="dialog" id="settings-form">
-      <h3>Portfolio settings</h3>
-      <p class="muted small" id="settings-started"></p>
+      <h3>Settings</h3>
+      <h4>AI (Claude)</h4>
+      <p class="small">The AI strategist and "Refresh now" on AI picks use your own Anthropic API key, sent straight from this browser to Anthropic.
+        It is stored only in this browser. Use a key with a spending limit. Get one at console.anthropic.com.</p>
+      <label>Anthropic API key <input id="api-key" type="password" autocomplete="off" placeholder="sk-ant-..."></label>
+      <label>Model <select id="ai-model"></select></label>
+      <div class="row"><button type="button" id="forget-key" class="ghost">Forget key</button></div>
+
       <h4>Start over</h4>
-      <p class="small">Wipes all holdings and trades and starts again with this much virtual cash.</p>
+      <p class="muted small" id="settings-started"></p>
+      <p class="small">Wipes all holdings and trades and starts again with this much virtual cash. Your rules are kept but restart from now.</p>
       <div class="two">
         <label>SGD cash <input id="start-sgd" type="number" min="0" step="1000" required></label>
         <label>USD cash <input id="start-usd" type="number" min="0" step="1000" required></label>
@@ -105,6 +213,7 @@
     </form>
   </dialog>
 
+  <div id="tooltip" class="tooltip" hidden></div>
   <script type="module" src="app.js"></script>
 </body>
 </html>

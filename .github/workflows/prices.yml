@@ -1,17 +1,40 @@
-name: Fetch prices and deploy
+name: Update prices, AI picks and AI fund
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:
   schedule:
     # Every 15 minutes on weekdays while SGX (01:00-09:00 UTC) or US markets (13:30-21:00 UTC) trade,
     # plus one run after the US close so the day's closing prices land. GitHub may start scheduled runs late.
     - cron: '*/15 1-9,13-21 * * 1-5'
     - cron: '30 22 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      refresh_picks:
+        description: Get fresh AI long/short picks now
+        type: boolean
+        default: false
+      fund_start_amount:
+        description: Start a NEW AI fund with this amount (replaces the current one). Leave empty to keep the current fund.
+        type: string
+        default: ''
+      fund_currency:
+        description: New fund's currency (USD trades US stocks, SGD trades SGX stocks)
+        type: choice
+        options: [USD, SGD]
+        default: USD
+      fund_decisions_per_day:
+        description: How many times a trading day the AI decides (each costs roughly US$0.30-1.00)
+        type: choice
+        options: ['1', '2', '4']
+        default: '2'
+      fund_stop:
+        description: Stop the AI fund and close all its positions
+        type: boolean
+        default: false
 
 permissions:
-  contents: read
+  contents: write # saves AI picks and AI fund state to the ai-state branch
   pages: write
   id-token: write
 
@@ -25,21 +48,63 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    env:
+      ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      AI_MODEL: ${{ vars.AI_MODEL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+      - run: npm install --no-save --no-audit --no-fund @anthropic-ai/sdk@0.128.0
       - run: node --test
       - id: pages
         uses: actions/configure-pages@v5
       # Passing the live prices.json lets a symbol that fails this run keep its last price.
       - run: node scripts/fetch-prices.mjs "${{ steps.pages.outputs.base_url }}/data/prices.json"
+
+      # AI picks and the AI fund keep their state on a separate branch, so main's history stays clean.
+      - name: Load AI state
+        env:
+          TOKEN: ${{ github.token }}
+        run: |
+          url="https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          if git ls-remote --exit-code --heads origin ai-state >/dev/null; then
+            git clone --quiet --depth 1 --branch ai-state "$url" state
+          else
+            git init --quiet -b ai-state state
+            git -C state remote add origin "$url"
+          fi
+      # A failure in an AI step must not stop prices from updating.
+      - name: AI picks
+        continue-on-error: true
+        env:
+          FORCE_PICKS: ${{ inputs.refresh_picks }}
+        run: node scripts/fetch-picks.mjs state/picks.json
+      - name: AI fund
+        continue-on-error: true
+        env:
+          FUND_START_AMOUNT: ${{ inputs.fund_start_amount }}
+          FUND_CURRENCY: ${{ inputs.fund_currency }}
+          FUND_DECISIONS_PER_DAY: ${{ inputs.fund_decisions_per_day }}
+          FUND_STOP: ${{ inputs.fund_stop }}
+        run: node scripts/ai-fund.mjs state/ai-fund.json state/picks.json
+      - name: Save AI state
+        run: |
+          cd state
+          git add -A
+          if ! git diff --cached --quiet; then
+            git -c user.name="paper-trader bot" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" \
+              commit --quiet -m "AI state $(date -u +%FT%TZ)"
+            git push --quiet origin ai-state
+          fi
+
       - name: Collect site files
         run: |
           mkdir -p _site/data
-          cp index.html app.js portfolio.js styles.css _site/
+          cp index.html *.js styles.css _site/
           cp data/prices.json data/sample-prices.json _site/data/
+          cp state/*.json _site/data/ 2>/dev/null || true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
