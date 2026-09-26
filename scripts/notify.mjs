@@ -1,12 +1,13 @@
 // Sends the AI fund's alerts to Telegram (see alerts.js). Runs after the fund's steps, before the
-// fund's state is saved, because it records what it has sent in the fund (fund.notified).
+// funds are saved, because it records what it has sent in each fund (fund.notified).
 // Usage: node scripts/notify.mjs <ai-fund.json>     send new alerts
 //        node scripts/notify.mjs --setup            find your chat and send a test message
 // Environment: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID (both GitHub secrets), APP_URL (the site's address).
 // Alerts can contain your trades, so nothing about them is printed to the (public) Actions log.
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { collectAlerts, formatMessage } from '../alerts.js';
+import { collectAllAlerts, formatMessage } from '../alerts.js';
+import { loadFunds } from '../funds.js';
 
 const { TELEGRAM_BOT_TOKEN: token, TELEGRAM_CHAT_ID: chatId, APP_URL: appUrl } = process.env;
 const api = async (method, body) => {
@@ -38,8 +39,8 @@ if (process.argv[2] === '--setup') {
 }
 
 const file = process.argv[2];
-let fund;
-try { fund = JSON.parse(await readFile(file, 'utf8')); } catch { process.exit(0); }
+let c;
+try { c = loadFunds(JSON.parse(await readFile(file, 'utf8'))); } catch { process.exit(0); }
 let prices = null;
 try { prices = JSON.parse(await readFile('data/prices.json', 'utf8')); } catch { /* summary needs prices; alerts don't */ }
 
@@ -47,12 +48,11 @@ if (!token || !chatId) {
   console.log('Telegram alerts are off (add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID to turn them on).');
   process.exit(0);
 }
-const before = fund.notified;
-const texts = collectAlerts(fund, { prices });
+const texts = collectAllAlerts(c, { prices });
 try {
   if (texts.length) await send(chatId, formatMessage(texts, appUrl));
-  await writeFile(file, JSON.stringify(fund));
-  console.log(before ? `Telegram: ${texts.length} alert(s) sent.` : 'Telegram: connected; alerts start from the next event.');
+  await writeFile(file, JSON.stringify(c));
+  console.log(`Telegram: ${texts.length} alert(s) sent.`);
 } catch (err) {
   // Not saved as sent, so they go out next run.
   console.warn(`! Telegram alerts not sent (will retry next run): ${err.message}`);

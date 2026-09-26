@@ -6,12 +6,12 @@ import { addSpend, monthSpend, fundAiCost } from './spend.js';
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest, fillPendingOrders } from './rules.js';
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
 import { MARKETS, marketForCurrency, tradingStatus, STATUS_LABELS } from './markets.js';
-import { reconcile } from './fund.js';
+import { loadFunds, reconcileAll, STYLES, DEFAULT_STYLE, MAX_ACTIVE_FUNDS } from './funds.js';
 import { calcFee, planFor, fxSpreadFor, FEE_PLANS } from './fees.js';
 import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus, loadPrivateFund } from './auth.js';
 import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
 
-const KEYS = { portfolio: 'paper-trader:portfolio', ai: 'paper-trader:ai', picks: 'paper-trader:picks', strategist: 'paper-trader:strategist', spend: 'paper-trader:ai-spend' };
+const KEYS = { portfolio: 'paper-trader:portfolio', ai: 'paper-trader:ai', picks: 'paper-trader:picks', strategist: 'paper-trader:strategist', spend: 'paper-trader:ai-spend', fundId: 'paper-trader:fund' };
 const PRICE_REFRESH_MS = 5 * 60 * 1000;
 const $ = (id) => document.getElementById(id);
 
@@ -28,7 +28,8 @@ const state = {
   browserSpend: readStore(KEYS.spend), // what this browser spent with your own key
   localPicks: readStore(KEYS.picks),
   strategist: readStore(KEYS.strategist),
-  fund: undefined, // undefined = not loaded yet, null = no fund
+  funds: undefined, // the AI funds (funds.js): undefined = not loaded yet, null = none
+  fundId: readStore(KEYS.fundId), // the fund shown on the AI fund page
   fundCmd: null, // the admin's latest start/stop request: { id, action, createdAt, phase, message }
   marketFilter: 'all',
   trade: null, // { symbol, side }
@@ -200,7 +201,7 @@ async function loadSideData() {
   state.sitePicks = picks.status === 'fulfilled' ? picks.value : null;
   state.picksHistory = history.status === 'fulfilled' ? history.value : null;
   state.spend = spend.status === 'fulfilled' ? spend.value : null;
-  state.fund = fund.status === 'fulfilled' ? fund.value : null;
+  state.funds = fund.status === 'fulfilled' && fund.value ? loadFunds(fund.value) : null;
   render();
 }
 
@@ -1030,29 +1031,62 @@ const brokerLabel = (f) => {
   return 'Tiger (not connected yet)';
 };
 
+const fundList = () => state.funds?.funds ?? [];
+// The fund shown on the AI fund page: the one picked, else the first running one, else the first.
+function selectedFund() {
+  const list = fundList();
+  return list.find((f) => f.id === state.fundId) ?? list.find((f) => !f.stoppedAt) ?? list[0] ?? null;
+}
+function selectFund(id) {
+  state.fundId = id;
+  writeStore(KEYS.fundId, id);
+  fundControlsKey = null;
+  render();
+}
+
+const modelOptions = (selected) => `<option value="">Default (${esc(modelName(TIERS.advanced))})</option>${Object.entries(MODELS)
+  .map(([id, m]) => `<option value="${id}" ${id === selected ? 'selected' : ''}>${esc(m.label)}</option>`).join('')}`;
+const styleOptions = (selected) => Object.entries(STYLES).map(([id, st]) => `<option value="${id}" ${id === selected ? 'selected' : ''}>${esc(st.label)}</option>`).join('');
+
+// The fields both forms share: mandate, limits, shorts and model.
+const mandateFields = (p, v) => `
+  <label>Name <input id="${p}-name" maxlength="40" value="${esc(v.name ?? '')}" placeholder="e.g. Steady banks"></label>
+  <label>Style <select id="${p}-style">${styleOptions(v.style)}</select></label>
+  <label class="wide">Focus (optional) <input id="${p}-focus" maxlength="300" value="${esc(v.focus ?? '')}" placeholder="e.g. Only Singapore banks and REITs · Big US tech · Avoid airlines"></label>
+  <p class="small muted wide" id="${p}-style-brief">${esc(STYLES[v.style]?.brief ?? '')}</p>
+  <label>AI model <select id="${p}-model">${modelOptions(v.model)}</select></label>
+  <label>Largest single order, % of budget <input id="${p}-max-order" type="number" min="1" max="100" step="1" value="${v.maxOrderPct}"></label>
+  <label>Pause after losing in a day, % <input id="${p}-daily-loss" type="number" min="0.5" max="50" step="0.5" value="${v.dailyLossPct}"></label>
+  <label class="check"><input type="checkbox" id="${p}-shorts" ${v.allowShorts !== false ? 'checked' : ''}> Short selling allowed</label>`;
+const readMandate = (p) => ({
+  name: $(`${p}-name`).value.trim(), style: $(`${p}-style`).value, focus: $(`${p}-focus`).value.trim(),
+  settings: { model: $(`${p}-model`).value || null, maxOrderPct: numberOf(`${p}-max-order`), dailyLossPct: numberOf(`${p}-daily-loss`), allowShorts: $(`${p}-shorts`).checked },
+});
+
 // Start/stop/pause buttons and settings for admins. Rebuilt only when something they show changes,
 // so typing isn't lost when prices refresh.
 let fundControlsKey = null;
 function renderFundControls() {
   const el = $('fund-controls');
-  const f = state.fund;
-  const running = f && !f.stoppedAt;
+  const list = fundList();
+  const f = selectedFund();
+  const running = list.filter((x) => !x.stoppedAt);
   const cmd = state.fundCmd;
-  const key = JSON.stringify([authEnabled, state.user?.isAdmin, f === undefined, running, f?.paused?.at, f?.settings, cmd?.phase, cmd?.message]);
+  const key = JSON.stringify([authEnabled, state.user?.isAdmin, state.funds === undefined, f?.id, list.map((x) => [x.id, x.name, x.style, x.focus, x.stoppedAt, x.paused?.at, x.settings]), cmd?.phase, cmd?.message]);
   if (key === fundControlsKey) return;
   fundControlsKey = key;
-  el.hidden = !authEnabled || f === undefined;
+  el.hidden = !authEnabled || state.funds === undefined;
   if (el.hidden) return;
   if (!state.user?.isAdmin) {
-    el.innerHTML = '<p class="muted small">Only admins can start, pause or stop the AI fund.</p>';
+    el.innerHTML = '<p class="muted small">Only admins can start, pause or stop AI funds.</p>';
     return;
   }
   const busy = cmd && ['sending', 'sent', 'accepted'].includes(cmd.phase) ? 'disabled' : '';
-  const s = f?.settings ?? { broker: 'simulator', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5 };
-  const limitFields = (prefix, v) => `
-      <label>Largest single order, % of budget <input id="${prefix}-max-order" type="number" min="1" max="100" step="1" value="${v.maxOrderPct}"></label>
-      <label>Pause after losing in a day, % <input id="${prefix}-daily-loss" type="number" min="0.5" max="50" step="0.5" value="${v.dailyLossPct}"></label>`;
-  const startForm = `<form id="fund-start-form" class="form-grid fund-form">
+  const full = running.length >= MAX_ACTIVE_FUNDS;
+  const startForm = full
+    ? `<p class="small">${MAX_ACTIVE_FUNDS} funds are running, the most at once. Stop one to start another.</p>`
+    : `<form id="fund-start-form" class="form-grid fund-form">
+      ${mandateFields('new', { style: DEFAULT_STYLE, ...STYLES[DEFAULT_STYLE].defaults })}
       <label>Amount <input id="fund-amount" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="e.g. 10000"></label>
       <label>Currency
         <select id="fund-currency"><option value="USD">USD · trades US stocks</option><option value="SGD">SGD · trades SGX stocks</option></select>
@@ -1069,33 +1103,39 @@ function renderFundControls() {
       <label>Fees like
         <select id="fund-fees"><option value="tiger">Tiger Brokers</option><option value="scb">Standard Chartered</option><option value="none">No fees</option></select>
       </label>
-      ${limitFields('fund', { maxOrderPct: 25, dailyLossPct: 5 })}
-      <p class="small muted wide">With Tiger, which account trades (paper or live) is set by the Tiger secrets on GitHub; a live account also needs TIGER_LIVE_TRADING=yes. Approval applies to Tiger; the simulator always trades on its own. With Tiger, the fees are what Tiger actually charges.</p>
-      <div class="row"><button type="submit" class="primary" ${busy}>${running ? 'Start new fund' : 'Start AI fund'}</button></div>
+      <p class="small muted wide">Each fund trades on its own, with its own money. With Tiger, all Tiger funds share your Tiger account (paper or live is set by the Tiger secrets on GitHub); one account can't be long and short the same stock, so a fund can't take the other side of another Tiger fund's position. Approval applies to Tiger; the simulator always trades on its own.</p>
+      <div class="row"><button type="submit" class="primary" ${busy}>Start fund</button></div>
     </form>`;
-  el.innerHTML = `
-    <div class="panel-head"><h2>${running ? 'Control the AI fund' : 'Start an AI fund'}</h2></div>
-    ${running ? `
-      <p class="small">Trading through: <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? ` · ${s.approval === 'manual' ? 'you approve each trade' : 'automatic'}` : ''}</p>
-      <div class="row">
-        ${f.paused
+  const s = f?.settings ?? {};
+  const selectedControls = f ? `
+    <p class="small"><strong>${esc(f.name)}</strong> · trading through <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? ` · ${s.approval === 'manual' ? 'you approve each trade' : 'automatic'}` : ''}</p>
+    <div class="row">
+      ${f.stoppedAt
+        ? `<button type="button" class="ghost" data-fund-cmd="remove" ${busy}>Remove this fund from the list</button>`
+        : `${f.paused
           ? `<button type="button" class="primary" data-fund-cmd="resume" ${busy}>Resume trading</button>`
-          : `<button type="button" class="danger" data-fund-cmd="pause" ${busy}>Pause all trading</button>`}
-        <button type="button" class="ghost" data-fund-stop ${busy}>Stop fund and close positions</button>
-      </div>
-      <details class="fund-new"><summary>Approval and limits</summary>
-        <form id="fund-settings-form" class="form-grid fund-form">
-          <label>Approval
-            <select id="set-approval"><option value="manual" ${s.approval === 'manual' ? 'selected' : ''}>I approve each trade</option><option value="auto" ${s.approval === 'auto' ? 'selected' : ''}>Automatic</option></select>
-          </label>
-          ${limitFields('set', s)}
-          <div class="row"><button type="submit" class="primary" ${busy}>Save</button></div>
-        </form>
-      </details>
-      <details class="fund-new"><summary>Start a new fund instead</summary>
-        <p class="small">This closes the current fund's record and starts fresh.</p>${startForm}</details>`
-      : startForm}
+          : `<button type="button" class="danger" data-fund-cmd="pause" ${busy}>Pause this fund</button>`}
+        <button type="button" class="ghost" data-fund-stop ${busy}>Stop fund and close positions</button>`}
+      ${running.length > 1 ? `<button type="button" class="danger" data-fund-cmd="pause-all" ${busy}>Pause all funds</button>` : ''}
+    </div>
+    ${f.stoppedAt ? '' : `<details class="fund-new"><summary>Mandate, approval and limits</summary>
+      <form id="fund-settings-form" class="form-grid fund-form">
+        ${mandateFields('set', { name: f.name, style: f.style, focus: f.focus, model: s.model, maxOrderPct: s.maxOrderPct ?? 25, dailyLossPct: s.dailyLossPct ?? 5, allowShorts: s.allowShorts })}
+        <label>Approval
+          <select id="set-approval"><option value="manual" ${s.approval === 'manual' ? 'selected' : ''}>I approve each trade</option><option value="auto" ${s.approval === 'auto' ? 'selected' : ''}>Automatic</option></select>
+        </label>
+        <p class="small muted wide">Changing the style changes the AI's brief from its next decision. It doesn't change the limits above by itself.</p>
+        <div class="row"><button type="submit" class="primary" ${busy}>Save</button></div>
+      </form>
+    </details>`}` : '';
+  // Keep open sections open when the controls are redrawn.
+  const wasOpen = new Set([...el.querySelectorAll('details[open] > summary')].map((x) => x.textContent));
+  el.innerHTML = `
+    <div class="panel-head"><h2>${list.length ? 'Control the AI funds' : 'Start an AI fund'}</h2></div>
+    ${selectedControls}
+    ${list.length ? `<details class="fund-new"><summary>Start another fund</summary>${startForm}</details>` : startForm}
     ${cmd?.message ? `<p class="small ${cmd.phase === 'failed' ? 'down' : 'muted'}" role="status">${esc(cmd.message)}</p>` : ''}`;
+  for (const d of el.querySelectorAll('details')) if (wasOpen.has(d.querySelector('summary')?.textContent)) d.open = true;
   const brokerSel = $('fund-broker');
   if (brokerSel) {
     const sync = () => {
@@ -1107,14 +1147,29 @@ function renderFundControls() {
     brokerSel.addEventListener('change', sync);
     sync();
   }
+  // Picking a style for a new fund fills in that style's limits; for a running fund it only shows the brief.
+  for (const p of ['new', 'set']) {
+    const sel = $(`${p}-style`);
+    if (!sel) continue;
+    sel.addEventListener('change', () => {
+      const st = STYLES[sel.value];
+      $(`${p}-style-brief`).textContent = st.brief;
+      if (p === 'new') {
+        $('new-max-order').value = st.defaults.maxOrderPct;
+        $('new-daily-loss').value = st.defaults.dailyLossPct;
+        $('new-shorts').checked = st.defaults.allowShorts;
+      }
+    });
+  }
 }
 
 const COMMAND_TEXT = {
   start: ['Starting the fund', 'The fund is running. Its first decision comes 15 minutes after its market opens.'],
   stop: ['Stopping the fund', 'The fund is stopped and its positions are being closed.'],
-  pause: ['Pausing the fund', 'The fund is paused. It makes no new trades and open orders are cancelled; stop-losses still work.'],
+  pause: ['Pausing', 'Paused. No new trades are made and open orders are cancelled; stop-losses still work.'],
   resume: ['Resuming the fund', 'The fund is trading again.'],
-  settings: ['Saving settings', 'Settings saved.'],
+  settings: ['Saving', 'Saved.'],
+  remove: ['Removing the fund', 'Removed.'],
   approve: ['Sending approved trades', 'Done.'],
   reject: ['Rejecting', 'Rejected.'],
 };
@@ -1125,7 +1180,7 @@ async function submitFundCommand(action, fields = {}) {
   render();
   try {
     const row = await sendFundCommand({ action, ...fields });
-    state.fundCmd = { id: row.id, action, ids: fields.payload?.ids, createdAt: row.created_at, phase: 'sent', message: `${what}: asking GitHub to run it…` };
+    state.fundCmd = { id: row.id, action, fund: fields.payload?.fund ?? null, ids: fields.payload?.ids, createdAt: row.created_at, phase: 'sent', message: `${what}: asking GitHub to run it…` };
   } catch (err) {
     state.fundCmd = { phase: 'failed', action, message: err.message };
   }
@@ -1133,20 +1188,23 @@ async function submitFundCommand(action, fields = {}) {
   if (state.fundCmd.id) watchFundCommand(state.fundCmd);
 }
 
-// Whether the fund (as last loaded) shows that a command has been carried out.
-function commandDone(cmd, f) {
+// Whether the funds (as last loaded) show that a command has been carried out.
+function commandDone(cmd, c) {
   const since = Date.parse(cmd.createdAt);
-  const handled = f?.lastCommand && Date.parse(f.lastCommand.time) >= since;
+  const handled = c?.lastCommand && Date.parse(c.lastCommand.time) >= since;
+  const f = (c?.funds ?? []).find((x) => x.id === cmd.fund);
+  const targets = cmd.fund === 'all' ? (c?.funds ?? []).filter((x) => !x.stoppedAt) : f ? [f] : [];
   switch (cmd.action) {
-    case 'start': return f && Date.parse(f.startedAt) >= since;
-    case 'stop': return f?.stoppedAt && Date.parse(f.stoppedAt) >= since;
-    case 'pause': return Boolean(f?.paused);
-    case 'resume': return f && !f.paused;
+    case 'start': return handled && c.lastCommand.action === 'start';
+    case 'stop': return Boolean(f?.stoppedAt && Date.parse(f.stoppedAt) >= since) || (handled && !c.lastCommand.ok);
+    case 'pause': return (targets.length && targets.every((x) => x.paused)) || (handled && !c.lastCommand.ok);
+    case 'resume': return (targets.length && targets.every((x) => !x.paused)) || (handled && !c.lastCommand.ok);
+    case 'remove': return !f || (handled && !c.lastCommand.ok);
     default: return handled;
   }
 }
 
-// Follows a request until GitHub accepts it and the fund shows the change (usually 3-5 minutes).
+// Follows a request until GitHub accepts it and the funds show the change (usually 3-5 minutes).
 async function watchFundCommand(cmd) {
   const [what, doneText] = COMMAND_TEXT[cmd.action];
   const started = Date.now();
@@ -1164,11 +1222,12 @@ async function watchFundCommand(cmd) {
         }
       } else {
         await loadSideData();
-        if (commandDone(cmd, state.fund)) {
-          const lc = state.fund?.lastCommand;
+        if (commandDone(cmd, state.funds)) {
+          const lc = state.funds?.lastCommand;
           const own = lc && Date.parse(lc.time) >= Date.parse(cmd.createdAt);
           cmd.phase = own && !lc.ok ? 'failed' : 'done';
           cmd.message = own && lc.message ? lc.message : doneText;
+          if (cmd.action === 'start' && own && lc.ok && lc.fund) selectFund(lc.fund); // show the new fund
         }
       }
     } catch (err) {
@@ -1193,34 +1252,43 @@ document.addEventListener('submit', (e) => {
     const currency = $('fund-currency').value;
     const decisionsPerDay = numberOf('fund-decisions');
     const broker = $('fund-broker').value;
-    const settings = { broker, approval: $('fund-approval').value, feePlan: $('fund-fees').value, maxOrderPct: numberOf('fund-max-order'), dailyLossPct: numberOf('fund-daily-loss') };
+    const m = readMandate('new');
+    const settings = { ...m.settings, broker, approval: $('fund-approval').value, feePlan: $('fund-fees').value };
     if (!(amount > 0)) return;
-    const replacing = state.fund && !state.fund.stoppedAt ? ' This replaces the current fund.' : '';
     const where = broker === 'tiger' ? `through your Tiger account (${settings.approval === 'manual' ? 'you approve each trade' : 'automatically'})` : 'in the simulator';
-    if (!confirm(`Start an AI fund with ${money(amount, currency)}, trading ${where}, deciding ${decisionsPerDay} time${decisionsPerDay > 1 ? 's' : ''} a trading day?${replacing}`)) return;
-    submitFundCommand('start', { amount, currency, decisionsPerDay, payload: { settings } });
+    const label = m.name ? `"${m.name}"` : 'a new AI fund';
+    if (!confirm(`Start ${label} (${STYLES[m.style].label}) with ${money(amount, currency)}, trading ${where}, deciding ${decisionsPerDay} time${decisionsPerDay > 1 ? 's' : ''} a trading day? Funds already running keep going.`)) return;
+    submitFundCommand('start', { amount, currency, decisionsPerDay, payload: { name: m.name, style: m.style, focus: m.focus, settings } });
   }
   if (e.target.id === 'fund-settings-form') {
     e.preventDefault();
-    submitFundCommand('settings', { payload: { approval: $('set-approval').value, maxOrderPct: numberOf('set-max-order'), dailyLossPct: numberOf('set-daily-loss') } });
+    const m = readMandate('set');
+    submitFundCommand('settings', { payload: { fund: selectedFund()?.id, name: m.name, style: m.style, focus: m.focus, settings: { ...m.settings, approval: $('set-approval').value } } });
   }
 });
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-fund-stop], [data-fund-cmd], [data-proposal]');
+  const t = e.target.closest('[data-fund-stop], [data-fund-cmd], [data-proposal], [data-fund-select]');
   if (!t) return;
-  if (t.matches('[data-fund-stop]')) {
-    const tiger = state.fund?.settings?.broker === 'tiger';
-    if (confirm(`Stop the AI fund? ${tiger ? 'It sends orders to Tiger to close every position' : 'It sells and covers everything at the latest prices'} and stops trading.`)) submitFundCommand('stop');
+  const f = selectedFund();
+  if (t.matches('[data-fund-select]')) {
+    selectFund(t.dataset.fundSelect);
+  } else if (t.matches('[data-fund-stop]')) {
+    const tiger = f?.settings?.broker === 'tiger';
+    if (confirm(`Stop "${f.name}"? ${tiger ? 'It sends orders to Tiger to close every position' : 'It sells and covers everything at the latest prices'} and stops trading. Other funds keep going.`)) submitFundCommand('stop', { payload: { fund: f.id } });
   } else if (t.dataset.fundCmd === 'pause') {
-    if (confirm('Pause all trading? No new trades are made and open orders are cancelled. Stop-losses keep working.')) submitFundCommand('pause');
+    if (confirm(`Pause "${f.name}"? It makes no new trades and its open orders are cancelled. Stop-losses keep working.`)) submitFundCommand('pause', { payload: { fund: f.id } });
+  } else if (t.dataset.fundCmd === 'pause-all') {
+    if (confirm('Pause ALL funds? None makes new trades and their open orders are cancelled. Stop-losses keep working.')) submitFundCommand('pause', { payload: { fund: 'all' } });
   } else if (t.dataset.fundCmd === 'resume') {
-    submitFundCommand('resume');
+    submitFundCommand('resume', { payload: { fund: f.id } });
+  } else if (t.dataset.fundCmd === 'remove') {
+    if (confirm(`Remove "${f.name}" from the list? A one-line summary of its result is kept.`)) submitFundCommand('remove', { payload: { fund: f.id } });
   } else if (t.dataset.proposal) {
     const [verb, ids] = [t.dataset.proposal, t.dataset.ids.split(',')];
-    const list = (state.fund?.proposals ?? []).filter((p) => ids.includes(p.id));
+    const list = (f?.proposals ?? []).filter((p) => ids.includes(p.id));
     const text = list.map((p) => `${p.action} ${p.shares} ${p.symbol} (limit ${price(p.limitPrice)})`).join(', ');
     if (verb === 'approve' && !confirm(`Send to Tiger: ${text}?`)) return;
-    submitFundCommand(verb, { payload: { ids } });
+    submitFundCommand(verb, { payload: { ids, fund: f?.id } });
   }
 });
 
@@ -1274,9 +1342,41 @@ function renderBrokerOrders(f) {
   </section>`;
 }
 
+// The funds side by side, best first: return, against the index, and after the AI's cost.
+function renderLeaderboard(c, selected) {
+  const quotes = state.prices.quotes ?? {};
+  const fx = state.prices.fx?.USDSGD;
+  const rows = c.funds.map((f) => {
+    const a = summarize(f.portfolio, quotes).accounts[f.currency];
+    const bench = benchmarkFor({ currency: f.currency, amount: f.budget, since: f.startedAt, quotes, plan: planFor(f.settings?.feePlan ?? 'tiger') });
+    const costUsd = fundAiCost(f);
+    const cost = f.currency === 'USD' ? costUsd : fx ? costUsd * fx : 0;
+    return { f, a, bench, afterCost: (a.net - cost) / f.budget };
+  }).sort((x, y) => Number(Boolean(x.f.stoppedAt)) - Number(Boolean(y.f.stoppedAt)) || y.afterCost - x.afterCost);
+  const status = (f) => (f.stoppedAt ? 'stopped' : f.paused ? 'paused' : 'running');
+  return `<section class="panel">
+    <div class="panel-head"><h2>${c.funds.length > 1 ? 'Your AI funds, best first' : 'Your AI fund'}</h2></div>
+    <div class="table-wrap"><table class="leaderboard">
+      <thead><tr><th>Fund</th><th class="num">Value</th><th class="num">Return</th><th class="num">vs index</th><th class="num hide-sm">After AI cost</th><th class="hide-sm">Status</th></tr></thead>
+      <tbody>${rows.map(({ f, a, bench, afterCost }) => `<tr data-fund-select="${esc(f.id)}" class="${f.id === selected?.id ? 'selected' : ''}" tabindex="0">
+        <td><strong>${esc(f.name)}</strong><span class="chip">${esc(STYLES[f.style]?.label ?? f.style)}</span>
+          <span class="name">${esc(f.currency)} · ${f.settings?.broker === 'tiger' ? 'Tiger' : 'simulator'}${f.settings?.model ? ` · ${esc(modelName(f.settings.model))}` : ''}${f.focus ? ` · ${esc(f.focus)}` : ''}</span></td>
+        <td class="num">${money(a.equity, f.currency)}</td>
+        <td class="num ${tone(a.netPct)}">${pct(a.netPct)}</td>
+        <td class="num ${bench ? tone(a.netPct - bench.pct) : ''}">${bench ? `${a.netPct - bench.pct >= 0 ? '+' : '−'}${Math.abs((a.netPct - bench.pct) * 100).toFixed(2)} pts` : '–'}</td>
+        <td class="num hide-sm ${tone(afterCost)}">${pct(afterCost)}</td>
+        <td class="hide-sm small">${status(f)}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>
+    <p class="muted small">${c.funds.length > 1 ? 'Tap a fund to see it below. ' : ''}"vs index" is the fund's return minus what the same money made in ${esc(BENCHMARKS.USD.label)} or ${esc(BENCHMARKS.SGD.label)} since it started, after fees.
+      ${c.archived?.length ? `Removed earlier: ${c.archived.slice(-5).map((x) => `${esc(x.name)} ${pct((x.finalValue ?? x.budget) / x.budget - 1)}`).join(', ')}.` : ''}</p>
+  </section>`;
+}
+
 function renderFund() {
   const el = $('fund');
-  const f = state.fund;
+  const c = state.funds;
+  const f = c === undefined ? undefined : selectedFund();
   const actions = repoActionsUrl();
   const runLink = actions
     ? `<a href="${actions}" target="_blank" rel="noopener">Actions → Update prices, AI picks and AI fund</a>`
@@ -1286,6 +1386,7 @@ function renderFund() {
     el.innerHTML = `<section class="panel">
       <h2>AI fund</h2>
       <p>Give Claude an amount and let it trade on its own, aiming for the biggest profit it can make, in the simulator or through your Tiger Brokers account. It runs on GitHub, so it keeps trading while this page is closed.</p>
+      <p>You can run up to ${MAX_ACTIVE_FUNDS} funds at once, each with its own amount, market, style (cautious, balanced or aggressive), focus and AI model, and compare them side by side.</p>
       ${authEnabled ? '' : `<ol>
         <li>Add your Anthropic API key to the GitHub repo as a secret named <code>ANTHROPIC_API_KEY</code> (Settings → Secrets and variables → Actions).</li>
         <li>Open ${runLink}, press <strong>Run workflow</strong>, and fill in <em>Start a NEW AI fund with this amount</em>, its currency (USD trades US stocks, SGD trades SGX stocks) and how many decisions a day.</li>
@@ -1306,20 +1407,23 @@ function renderFund() {
     : f.paused
       ? 'Paused'
       : `Running · ${f.decisionsPerDay} decision${f.decisionsPerDay > 1 ? 's' : ''} per trading day · ${MARKETS[market].label} ${STATUS_LABELS[marketStatus(market)]}`;
-  const check = f.broker?.check ?? reconcile(f); // the private copy has Tiger's positions; the public one only the check
+  const check = c.brokerCheck ?? reconcileAll(c); // all Tiger funds against the one Tiger account
   const bench = benchmarkFor({ currency: f.currency, amount: f.budget, since: f.startedAt, quotes, plan: planFor(s.feePlan ?? 'tiger') });
   const fx = state.prices.fx?.USDSGD;
   const aiCostUsd = fundAiCost(f);
   const aiCost = f.currency === 'USD' ? aiCostUsd : fx ? aiCostUsd * fx : null; // in the fund's currency
   const cap = state.spend?.cap, month = monthSpend(state.spend);
   el.innerHTML = `
+    ${renderLeaderboard(c, f)}
+    ${check && !check.ok ? `<div class="notice warn fund-alert"><span><strong>Your Tiger account doesn't hold what the funds think:</strong> ${check.mismatches.map((m) => `${esc(m.symbol)}: funds ${m.fund}, Tiger ${m.tiger}`).join('; ')}. Check the Tiger app before trading further.</span></div>` : ''}
+    <div class="fund-title"><h2>${esc(f.name ?? 'AI fund')}</h2><span class="chip">${esc(STYLES[f.style]?.label ?? '')}</span>
+      ${f.focus ? `<span class="muted small">Focus: ${esc(f.focus)}</span>` : ''}</div>
     ${f.aiCapped ? `<div class="notice warn fund-alert"><span><strong>AI paused for the month:</strong> ${esc(f.aiCapped.message)}</span></div>` : ''}
     ${f.paused ? `<div class="notice warn fund-alert"><span><strong>Trading is paused</strong> (${fmtDateTime(f.paused.at)}): ${esc(f.paused.reason)} Stop-losses still work.</span></div>` : ''}
     ${f.broker?.error && s.broker === 'tiger' ? `<div class="notice warn fund-alert"><span><strong>Tiger:</strong> ${esc(f.broker.error)}</span></div>` : ''}
-    ${check && !check.ok ? `<div class="notice warn fund-alert"><span><strong>The fund and your Tiger account disagree:</strong> ${check.mismatches.map((m) => `${esc(m.symbol)}: fund ${m.fund}, Tiger ${m.tiger}`).join('; ')}. Check the Tiger app before trading further.</span></div>` : ''}
     ${renderProposals(f)}
     <section class="cards">
-      <div class="card"><div class="label">AI fund · profit / loss</div>
+      <div class="card"><div class="label">${esc(f.name ?? 'AI fund')} · profit / loss</div>
         <div class="big ${tone(a.net)}">${money(a.net, f.currency, { sign: true })}</div>
         <div class="${tone(a.net)}">${pct(a.netPct)} on ${money(f.budget, f.currency)}</div></div>
       <div class="card"><div class="label">Value now</div><div class="big">${money(a.equity, f.currency)}</div>
@@ -1337,7 +1441,8 @@ function renderFund() {
           <span>All scheduled AI, ${new Date().toLocaleDateString(undefined, { month: 'long' })}</span><span>US$${month.toFixed(2)}${cap ? ` of US$${cap} cap` : ''}</span></div></div>
       <div class="card"><div class="label">Status</div><p>${esc(status)}</p>
         <p class="small">Trades through: <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? `<br>${s.approval === 'manual' ? 'You approve each trade' : 'Trades automatically'}` : ''}</p>
-        <p class="muted small">Limits: ${s.maxOrderPct ?? 25}% of the budget per order; pauses after losing ${s.dailyLossPct ?? 5}% in a day.<br>
+        <p class="muted small">Limits: ${s.maxOrderPct ?? 25}% of the budget per order; pauses after losing ${s.dailyLossPct ?? 5}% in a day; ${s.allowShorts === false ? 'no short selling' : 'shorts allowed'}.<br>
+          Model: ${esc(modelName(s.model || TIERS.advanced))}.<br>
           Fees: ${esc(s.broker === 'tiger' ? 'what Tiger charges' : planFor(s.feePlan ?? 'tiger').label)}.<br>
           Started ${fmtDateTime(f.startedAt)}. Last decision ${f.lastDecisionAt ? ago(f.lastDecisionAt) : 'not yet'}.</p>
         ${f.lastError ? `<p class="down small">Last decision failed ${ago(f.lastError.time)}: ${esc(f.lastError.message)}</p>` : ''}</div>
@@ -1413,8 +1518,8 @@ function renderConnections() {
   const secretsLink = repo ? `<a href="${repo}/settings/secrets/actions" target="_blank" rel="noopener">GitHub → Settings → Secrets and variables → Actions</a>` : 'the GitHub repo → Settings → Secrets and variables → Actions';
   const status = (ok, text) => `<span class="${ok ? 'ok' : 'off'}">${esc(text)}</span>`;
   const row = (name, badge, body) => `<li><div class="conn-head"><strong>${name}</strong>${badge}</div>${body}</li>`;
-  const f = state.fund;
-  const tiger = f?.settings?.broker === 'tiger';
+  const f = fundList().find((x) => x.settings?.broker === 'tiger' && !x.stoppedAt) ?? fundList().find((x) => x.settings?.broker === 'tiger');
+  const tiger = Boolean(f);
   const tigerOk = tiger && f.broker?.accountType && !f.broker?.error;
   const picksAt = state.sitePicks?.createdAt;
   const rows = [
@@ -1427,7 +1532,7 @@ function renderConnections() {
       `<p class="muted small">Uses the <code>ANTHROPIC_API_KEY</code> secret in ${secretsLink}.
         This month: about US$${monthSpend(state.spend).toFixed(2)}${state.spend?.cap ? ` of the US$${state.spend.cap} monthly cap (change it with the <code>AI_MONTHLY_CAP_USD</code> repository variable)` : ' (no monthly cap)'}.</p>`),
     row('Tiger Brokers (AI fund orders)',
-      status(tigerOk, tigerOk ? brokerLabel(f) : tiger ? 'Not connected' : 'Not in use (the fund uses the simulator)'),
+      status(tigerOk, tigerOk ? brokerLabel(f) : tiger ? 'Not connected' : 'Not in use (no fund trades through Tiger)'),
       `<p class="muted small">Tiger's keys are not typed in here: anything on this page is public, and Tiger's private key must stay secret.
         Add them as secrets in ${secretsLink}: <code>TIGEROPEN_TIGER_ID</code>, <code>TIGEROPEN_ACCOUNT</code> (your paper account first),
         <code>TIGEROPEN_PRIVATE_KEY</code> and <code>TIGEROPEN_LICENSE</code> (<code>TBSG</code>). Then start the AI fund with Tiger as the broker.</p>
@@ -1570,6 +1675,10 @@ $('strategist-form').addEventListener('submit', runStrategist);
 $('picks-refresh').addEventListener('click', refreshPicks);
 
 $('cards').addEventListener('click', (e) => { if (e.target.id === 'open-convert') openConvert(); });
+document.addEventListener('keydown', (e) => {
+  const row = e.target.closest?.('[data-fund-select]');
+  if (row && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectFund(row.dataset.fundSelect); }
+});
 $('convert-form').addEventListener('submit', submitConvert);
 $('convert-form').addEventListener('input', () => { $('convert-error').textContent = ''; updateConvert(); });
 $('convert-cancel').addEventListener('click', () => $('convert-dialog').close());

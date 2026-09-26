@@ -15,7 +15,7 @@ on:
         type: boolean
         default: false
       fund_start_amount:
-        description: Start a NEW AI fund with this amount (replaces the current one). Leave empty to keep the current fund.
+        description: Start a NEW AI fund with this amount, alongside any running ones (up to 5). Leave empty otherwise.
         type: string
         default: ''
       fund_currency:
@@ -29,7 +29,7 @@ on:
         options: ['1', '2', '4']
         default: '1'
       fund_stop:
-        description: Stop the AI fund and close all its positions
+        description: Stop the AI fund and close its positions (only when one fund is running; with several, use the app)
         type: boolean
         default: false
       fund_command:

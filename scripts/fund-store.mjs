@@ -47,7 +47,12 @@ async function withRetries(fn) {
 }
 
 const readLocal = async () => { try { return JSON.parse(await readFile(file, 'utf8')); } catch { return null; } };
-const savedAt = (f) => Date.parse(f?.savedAt ?? f?.history?.at(-1)?.[0] ?? 0) || 0;
+// When a copy was saved (older copies without a stamp: their latest recorded value).
+const savedAt = (x) => {
+  if (x?.savedAt) return Date.parse(x.savedAt);
+  const funds = Array.isArray(x?.funds) ? x.funds : x ? [x] : [];
+  return Math.max(0, ...funds.map((f) => Date.parse(f.history?.at(-1)?.[0] ?? 0) || 0));
+};
 
 if (!token) {
   await output({ ok: true, private: false });

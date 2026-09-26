@@ -242,32 +242,42 @@ def check():
     print(f'  {len(positions)} open positions')
 
 
+def tiger_funds(data):
+    """The funds trading through Tiger: a file holds several funds ({"funds": [...]}, see funds.js),
+    or one fund in files from before that."""
+    funds = data.get('funds') if isinstance(data.get('funds'), list) else [data]
+    return [f for f in funds if (f.get('settings') or {}).get('broker') == 'tiger' and 'portfolio' in f]
+
+
 def main():
     if sys.argv[1] == 'check':
         check()
         return
     mode, path = sys.argv[1], sys.argv[2]
+    if mode not in ('sync', 'send'):
+        raise SystemExit(f'Unknown mode {mode}')
     try:
         with open(path, encoding='utf-8') as f:
-            fund = json.load(f)
+            data = json.load(f)
     except FileNotFoundError:
         return
-    if (fund.get('settings') or {}).get('broker') != 'tiger':
+    funds = tiger_funds(data)
+    if not funds:
         return
-    needs_tiger = any(o.get('status') in OPEN + ('queued',) for o in fund.get('brokerOrders', [])) or mode == 'sync'
-    broker, error = connect() if needs_tiger else (None, None)
-    if mode == 'sync':
-        sync(fund, broker, error)
-    elif mode == 'send':
-        send(fund, broker, error, allow_live=os.environ.get('TIGER_LIVE_TRADING', '').lower() == 'yes')
-    else:
-        raise SystemExit(f'Unknown mode {mode}')
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(fund, f)
+    busy = any(o.get('status') in OPEN + ('queued',) for fund in funds for o in fund.get('brokerOrders', []))
+    broker, error = connect() if busy or mode == 'sync' else (None, None)
     counts = {}
-    for o in fund.get('brokerOrders', []):
-        counts[o['status']] = counts.get(o['status'], 0) + 1
-    print(f'Tiger {mode}: account {(fund.get("broker") or {}).get("accountType") or "?"}; orders {counts}; {error or "ok"}')
+    for fund in funds:  # all Tiger funds share the one account; each only touches its own orders
+        if mode == 'sync':
+            sync(fund, broker, error)
+        else:
+            send(fund, broker, error, allow_live=os.environ.get('TIGER_LIVE_TRADING', '').lower() == 'yes')
+        for o in fund.get('brokerOrders', []):
+            counts[o['status']] = counts.get(o['status'], 0) + 1
+    with open(path, 'w', encoding='utf-8') as f:
+        json.dump(data, f)
+    account = broker and account_type(broker)
+    print(f'Tiger {mode}: {len(funds)} fund(s), account {account or "?"}; orders {counts}; {error or "ok"}')
 
 
 if __name__ == '__main__':

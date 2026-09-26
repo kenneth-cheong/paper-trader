@@ -11,6 +11,7 @@
 import { CONDITIONS, UNITS, REPEATS, newRule, checkRule, describeRule } from './rules.js';
 import { summarize, buyingPower, SHORT_MARGIN } from './portfolio.js';
 import { describeFees, planFor } from './fees.js';
+import { STYLES, DEFAULT_STYLE } from './funds.js';
 
 const SDK_URL = 'https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.128.0/+esm';
 
@@ -442,11 +443,11 @@ export async function recommend({ client, Anthropic, model = TIERS.advanced, new
 
 // ---------- 3. AI fund decisions ----------
 
-export const FUND_SYSTEM = `You are the portfolio manager of an autonomous paper-trading fund inside a simulator. Your only objective is to make as much profit as possible on the fund's money, measured by its value in its own currency. You decide on your own; nobody approves your trades.
+export const FUND_SYSTEM = `You are the portfolio manager of an autonomous paper-trading fund inside a simulator. Your objective is to make as much profit as possible on the fund's money, measured by its value in its own currency, while following the fund's mandate (its style and focus, set by its owner, in the context). You decide on your own.
 
 Hard limits, enforced by the simulator (orders that break them are rejected):
 - You can only use the fund's own money. A buy must fit within buying power; there is never any extra money.
-- Short selling is allowed. Each short sets aside ${SHORT_MARGIN * 100}% of its sale value from buying power, and any short that is 40% under water is covered automatically.
+- Short selling is allowed unless mandate.short_selling_allowed is false. Each short sets aside ${SHORT_MARGIN * 100}% of its sale value from buying power, and any short that is 40% under water is covered automatically.
 - Only the listed stocks can be traded, all in the fund's currency. Orders fill at the latest price shown, in whole shares, in this order: sells and covers first, then buys and shorts.
 - No single order may be worth more than max_order_value.
 - Every trade pays broker fees (see trading_fees), and they come out of the fund's money. Only trade when the expected gain clearly beats the round-trip cost; frequent small trades lose money to fees.
@@ -501,8 +502,13 @@ export function fundContext({ fund, quotes, picks, news, now = new Date() }) {
   const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === ccy);
   const { accounts, positions } = summarize(fund.portfolio, quotes);
   const a = accounts[ccy];
+  const style = STYLES[fund.style] ?? STYLES[DEFAULT_STYLE];
   return {
     now: now.toISOString(),
+    mandate: {
+      name: fund.name ?? 'AI fund', style: style.label, style_brief: style.brief, owner_focus: fund.focus || null,
+      short_selling_allowed: fund.settings?.allowShorts !== false,
+    },
     fund: {
       currency: ccy, budget: fund.budget, value: round2(a.equity), profit: round2(a.net), profit_pct: pct(a.netPct),
       cash: round2(a.cash), buying_power: round2(buyingPower(fund.portfolio, ccy)), started: fund.startedAt,

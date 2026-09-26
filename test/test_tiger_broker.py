@@ -134,6 +134,15 @@ class StopOrderTests(unittest.TestCase):
         self.assertEqual(len(b.placed), 1)
 
 
+class FileTests(unittest.TestCase):
+    def test_finds_the_tiger_funds_in_either_file_shape(self):
+        tiger = {'settings': {'broker': 'tiger'}, 'portfolio': {}}
+        sim = {'settings': {'broker': 'simulator'}, 'portfolio': {}}
+        self.assertEqual(tb.tiger_funds({'version': 2, 'funds': [sim, tiger]}), [tiger])
+        self.assertEqual(tb.tiger_funds(tiger), [tiger])
+        self.assertEqual(tb.tiger_funds({'version': 2, 'funds': []}), [])
+
+
 class FeeTests(unittest.TestCase):
     def test_itemised_charges_win_over_commission(self):
         order = tiger_order('Filled', commission=1.99, gst=0.18, charges=[SimpleNamespace(total=1.99), SimpleNamespace(total=0.21)])

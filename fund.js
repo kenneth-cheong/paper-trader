@@ -29,7 +29,7 @@ export const SHORT_MAX_LOSS = 0.4;
 export const LIMIT_BAND = 0.01; // Tiger limit orders: at most 1% worse than the latest price
 export const PROPOSAL_MINUTES = 60;
 export const PROPOSAL_MAX_DRIFT = 0.02;
-export const DEFAULT_SETTINGS = { broker: 'simulator', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5, feePlan: 'tiger' };
+export const DEFAULT_SETTINGS = { broker: 'simulator', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5, feePlan: 'tiger', allowShorts: true, model: null };
 
 const OPEN_BROKER = ['queued', 'sent', 'partial'];
 const isGuard = (o) => o.source === 'guard';
@@ -94,6 +94,11 @@ export function applySettings(fund, s = {}, { atStart = false } = {}) {
     const v = Number(s.dailyLossPct);
     if (!(v >= 0.5 && v <= 50)) throw new Error('The daily loss limit must be between 0.5% and 50%.');
     next.dailyLossPct = v;
+  }
+  if (s.allowShorts !== undefined) next.allowShorts = Boolean(s.allowShorts);
+  if (s.model !== undefined) {
+    if (s.model && !/^claude-[a-z0-9.-]+$/.test(s.model)) throw new Error(`Unknown model ${s.model}.`);
+    next.model = s.model || null; // null: the default model
   }
   // With Tiger, fees are what Tiger actually charges; the Tiger plan is only used to estimate them.
   if (next.broker === 'tiger') next.feePlan = 'tiger';
@@ -189,8 +194,10 @@ const opens = (action) => action === 'buy' || action === 'short';
 // Runs the AI's orders through every limit. In the simulator they fill at once at the current price.
 // With Tiger they become proposals (approval 'manual') or queued limit orders (approval 'auto', or
 // `send: true` for approved proposals). Sells and covers go first so they free up money.
+// `others`: other Tiger funds' holdings in the same account (funds.js otherTigerHoldings), so this
+// fund never opens a position on the other side of theirs.
 // Returns one result per order: status 'filled', 'awaiting approval', 'sent to Tiger' or 'rejected'.
-export function applyOrders(fund, orders, quotes, now = new Date(), { send = false } = {}) {
+export function applyOrders(fund, orders, quotes, now = new Date(), { send = false, others = {} } = {}) {
   const time = now.toISOString();
   const broker = usesBroker(fund);
   const s = settingsOf(fund);
@@ -205,6 +212,11 @@ export function applyOrders(fund, orders, quotes, now = new Date(), { send = fal
       if (!q || q.currency !== fund.currency) throw new Error(`${o.symbol} is not tradable in this ${fund.currency} fund.`);
       if (q.stale) throw new Error(`No fresh price for ${o.symbol}.`);
       if (fund.paused && opens(o.action)) throw new Error('The fund is paused.');
+      if (o.action === 'short' && s.allowShorts === false) throw new Error("This fund's style doesn't allow short selling.");
+      const theirs = others[o.symbol] ?? 0;
+      if (broker && opens(o.action) && (o.action === 'buy' ? theirs < 0 : theirs > 0)) {
+        throw new Error(`Another fund in the same Tiger account is ${theirs > 0 ? 'long' : 'short'} ${o.symbol}; one account can't be long and short the same stock.`);
+      }
       const { side, qty } = resolveOrder(o, ledger.positions[o.symbol]?.qty ?? 0);
       const cap = fund.budget * s.maxOrderPct / 100;
       if (opens(o.action) && qty * q.price > cap) {
@@ -241,8 +253,8 @@ function queueBrokerOrder(fund, r, source, now) {
 }
 
 // The AI's decision: fills in the simulator, or turns into proposals / queued Tiger orders.
-export function executeDecision(fund, orders, quotes, now = new Date()) {
-  const results = applyOrders(fund, orders, quotes, now);
+export function executeDecision(fund, orders, quotes, now = new Date(), { others = {} } = {}) {
+  const results = applyOrders(fund, orders, quotes, now, { others });
   for (const r of results) {
     if (r.status === 'sent to Tiger') r.brokerOrderId = queueBrokerOrder(fund, r, 'decision', now).id;
     if (r.status === 'awaiting approval') {
@@ -265,7 +277,7 @@ export function expireProposals(fund, now = new Date()) {
 }
 
 // Sends approved proposals to Tiger after re-checking them against the current price and every limit.
-export function approveProposals(fund, ids, quotes, prices, now = new Date()) {
+export function approveProposals(fund, ids, quotes, prices, now = new Date(), { others = {} } = {}) {
   expireProposals(fund, now);
   const market = marketForCurrency(fund.currency);
   const out = [];
@@ -278,7 +290,7 @@ export function approveProposals(fund, ids, quotes, prices, now = new Date()) {
     } else if (!q || Math.abs(q.price / p.refPrice - 1) > PROPOSAL_MAX_DRIFT) {
       Object.assign(p, { status: 'expired', message: `The price moved more than ${PROPOSAL_MAX_DRIFT * 100}% since it was proposed.` });
     } else {
-      const [r] = applyOrders(fund, [{ symbol: p.symbol, action: p.action, shares: p.shares, reason: p.reason }], quotes, now, { send: true });
+      const [r] = applyOrders(fund, [{ symbol: p.symbol, action: p.action, shares: p.shares, reason: p.reason }], quotes, now, { send: true, others });
       if (r.status === 'sent to Tiger') Object.assign(p, { status: 'approved', brokerOrderId: queueBrokerOrder(fund, r, 'approved', now).id });
       else Object.assign(p, { status: 'failed', message: r.message });
     }

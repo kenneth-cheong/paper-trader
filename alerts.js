@@ -3,13 +3,13 @@
 // fund.notified, so nothing is sent twice; the first run only takes note of what's already there.
 //
 // Alerts: trades waiting for approval (with their deadline), fills (Tiger's or the simulator's),
-// stop-losses / take-profits, Tiger refusing an order, the fund pausing or stopping, a failed AI
-// decision, the AI's monthly cost cap, Tiger not connected, the fund and Tiger disagreeing, splits
+// stop-losses / take-profits, Tiger refusing an order, a fund pausing or stopping, a failed AI
+// decision, the AI's monthly cost cap, Tiger not connected, the funds and Tiger disagreeing, splits
 // and dividends, and a short summary after each trading day's close.
 
 import { summarize } from './portfolio.js';
 import { MARKETS, marketForCurrency, isOpen } from './markets.js';
-import { reconcile } from './fund.js';
+import { reconcileAll } from './funds.js';
 import { benchmarkFor } from './benchmark.js';
 import { planFor } from './fees.js';
 import { fundAiCost } from './spend.js';
@@ -49,8 +49,6 @@ function candidates(fund, { prices = null, now = new Date() } = {}) {
   if (fund.aiCapped) out[`cap:${fund.aiCapped.time}`] = `💸 ${esc(fund.aiCapped.message)}`;
   if (fund.lastCommand && !fund.lastCommand.ok) out[`cmd:${fund.lastCommand.time}`] = `⚠️ Your "${esc(fund.lastCommand.action)}" request didn't work: ${esc(fund.lastCommand.message)}`;
   if (fund.settings?.broker === 'tiger' && fund.broker?.error) out[`berr:${fund.broker.error}`] = `⚠️ <b>Tiger</b>: ${esc(fund.broker.error)}`;
-  const check = reconcile(fund);
-  if (check && !check.ok) out[`mismatch:${JSON.stringify(check.mismatches)}`] = `⚠️ <b>The fund and your Tiger account disagree</b>: ${check.mismatches.map((m) => `${esc(m.symbol)} fund ${m.fund}, Tiger ${m.tiger}`).join('; ')}. Check the Tiger app.`;
   const summary = dailySummary(fund, prices, now);
   if (summary) out[summary.key] = summary.text;
   return out;
@@ -70,7 +68,7 @@ export function dailySummary(fund, prices, now = new Date()) {
   const dayStart = fund.day?.date ? fund.day.startValue : null;
   const bench = benchmarkFor({ currency: fund.currency, amount: fund.budget, since: fund.startedAt, quotes, plan: planFor(fund.settings?.feePlan ?? 'tiger') });
   const lines = [
-    `📊 <b>${MARKETS[market].label} close, ${today}</b>`,
+    `📊 <b>${MARKETS[market].label} close, ${today}</b>${fund.name ? ` · ${esc(fund.name)}` : ''}`,
     `Value ${num(a.equity)} ${fund.currency}${dayStart ? ` (today ${signed(a.equity - dayStart)})` : ''}; since start ${signed(a.net)} (${pctText(a.netPct)}).`,
     bench ? `Same money in ${bench.symbol}: ${pctText(bench.pct)}. The fund is ${a.net >= bench.net ? 'ahead' : 'behind'} by ${num(Math.abs(a.net - bench.net))} ${fund.currency}.` : '',
     `Holding ${Object.keys(fund.portfolio.positions).length} stock(s). AI cost so far about US$${fundAiCost(fund).toFixed(2)}.`,
@@ -87,6 +85,23 @@ export function collectAlerts(fund, options = {}) {
   const fresh = Object.entries(all).filter(([k]) => !seen.has(k));
   fund.notified = { keys: [...seen, ...fresh.map(([k]) => k)].slice(-MAX_KEYS) };
   return first ? [] : fresh.map(([, text]) => text);
+}
+
+// Every fund's alerts (each labelled with its name when there are several) and a check of Tiger
+// against all the Tiger funds together. `c` is a collection (funds.js).
+export function collectAllAlerts(c, options = {}) {
+  const many = c.funds.length > 1;
+  const texts = [];
+  for (const f of c.funds) {
+    for (const t of collectAlerts(f, options)) texts.push(many ? `<b>${esc(f.name)}</b> · ${t}` : t);
+  }
+  const check = reconcileAll(c);
+  const key = check && !check.ok ? `mismatch:${JSON.stringify(check.mismatches)}` : null;
+  if (key && c.notifiedMismatch !== key) {
+    texts.push(`⚠️ <b>Your Tiger account doesn't hold what the funds think</b>: ${check.mismatches.map((m) => `${esc(m.symbol)} funds ${m.fund}, Tiger ${m.tiger}`).join('; ')}. Check the Tiger app.`);
+  }
+  c.notifiedMismatch = key;
+  return texts;
 }
 
 // One Telegram message (under its 4096-character limit) for a list of alerts.

@@ -1,6 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { collectAlerts, dailySummary, formatMessage } from '../alerts.js';
+import { collectAlerts, collectAllAlerts, dailySummary, formatMessage } from '../alerts.js';
+import { loadFunds, addFund } from '../funds.js';
 import { newFund, executeDecision, pauseFund } from '../fund.js';
 
 const at = (iso) => new Date(iso);
@@ -27,13 +28,10 @@ test('approvals, Tiger refusals, stop orders and disagreements with Tiger are an
   executeDecision(f, [{ symbol: 'A', action: 'buy', shares: 10, reason: 'Strong earnings' }], { A: q(100) }, at('2026-01-07T15:00:00Z'));
   f.brokerOrders.push({ id: 'g1', source: 'guard', side: 'sell', action: 'sell', qty: 5, symbol: 'B', stopPrice: 47.5, status: 'sent' });
   f.brokerOrders.push({ id: 'b2', source: 'decision', side: 'buy', action: 'buy', qty: 5, symbol: 'C', status: 'rejected', error: 'Not enough buying power' });
-  f.portfolio.positions.B = { qty: 5, avgCost: 50, currency: 'USD' };
-  f.broker = { time: 'x', positions: [], error: null };
   const texts = collectAlerts(f);
   assert.match(texts.join('\n'), /Waiting for your approval<\/b> until 00:00 SGT: BUY 10 A \(limit 101.00\). Strong earnings/);
   assert.match(texts.join('\n'), /Stop-loss placed at Tiger: sell 5 B if it falls to 47.50/);
   assert.match(texts.join('\n'), /Tiger didn't take<\/b> buy 5 C: Not enough buying power/);
-  assert.match(texts.join('\n'), /disagree<\/b>: B fund 5, Tiger 0/);
   assert.match(formatMessage(texts, 'https://x.github.io/p/'), /<a href="https:\/\/x.github.io\/p\/#fund">Open the AI fund<\/a>$/);
 });
 
@@ -51,4 +49,22 @@ test('a daily summary after the close of a trading day, once', () => {
   collectAlerts(f, { prices, now: at('2026-01-07T20:00:00Z') });
   assert.equal(collectAlerts(f, { prices, now: at('2026-01-07T21:15:00Z') }).length, 1);
   assert.equal(collectAlerts(f, { prices, now: at('2026-01-07T21:30:00Z') }).length, 0);
+});
+
+test('with several funds, alerts carry the fund name and Tiger is checked against them together', () => {
+  const c = loadFunds(null);
+  const now = at('2026-01-07T14:00:00Z');
+  const a = addFund(c, { name: 'Steady', style: 'cautious', budget: 5000, currency: 'USD', settings: { broker: 'tiger' }, now });
+  const b = addFund(c, { name: 'Rocket', style: 'aggressive', budget: 5000, currency: 'USD', settings: { broker: 'tiger' }, now });
+  assert.deepEqual(collectAllAlerts(c), []); // seeded
+  a.portfolio.positions.X = { qty: 10, avgCost: 10, currency: 'USD' };
+  b.portfolio.positions.X = { qty: 5, avgCost: 10, currency: 'USD' };
+  a.broker = { time: '2026-01-07T15:00:00Z', positions: [{ symbol: 'X', qty: 12 }], error: null };
+  b.broker = a.broker;
+  pauseFund(b, 'Paused by its owner.', at('2026-01-07T15:00:00Z'));
+  const texts = collectAllAlerts(c);
+  assert.equal(texts.length, 2);
+  assert.match(texts[0], /^<b>Rocket<\/b> · ⛔ <b>Trading paused/);
+  assert.match(texts[1], /doesn't hold what the funds think<\/b>: X funds 15, Tiger 12/);
+  assert.deepEqual(collectAllAlerts(c), []); // said once
 });

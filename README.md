@@ -10,7 +10,7 @@ Practice trading Singapore (SGX) and US stocks with virtual cash at real market 
 | **Markets** | Prices, day change and a 1-month sparkline for every stock. Buy, sell or short from here. |
 | **Auto-trading** | Rules that trade for you: limit buys, stop-losses, take-profits, trailing stops, moving-average crossovers and scheduled buys. Each rule can be backtested on the past year. |
 | **AI strategist** | Claude reads a year of prices, current news and your own trades, then proposes strategies written as auto-trading rules. Each strategy is backtested automatically, and you can add it as paused rules. |
-| **AI fund** | Give Claude an amount and it trades on its own to make as much profit as possible, without ever using more than that amount. |
+| **AI fund** | Give Claude an amount and it trades on its own to make as much profit as possible, without ever using more than that amount. Run up to 5 funds side by side, each with its own style, focus and model, and compare them. |
 | **History** | Every trade, with automatic ones marked. |
 
 ### Accounts and trading rules
@@ -99,6 +99,21 @@ To invite someone, sign in and press **Invites** at the top. No email is sent, s
 
 Note that the site's static files are public, including the shared prices, AI picks and AI fund. Signing in protects each person's own portfolio and the app screens.
 
+### Several AI funds
+
+Up to **5 funds** can run at once. Each has its own amount, currency (market), broker (simulator or Tiger), approval setting, decisions per day, limits and:
+
+- **Style**, which is the AI's brief and sets the default limits (you can still change them):
+  - **Cautious:** large, established companies, gradual positions, a stop-loss on everything, no shorts. 10% max per order, pauses after a 3% daily loss.
+  - **Balanced:** a spread of positions and sensible risk. 25% per order, 5% daily loss, shorts allowed.
+  - **Aggressive:** concentrated bets on the strongest ideas, momentum and shorts. 40% per order, 8% daily loss.
+- **Focus** (optional), your own instruction, for example *Only Singapore banks and REITs* or *Big US tech*.
+- **AI model**: the default (Sonnet), or Haiku (cheapest) or Opus (strongest, most expensive).
+
+The AI fund page ranks the funds by return after the AI's cost, and shows each one's return against the index. Tap a fund to see its positions, orders and decisions, and to pause, stop or change it. *Pause all funds* is the kill switch for all of them. A stopped fund stays listed until you remove it; a one-line summary of its result is kept.
+
+Funds trading through Tiger share your one Tiger account. Each fund keeps its own record, and the check that Tiger holds what the funds think covers all of them together. One account can't be long and short the same stock, so a fund can't open a position on the other side of another Tiger fund's position in that stock. Each fund's decisions cost separately, and the monthly AI cap is shared.
+
 ### Starting, stopping or replacing the AI fund
 
 **From the app (accounts on, admins only):** the AI fund tab has *Start AI fund* and *Stop fund* buttons. They need a one-time setup, because Supabase starts the GitHub workflow for you:
@@ -112,10 +127,10 @@ The token never reaches the browser. Only admins can send start or stop requests
 
 **From GitHub:** go to **Actions → Update prices, AI picks and AI fund → Run workflow** and fill in:
 
-- *Start a NEW AI fund with this amount*: e.g. `10000`. This replaces any current fund.
+- *Start a NEW AI fund with this amount*: e.g. `10000`. It runs alongside any others (balanced style; use the app to choose a style, focus and model).
 - *New fund's currency*: `USD` (US stocks) or `SGD` (SGX stocks).
 - *How many times a trading day the AI decides*: 1, 2 or 4.
-- *Stop the AI fund*: closes all its positions and stops it.
+- *Stop the AI fund*: closes all its positions and stops it (only when one fund is running; with several, use the app).
 
 ### Trading through Tiger Brokers
 
@@ -210,6 +225,7 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `spend.js` | The AI's monthly spend and cap. |
 | `alerts.js`, `scripts/notify.mjs` | Telegram alerts. |
 | `scripts/fund-store.mjs`, `supabase/private-fund.sql` | Keeping the AI fund private in Supabase. |
+| `funds.js` | Several AI funds: styles, starting, removing, and sharing one Tiger account. |
 | `rules.js` | Auto-trading rules engine and backtester. |
 | `fund.js` | The AI fund: budget limit, order execution, protections, decision schedule. |
 | `ai.js` | Every Claude call: the Haiku news digest, then picks, strategies and fund decisions, each answered through a validated "submit" tool. |
