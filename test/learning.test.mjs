@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { collectIdeas, gradeIdeas, learningStats, statLessons, updatePlaybook, activeLessons, playbookForPrompt, editPlaybook, reviewDue, applyReview, quietReason, decisionSnapshot, QUIET } from '../learning.js';
-import { mergeEvents, eventsFromDigest, measureEvents, bigMoves, buildMemory } from '../memory.js';
+import { mergeEvents, eventsFromDigest, measureEvents, bigMoves, buildMemory, plausibleDate } from '../memory.js';
 import { newFund } from '../fund.js';
 
 const DAY = 86400;
@@ -125,8 +125,23 @@ test('market memory: news events are measured after the fact and become lessons 
   assert.ok(Math.abs(measured[0].day.move - 0.06) < 1e-9);
   assert.ok(Math.abs(measured[0].week.move - 2.5 / 106) < 1e-9);
   const memory = buildMemory(merged, quotes, 'US', now);
-  assert.ok(memory.lessons.some((l) => l.id === 'US:news-positive-earnings' && /keep going the same way/.test(l.text)));
+  assert.ok(memory.lessons.some((l) => l.id === 'US:news-positive' && /keep going the same way/.test(l.text)));
   assert.ok(memory.lessons.some((l) => l.id === 'US:big-up')); // the 6% jumps count as big moves too
   assert.equal(bigMoves(quotes, 'US').length, 5);
   assert.deepEqual(eventsFromDigest({ items: [{ symbols: ['A', 'B'], date: '2026-03-12T10:00', headline: 'h', type: 'deal', tone: 'positive' }] }).map((e) => [e.symbol, e.date]), [['A', '2026-03-12'], ['B', '2026-03-12']]);
+});
+
+test('earnings dated at a quarter end are ignored, and a narrower lesson on the same cases isn\'t repeated', () => {
+  assert.equal(plausibleDate({ type: 'earnings', date: '2025-09-27' }), false); // Apple's fiscal quarter end, not the report day
+  assert.equal(plausibleDate({ type: 'earnings', date: '2025-10-30' }), true);
+  assert.equal(plausibleDate({ type: 'deal', date: '2025-12-28' }), true);
+  const quotes = { SPY: q(() => 400) };
+  const events = [];
+  for (let k = 0; k < 5; k++) {
+    quotes[`S${k}`] = q((i) => (i < 10 ? 100 : 106 + (i - 10) * 0.5));
+    events.push({ symbol: `S${k}`, date: new Date((T0 + 10 * DAY) * 1000).toISOString().slice(0, 10), headline: `Beat ${k}`, type: 'earnings', tone: 'positive' });
+  }
+  const ids = buildMemory(mergeEvents([], events, quotes), quotes, 'US', now).lessons.map((l) => l.id);
+  assert.ok(ids.includes('US:news-positive'));
+  assert.ok(!ids.includes('US:news-positive-earnings')); // same 5 cases
 });

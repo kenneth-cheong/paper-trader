@@ -193,7 +193,7 @@ export const NEWS_TOOL = {
           required: ['symbols', 'date', 'headline', 'summary', 'type', 'tone', 'source_url'],
           properties: {
             symbols: { type: 'array', items: { type: 'string' }, description: 'Watchlist symbols affected; empty for market-wide news.' },
-            date: { type: 'string', description: 'When it happened, e.g. 2026-09-24.' },
+            date: { type: 'string', description: 'The day it was announced, e.g. 2026-09-24 (for results, not the end of the period they cover).' },
             headline: { type: 'string' },
             summary: { type: 'string', description: 'One or two sentences of facts and figures.' },
             type: { type: 'string', enum: EVENT_TYPES },
@@ -602,7 +602,7 @@ export async function decideFund({ client, Anthropic, model = TIERS.advanced, ne
 
 // ---------- learning: the one-off news backfill and the weekly review (both on the cheap model) ----------
 
-const BACKFILL_SYSTEM = `You research company news history for a trading simulator. Search the web and list the most important company-specific news events for one stock over the period given: earnings results, guidance changes, deals, products, legal or regulatory news, management changes and big analyst moves. Give each event's date as first reported, a factual headline, its type, and whether it was good or bad news for the company as reported at the time. Do not describe how the share price reacted; that is measured separately. Only include events you found a source for. Finish by calling submit_events.`;
+const BACKFILL_SYSTEM = `You research company news history for a trading simulator. Search the web and list the most important company-specific news events for one stock over the period given: earnings results, guidance changes, deals, products, legal or regulatory news, management changes and big analyst moves. Give each event's date as the day it was announced or first reported (for results, the announcement day, never the end of the quarter or financial year they cover), a factual headline, its type, and whether it was good or bad news for the company as reported at the time. Do not describe how the share price reacted; that is measured separately. Only include events you found a source for. Finish by calling submit_events.`;
 
 export const BACKFILL_TOOL = {
   name: 'submit_events',
@@ -620,7 +620,7 @@ export const BACKFILL_TOOL = {
           additionalProperties: false,
           required: ['date', 'headline', 'type', 'tone', 'source_url'],
           properties: {
-            date: { type: 'string', description: 'YYYY-MM-DD, when first reported.' },
+            date: { type: 'string', description: 'YYYY-MM-DD, the day it was announced (not the end of the period it covers).' },
             headline: { type: 'string' },
             type: { type: 'string', enum: EVENT_TYPES },
             tone: { type: 'string', enum: TONES },

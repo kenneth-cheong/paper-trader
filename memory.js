@@ -69,6 +69,14 @@ function movesAfter(bars, i, indexByDate) {
 
 const indexCloses = (quotes, market) => new Map((quotes[BENCHMARKS[MARKET_CURRENCY[market]]?.symbol]?.daily ?? []).map(([t, c]) => [dateOf(t), c]));
 
+// Results are never announced within days of the quarter ending, so an earnings event dated in the
+// last week of March, June, September or December is really the period's end date, not the news date.
+export function plausibleDate(e) {
+  if (e.type !== 'earnings') return true;
+  const [, m, d] = e.date.split('-').map(Number);
+  return !([3, 6, 9, 12].includes(m) && d >= 24);
+}
+
 // Each news event with the moves after it (in the direction of its tone: + means it went the way the
 // news pointed). Events before the price history, or too recent to have a week after, are left out.
 export function measureEvents(events, quotes, market) {
@@ -76,7 +84,7 @@ export function measureEvents(events, quotes, market) {
   const out = [];
   for (const e of events) {
     const q = quotes[e.symbol];
-    if (!q || q.market !== market || e.tone === 'mixed') continue;
+    if (!q || q.market !== market || e.tone === 'mixed' || !plausibleDate(e)) continue;
     const bars = q.daily ?? [];
     const i = bars.findIndex(([t]) => dateOf(t) >= e.date);
     if (i < 1) continue;
@@ -125,8 +133,9 @@ export function driftStats(list, horizon = 'week') {
 
 // ---------- lessons ----------
 
-function driftLesson(id, what, st, lessons) {
+function driftLesson(id, what, st, lessons, broader = null) {
   if (!st || st.n < MIN_CASES || st.vsIndex == null) return;
+  if (broader && broader.n === st.n) return; // the same cases as the broader lesson: nothing new
   const ev = `${st.n} cases: ${share(st.continued)} kept going the same way over the next week, average ${pct(st.vsIndex)} vs the index`;
   if (st.vsIndex >= 0.01 && st.continued >= 0.55) lessons.push({ id, text: `${what} tended to keep going the same way over the following week. Don't assume the first day's move used it all up.`, evidence: ev, source: 'market memory' });
   if (st.vsIndex <= -0.01 && st.continued <= 0.45) lessons.push({ id, text: `${what} tended to give part of it back within a week. Be wary of chasing the first day's move.`, evidence: ev, source: 'market memory' });
@@ -141,9 +150,10 @@ export function buildMemory(events, quotes, market, now = new Date()) {
   driftLesson(`${market}:big-up`, `After a one-day jump of ${BIG_MOVE * 100}% or more, ${market} stocks`, driftStats(up), lessons);
   driftLesson(`${market}:big-down`, `After a one-day drop of ${BIG_MOVE * 100}% or more, ${market} stocks`, driftStats(down), lessons);
   for (const tone of ['positive', 'negative']) {
-    driftLesson(`${market}:news-${tone}`, `After ${tone} company news, ${market} stocks`, driftStats(measured.filter((e) => e.tone === tone)), lessons);
+    const all = driftStats(measured.filter((e) => e.tone === tone));
+    driftLesson(`${market}:news-${tone}`, `After ${tone} company news, ${market} stocks`, all, lessons);
     for (const type of EVENT_TYPES) {
-      driftLesson(`${market}:news-${tone}-${type}`, `After ${tone} ${type} news, ${market} stocks`, driftStats(measured.filter((e) => e.tone === tone && e.type === type)), lessons);
+      driftLesson(`${market}:news-${tone}-${type}`, `After ${tone} ${type} news, ${market} stocks`, driftStats(measured.filter((e) => e.tone === tone && e.type === type)), lessons, all);
     }
   }
   return {
