@@ -73,9 +73,10 @@ export async function saveCloudPortfolio(userId, data) {
 // ---------- AI fund control (admins; see supabase/fund-control.sql) ----------
 
 // Asks GitHub (through Supabase) to start or stop the AI fund, or to refresh the AI picks.
-export async function sendFundCommand({ action, amount = null, currency = null, decisionsPerDay = null }) {
+// `payload`: settings for 'start'/'settings', { ids } for 'approve'/'reject'.
+export async function sendFundCommand({ action, amount = null, currency = null, decisionsPerDay = null, payload = null }) {
   return check(await (await client()).from('fund_commands')
-    .insert({ action, amount, currency, decisions_per_day: decisionsPerDay })
+    .insert({ action, amount, currency, decisions_per_day: decisionsPerDay, payload })
     .select('id, action, created_at').single());
 }
 

@@ -11,7 +11,7 @@ create extension if not exists pg_net with schema extensions;
 
 create table if not exists public.fund_commands (
   id bigint generated always as identity primary key,
-  action text not null check (action in ('start', 'stop', 'refresh_picks')),
+  action text not null,
   amount numeric check (amount is null or amount > 0),
   currency text check (currency is null or currency in ('USD', 'SGD')),
   decisions_per_day int check (decisions_per_day is null or decisions_per_day in (1, 2, 4)),
@@ -21,6 +21,12 @@ create table if not exists public.fund_commands (
   check (action <> 'start' or (amount is not null and currency is not null and decisions_per_day is not null))
 );
 alter table public.fund_commands enable row level security;
+
+-- Commands added later (Tiger trading): approvals, pausing and settings carry a JSON payload.
+alter table public.fund_commands add column if not exists payload jsonb;
+alter table public.fund_commands drop constraint if exists fund_commands_action_check;
+alter table public.fund_commands add constraint fund_commands_action_check
+  check (action in ('start', 'stop', 'refresh_picks', 'approve', 'reject', 'pause', 'resume', 'settings'));
 
 drop policy if exists "admins see commands" on public.fund_commands;
 create policy "admins see commands" on public.fund_commands for select to authenticated using (public.is_admin());
@@ -40,9 +46,15 @@ begin
   end if;
   inputs := case new.action
     when 'start' then jsonb_build_object(
-      'fund_start_amount', new.amount::text, 'fund_currency', new.currency, 'fund_decisions_per_day', new.decisions_per_day::text)
+      'fund_start_amount', new.amount::text, 'fund_currency', new.currency, 'fund_decisions_per_day', new.decisions_per_day::text,
+      'fund_command', coalesce(new.payload, '{}'::jsonb)::text)
     when 'stop' then jsonb_build_object('fund_stop', 'true')
-    else jsonb_build_object('refresh_picks', 'true')
+    when 'refresh_picks' then jsonb_build_object('refresh_picks', 'true')
+    when 'approve' then jsonb_build_object('fund_command', jsonb_build_object('approve', coalesce(new.payload -> 'ids', '[]'::jsonb))::text)
+    when 'reject' then jsonb_build_object('fund_command', jsonb_build_object('reject', coalesce(new.payload -> 'ids', '[]'::jsonb))::text)
+    when 'pause' then jsonb_build_object('fund_command', '{"pause":true}')
+    when 'resume' then jsonb_build_object('fund_command', '{"resume":true}')
+    else jsonb_build_object('fund_command', jsonb_build_object('settings', coalesce(new.payload, '{}'::jsonb))::text)
   end;
   new.request_id := net.http_post(
     url := 'https://api.github.com/repos/kenneth-cheong/paper-trader/actions/workflows/prices.yml/dispatches',

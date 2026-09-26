@@ -224,9 +224,14 @@ select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border
 .pending li button { margin-left: auto; }
 
 /* AI fund controls */
-.fund-form { grid-template-columns: repeat(3, 1fr) auto; }
+.fund-form { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); }
 .fund-new { margin-top: 12px; }
 .fund-new summary { cursor: pointer; color: var(--accent); font-size: 14px; }
+.fund-form .wide { grid-column: 1 / -1; margin: 0; }
+.fund-alert { margin: 0 0 12px; }
+.approvals { border-color: var(--accent); }
+.approvals li { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; padding: 6px 0; border-top: 1px solid var(--border); }
+.approvals li .row { margin-left: auto; }
 
 /* accounts */
 .user-chip { display: inline-flex; gap: 8px; align-items: center; flex-wrap: wrap; }

@@ -875,25 +875,38 @@ function repoActionsUrl() {
   return m && repo ? `https://github.com/${m[1]}/${repo}/actions/workflows/prices.yml` : null;
 }
 
-// Start/stop buttons for admins. Rebuilt only when something they show changes, so typing isn't lost
-// when prices refresh.
+// ----- AI fund: admin controls -----
+
+const brokerLabel = (f) => {
+  if (f.settings?.broker !== 'tiger') return 'Simulator (virtual money)';
+  if (f.broker?.accountType === 'live') return 'Tiger LIVE account (real money)';
+  if (f.broker?.accountType === 'paper') return 'Tiger paper account (simulated money)';
+  return 'Tiger (not connected yet)';
+};
+
+// Start/stop/pause buttons and settings for admins. Rebuilt only when something they show changes,
+// so typing isn't lost when prices refresh.
 let fundControlsKey = null;
 function renderFundControls() {
   const el = $('fund-controls');
   const f = state.fund;
   const running = f && !f.stoppedAt;
   const cmd = state.fundCmd;
-  const key = JSON.stringify([authEnabled, state.user?.isAdmin, f === undefined, running, cmd?.phase, cmd?.message]);
+  const key = JSON.stringify([authEnabled, state.user?.isAdmin, f === undefined, running, f?.paused?.at, f?.settings, cmd?.phase, cmd?.message]);
   if (key === fundControlsKey) return;
   fundControlsKey = key;
   el.hidden = !authEnabled || f === undefined;
   if (el.hidden) return;
   if (!state.user?.isAdmin) {
-    el.innerHTML = '<p class="muted small">Only admins can start or stop the AI fund.</p>';
+    el.innerHTML = '<p class="muted small">Only admins can start, pause or stop the AI fund.</p>';
     return;
   }
-  const busy = cmd && ['sending', 'sent', 'accepted'].includes(cmd.phase);
-  const form = `<form id="fund-start-form" class="form-grid fund-form">
+  const busy = cmd && ['sending', 'sent', 'accepted'].includes(cmd.phase) ? 'disabled' : '';
+  const s = f?.settings ?? { broker: 'simulator', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5 };
+  const limitFields = (prefix, v) => `
+      <label>Largest single order, % of budget <input id="${prefix}-max-order" type="number" min="1" max="100" step="1" value="${v.maxOrderPct}"></label>
+      <label>Pause after losing in a day, % <input id="${prefix}-daily-loss" type="number" min="0.5" max="50" step="0.5" value="${v.dailyLossPct}"></label>`;
+  const startForm = `<form id="fund-start-form" class="form-grid fund-form">
       <label>Amount <input id="fund-amount" type="number" min="0.01" step="0.01" inputmode="decimal" required placeholder="e.g. 10000"></label>
       <label>Currency
         <select id="fund-currency"><option value="USD">USD · trades US stocks</option><option value="SGD">SGD · trades SGX stocks</option></select>
@@ -901,27 +914,64 @@ function renderFundControls() {
       <label>Decisions per trading day
         <select id="fund-decisions"><option value="1">1 (cheapest)</option><option value="2">2</option><option value="4">4</option></select>
       </label>
-      <div class="row"><button type="submit" class="primary" ${busy ? 'disabled' : ''}>${running ? 'Start new fund' : 'Start AI fund'}</button></div>
+      <label>Trades go to
+        <select id="fund-broker"><option value="simulator">Simulator (virtual money)</option><option value="tiger">Tiger Brokers account</option></select>
+      </label>
+      <label>Approval
+        <select id="fund-approval"><option value="manual">I approve each trade</option><option value="auto">Automatic</option></select>
+      </label>
+      ${limitFields('fund', { maxOrderPct: 25, dailyLossPct: 5 })}
+      <p class="small muted wide">With Tiger, which account trades (paper or live) is set by the Tiger secrets on GitHub; a live account also needs TIGER_LIVE_TRADING=yes. Approval applies to Tiger; the simulator always trades on its own.</p>
+      <div class="row"><button type="submit" class="primary" ${busy}>${running ? 'Start new fund' : 'Start AI fund'}</button></div>
     </form>`;
   el.innerHTML = `
     <div class="panel-head"><h2>${running ? 'Control the AI fund' : 'Start an AI fund'}</h2></div>
-    ${running
-      ? `<div class="row">
-          <button type="button" class="danger" data-fund-stop ${busy ? 'disabled' : ''}>Stop fund and close positions</button>
-        </div>
-        <details class="fund-new"><summary>Start a new fund instead</summary>
-          <p class="small">This closes the current fund's record and starts fresh with the new amount.</p>${form}</details>`
-      : form}
+    ${running ? `
+      <p class="small">Trading through: <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? ` · ${s.approval === 'manual' ? 'you approve each trade' : 'automatic'}` : ''}</p>
+      <div class="row">
+        ${f.paused
+          ? `<button type="button" class="primary" data-fund-cmd="resume" ${busy}>Resume trading</button>`
+          : `<button type="button" class="danger" data-fund-cmd="pause" ${busy}>Pause all trading</button>`}
+        <button type="button" class="ghost" data-fund-stop ${busy}>Stop fund and close positions</button>
+      </div>
+      <details class="fund-new"><summary>Approval and limits</summary>
+        <form id="fund-settings-form" class="form-grid fund-form">
+          <label>Approval
+            <select id="set-approval"><option value="manual" ${s.approval === 'manual' ? 'selected' : ''}>I approve each trade</option><option value="auto" ${s.approval === 'auto' ? 'selected' : ''}>Automatic</option></select>
+          </label>
+          ${limitFields('set', s)}
+          <div class="row"><button type="submit" class="primary" ${busy}>Save</button></div>
+        </form>
+      </details>
+      <details class="fund-new"><summary>Start a new fund instead</summary>
+        <p class="small">This closes the current fund's record and starts fresh.</p>${startForm}</details>`
+      : startForm}
     ${cmd?.message ? `<p class="small ${cmd.phase === 'failed' ? 'down' : 'muted'}" role="status">${esc(cmd.message)}</p>` : ''}`;
+  const brokerSel = $('fund-broker');
+  if (brokerSel) {
+    const sync = () => { $('fund-approval').disabled = brokerSel.value !== 'tiger'; };
+    brokerSel.addEventListener('change', sync);
+    sync();
+  }
 }
 
+const COMMAND_TEXT = {
+  start: ['Starting the fund', 'The fund is running. Its first decision comes 15 minutes after its market opens.'],
+  stop: ['Stopping the fund', 'The fund is stopped and its positions are being closed.'],
+  pause: ['Pausing the fund', 'The fund is paused. It makes no new trades and open orders are cancelled; stop-losses still work.'],
+  resume: ['Resuming the fund', 'The fund is trading again.'],
+  settings: ['Saving settings', 'Settings saved.'],
+  approve: ['Sending approved trades', 'Done.'],
+  reject: ['Rejecting', 'Rejected.'],
+};
+
 async function submitFundCommand(action, fields = {}) {
-  const what = action === 'stop' ? 'Stopping the fund' : 'Starting the fund';
+  const [what] = COMMAND_TEXT[action];
   state.fundCmd = { phase: 'sending', action, message: `${what}: sending the request…` };
   render();
   try {
     const row = await sendFundCommand({ action, ...fields });
-    state.fundCmd = { id: row.id, action, createdAt: row.created_at, phase: 'sent', message: `${what}: asking GitHub to run it…` };
+    state.fundCmd = { id: row.id, action, ids: fields.payload?.ids, createdAt: row.created_at, phase: 'sent', message: `${what}: asking GitHub to run it…` };
   } catch (err) {
     state.fundCmd = { phase: 'failed', action, message: err.message };
   }
@@ -929,9 +979,22 @@ async function submitFundCommand(action, fields = {}) {
   if (state.fundCmd.id) watchFundCommand(state.fundCmd);
 }
 
+// Whether the fund (as last loaded) shows that a command has been carried out.
+function commandDone(cmd, f) {
+  const since = Date.parse(cmd.createdAt);
+  const handled = f?.lastCommand && Date.parse(f.lastCommand.time) >= since;
+  switch (cmd.action) {
+    case 'start': return f && Date.parse(f.startedAt) >= since;
+    case 'stop': return f?.stoppedAt && Date.parse(f.stoppedAt) >= since;
+    case 'pause': return Boolean(f?.paused);
+    case 'resume': return f && !f.paused;
+    default: return handled;
+  }
+}
+
 // Follows a request until GitHub accepts it and the fund shows the change (usually 3-5 minutes).
 async function watchFundCommand(cmd) {
-  const what = cmd.action === 'stop' ? 'Stopping the fund' : 'Starting the fund';
+  const [what, doneText] = COMMAND_TEXT[cmd.action];
   const started = Date.now();
   while (state.fundCmd === cmd && Date.now() - started < 20 * 60 * 1000) {
     await new Promise((r) => setTimeout(r, cmd.phase === 'sent' ? 4000 : 20000));
@@ -947,12 +1010,11 @@ async function watchFundCommand(cmd) {
         }
       } else {
         await loadSideData();
-        const f = state.fund;
-        const since = Date.parse(cmd.createdAt);
-        const done = cmd.action === 'stop' ? f?.stoppedAt && Date.parse(f.stoppedAt) >= since : f && Date.parse(f.startedAt) >= since;
-        if (done) {
-          cmd.phase = 'done';
-          cmd.message = cmd.action === 'stop' ? 'The fund is stopped and its positions are closed.' : 'The fund is running. Its first decision comes 15 minutes after its market opens.';
+        if (commandDone(cmd, state.fund)) {
+          const lc = state.fund?.lastCommand;
+          const own = lc && Date.parse(lc.time) >= Date.parse(cmd.createdAt);
+          cmd.phase = own && !lc.ok ? 'failed' : 'done';
+          cmd.message = own && lc.message ? lc.message : doneText;
         }
       }
     } catch (err) {
@@ -968,21 +1030,90 @@ async function watchFundCommand(cmd) {
   }
 }
 
+const numberOf = (id) => Number($(id).value);
+
 document.addEventListener('submit', (e) => {
-  if (e.target.id !== 'fund-start-form') return;
-  e.preventDefault();
-  const amount = Math.round(Number($('fund-amount').value) * 100) / 100;
-  const currency = $('fund-currency').value;
-  const decisionsPerDay = Number($('fund-decisions').value);
-  if (!(amount > 0)) return;
-  const replacing = state.fund && !state.fund.stoppedAt ? ' This replaces the current fund.' : '';
-  if (!confirm(`Start an AI fund with ${money(amount, currency)}, deciding ${decisionsPerDay} time${decisionsPerDay > 1 ? 's' : ''} a trading day?${replacing}`)) return;
-  submitFundCommand('start', { amount, currency, decisionsPerDay });
+  if (e.target.id === 'fund-start-form') {
+    e.preventDefault();
+    const amount = Math.round(numberOf('fund-amount') * 100) / 100;
+    const currency = $('fund-currency').value;
+    const decisionsPerDay = numberOf('fund-decisions');
+    const broker = $('fund-broker').value;
+    const settings = { broker, approval: $('fund-approval').value, maxOrderPct: numberOf('fund-max-order'), dailyLossPct: numberOf('fund-daily-loss') };
+    if (!(amount > 0)) return;
+    const replacing = state.fund && !state.fund.stoppedAt ? ' This replaces the current fund.' : '';
+    const where = broker === 'tiger' ? `through your Tiger account (${settings.approval === 'manual' ? 'you approve each trade' : 'automatically'})` : 'in the simulator';
+    if (!confirm(`Start an AI fund with ${money(amount, currency)}, trading ${where}, deciding ${decisionsPerDay} time${decisionsPerDay > 1 ? 's' : ''} a trading day?${replacing}`)) return;
+    submitFundCommand('start', { amount, currency, decisionsPerDay, payload: { settings } });
+  }
+  if (e.target.id === 'fund-settings-form') {
+    e.preventDefault();
+    submitFundCommand('settings', { payload: { approval: $('set-approval').value, maxOrderPct: numberOf('set-max-order'), dailyLossPct: numberOf('set-daily-loss') } });
+  }
 });
 document.addEventListener('click', (e) => {
-  if (!e.target.closest('[data-fund-stop]')) return;
-  if (confirm('Stop the AI fund? It sells and covers everything at the latest prices and stops trading.')) submitFundCommand('stop');
+  const t = e.target.closest('[data-fund-stop], [data-fund-cmd], [data-proposal]');
+  if (!t) return;
+  if (t.matches('[data-fund-stop]')) {
+    const tiger = state.fund?.settings?.broker === 'tiger';
+    if (confirm(`Stop the AI fund? ${tiger ? 'It sends orders to Tiger to close every position' : 'It sells and covers everything at the latest prices'} and stops trading.`)) submitFundCommand('stop');
+  } else if (t.dataset.fundCmd === 'pause') {
+    if (confirm('Pause all trading? No new trades are made and open orders are cancelled. Stop-losses keep working.')) submitFundCommand('pause');
+  } else if (t.dataset.fundCmd === 'resume') {
+    submitFundCommand('resume');
+  } else if (t.dataset.proposal) {
+    const [verb, ids] = [t.dataset.proposal, t.dataset.ids.split(',')];
+    const list = (state.fund?.proposals ?? []).filter((p) => ids.includes(p.id));
+    const text = list.map((p) => `${p.action} ${p.shares} ${p.symbol} (limit ${price(p.limitPrice)})`).join(', ');
+    if (verb === 'approve' && !confirm(`Send to Tiger: ${text}?`)) return;
+    submitFundCommand(verb, { payload: { ids } });
+  }
 });
+
+// ----- AI fund: page -----
+
+const ORDER_STATUS = {
+  queued: 'waiting to send', sent: 'at Tiger, not filled yet', partial: 'partly filled', filled: 'filled',
+  cancelled: 'cancelled', rejected: 'rejected by Tiger', failed: 'not sent',
+};
+
+function renderProposals(f) {
+  const waiting = (f.proposals ?? []).filter((p) => p.status === 'awaiting');
+  const admin = state.user?.isAdmin || !authEnabled;
+  const busy = state.fundCmd && ['sending', 'sent', 'accepted'].includes(state.fundCmd.phase) ? 'disabled' : '';
+  if (!waiting.length) return '';
+  return `<section class="panel approvals">
+    <div class="panel-head"><h2>Waiting for your approval</h2>
+      ${admin && authEnabled && waiting.length > 1 ? `<button class="primary small-btn" data-proposal="approve" data-ids="${waiting.map((p) => p.id).join(',')}" ${busy}>Approve all</button>` : ''}</div>
+    <p class="small muted">Each is a limit order: it can't fill at a worse price than shown. A proposal expires after an hour, or if the price moves more than 2% before you approve.</p>
+    <ul class="orders">${waiting.map((p) => `<li>
+      <span class="chip ${p.action === 'buy' || p.action === 'cover' ? 'buy' : 'sell'}">${esc(p.action)}</span>
+      ${Number(p.shares).toLocaleString()} <strong>${esc(p.symbol)}</strong> · limit ${price(p.limitPrice)} ${esc(f.currency)} (≈ ${money(p.shares * p.limitPrice, f.currency)})
+      <span class="muted small">${esc(p.reason)} · expires ${fmtDateTime(p.expiresAt)}</span>
+      ${admin && authEnabled ? `<span class="row"><button class="small-btn primary" data-proposal="approve" data-ids="${esc(p.id)}" ${busy}>Approve</button>
+        <button class="small-btn ghost" data-proposal="reject" data-ids="${esc(p.id)}" ${busy}>Reject</button></span>` : ''}
+    </li>`).join('')}</ul>
+  </section>`;
+}
+
+function renderBrokerOrders(f) {
+  const orders = (f.brokerOrders ?? []).slice().reverse().slice(0, 30);
+  if (!orders.length) return '';
+  return `<section class="panel">
+    <div class="panel-head"><h2>Tiger orders</h2></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Placed</th><th>Order</th><th class="num">Limit</th><th>Status</th><th class="num hide-sm">Filled</th></tr></thead>
+      <tbody>${orders.map((o) => `<tr>
+        <td>${fmtDateTime(o.createdAt)}<br><span class="muted small">${esc(o.source === 'decision' || o.source === 'approved' ? 'AI decision' : o.source === 'protection' ? 'stop-loss / take-profit' : 'fund stopped')}</span></td>
+        <td><span class="chip ${o.side === 'buy' ? 'buy' : 'sell'}">${esc(o.action)}</span> ${Number(o.qty).toLocaleString()} ${esc(o.symbol)}</td>
+        <td class="num">${price(o.limitPrice)}</td>
+        <td class="${['rejected', 'failed'].includes(o.status) ? 'down' : ''}">${esc(ORDER_STATUS[o.status] ?? o.status)}${o.cancelRequested && ['queued', 'sent', 'partial'].includes(o.status) ? ' · cancelling' : ''}
+          ${o.error ? `<br><span class="small">${esc(o.error)}</span>` : ''}</td>
+        <td class="num hide-sm">${o.filledQty ? `${o.filledQty} at ${price(o.avgFillPrice)}` : '–'}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>
+  </section>`;
+}
 
 function renderFund() {
   const el = $('fund');
@@ -995,13 +1126,13 @@ function renderFund() {
   if (!f) {
     el.innerHTML = `<section class="panel">
       <h2>AI fund</h2>
-      <p>Give Claude an amount and let it trade on its own, aiming for the biggest profit it can make. It runs on GitHub, so it keeps trading while this page is closed.</p>
+      <p>Give Claude an amount and let it trade on its own, aiming for the biggest profit it can make, in the simulator or through your Tiger Brokers account. It runs on GitHub, so it keeps trading while this page is closed.</p>
       ${authEnabled ? '' : `<ol>
         <li>Add your Anthropic API key to the GitHub repo as a secret named <code>ANTHROPIC_API_KEY</code> (Settings → Secrets and variables → Actions).</li>
         <li>Open ${runLink}, press <strong>Run workflow</strong>, and fill in <em>Start a NEW AI fund with this amount</em>, its currency (USD trades US stocks, SGD trades SGX stocks) and how many decisions a day.</li>
         <li>Come back here in a few minutes.</li>
       </ol>`}
-      <p class="small"><strong>Hard limit:</strong> the fund's ledger starts with exactly that amount and nothing is ever added, so any order costing more than its buying power is rejected. Shorts need 150% collateral and are closed automatically at a 40% loss, so the fund can't lose more than its amount.</p>
+      <p class="small"><strong>Hard limits:</strong> the fund can only use its amount; any order costing more than its buying power, or more than the per-order limit, is rejected. It pauses itself after losing the daily limit, and shorts are closed automatically at a 40% loss.</p>
       <p class="muted small">Cost: each decision is one Claude call with web search, roughly US$0.05–0.15: Claude Haiku 4.5 reads the news and Claude Sonnet 5 decides.</p>
     </section>`;
     return;
@@ -1010,10 +1141,18 @@ function renderFund() {
   const { accounts, positions } = summarize(f.portfolio, quotes);
   const a = accounts[f.currency];
   const market = marketForCurrency(f.currency);
+  const s = f.settings ?? {};
   const status = f.stoppedAt
     ? `Stopped ${fmtDateTime(f.stoppedAt)}`
-    : `Running · ${f.decisionsPerDay} decision${f.decisionsPerDay > 1 ? 's' : ''} per trading day · ${MARKETS[market].label} ${STATUS_LABELS[marketStatus(market)]}`;
+    : f.paused
+      ? 'Paused'
+      : `Running · ${f.decisionsPerDay} decision${f.decisionsPerDay > 1 ? 's' : ''} per trading day · ${MARKETS[market].label} ${STATUS_LABELS[marketStatus(market)]}`;
+  const check = f.broker?.check;
   el.innerHTML = `
+    ${f.paused ? `<div class="notice warn fund-alert"><span><strong>Trading is paused</strong> (${fmtDateTime(f.paused.at)}): ${esc(f.paused.reason)} Stop-losses still work.</span></div>` : ''}
+    ${f.broker?.error && s.broker === 'tiger' ? `<div class="notice warn fund-alert"><span><strong>Tiger:</strong> ${esc(f.broker.error)}</span></div>` : ''}
+    ${check && !check.ok ? `<div class="notice warn fund-alert"><span><strong>The fund and your Tiger account disagree:</strong> ${check.mismatches.map((m) => `${esc(m.symbol)}: fund ${m.fund}, Tiger ${m.tiger}`).join('; ')}. Check the Tiger app before trading further.</span></div>` : ''}
+    ${renderProposals(f)}
     <section class="cards">
       <div class="card"><div class="label">AI fund · profit / loss</div>
         <div class="big ${tone(a.net)}">${money(a.net, f.currency, { sign: true })}</div>
@@ -1021,13 +1160,15 @@ function renderFund() {
       <div class="card"><div class="label">Value now</div><div class="big">${money(a.equity, f.currency)}</div>
         <div class="sub"><span>Cash</span><span>${money(a.cash, f.currency)}</span><span>Buying power</span><span>${money(a.buyingPower, f.currency)}</span></div></div>
       <div class="card"><div class="label">Status</div><p>${esc(status)}</p>
-        <p class="muted small">Started ${fmtDateTime(f.startedAt)}. Last decision ${f.lastDecisionAt ? ago(f.lastDecisionAt) : 'not yet'}.</p>
+        <p class="small">Trades through: <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? `<br>${s.approval === 'manual' ? 'You approve each trade' : 'Trades automatically'}` : ''}</p>
+        <p class="muted small">Limits: ${s.maxOrderPct ?? 25}% of the budget per order; pauses after losing ${s.dailyLossPct ?? 5}% in a day.<br>
+          Started ${fmtDateTime(f.startedAt)}. Last decision ${f.lastDecisionAt ? ago(f.lastDecisionAt) : 'not yet'}.</p>
         ${f.lastError ? `<p class="down small">Last decision failed ${ago(f.lastError.time)}: ${esc(f.lastError.message)}</p>` : ''}</div>
     </section>
     <section class="panel">
       <div class="panel-head"><h2>Fund value</h2></div>
       <div id="fund-chart"></div>
-      <p class="muted small">Hard limit: the fund can only use its ${money(f.budget, f.currency)}. Orders beyond its buying power are rejected, and shorts are closed automatically at a 40% loss.</p>
+      <p class="muted small">Hard limit: the fund can only use its ${money(f.budget, f.currency)}. Orders beyond its buying power or the per-order limit are rejected, and shorts are closed automatically at a 40% loss.${s.broker === 'tiger' ? ' Values use Tiger\'s actual fill prices.' : ''}</p>
     </section>
     <section class="panel">
       <div class="panel-head"><h2>Positions</h2></div>
@@ -1042,19 +1183,23 @@ function renderFund() {
           <td class="hide-sm small">${esc(prot)}</td></tr>`;
         }).join('')}</tbody>` : '<tr><td class="empty">All in cash.</td></tr>'}</table></div>
     </section>
+    ${renderBrokerOrders(f)}
     <section class="panel">
       <div class="panel-head"><h2>Decisions</h2></div>
       ${f.decisions.slice().reverse().slice(0, 30).map((d) => `<article class="decision">
         <header><strong>${fmtDateTime(d.time)}</strong>${d.usage ? ` <span class="muted small">${esc(madeBy(d))} · about US$${d.usage.costUsd.toFixed(2)}</span>` : ''}</header>
         <p>${esc(d.outlook)}</p>
         ${d.orders.length ? `<ul class="orders">${d.orders.map((o) => `<li><span class="chip ${o.action === 'buy' || o.action === 'cover' ? 'buy' : 'sell'}">${esc(o.action)}</span>
-          ${Number(o.shares).toLocaleString()} ${esc(o.symbol)} ${o.status === 'filled' ? `at ${price(o.price)}` : `<span class="down">rejected: ${esc(o.message)}</span>`}
+          ${Number(o.shares).toLocaleString()} ${esc(o.symbol)}
+          ${o.status === 'filled' ? `at ${price(o.price)}`
+            : o.status === 'rejected' ? `<span class="down">rejected: ${esc(o.message)}</span>`
+            : `<span class="muted">${esc(o.status)}${o.limitPrice ? `, limit ${price(o.limitPrice)}` : ''}</span>`}
           <span class="muted small">${esc(o.reason)}</span></li>`).join('')}</ul>` : '<p class="muted small">No trades this round.</p>'}
         ${sources(d.source_urls)}
       </article>`).join('') || '<p class="muted">No decisions yet. The first one happens 15 minutes after the market opens.</p>'}
     </section>
-    ${f.events.length ? `<section class="panel"><div class="panel-head"><h2>Automatic closes</h2></div><ul class="orders">
-      ${f.events.slice().reverse().slice(0, 20).map((e) => `<li>${fmtDateTime(e.time)}: ${esc(e.action)} ${e.shares.toLocaleString()} ${esc(e.symbol)} at ${price(e.price)} <span class="muted small">(${esc(e.why)})</span></li>`).join('')}
+    ${f.events.length ? `<section class="panel"><div class="panel-head"><h2>Automatic events</h2></div><ul class="orders">
+      ${f.events.slice().reverse().slice(0, 20).map((e) => `<li>${fmtDateTime(e.time)}: ${esc(e.action)} ${Number(e.shares).toLocaleString()} ${esc(e.symbol)} at ${price(e.price)} <span class="muted small">(${esc(e.why)})</span></li>`).join('')}
     </ul></section>` : ''}
     ${authEnabled ? '' : `<p class="muted small">To stop the fund and close its positions, or to start a new one, use ${runLink} → Run workflow.</p>`}`;
   lineChart($('fund-chart'), (f.history ?? []).map(([t, v]) => ({ label: fmtDateTime(t), axis: fmtDate(t), value: v })), { ref: f.budget, refLabel: 'Budget', fmt: (v) => money(v, f.currency) });

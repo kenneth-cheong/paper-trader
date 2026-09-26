@@ -8,7 +8,7 @@ const at = (hhmm) => new Date(`2026-01-07T${hhmm}:00Z`);
 const q = (price, extra = {}) => ({ currency: 'USD', price, daily: [], intraday: [], ...extra });
 
 test('a new fund holds exactly its budget', () => {
-  const f = newFund({ budget: 5000, currency: 'USD', now: at('10:00') });
+  const f = newFund({ budget: 5000, currency: 'USD', settings: { maxOrderPct: 100 }, now: at('10:00') });
   assert.equal(f.portfolio.accounts.USD.cash, 5000);
   assert.deepEqual(Object.keys(f.portfolio.accounts), ['USD']);
   assert.throws(() => newFund({ budget: 0, currency: 'USD' }), /above 0/);
@@ -39,7 +39,7 @@ test('decisions are due 15 minutes after the open, then spaced through the sessi
 });
 
 test('no decision on a holiday or after an early close, when the clock says open but prices stopped', () => {
-  const f = newFund({ budget: 5000, currency: 'USD', now: at('10:00') });
+  const f = newFund({ budget: 5000, currency: 'USD', settings: { maxOrderPct: 100 }, now: at('10:00') });
   const yesterdayClose = new Date('2026-01-06T21:00:00Z');
   // A US holiday: the price job runs, but the newest US price is from yesterday.
   assert.equal(decisionDue(f, at('18:00'), pricesAt(yesterdayClose, 'US', at('17:55'))), false);
@@ -50,7 +50,7 @@ test('no decision on a holiday or after an early close, when the clock says open
 });
 
 test('the fund can never spend more than its budget', () => {
-  const f = newFund({ budget: 1000, currency: 'USD', now: at('10:00') });
+  const f = newFund({ budget: 1000, currency: 'USD', settings: { maxOrderPct: 100 }, now: at('10:00') });
   const quotes = { A: q(100), B: q(50), C: { ...q(10), currency: 'SGD' } };
   const res = applyOrders(f, [
     { symbol: 'A', action: 'buy', shares: 8, reason: '' },
@@ -64,7 +64,7 @@ test('the fund can never spend more than its budget', () => {
 });
 
 test('sells run before buys so the freed cash can be reused', () => {
-  const f = newFund({ budget: 1000, currency: 'USD', now: at('10:00') });
+  const f = newFund({ budget: 1000, currency: 'USD', settings: { maxOrderPct: 100 }, now: at('10:00') });
   applyOrders(f, [{ symbol: 'A', action: 'buy', shares: 10, reason: '' }], { A: q(100) }, at('15:00'));
   const res = applyOrders(f, [
     { symbol: 'B', action: 'buy', shares: 10, reason: '' },
@@ -74,7 +74,7 @@ test('sells run before buys so the freed cash can be reused', () => {
 });
 
 test('short and cover work, but actions must match the position', () => {
-  const f = newFund({ budget: 1500, currency: 'USD', now: at('10:00') });
+  const f = newFund({ budget: 1500, currency: 'USD', settings: { maxOrderPct: 100 }, now: at('10:00') });
   const quotes = { A: q(100) };
   let res = applyOrders(f, [{ symbol: 'A', action: 'short', shares: 10, reason: '' }], quotes, at('15:00'));
   assert.equal(res[0].status, 'filled');
@@ -92,7 +92,7 @@ test('short and cover work, but actions must match the position', () => {
 });
 
 test('stop-loss and take-profit fire on the 15-minute prices between decisions', () => {
-  const f = newFund({ budget: 10000, currency: 'USD', now: at('14:00') });
+  const f = newFund({ budget: 10000, currency: 'USD', settings: { maxOrderPct: 100 }, now: at('14:00') });
   applyOrders(f, [{ symbol: 'A', action: 'buy', shares: 10, reason: '' }, { symbol: 'B', action: 'buy', shares: 10, reason: '' }], { A: q(100), B: q(100) }, at('14:45'));
   setProtections(f, [
     { symbol: 'A', stop_loss_pct: 5, take_profit_pct: 0 },
@@ -112,20 +112,21 @@ test('stop-loss and take-profit fire on the 15-minute prices between decisions',
 });
 
 test('a short 40% under water is covered even without a stop-loss, keeping losses within the budget', () => {
-  const f = newFund({ budget: 1000, currency: 'USD', now: at('14:00') });
-  applyOrders(f, [{ symbol: 'A', action: 'short', shares: 20, reason: '' }], { A: q(100) }, at('14:45'));
+  const f = newFund({ budget: 1000, currency: 'USD', settings: { maxOrderPct: 100 }, now: at('14:00') });
+  // The largest short one order allows: worth the whole budget (the per-order limit is 100% here)
+  applyOrders(f, [{ symbol: 'A', action: 'short', shares: 10, reason: '' }], { A: q(100) }, at('14:45'));
   const t = (hhmm) => at(hhmm).getTime() / 1000;
   const events = checkProtections(f, { A: q(141, { intraday: [[t('15:00'), 120], [t('15:15'), 140], [t('15:30'), 141]] }) });
   assert.equal(events.length, 1);
   assert.match(events[0].why, /forced cover/);
   assert.equal(events[0].price, 140);
   const a = summarize(f.portfolio, {}).accounts.USD;
-  assert.equal(a.equity, 200); // lost 800 of the 1000, never more than the budget
+  assert.equal(a.equity, 600); // lost 400 of the 1000, never more than the budget
   assert.ok(a.cash >= 0);
 });
 
 test('stopping closes everything; recordValue tracks the fund value', () => {
-  const f = newFund({ budget: 1000, currency: 'USD', now: at('14:00') });
+  const f = newFund({ budget: 1000, currency: 'USD', settings: { maxOrderPct: 100 }, now: at('14:00') });
   applyOrders(f, [{ symbol: 'A', action: 'buy', shares: 5, reason: '' }], { A: q(100) }, at('14:45'));
   assert.equal(recordValue(f, { A: q(110) }, at('15:00')), 1050);
   stopFund(f, { A: q(120) }, at('16:00'));

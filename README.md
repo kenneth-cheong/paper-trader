@@ -85,6 +85,32 @@ The token never reaches the browser. Only admins can send start or stop requests
 - *How many times a trading day the AI decides*: 1, 2 or 4.
 - *Stop the AI fund*: closes all its positions and stops it.
 
+### Trading through Tiger Brokers
+
+The AI fund can trade through your Tiger Brokers account instead of the simulator. Start with Tiger's **paper account** (simulated money) and approval on.
+
+**How it works:** each run, a Python step (`scripts/tiger_broker.py`, using Tiger's official `tigeropen` library) checks your open orders and fills with Tiger. The fund then decides what to do, and a second step sends any new orders.
+- **Orders:** always DAY limit orders, at most 1% worse than the latest price, and only while the market is actually trading.
+- **Fills:** the fund records Tiger's actual fill prices.
+- **Approval (the default):** the AI's trades wait under *Waiting for your approval* until you tap **Approve**. A proposal expires after an hour, or if the price moves more than 2% first. Stop-losses and take-profits don't wait, because they reduce risk.
+- **Limits, enforced in code:** the fund's budget (open orders count as spent), a maximum size per order, and a daily-loss limit that pauses the fund.
+- **Kill switch:** **Pause all trading** stops new trades and cancels open orders.
+- **Mismatch check:** if the fund's positions and your Tiger account disagree, the page warns you.
+
+**Setup:**
+1. **Get Open API access from Tiger.** In the Tiger app or on the website, find *Open API* (developer registration), agree to the terms, and generate your key pair. Note your **Tiger ID**, your **paper account number** (a long number) and the **private key**.
+2. **Add GitHub repository secrets** (Settings → Secrets and variables → Actions → Secrets):
+   - `TIGEROPEN_TIGER_ID`: your Tiger ID;
+   - `TIGEROPEN_ACCOUNT`: your **paper** account number to start with;
+   - `TIGEROPEN_PRIVATE_KEY`: the private key text;
+   - `TIGEROPEN_LICENSE`: `TBSG` for Tiger Brokers Singapore.
+3. **Re-run `supabase/fund-control.sql`** in Supabase's SQL Editor, so the app can send approvals, pause and settings.
+4. **Start the fund:** in the app, go to *AI fund → Start AI fund → Trades go to: Tiger Brokers account*, keeping *I approve each trade*. Tiger's paper account may not cover SGX, so start with a USD fund.
+
+**Going live with real money** takes two deliberate changes. Change `TIGEROPEN_ACCOUNT` to your live account number, **and** add the repository variable `TIGER_LIVE_TRADING` = `yes` (Variables tab). Without the variable, orders for a live account are refused. The page shows *Tiger LIVE account (real money)* in red when it's live.
+
+**Privacy:** the website is public. Its copy of the fund leaves out your Tiger account's full positions and Tiger's order numbers, but the fund's own trades and value are visible to anyone with the link.
+
 ### Which model does what
 
 The work is split by difficulty to keep costs down:
@@ -127,7 +153,9 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `markets.js` | Exchange trading hours. |
 | `auth.js`, `login.js`, `config.js` | Sign-in, invites and saving portfolios to Supabase. |
 | `supabase/setup.sql` | Database tables, access rules and the invite-only sign-up check. |
-| `supabase/fund-control.sql` | Lets admins start and stop the AI fund from the app. |
+| `supabase/fund-control.sql` | Lets admins start, pause, approve and stop the AI fund from the app. |
+| `scripts/tiger_broker.py` | Sends the AI fund's orders to Tiger and brings back fills (with `test/test_tiger_broker.py`). |
+| `scripts/public-fund.mjs` | Writes the public copy of the AI fund, without your Tiger account details. |
 | `app.js`, `index.html`, `styles.css` | The web app. |
 | `scripts/` | The scheduled jobs: prices, AI picks, AI fund. |
 
