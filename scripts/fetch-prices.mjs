@@ -1,8 +1,9 @@
-// Fetches the latest prices for every symbol in symbols.json and writes data/prices.json.
-// Runs in GitHub Actions (server side, so no browser CORS limits and no API key).
+// Builds data/prices.json from Yahoo Finance chart data for every symbol in symbols.json.
 // Usage: node scripts/fetch-prices.mjs [previousPricesUrl]
-// When a symbol fails to fetch, its entry from previousPricesUrl (the live site's
-// prices.json) is carried over and marked stale, so one bad request never blanks a price.
+// In GitHub Actions, scripts/yahoo_fetch.py downloads the raw data first (Yahoo blocks Node's HTTP
+// client on cloud servers) and YAHOO_RAW_DIR points here at it; run locally, this fetches directly.
+// When a symbol fails, its entry from previousPricesUrl (the live site's prices.json) is carried
+// over and marked stale, so one bad request never blanks a price.
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 
@@ -33,7 +34,24 @@ async function yahooSession() {
   return session;
 }
 
+// Must match raw_name() in yahoo_fetch.py.
+const rawPath = (dir, symbol, range, interval) => `${dir}/${encodeURIComponent(symbol)}_${range}_${interval}.json`;
+
+async function readRawChart(dir, symbol, range, interval) {
+  let json;
+  try {
+    json = JSON.parse(await readFile(rawPath(dir, symbol, range, interval), 'utf8'));
+  } catch {
+    throw new Error('no downloaded data');
+  }
+  if (json.error && !json.chart) throw new Error(json.error);
+  const result = json?.chart?.result?.[0];
+  if (!result) throw new Error(json?.chart?.error?.description || 'empty result');
+  return result;
+}
+
 async function fetchChart(symbol, range, interval) {
+  if (process.env.YAHOO_RAW_DIR) return readRawChart(process.env.YAHOO_RAW_DIR, symbol, range, interval);
   let lastErr;
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
@@ -114,7 +132,7 @@ async function main() {
       const old = previous?.quotes?.[symbol];
       if (old) quotes[symbol] = { ...old, name, market, stale: true };
     }
-    await sleep(250); // be gentle with the endpoint
+    if (!process.env.YAHOO_RAW_DIR) await sleep(250); // be gentle with the endpoint
   }
 
   let usdsgd = previous?.fx?.USDSGD ?? null;
@@ -124,11 +142,14 @@ async function main() {
     console.warn(`! ${FX_SYMBOL}: ${err.message}`);
   }
 
+  if (Object.keys(quotes).length === 0) {
+    console.log(`Wrote nothing: 0/${symbols.length} quotes.`);
+    process.exit(1);
+  }
   const out = { updatedAt: new Date().toISOString(), fx: { USDSGD: usdsgd }, quotes };
   await mkdir(new URL('data/', ROOT), { recursive: true });
   await writeFile(new URL('data/prices.json', ROOT), JSON.stringify(out));
   console.log(`Wrote ${Object.keys(quotes).length}/${symbols.length} quotes (${failures} failed), USDSGD=${usdsgd}`);
-  if (Object.keys(quotes).length === 0) process.exit(1);
 }
 
 if (import.meta.url === `file://${process.argv[1]}`) main();

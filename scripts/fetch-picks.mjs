@@ -14,10 +14,13 @@ const previous = await readJson(file);
 const maxAgeH = Number(process.env.PICKS_MAX_AGE_HOURS || 10);
 const ageH = previous ? (Date.now() - Date.parse(previous.createdAt)) / 3600000 : Infinity;
 
-if (process.env.FORCE_PICKS !== 'true' && ageH < maxAgeH) {
+// An empty set of picks (e.g. from a run with no prices) is refreshed straight away.
+if (process.env.FORCE_PICKS !== 'true' && ageH < maxAgeH && previous?.picks?.length) {
   console.log(`Picks are ${ageH.toFixed(1)} h old; keeping them.`);
 } else if (!process.env.ANTHROPIC_API_KEY) {
   console.log('ANTHROPIC_API_KEY is not set; skipping AI picks.');
+} else if (!Object.keys((await readJson('data/prices.json'))?.quotes ?? {}).length) {
+  console.log('No prices this run; skipping AI picks.');
 } else {
   const prices = await readJson('data/prices.json');
   try {

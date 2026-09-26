@@ -3,3 +3,4 @@ data/prices.json
 data/picks.json
 data/ai-fund.json
 state/
+raw/

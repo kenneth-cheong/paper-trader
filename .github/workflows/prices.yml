@@ -62,9 +62,19 @@ jobs:
         uses: actions/configure-pages@v5
       # Passing the live prices.json lets a symbol that fails this run keep its last price.
       # If every price fails, the site still deploys (it falls back to sample prices with a banner).
-      - name: Fetch prices
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download prices from Yahoo
+        continue-on-error: true
+        run: |
+          pip install --quiet curl_cffi
+          python scripts/yahoo_fetch.py raw
+      - name: Build prices.json
         id: prices
         continue-on-error: true
+        env:
+          YAHOO_RAW_DIR: raw
         run: node scripts/fetch-prices.mjs "${{ steps.pages.outputs.base_url }}/data/prices.json"
 
       # AI picks and the AI fund keep their state on a separate branch, so main's history stays clean.
