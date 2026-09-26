@@ -41,7 +41,9 @@ if (!fund.stoppedAt) {
   for (const e of checkProtections(fund, quotes)) console.log(`Protection: ${e.action} ${e.shares} ${e.symbol} at ${e.price} (${e.why})`);
 
   if (decisionDue(fund, now)) {
-    if (!env.ANTHROPIC_API_KEY) {
+    if (!Object.keys(quotes).length) {
+      console.log('A decision is due but there are no prices this run; waiting for the next one.');
+    } else if (!env.ANTHROPIC_API_KEY) {
       console.log('A decision is due but ANTHROPIC_API_KEY is not set.');
     } else {
       try {

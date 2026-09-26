@@ -12,13 +12,36 @@ const FX_SYMBOL = 'SGD=X'; // Yahoo's USD -> SGD rate
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+// Yahoo answers requests from cloud servers with HTTP 429 unless they carry a session cookie and
+// the matching "crumb" token, which is how a browser visiting finance.yahoo.com gets them.
+let session = null;
+async function yahooSession() {
+  if (session) return session;
+  const cookies = [];
+  for (const url of ['https://fc.yahoo.com/', 'https://finance.yahoo.com/']) {
+    try {
+      const res = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'text/html' }, redirect: 'manual' });
+      cookies.push(...res.headers.getSetCookie().map((c) => c.split(';')[0]));
+    } catch { /* try the next one */ }
+    if (cookies.length) break;
+  }
+  const cookie = cookies.join('; ');
+  const res = await fetch('https://query2.finance.yahoo.com/v1/test/getcrumb', { headers: { 'User-Agent': UA, Cookie: cookie } });
+  const crumb = (await res.text()).trim();
+  if (!res.ok || !crumb || crumb.includes('<')) throw new Error(`could not get a Yahoo session (HTTP ${res.status})`);
+  session = { cookie, crumb };
+  return session;
+}
+
 async function fetchChart(symbol, range, interval) {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}`;
   let lastErr;
   for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const res = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json' } });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const { cookie, crumb } = await yahooSession();
+      const url = `https://query2.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=${range}&interval=${interval}&crumb=${encodeURIComponent(crumb)}`;
+      const res = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json', Cookie: cookie } });
+      if (res.status === 401 || res.status === 403) session = null; // stale crumb: get a new one next attempt
+      if (!res.ok) throw new Error(`HTTP ${res.status} ${(await res.text()).slice(0, 120).replace(/\s+/g, ' ')}`);
       const json = await res.json();
       const result = json?.chart?.result?.[0];
       if (!result) throw new Error(json?.chart?.error?.description || 'empty result');
