@@ -2,6 +2,7 @@ import { newPortfolio, applyTrade, placeOrder, cancelOrder, summarize, validateP
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest, fillPendingOrders } from './rules.js';
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
 import { MARKETS, marketForCurrency, tradingStatus, STATUS_LABELS } from './markets.js';
+import { calcFee, planFor, FEE_PLANS } from './fees.js';
 import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus } from './auth.js';
 import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
 
@@ -190,6 +191,10 @@ async function loadSideData() {
 }
 
 const quote = (symbol) => state.prices.quotes?.[symbol];
+const myPlan = () => planFor(state.portfolio.feePlan, state.portfolio.customFees);
+const feeOf = (q, side, qty) => (q && qty > 0 ? calcFee(myPlan(), q.market, side, qty, q.price) : { total: 0, parts: [] });
+// Backtests use the same fees as your own trades.
+const btOptions = () => ({ feePlan: state.portfolio.feePlan ?? 'tiger', customFees: state.portfolio.customFees });
 // Open only when today's prices are arriving (so holidays and early closes count as closed).
 const marketStatus = (market) => (state.sample ? 'open' : tradingStatus(market, state.prices));
 
@@ -379,6 +384,7 @@ function renderCards(accounts) {
         <span>Holdings</span><span>${money(a.marketValue, a.currency)}</span>
         <span>Realized</span><span class="${tone(a.realized)}">${money(a.realized, a.currency, { sign: true })}</span>
         <span>Unrealized</span><span class="${tone(a.unrealized)}">${money(a.unrealized, a.currency, { sign: true })}</span>
+        <span>Fees paid</span><span>${money(a.fees ?? 0, a.currency)}</span>
       </div>
     </div>`);
 
@@ -547,7 +553,7 @@ function renderTrades() {
   const ruleNote = (id) => state.portfolio.rules.find((r) => r.id === id)?.note;
   $('trades').innerHTML = `
     <thead><tr>
-      <th>When</th><th>Stock</th><th class="num">Shares</th><th class="num">Price</th><th class="num hide-sm">Amount</th><th class="num">Realized</th>
+      <th>When</th><th>Stock</th><th class="num">Shares</th><th class="num">Price</th><th class="num hide-sm">Amount</th><th class="num hide-sm">Fees</th><th class="num">Realized</th>
     </tr></thead>
     <tbody>${trades.map((t) => `<tr>
       <td>${fmtDateTime(t.time)}</td>
@@ -555,6 +561,7 @@ function renderTrades() {
       <td class="num">${t.qty.toLocaleString()}</td>
       <td class="num">${price(t.price)}</td>
       <td class="num hide-sm">${money(t.value, t.currency)}</td>
+      <td class="num hide-sm">${t.fee ? money(t.fee, t.currency) : '–'}</td>
       <td class="num ${tone(t.realized)}">${t.realized ? money(t.realized, t.currency, { sign: true }) : ''}</td>
     </tr>`).join('')}</tbody>`;
 }
@@ -579,8 +586,16 @@ function maxQty() {
   const q = quote(symbol);
   const held = state.portfolio.positions[symbol]?.qty ?? 0;
   const bp = Math.max(0, buyingPower(state.portfolio, q.currency));
-  if (side === 'buy') return held < 0 ? -held : Math.floor(bp / q.price);
-  return held > 0 ? held : Math.floor(bp / (q.price * (SHORT_MARGIN - 1)));
+  if (side === 'buy') {
+    if (held < 0) return -held;
+    let n = Math.floor(bp / q.price);
+    while (n > 0 && n * q.price + feeOf(q, 'buy', n).total > bp) n--; // leave room for the fees
+    return n;
+  }
+  if (held > 0) return held;
+  let n = Math.floor(bp / (q.price * (SHORT_MARGIN - 1)));
+  while (n > 0 && n * q.price * (SHORT_MARGIN - 1) + feeOf(q, 'sell', n).total > bp) n--;
+  return n;
 }
 
 function updateTradeDialog() {
@@ -609,7 +624,11 @@ function updateTradeDialog() {
     const pl = (q.price - avg) * closing * Math.sign(held);
     facts.push(['Profit / loss on what you close', `<span class="${tone(pl)}">${money(pl, ccy, { sign: true })}</span>`]);
   }
-  facts.push([`${side === 'buy' ? 'Total cost' : 'You receive'}${trading ? '' : ' (estimate)'}`, `<strong>${money(qty * q.price, ccy)}</strong>`]);
+  const fee = feeOf(q, side, qty);
+  const breakdown = fee.parts.map((p) => `${p.label} ${p.amount.toFixed(2)}`).join(', ');
+  facts.push([`Fees (${esc(myPlan().label)})`, `<span title="${esc(breakdown)}">${money(fee.total, ccy)}</span>`]);
+  facts.push([`${side === 'buy' ? 'Total cost with fees' : 'You receive after fees'}${trading ? '' : ' (estimate)'}`,
+    `<strong>${money(side === 'buy' ? qty * q.price + fee.total : qty * q.price - fee.total, ccy)}</strong>`]);
   $('trade-facts').innerHTML = facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
 
   const notes = [];
@@ -630,7 +649,7 @@ function submitTrade(e) {
   const q = quote(symbol);
   try {
     if (marketStatus(q.market) === 'open') {
-      state.portfolio = applyTrade(state.portfolio, { symbol, side, qty: $('qty').value, price: q.price, currency: q.currency });
+      state.portfolio = applyTrade(state.portfolio, { symbol, side, qty: $('qty').value, price: q.price, currency: q.currency, market: q.market });
     } else {
       state.portfolio = placeOrder(state.portfolio, { symbol, side, qty: $('qty').value, currency: q.currency });
       notify(`Order placed: ${side} ${shares(Number($('qty').value))} of ${symbol}. It fills at the first price after ${MARKETS[q.market].label} opens.`);
@@ -660,12 +679,12 @@ function renderBacktest(bt) {
   return `<div class="backtest">
     <p class="small"><strong>Past-year test</strong> <span class="muted">(${fmtDate(bt.from)} to ${fmtDate(bt.to)})</span></p>
     <dl class="facts">
-      <dt>Strategy result</dt><dd class="${tone(bt.returnPct)}"><strong>${pct(bt.returnPct)}</strong></dd>
+      <dt>Strategy result, after fees</dt><dd class="${tone(bt.returnPct)}"><strong>${pct(bt.returnPct)}</strong></dd>
       <dt>Buying and holding instead</dt><dd class="${tone(bt.buyHoldPct)}">${pct(bt.buyHoldPct)}</dd>
       <dt>Trades · worst drop</dt><dd>${bt.trades} · ${pct(-bt.maxDrawdown)}</dd>
     </dl>
     <div class="bt-chart"></div>
-    <p class="muted small">Starts with ${money(bt.startCash, bt.currency)}${bt.startInvested ? ' fully invested (these rules only sell)' : ' in cash'}. Uses daily closing prices, so it's an approximation. Past results don't predict future ones.</p>
+    <p class="muted small">Starts with ${money(bt.startCash, bt.currency)}${bt.startInvested ? ' fully invested (these rules only sell)' : ' in cash'}. After ${money(bt.fees ?? 0, bt.currency)} in trading fees. Uses daily closing prices, so it's an approximation. Past results don't predict future ones.</p>
   </div>`;
 }
 
@@ -796,7 +815,7 @@ function testRuleInEditor() {
   const r = ruleFromEditor();
   const errs = checkRule(r, Object.keys(state.prices.quotes ?? {}));
   if (errs.length) { $('rule-error').textContent = errs.join(' '); return; }
-  state.backtests.editor = backtest([r], quote(r.symbol));
+  state.backtests.editor = backtest([r], quote(r.symbol), btOptions());
   $('rule-test').innerHTML = `<div data-bt="editor">${renderBacktest(state.backtests.editor)}</div>`;
   drawBacktestCharts($('rule-test'));
 }
@@ -813,7 +832,7 @@ function renderStrategist() {
   if (!$('st-run').disabled) $('st-status').textContent = state.ai.key ? '' : 'Add your Anthropic API key in Settings first.';
   const a = state.strategist;
   if (!a) { $('strategist').innerHTML = ''; return; }
-  a.strategies.forEach((s, i) => { state.backtests[`s${i}`] ??= s.rules.length ? backtest(s.rules, quote(s.symbol)) : null; });
+  a.strategies.forEach((s, i) => { state.backtests[`s${i}`] ??= s.rules.length ? backtest(s.rules, quote(s.symbol), btOptions()) : null; });
   $('strategist').innerHTML = `
     <div class="analysis">
       <p class="muted small">From ${fmtDateTime(a.createdAt)} · ${esc(madeBy(a))} · about US$${a.usage.costUsd.toFixed(2)}</p>
@@ -920,8 +939,11 @@ function renderFundControls() {
       <label>Approval
         <select id="fund-approval"><option value="manual">I approve each trade</option><option value="auto">Automatic</option></select>
       </label>
+      <label>Fees like
+        <select id="fund-fees"><option value="tiger">Tiger Brokers</option><option value="scb">Standard Chartered</option><option value="none">No fees</option></select>
+      </label>
       ${limitFields('fund', { maxOrderPct: 25, dailyLossPct: 5 })}
-      <p class="small muted wide">With Tiger, which account trades (paper or live) is set by the Tiger secrets on GitHub; a live account also needs TIGER_LIVE_TRADING=yes. Approval applies to Tiger; the simulator always trades on its own.</p>
+      <p class="small muted wide">With Tiger, which account trades (paper or live) is set by the Tiger secrets on GitHub; a live account also needs TIGER_LIVE_TRADING=yes. Approval applies to Tiger; the simulator always trades on its own. With Tiger, the fees are what Tiger actually charges.</p>
       <div class="row"><button type="submit" class="primary" ${busy}>${running ? 'Start new fund' : 'Start AI fund'}</button></div>
     </form>`;
   el.innerHTML = `
@@ -949,7 +971,12 @@ function renderFundControls() {
     ${cmd?.message ? `<p class="small ${cmd.phase === 'failed' ? 'down' : 'muted'}" role="status">${esc(cmd.message)}</p>` : ''}`;
   const brokerSel = $('fund-broker');
   if (brokerSel) {
-    const sync = () => { $('fund-approval').disabled = brokerSel.value !== 'tiger'; };
+    const sync = () => {
+      const tiger = brokerSel.value === 'tiger';
+      $('fund-approval').disabled = !tiger;
+      $('fund-fees').disabled = tiger;
+      if (tiger) $('fund-fees').value = 'tiger';
+    };
     brokerSel.addEventListener('change', sync);
     sync();
   }
@@ -1039,7 +1066,7 @@ document.addEventListener('submit', (e) => {
     const currency = $('fund-currency').value;
     const decisionsPerDay = numberOf('fund-decisions');
     const broker = $('fund-broker').value;
-    const settings = { broker, approval: $('fund-approval').value, maxOrderPct: numberOf('fund-max-order'), dailyLossPct: numberOf('fund-daily-loss') };
+    const settings = { broker, approval: $('fund-approval').value, feePlan: $('fund-fees').value, maxOrderPct: numberOf('fund-max-order'), dailyLossPct: numberOf('fund-daily-loss') };
     if (!(amount > 0)) return;
     const replacing = state.fund && !state.fund.stoppedAt ? ' This replaces the current fund.' : '';
     const where = broker === 'tiger' ? `through your Tiger account (${settings.approval === 'manual' ? 'you approve each trade' : 'automatically'})` : 'in the simulator';
@@ -1158,10 +1185,12 @@ function renderFund() {
         <div class="big ${tone(a.net)}">${money(a.net, f.currency, { sign: true })}</div>
         <div class="${tone(a.net)}">${pct(a.netPct)} on ${money(f.budget, f.currency)}</div></div>
       <div class="card"><div class="label">Value now</div><div class="big">${money(a.equity, f.currency)}</div>
-        <div class="sub"><span>Cash</span><span>${money(a.cash, f.currency)}</span><span>Buying power</span><span>${money(a.buyingPower, f.currency)}</span></div></div>
+        <div class="sub"><span>Cash</span><span>${money(a.cash, f.currency)}</span><span>Buying power</span><span>${money(a.buyingPower, f.currency)}</span>
+          <span>Fees paid</span><span>${money(a.fees ?? 0, f.currency)}</span></div></div>
       <div class="card"><div class="label">Status</div><p>${esc(status)}</p>
         <p class="small">Trades through: <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? `<br>${s.approval === 'manual' ? 'You approve each trade' : 'Trades automatically'}` : ''}</p>
         <p class="muted small">Limits: ${s.maxOrderPct ?? 25}% of the budget per order; pauses after losing ${s.dailyLossPct ?? 5}% in a day.<br>
+          Fees: ${esc(s.broker === 'tiger' ? 'what Tiger charges' : planFor(s.feePlan ?? 'tiger').label)}.<br>
           Started ${fmtDateTime(f.startedAt)}. Last decision ${f.lastDecisionAt ? ago(f.lastDecisionAt) : 'not yet'}.</p>
         ${f.lastError ? `<p class="down small">Last decision failed ${ago(f.lastError.time)}: ${esc(f.lastError.message)}</p>` : ''}</div>
     </section>
@@ -1191,7 +1220,7 @@ function renderFund() {
         <p>${esc(d.outlook)}</p>
         ${d.orders.length ? `<ul class="orders">${d.orders.map((o) => `<li><span class="chip ${o.action === 'buy' || o.action === 'cover' ? 'buy' : 'sell'}">${esc(o.action)}</span>
           ${Number(o.shares).toLocaleString()} ${esc(o.symbol)}
-          ${o.status === 'filled' ? `at ${price(o.price)}`
+          ${o.status === 'filled' ? `at ${price(o.price)}${o.fee ? ` <span class="muted small">+ ${money(o.fee, f.currency)} fees</span>` : ''}`
             : o.status === 'rejected' ? `<span class="down">rejected: ${esc(o.message)}</span>`
             : `<span class="muted">${esc(o.status)}${o.limitPrice ? `, limit ${price(o.limitPrice)}` : ''}</span>`}
           <span class="muted small">${esc(o.reason)}</span></li>`).join('')}</ul>` : '<p class="muted small">No trades this round.</p>'}
@@ -1216,7 +1245,29 @@ function openSettings() {
   $('start-usd').value = a.USD?.start ?? DEFAULT_START.USD;
   $('settings-started').textContent = `Current portfolio started ${fmtDate(state.portfolio.createdAt)}, ${state.portfolio.trades.length} trades.`;
   $('settings-error').textContent = '';
+  const c = state.portfolio.customFees ?? { pct: { US: 0.1, SGX: 0.1 }, min: { US: 1, SGX: 1 } };
+  $('fee-plan').value = state.portfolio.feePlan ?? 'tiger';
+  $('fee-us-pct').value = c.pct.US; $('fee-us-min').value = c.min.US;
+  $('fee-sgx-pct').value = c.pct.SGX; $('fee-sgx-min').value = c.min.SGX;
+  showFeeSummary();
   if (!$('settings-dialog').open) $('settings-dialog').showModal();
+}
+
+function showFeeSummary() {
+  const custom = $('fee-plan').value === 'custom';
+  $('fee-custom').hidden = !custom;
+  $('fee-summary').textContent = custom ? 'A percentage of each trade, with a minimum per trade, in each market.' : FEE_PLANS[$('fee-plan').value].summary;
+}
+
+// Saves the fee plan with the portfolio (so it syncs with your account too).
+function saveFeeSettings() {
+  const plan = $('fee-plan').value;
+  const num = (id) => Math.max(0, Number($(id).value) || 0);
+  state.portfolio = structuredClone(state.portfolio);
+  state.portfolio.feePlan = plan;
+  if (plan === 'custom') state.portfolio.customFees = { pct: { US: num('fee-us-pct'), SGX: num('fee-sgx-pct') }, min: { US: num('fee-us-min'), SGX: num('fee-sgx-min') } };
+  savePortfolio();
+  showFeeSummary();
 }
 
 function saveAiSettings() {
@@ -1233,7 +1284,8 @@ function reset() {
   }
   if (!confirm('Delete all holdings and trades and start over?')) return;
   const rules = state.portfolio.rules.map((r) => ({ ...r, state: freshState() }));
-  state.portfolio = { ...newPortfolio({ SGD: sgd, USD: usd }), rules };
+  const { feePlan, customFees } = state.portfolio;
+  state.portfolio = { ...newPortfolio({ SGD: sgd, USD: usd }), rules, feePlan: feePlan ?? 'tiger', ...(customFees ? { customFees } : {}) };
   savePortfolio();
   $('settings-dialog').close();
   render();
@@ -1281,7 +1333,7 @@ document.addEventListener('click', (e) => {
   } else if (d.editRule) openRuleEditor(d.editRule);
   else if (d.testRule) {
     const r = state.portfolio.rules.find((x) => x.id === d.testRule);
-    state.backtests[r.id] = backtest([r], quote(r.symbol));
+    state.backtests[r.id] = backtest([r], quote(r.symbol), btOptions());
     render();
   } else if (d.deleteRule) {
     if (confirm('Delete this rule?')) saveRules((rules) => rules.splice(rules.findIndex((x) => x.id === d.deleteRule), 1));
@@ -1334,6 +1386,7 @@ $('picks-refresh').addEventListener('click', refreshPicks);
 
 $('open-settings').addEventListener('click', openSettings);
 $('api-key').addEventListener('change', saveAiSettings);
+for (const id of ['fee-plan', 'fee-us-pct', 'fee-us-min', 'fee-sgx-pct', 'fee-sgx-min']) $(id).addEventListener('change', saveFeeSettings);
 $('ai-model').addEventListener('change', saveAiSettings);
 $('forget-key').addEventListener('click', () => { $('api-key').value = ''; saveAiSettings(); });
 $('settings-form').addEventListener('submit', () => { saveAiSettings(); render(); });

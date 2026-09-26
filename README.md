@@ -18,9 +18,32 @@ Practice trading Singapore (SGX) and US stocks with virtual cash at real market 
 - **Two virtual cash accounts:** SGD 100,000 for SGX stocks and USD 100,000 for US stocks. You can change both amounts when you reset. Profit and loss is counted per currency, so exchange-rate moves don't affect it. A combined SGD figure is shown for reference.
 - **Net profit/loss** = cash + value of holdings − starting cash. It's split into realized (closed trades) and unrealized (open positions).
 - **Short selling:** selling more than you hold opens a short. Like a margin account, each short sets aside 150% of its sale value from your buying power until you buy it back ("cover").
-- No fees and whole shares only. While a market is trading, orders fill at the latest fetched price. **Orders placed while it's closed wait** (listed under Holdings, where you can cancel them) and fill at the first price after it reopens, as with a real broker.
+- **Trading fees** are charged on every trade (see *Trading fees* below). Whole shares only. While a market is trading, orders fill at the latest fetched price. **Orders placed while it's closed wait** (listed under Holdings, where you can cancel them) and fill at the first price after it reopens, as with a real broker.
 - **Market hours:** SGX 9:00am–12:00pm and 1:00pm–5:00pm Singapore time; US 9:30am–4:00pm New York time (daylight saving is handled). A market only counts as open when the clock says so *and* today's prices are arriving, so public holidays and early closes show as closed with no holiday calendar to maintain.
 - **Your portfolio and rules** are saved to your account when accounts are on (see *Accounts* below); otherwise they live in your browser, and *Settings → Export* backs them up or moves them to another device.
+
+### Trading fees
+
+Every trade pays fees, so all profit and loss is **after fees**:
+- **Buying:** the fee is added to what the shares cost you, so it's in your average price.
+- **Selling:** the fee is taken from what you receive.
+- **Where you see them:** the trade window shows the fees before you confirm, each account card shows *Fees paid*, and History lists the fee for every trade.
+- **Also included in:** backtests, auto-trading rules, orders placed while a market is closed, and the AI fund.
+
+Choose the fees in *Settings → Trading fees*:
+
+| Plan | US stocks | SGX stocks |
+|---|---|---|
+| **Tiger Brokers (Singapore)** (default) | US$0.005/share commission (min US$0.99, max 0.5%) + US$0.005/share platform fee (min US$1, max 0.5%); SEC and FINRA fees on sales | 0.03% commission (min S$0.99) + 0.03% platform fee (min S$1) + SGX clearing 0.0325% and trading 0.0075% |
+| **Standard Chartered Online Trading** | 0.20%, US$10 minimum (check your rate) | 0.20%, S$10 minimum + SGX fees |
+| **My own rates** | a percentage with a minimum | a percentage with a minimum |
+| **No fees** | – | – |
+
+9% GST is added to the broker's and SGX's fees. Priority and accredited Standard Chartered customers pay less, so use *My own rates* if that's you. These are published retail rates as of September 2026 and can change.
+
+**Examples:** US$1,000 of a US stock costs about US$2.17 in fees with Tiger. S$38,000 of an SGX stock costs about S$41 with Tiger and S$99 with Standard Chartered.
+
+The **AI fund** uses the Tiger, Standard Chartered or no-fee plan you choose when starting it. When trading through Tiger, it records the fees Tiger actually charged, using the Tiger plan only as an estimate until Tiger reports them. The AI is told what a round trip costs, so it avoids trades too small to cover their fees.
 
 ### Auto-trading rules
 
@@ -151,6 +174,7 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `fund.js` | The AI fund: budget limit, order execution, protections, decision schedule. |
 | `ai.js` | Every Claude call: the Haiku news digest, then picks, strategies and fund decisions, each answered through a validated "submit" tool. |
 | `markets.js` | Exchange trading hours. |
+| `fees.js` | Broker fee plans (Tiger, Standard Chartered, custom) and the fee for each trade. |
 | `auth.js`, `login.js`, `config.js` | Sign-in, invites and saving portfolios to Supabase. |
 | `supabase/setup.sql` | Database tables, access rules and the invite-only sign-up check. |
 | `supabase/fund-control.sql` | Lets admins start, pause, approve and stop the AI fund from the app. |

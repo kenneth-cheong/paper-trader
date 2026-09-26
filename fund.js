@@ -9,6 +9,8 @@
 //   - each order is capped at a share of the budget (settings.maxOrderPct);
 //   - if the fund loses settings.dailyLossPct in a day, it pauses itself;
 //   - shorts need 150% collateral and are covered automatically at a 40% loss;
+//   - every trade pays fees (settings.feePlan; with Tiger, what Tiger actually charged), so the
+//     budget and profit are after fees;
 //   - a paused fund makes no new trades (stop-losses and take-profits still close positions), and its
 //     open Tiger orders are cancelled.
 // With Tiger and approval 'manual', the AI's trades wait as proposals until an admin approves them;
@@ -22,7 +24,7 @@ export const SHORT_MAX_LOSS = 0.4;
 export const LIMIT_BAND = 0.01; // Tiger limit orders: at most 1% worse than the latest price
 export const PROPOSAL_MINUTES = 60;
 export const PROPOSAL_MAX_DRIFT = 0.02;
-export const DEFAULT_SETTINGS = { broker: 'simulator', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5 };
+export const DEFAULT_SETTINGS = { broker: 'simulator', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5, feePlan: 'tiger' };
 
 const OPEN_BROKER = ['queued', 'sent', 'partial'];
 const newId = (p) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
@@ -72,6 +74,10 @@ export function applySettings(fund, s = {}, { atStart = false } = {}) {
     if (!['manual', 'auto'].includes(s.approval)) throw new Error(`Unknown approval mode ${s.approval}.`);
     next.approval = s.approval;
   }
+  if (s.feePlan !== undefined) {
+    if (!['tiger', 'scb', 'none'].includes(s.feePlan)) throw new Error(`Unknown fee plan ${s.feePlan}.`);
+    next.feePlan = s.feePlan;
+  }
   if (s.maxOrderPct !== undefined) {
     const v = Number(s.maxOrderPct);
     if (!(v >= 1 && v <= 100)) throw new Error('The per-order limit must be between 1% and 100% of the budget.');
@@ -82,7 +88,10 @@ export function applySettings(fund, s = {}, { atStart = false } = {}) {
     if (!(v >= 0.5 && v <= 50)) throw new Error('The daily loss limit must be between 0.5% and 50%.');
     next.dailyLossPct = v;
   }
+  // With Tiger, fees are what Tiger actually charges; the Tiger plan is only used to estimate them.
+  if (next.broker === 'tiger') next.feePlan = 'tiger';
   fund.settings = next;
+  if (fund.portfolio) fund.portfolio.feePlan = next.feePlan;
   return next;
 }
 
@@ -131,7 +140,7 @@ function committedLedger(fund) {
     const left = o.qty - (o.appliedQty ?? 0);
     if (!OPEN_BROKER.includes(o.status) || left <= 0) continue;
     try {
-      p = applyTrade(p, { symbol: o.symbol, side: o.side, qty: left, price: o.limitPrice, currency: fund.currency, time: o.createdAt });
+      p = applyTrade(p, { symbol: o.symbol, side: o.side, qty: left, price: o.limitPrice, currency: fund.currency, market: o.market, time: o.createdAt });
     } catch { /* already over-committed; new orders will be refused below */ }
   }
   return p;
@@ -186,13 +195,13 @@ export function applyOrders(fund, orders, quotes, now = new Date(), { send = fal
         throw new Error(`Over the per-order limit of ${s.maxOrderPct}% of the budget (${cap.toFixed(2)} ${fund.currency}).`);
       }
       if (!broker) {
-        fund.portfolio = applyTrade(fund.portfolio, { symbol: o.symbol, side, qty, price: q.price, currency: fund.currency, time });
+        fund.portfolio = applyTrade(fund.portfolio, { symbol: o.symbol, side, qty, price: q.price, currency: fund.currency, market: q.market, time });
         ledger = fund.portfolio;
-        Object.assign(res, { status: 'filled', shares: qty, price: q.price });
+        Object.assign(res, { status: 'filled', shares: qty, price: q.price, fee: fund.portfolio.trades.at(-1).fee });
       } else {
         const limit = limitPrice(side, q.price, q.market);
-        ledger = applyTrade(ledger, { symbol: o.symbol, side, qty, price: side === 'buy' ? limit : q.price, currency: fund.currency, time });
-        Object.assign(res, { side, shares: qty, refPrice: q.price, limitPrice: limit });
+        ledger = applyTrade(ledger, { symbol: o.symbol, side, qty, price: side === 'buy' ? limit : q.price, currency: fund.currency, market: q.market, time });
+        Object.assign(res, { side, shares: qty, refPrice: q.price, limitPrice: limit, market: q.market });
         res.status = s.approval === 'manual' && !send ? 'awaiting approval' : 'sent to Tiger';
       }
     } catch (err) {
@@ -206,7 +215,7 @@ export function applyOrders(fund, orders, quotes, now = new Date(), { send = fal
 function queueBrokerOrder(fund, r, source, now) {
   const order = {
     id: newId('b'), source, createdAt: now.toISOString(),
-    symbol: r.symbol, tigerSymbol: tigerSymbol(r.symbol), currency: fund.currency,
+    symbol: r.symbol, tigerSymbol: tigerSymbol(r.symbol), currency: fund.currency, market: r.market ?? marketForCurrency(fund.currency),
     action: r.action, side: r.side, qty: r.shares, limitPrice: r.limitPrice, refPrice: r.refPrice, reason: r.reason ?? '',
     status: 'queued', filledQty: 0, appliedQty: 0, avgFillPrice: null, tigerOrderId: null, error: null,
   };
@@ -268,19 +277,23 @@ export function rejectProposals(fund, ids, now = new Date()) {
   }
 }
 
-// Records Tiger fills in the fund's ledger at Tiger's actual prices. Returns the new fills.
-// If a fill can't be recorded (the ledger and Tiger disagree), the fund pauses itself.
+// Records Tiger fills in the fund's ledger at Tiger's actual prices and fees, once an order is finished
+// (filled, or cancelled after filling part), when Tiger's final charges are known. Until then the
+// order's money stays reserved (see committedLedger). Without a fee from Tiger, the Tiger plan's
+// estimate is used. If a fill can't be recorded (the ledger and Tiger disagree), the fund pauses.
 export function applyBrokerFills(fund, now = new Date()) {
   const fills = [];
   for (const o of fund.brokerOrders ?? []) {
     const fresh = (o.filledQty ?? 0) - (o.appliedQty ?? 0);
-    if (fresh <= 0 || !(o.avgFillPrice > 0)) continue;
+    if (fresh <= 0 || !(o.avgFillPrice > 0) || !['filled', 'cancelled'].includes(o.status)) continue;
     try {
       fund.portfolio = applyTrade(fund.portfolio, {
-        symbol: o.symbol, side: o.side, qty: fresh, price: o.avgFillPrice, currency: fund.currency, time: o.filledAt ?? now.toISOString(),
+        symbol: o.symbol, side: o.side, qty: fresh, price: o.avgFillPrice, currency: fund.currency,
+        market: o.market ?? marketForCurrency(fund.currency), fee: o.fee ?? undefined, time: o.filledAt ?? now.toISOString(),
       });
       o.appliedQty = o.filledQty;
-      const e = { time: now.toISOString(), symbol: o.symbol, action: o.action, shares: fresh, price: o.avgFillPrice, why: `Tiger fill (${o.source})` };
+      const fee = fund.portfolio.trades.at(-1).fee;
+      const e = { time: now.toISOString(), symbol: o.symbol, action: o.action, shares: fresh, price: o.avgFillPrice, fee, why: `Tiger fill (${o.source}); fees ${fee.toFixed(2)}${o.fee == null ? ' (estimated)' : ''}` };
       fund.events.push(e);
       fills.push(e);
     } catch (err) {
@@ -362,9 +375,9 @@ export function checkProtections(fund, quotes, now = new Date()) {
     const action = pos.qty > 0 ? 'sell' : 'cover';
     if (broker) {
       const limit = limitPrice(side, price, quotes[symbol]?.market);
-      queueBrokerOrder(fund, { symbol, action, side, shares: Math.abs(pos.qty), refPrice: price, limitPrice: limit, reason: why }, 'protection', now);
+      queueBrokerOrder(fund, { symbol, action, side, shares: Math.abs(pos.qty), refPrice: price, limitPrice: limit, market: quotes[symbol]?.market, reason: why }, 'protection', now);
     } else {
-      fund.portfolio = applyTrade(fund.portfolio, { symbol, side, qty: Math.abs(pos.qty), price, currency: fund.currency, time });
+      fund.portfolio = applyTrade(fund.portfolio, { symbol, side, qty: Math.abs(pos.qty), price, currency: fund.currency, market: quotes[symbol]?.market, time });
     }
     delete fund.protections[symbol];
     const e = { time, symbol, action, shares: Math.abs(pos.qty), price, why: broker ? `${why}; closing order sent to Tiger` : why };
@@ -399,7 +412,7 @@ export function stopFund(fund, quotes, now = new Date()) {
     if (broker) {
       if (!q) { results.push({ symbol, action, shares: Math.abs(pos.qty), status: 'rejected', message: 'No price to close at.' }); continue; }
       const side = pos.qty > 0 ? 'sell' : 'buy';
-      const o = queueBrokerOrder(fund, { symbol, action, side, shares: Math.abs(pos.qty), refPrice: q.price, limitPrice: limitPrice(side, q.price, q.market), reason: 'Fund stopped' }, 'stop', now);
+      const o = queueBrokerOrder(fund, { symbol, action, side, shares: Math.abs(pos.qty), refPrice: q.price, limitPrice: limitPrice(side, q.price, q.market), market: q.market, reason: 'Fund stopped' }, 'stop', now);
       results.push({ symbol, action, shares: o.qty, status: 'sent to Tiger', limitPrice: o.limitPrice, reason: 'Fund stopped' });
     } else {
       results.push(...applyOrders(fund, [{ symbol, action, shares: Math.abs(pos.qty), reason: 'Fund stopped' }], quotes, now));

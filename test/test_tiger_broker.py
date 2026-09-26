@@ -39,8 +39,9 @@ def order(**kw):
     return base
 
 
-def tiger_order(status, filled=0, price=None, reason=None):
-    return SimpleNamespace(status=SimpleNamespace(value=status), filled=filled, avg_fill_price=price, reason=reason)
+def tiger_order(status, filled=0, price=None, reason=None, commission=None, gst=None, charges=None):
+    return SimpleNamespace(status=SimpleNamespace(value=status), filled=filled, avg_fill_price=price, reason=reason,
+                           commission=commission, gst=gst, charges=charges)
 
 
 class SendTests(unittest.TestCase):
@@ -81,6 +82,13 @@ class SendTests(unittest.TestCase):
         self.assertEqual(fund['brokerOrders'][0]['status'], 'cancelled')
 
 
+class FeeTests(unittest.TestCase):
+    def test_itemised_charges_win_over_commission(self):
+        order = tiger_order('Filled', commission=1.99, gst=0.18, charges=[SimpleNamespace(total=1.99), SimpleNamespace(total=0.21)])
+        self.assertEqual(tb.fee_of(order), 2.2)
+        self.assertIsNone(tb.fee_of(tiger_order('Filled')))
+
+
 class SyncTests(unittest.TestCase):
     def test_brings_back_fills_rejections_and_positions(self):
         fund = {'brokerOrders': [
@@ -90,7 +98,7 @@ class SyncTests(unittest.TestCase):
             order(id='b4', status='filled', tigerOrderId=4, filledQty=10),
         ]}
         b = FakeBroker(orders={
-            1: tiger_order('Filled', 10, 100.4),
+            1: tiger_order('Filled', 10, 100.4, commission=1.99, gst=0.18),
             2: tiger_order('Inactive', reason='Not enough buying power'),
             3: tiger_order('PartiallyFilled', 6, 100.1),
         })
@@ -98,6 +106,8 @@ class SyncTests(unittest.TestCase):
         o1, o2, o3, o4 = fund['brokerOrders']
         self.assertEqual((o1['status'], o1['filledQty'], o1['avgFillPrice']), ('filled', 10, 100.4))
         self.assertIn('filledAt', o1)
+        self.assertEqual(o1['fee'], 2.17)  # commission + GST as Tiger reported them
+        self.assertNotIn('fee', o3)  # not reported yet
         self.assertEqual((o2['status'], o2['error']), ('rejected', 'Not enough buying power'))
         self.assertEqual((o3['status'], o3['filledQty']), ('partial', 6))
         self.assertEqual(o4['status'], 'filled')  # finished orders aren't asked about again

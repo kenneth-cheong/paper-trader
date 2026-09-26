@@ -33,6 +33,19 @@ def now_iso():
     return datetime.now(timezone.utc).isoformat(timespec='seconds').replace('+00:00', 'Z')
 
 
+def fee_of(order):
+    """What Tiger charged for an order (its itemised charges, or commission + GST), or None if not reported yet."""
+    charges = getattr(order, 'charges', None)
+    if charges:
+        total = sum(float(getattr(c, 'total', 0) or 0) for c in charges)
+        if total > 0:
+            return round(total, 2)
+    commission = getattr(order, 'commission', None)
+    if commission:
+        return round(float(commission) + float(getattr(order, 'gst', 0) or 0), 2)
+    return None
+
+
 def status_of(order):
     raw = getattr(order.status, 'value', order.status)
     return STATUS.get(str(raw), 'sent')
@@ -53,7 +66,7 @@ class Broker:
         return self.client.place_order(order) or order.id
 
     def get_order(self, order_id):
-        return self.client.get_order(account=self.account, id=order_id)
+        return self.client.get_order(account=self.account, id=order_id, show_charges=True)
 
     def cancel(self, order_id):
         return self.client.cancel_order(account=self.account, id=order_id)
@@ -104,6 +117,9 @@ def sync(fund, broker, error=None):
             if getattr(t, 'avg_fill_price', None):
                 o['avgFillPrice'] = float(t.avg_fill_price)
             o['status'] = status_of(t)
+            fee = fee_of(t)
+            if fee is not None:
+                o['fee'] = fee
             if o['status'] == 'rejected':
                 o['error'] = getattr(t, 'reason', None) or 'Rejected by Tiger.'
         except Exception as err:  # noqa: BLE001

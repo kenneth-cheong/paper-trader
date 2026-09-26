@@ -202,6 +202,22 @@
       <p class="muted small">News is always gathered by Claude Haiku 4.5, the cheapest model; the model above only reads its short summary to decide, which keeps even Opus affordable.</p>
       <div class="row"><button type="button" id="forget-key" class="ghost">Forget key</button></div>
 
+      <h4>Trading fees</h4>
+      <p class="small">Every trade pays these, so your profit and loss are after fees. Changes apply to future trades.</p>
+      <label>Fees like <select id="fee-plan">
+        <option value="tiger">Tiger Brokers (Singapore)</option>
+        <option value="scb">Standard Chartered Online Trading</option>
+        <option value="custom">My own rates</option>
+        <option value="none">No fees</option>
+      </select></label>
+      <p class="muted small" id="fee-summary"></p>
+      <div class="two" id="fee-custom" hidden>
+        <label>US fee, % <input id="fee-us-pct" type="number" min="0" step="0.01" inputmode="decimal"></label>
+        <label>US minimum, USD <input id="fee-us-min" type="number" min="0" step="0.01" inputmode="decimal"></label>
+        <label>SGX fee, % <input id="fee-sgx-pct" type="number" min="0" step="0.01" inputmode="decimal"></label>
+        <label>SGX minimum, SGD <input id="fee-sgx-min" type="number" min="0" step="0.01" inputmode="decimal"></label>
+      </div>
+
       <h4>Start over</h4>
       <p class="muted small" id="settings-started"></p>
       <p class="small">Wipes all holdings and trades and starts again with this much virtual cash. Your rules are kept but restart from now.</p>

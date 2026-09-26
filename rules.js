@@ -175,7 +175,7 @@ export function runRules(portfolio, quotes, { afterPoint } = {}) {
       try {
         const qty = orderQty(rule, pt.price, p, currency);
         if (qty == null) continue; // nothing to sell yet; stay armed
-        const next = applyTrade(p, { symbol: rule.symbol, side: rule.action.side, qty, price: pt.price, currency, time });
+        const next = applyTrade(p, { symbol: rule.symbol, side: rule.action.side, qty, price: pt.price, currency, market: quote.market, time });
         next.trades.at(-1).rule = rule.id;
         next.rules = rules;
         p = next;
@@ -200,7 +200,7 @@ export function runRules(portfolio, quotes, { afterPoint } = {}) {
 // Replays rules for one stock over its daily closes (about a year) with a fresh account.
 // If none of the rules buy, the test starts fully invested, since sell rules need shares to act on.
 // Compares the result with simply buying on day one and holding.
-export function backtest(rules, quote, { startCash = 10000 } = {}) {
+export function backtest(rules, quote, { startCash = 10000, feePlan, customFees } = {}) {
   const daily = quote?.daily ?? [];
   if (daily.length < 20) return { error: 'Not enough price history to test.' };
   const ccy = quote.currency;
@@ -208,9 +208,14 @@ export function backtest(rules, quote, { startCash = 10000 } = {}) {
   const [t0, p0] = daily[0];
 
   let p = newPortfolio({ [ccy]: startCash });
+  if (feePlan) Object.assign(p, { feePlan, customFees });
   const startInvested = !rules.some((r) => r.action.side === 'buy');
   if (startInvested) {
-    p = applyTrade(p, { symbol, side: 'buy', qty: Math.floor(startCash / p0), price: p0, currency: ccy, time: new Date(t0 * 1000).toISOString() });
+    // Leave room for the buying fee
+    let qty = Math.floor(startCash / p0);
+    while (qty > 0) {
+      try { p = applyTrade(p, { symbol, side: 'buy', qty, price: p0, currency: ccy, market: quote.market, time: new Date(t0 * 1000).toISOString() }); break; } catch { qty--; }
+    }
   }
   p.rules = rules.map((r) => ({ ...structuredClone(r), enabled: true, state: { ...freshState(), cursor: t0 } }));
 
@@ -234,6 +239,7 @@ export function backtest(rules, quote, { startCash = 10000 } = {}) {
     returnPct: final / startCash - 1,
     buyHoldPct: last / p0 - 1,
     trades: log.filter((l) => l.trade).length,
+    fees: portfolio.accounts[ccy].fees ?? 0,
     skipped: log.filter((l) => l.error).length,
     maxDrawdown,
     curve,
@@ -257,7 +263,7 @@ export function fillPendingOrders(portfolio, quotes) {
     const [t, price] = point;
     const time = new Date(t * 1000).toISOString();
     try {
-      p = applyTrade(p, { symbol: order.symbol, side: order.side, qty: order.qty, price, currency: order.currency, time });
+      p = applyTrade(p, { symbol: order.symbol, side: order.side, qty: order.qty, price, currency: order.currency, market: quotes[order.symbol]?.market, time });
       p.trades.at(-1).order = order.id;
       log.push({ order, trade: p.trades.at(-1) });
     } catch (err) {

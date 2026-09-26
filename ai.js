@@ -10,6 +10,7 @@
 
 import { CONDITIONS, UNITS, REPEATS, newRule, checkRule, describeRule } from './rules.js';
 import { summarize, buyingPower, SHORT_MARGIN } from './portfolio.js';
+import { describeFees, planFor } from './fees.js';
 
 const SDK_URL = 'https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.128.0/+esm';
 
@@ -238,6 +239,10 @@ export function buildContext({ prices, portfolio, focus = 'all', risk = 'balance
     sample_data: !!prices.sample,
     risk_profile: RISK[risk],
     question: question.trim() || null,
+    trading_fees: {
+      US: describeFees(portfolio, 'US', 2500),
+      SGX: describeFees(portfolio, 'SGX', 5000),
+    },
     accounts: Object.values(accounts).map((a) => ({
       currency: a.currency, starting_cash: a.start, cash: round2(a.cash), buying_power: round2(a.buyingPower),
       holdings_value: round2(a.marketValue), net_pl: round2(a.net), net_pl_pct: pct(a.netPct),
@@ -277,7 +282,7 @@ repeat: ${Object.entries(REPEATS).map(([k, v]) => `${k} (${v})`).join('; ')}
 
 How rules behave: a rule fires on the first 15-minute price where its condition is true; with "repeat" it can fire again only after the condition has been false in between. drop_from_high and rise_from_low measure from the highest/lowest price since the rule started (for sell rules, since the stock was bought). loss_from_cost and gain_from_cost compare with the user's average purchase price. above_ma/below_ma compare the price with the average of the last N daily closes. "every" fires every N calendar days. Price thresholds are in the stock's own currency. Only use symbols from the data.
 
-Each strategy will be backtested on the same year of daily prices and shown next to your rationale, so make the rules concrete and self-consistent (for example, pair an entry rule with an exit rule). Size positions sensibly against the user's buying power. Mix styles where it makes sense, and include one that protects existing holdings if the user has any. This is an educational simulator; be direct about risk and never promise returns. Finish by calling submit_strategies.`;
+Each strategy will be backtested on the same year of daily prices, after the user's trading fees (in trading_fees), and shown next to your rationale, so make the rules concrete and self-consistent (for example, pair an entry rule with an exit rule). Fees make frequent small trades expensive: prefer fewer, larger moves, and avoid rules that fire often for small gains. Size positions sensibly against the user's buying power. Mix styles where it makes sense, and include one that protects existing holdings if the user has any. This is an educational simulator; be direct about risk and never promise returns. Finish by calling submit_strategies.`;
 
 const RULE_SCHEMA = {
   type: 'object',
@@ -443,6 +448,8 @@ Hard limits, enforced by the simulator (orders that break them are rejected):
 - You can only use the fund's own money. A buy must fit within buying power; there is never any extra money.
 - Short selling is allowed. Each short sets aside ${SHORT_MARGIN * 100}% of its sale value from buying power, and any short that is 40% under water is covered automatically.
 - Only the listed stocks can be traded, all in the fund's currency. Orders fill at the latest price shown, in whole shares, in this order: sells and covers first, then buys and shorts.
+- No single order may be worth more than max_order_value.
+- Every trade pays broker fees (see trading_fees), and they come out of the fund's money. Only trade when the expected gain clearly beats the round-trip cost; frequent small trades lose money to fees.
 
 ${NEWS} Use the price statistics, your positions and your earlier decisions (you are called again at the next decision time; stop-loss and take-profit levels you set are checked every 15 minutes in between). Doing nothing is a valid decision when nothing is compelling. Keep reasons short and specific. Finish by calling submit_decision.`;
 
@@ -490,6 +497,7 @@ export const FUND_TOOL = {
 
 export function fundContext({ fund, quotes, picks, news, now = new Date() }) {
   const ccy = fund.currency;
+  const market = ccy === 'SGD' ? 'SGX' : 'US';
   const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === ccy);
   const { accounts, positions } = summarize(fund.portfolio, quotes);
   const a = accounts[ccy];
@@ -498,8 +506,10 @@ export function fundContext({ fund, quotes, picks, news, now = new Date() }) {
     fund: {
       currency: ccy, budget: fund.budget, value: round2(a.equity), profit: round2(a.net), profit_pct: pct(a.netPct),
       cash: round2(a.cash), buying_power: round2(buyingPower(fund.portfolio, ccy)), started: fund.startedAt,
-      decisions_per_day: fund.decisionsPerDay,
+      decisions_per_day: fund.decisionsPerDay, fees_paid: round2(a.fees ?? 0),
+      max_order_value: round2(fund.budget * (fund.settings?.maxOrderPct ?? 25) / 100),
     },
+    trading_fees: describeFees(planFor(fund.settings?.feePlan ?? 'tiger'), market, Math.min(fund.budget, fund.budget * (fund.settings?.maxOrderPct ?? 25) / 100)),
     positions: positions.map((p) => ({
       symbol: p.symbol, shares: p.qty, side: p.short ? 'short' : 'long', avg_price: round2(p.avgCost), price: p.price,
       value: round2(p.marketValue), unrealized_pl_pct: pct(p.unrealizedPct), protection: fund.protections[p.symbol] ?? null,

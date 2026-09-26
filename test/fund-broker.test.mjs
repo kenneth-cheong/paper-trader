@@ -27,7 +27,7 @@ test('Tiger symbols and limit prices follow each exchange', () => {
 
 test('settings: approval and limits can change, the broker only at the start', () => {
   const f = tiger();
-  assert.deepEqual(f.settings, { broker: 'tiger', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5 });
+  assert.deepEqual(f.settings, { broker: 'tiger', approval: 'manual', maxOrderPct: 25, dailyLossPct: 5, feePlan: 'tiger' });
   applySettings(f, { approval: 'auto', maxOrderPct: 10, dailyLossPct: 3 });
   assert.equal(f.settings.approval, 'auto');
   assert.throws(() => applySettings(f, { broker: 'simulator' }), /only be chosen when starting/);
@@ -90,17 +90,27 @@ test('each order is capped at a share of the budget', () => {
   assert.match(res[0].message, /per-order limit of 25%/);
 });
 
-test('Tiger fills are recorded at Tiger\'s prices, including partial fills', () => {
+test('a Tiger order is recorded when it finishes, at Tiger\'s fill price and fees', () => {
   const f = tiger({ approval: 'auto' });
   executeDecision(f, [buy('A', 20)], { A: q(100) }, at('15:50'));
   const o = f.brokerOrders[0];
   Object.assign(o, { status: 'partial', filledQty: 5, avgFillPrice: 100.2 });
-  assert.equal(applyBrokerFills(f, at('16:00')).length, 1);
-  assert.equal(f.portfolio.positions.A.qty, 5);
-  Object.assign(o, { status: 'filled', filledQty: 20, avgFillPrice: 100.3 });
-  applyBrokerFills(f, at('16:15'));
+  assert.equal(applyBrokerFills(f, at('16:00')).length, 0); // still open: money stays reserved
+  Object.assign(o, { status: 'filled', filledQty: 20, avgFillPrice: 100.3, fee: 2.4 });
+  const [fill] = applyBrokerFills(f, at('16:15'));
+  assert.equal(fill.fee, 2.4); // what Tiger charged
   assert.equal(f.portfolio.positions.A.qty, 20);
+  assert.equal(f.portfolio.accounts.USD.cash, 10000 - 20 * 100.3 - 2.4);
   assert.equal(applyBrokerFills(f, at('16:30')).length, 0); // nothing new
+});
+
+test('without Tiger\'s fee, the Tiger plan estimates it; a cancelled part-fill is recorded too', () => {
+  const f = tiger({ approval: 'auto' });
+  executeDecision(f, [buy('A', 20)], { A: q(100) }, at('15:50'));
+  Object.assign(f.brokerOrders[0], { status: 'cancelled', filledQty: 10, avgFillPrice: 100 });
+  const [fill] = applyBrokerFills(f, at('16:00'));
+  assert.equal(fill.fee, 2.17); // Tiger US estimate for 10 x 100
+  assert.match(fill.why, /estimated/);
 });
 
 test('pausing blocks new trades, cancels open orders, and resuming lifts it', () => {

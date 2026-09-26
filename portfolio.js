@@ -2,9 +2,16 @@
 // Each currency has its own cash account, so SGX trades settle in SGD and US trades in USD
 // and exchange-rate moves never leak into the profit or loss.
 //
+// Fees: pass `market` ('US' or 'SGX') and the fee comes from the portfolio's fee plan (fees.js), or
+// pass `fee` directly (for example the commission a real broker charged). A buy's fee is added to
+// what the shares cost; a sale's fee comes out of what you receive. So average prices, realized
+// profit and cash are all after fees, and `fees` on each account adds up what was paid.
+//
 // Positions have a signed quantity: positive is long, negative is short. Selling more than you hold
 // opens a short; buying while short covers it. Like a margin account, every open short sets aside
 // 150% of its sale value (at the price it was shorted), and that collateral can't be spent on buys.
+
+import { feeFor, DEFAULT_FEE_PLAN } from './fees.js';
 
 export const DEFAULT_START = { SGD: 100000, USD: 100000 };
 export const SHORT_MARGIN = 1.5;
@@ -12,9 +19,9 @@ export const SHORT_MARGIN = 1.5;
 export function newPortfolio(start = DEFAULT_START) {
   const accounts = {};
   for (const [ccy, amount] of Object.entries(start)) {
-    accounts[ccy] = { start: amount, cash: amount, realized: 0 };
+    accounts[ccy] = { start: amount, cash: amount, realized: 0, fees: 0 };
   }
-  return { version: 1, createdAt: new Date().toISOString(), accounts, positions: {}, trades: [], rules: [], pendingOrders: [] };
+  return { version: 1, createdAt: new Date().toISOString(), accounts, positions: {}, trades: [], rules: [], pendingOrders: [], feePlan: DEFAULT_FEE_PLAN };
 }
 
 // Keeps money at 1/10000 of a unit so repeated trades don't drift from floating-point error.
@@ -30,7 +37,7 @@ export function buyingPower(portfolio, currency) {
 }
 
 // Returns a new portfolio with the trade applied, or throws an Error whose message is shown to the user.
-export function applyTrade(portfolio, { symbol, side, qty, price, currency, time = new Date().toISOString() }) {
+export function applyTrade(portfolio, { symbol, side, qty, price, currency, market, fee, time = new Date().toISOString() }) {
   const p = structuredClone(portfolio);
   qty = Number(qty);
   if (!Number.isInteger(qty) || qty <= 0) throw new Error('Quantity must be a whole number of shares.');
@@ -38,6 +45,8 @@ export function applyTrade(portfolio, { symbol, side, qty, price, currency, time
   if (side !== 'buy' && side !== 'sell') throw new Error(`Unknown side "${side}".`);
   const acct = p.accounts[currency];
   if (!acct) throw new Error(`There is no ${currency} account.`);
+  fee = money(fee ?? feeFor(p, market, side, qty, price));
+  if (!(fee >= 0)) throw new Error('A fee cannot be negative.');
 
   const pos = p.positions[symbol] ?? { qty: 0, avgCost: 0, currency };
   const before = buyingPower(p, currency);
@@ -45,29 +54,33 @@ export function applyTrade(portfolio, { symbol, side, qty, price, currency, time
   const delta = side === 'buy' ? qty : -qty;
   const closing = q0 !== 0 && Math.sign(delta) !== Math.sign(q0) ? Math.min(qty, Math.abs(q0)) : 0;
   const opening = qty - closing;
-  const realized = money(closing * (price - pos.avgCost) * Math.sign(q0));
+  const feeShare = fee / qty;
+  // The price per share after fees: higher for a buy, lower for a sale.
+  const net = price + Math.sign(delta) * feeShare;
+  const realized = money(closing * (net - pos.avgCost) * Math.sign(q0));
   const q1 = q0 + delta;
 
   if (q1 === 0) pos.avgCost = 0;
-  else if (opening > 0 && closing > 0) pos.avgCost = price; // flipped from long to short or back
-  else if (opening > 0) pos.avgCost = (Math.abs(q0) * pos.avgCost + opening * price) / Math.abs(q1);
+  else if (opening > 0 && closing > 0) pos.avgCost = net; // flipped from long to short or back
+  else if (opening > 0) pos.avgCost = (Math.abs(q0) * pos.avgCost + opening * net) / Math.abs(q1);
   pos.qty = q1;
 
   const value = money(qty * price);
-  acct.cash = money(acct.cash - delta * price);
+  acct.cash = money(acct.cash - delta * price - fee);
   acct.realized = money(acct.realized + realized);
+  acct.fees = money((acct.fees ?? 0) + fee);
   if (q1 === 0) delete p.positions[symbol];
   else p.positions[symbol] = pos;
 
   // Opening or adding to a position must leave buying power at zero or above. Closing is always allowed.
   if (opening > 0 && buyingPower(p, currency) < 0) {
     if (side === 'buy') {
-      throw new Error(`Not enough ${currency} cash: this costs ${value.toFixed(2)} and you have ${Math.max(0, before).toFixed(2)} available.`);
+      throw new Error(`Not enough ${currency} cash: this costs ${money(value + fee).toFixed(2)} including ${fee.toFixed(2)} in fees, and you have ${Math.max(0, before).toFixed(2)} available.`);
     }
     throw new Error(`Not enough ${currency} buying power to short: a short sets aside ${SHORT_MARGIN * 100}% of its value (${money(opening * price * SHORT_MARGIN).toFixed(2)}) and you have ${Math.max(0, before).toFixed(2)} available.`);
   }
 
-  p.trades.push({ time, symbol, side, qty, price, currency, value, realized });
+  p.trades.push({ time, symbol, side, qty, price, currency, value, fee, realized });
   return p;
 }
 
@@ -98,7 +111,7 @@ export function summarize(portfolio, quotes = {}) {
   const accounts = {};
   for (const [ccy, a] of Object.entries(portfolio.accounts)) {
     accounts[ccy] = {
-      currency: ccy, start: a.start, cash: a.cash, realized: a.realized,
+      currency: ccy, start: a.start, cash: a.cash, realized: a.realized, fees: a.fees ?? 0,
       marketValue: 0, unrealized: 0, buyingPower: buyingPower(portfolio, ccy), hasShorts: false,
     };
   }
