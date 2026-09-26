@@ -204,8 +204,8 @@
       <p class="muted small" id="settings-started"></p>
       <p class="small">Wipes all holdings and trades and starts again with this much virtual cash. Your rules are kept but restart from now.</p>
       <div class="two">
-        <label>SGD cash <input id="start-sgd" type="number" min="0" step="1000" required></label>
-        <label>USD cash <input id="start-usd" type="number" min="0" step="1000" required></label>
+        <label>SGD cash <input id="start-sgd" type="number" min="0" step="0.01" inputmode="decimal" required></label>
+        <label>USD cash <input id="start-usd" type="number" min="0" step="0.01" inputmode="decimal" required></label>
       </div>
       <button type="button" id="reset" class="danger">Reset portfolio</button>
       <h4>Back up or move</h4>
@@ -215,7 +215,7 @@
       </div>
       <p class="error" id="settings-error" role="alert"></p>
       <div class="dialog-actions">
-        <button type="submit" class="primary">Done</button>
+        <button type="submit" class="primary" formnovalidate>Done</button>
       </div>
     </form>
   </dialog>

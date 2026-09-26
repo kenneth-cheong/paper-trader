@@ -930,9 +930,10 @@ function saveAiSettings() {
 }
 
 function reset() {
-  const sgd = Number($('start-sgd').value), usd = Number($('start-usd').value);
-  if (!(sgd >= 0 && usd >= 0)) {
-    $('settings-error').textContent = 'Starting cash must be zero or more.';
+  const raw = [$('start-sgd').value.trim(), $('start-usd').value.trim()];
+  const [sgd, usd] = raw.map((v) => Math.round(Number(v) * 100) / 100);
+  if (raw.includes('') || !(sgd >= 0 && usd >= 0)) {
+    $('settings-error').textContent = 'Enter a starting amount of zero or more for both SGD and USD.';
     return;
   }
   if (!confirm('Delete all holdings and trades and start over?')) return;
