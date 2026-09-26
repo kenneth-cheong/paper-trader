@@ -121,14 +121,15 @@ The AI fund can trade through your Tiger Brokers account instead of the simulato
 - **Mismatch check:** if the fund's positions and your Tiger account disagree, the page warns you.
 
 **Setup:**
-1. **Get Open API access from Tiger.** In the Tiger app or on the website, find *Open API* (developer registration), agree to the terms, and generate your key pair. Note your **Tiger ID**, your **paper account number** (a long number) and the **private key**.
+1. **Get Open API access from Tiger.** On a computer, log in at [developer.tigerbrokers.com.sg](https://developer.tigerbrokers.com.sg/) (it isn't in the phone app) and register as a developer. The *Developer Information* page then shows your **Tiger ID**, **License** and **Demo Account** (the 17-digit paper account). Under *Your RSA KEY*, click **Regenerate** and copy the **PKCS#1 private key** (for Python) straight away: Tiger shows it only once.
 2. **Add GitHub repository secrets** (Settings → Secrets and variables → Actions → Secrets):
    - `TIGEROPEN_TIGER_ID`: your Tiger ID;
    - `TIGEROPEN_ACCOUNT`: your **paper** account number to start with;
    - `TIGEROPEN_PRIVATE_KEY`: the private key text;
    - `TIGEROPEN_LICENSE`: `TBSG` for Tiger Brokers Singapore.
-3. **Re-run `supabase/fund-control.sql`** in Supabase's SQL Editor, so the app can send approvals, pause and settings.
-4. **Start the fund:** in the app, go to *AI fund → Start AI fund → Trades go to: Tiger Brokers account*, keeping *I approve each trade*. Tiger's paper account may not cover SGX, so start with a USD fund.
+3. **Check the connection:** Actions → *Check Tiger connection* → **Run workflow**. It only reads (no orders) and should print `Connected to Tiger: paper account ending ...` with the demo balance. Balances are printed for paper accounts only, since Actions logs of a public repo are public.
+4. **Re-run `supabase/fund-control.sql`** in Supabase's SQL Editor, so the app can send approvals, pause and settings.
+5. **Start the fund:** in the app, go to *AI fund → Start AI fund → Trades go to: Tiger Brokers account*, keeping *I approve each trade*. Tiger's paper account may not cover SGX, so start with a USD fund.
 
 **Going live with real money** takes two deliberate changes. Change `TIGEROPEN_ACCOUNT` to your live account number, **and** add the repository variable `TIGER_LIVE_TRADING` = `yes` (Variables tab). Without the variable, orders for a live account are refused. The page shows *Tiger LIVE account (real money)* in red when it's live.
 

@@ -1,9 +1,11 @@
 """Sends the AI fund's orders to Tiger Brokers and brings back what happened to them.
 
 Usage: python scripts/tiger_broker.py sync|send <ai-fund.json>
+       python scripts/tiger_broker.py check
   sync  cancels orders the fund asked to cancel, refreshes the status and fills of open orders,
         and records the account's positions (runs before the fund's JavaScript step).
   send  places queued orders as DAY limit orders (runs after it).
+  check only reads: connects, and prints the account type, cash and number of positions. No orders.
 
 Credentials come from environment variables read by Tiger's SDK (tigeropen): TIGEROPEN_TIGER_ID,
 TIGEROPEN_PRIVATE_KEY, TIGEROPEN_ACCOUNT and TIGEROPEN_LICENSE (TBSG for Tiger Brokers Singapore).
@@ -90,6 +92,9 @@ def connect():
     if not (os.environ.get('TIGEROPEN_TIGER_ID') and os.environ.get('TIGEROPEN_ACCOUNT') and os.environ.get('TIGEROPEN_PRIVATE_KEY')):
         return None, NOT_CONNECTED
     os.environ['TIGEROPEN_PRIVATE_KEY'] = clean_key(os.environ['TIGEROPEN_PRIVATE_KEY'])
+    for name in ('TIGEROPEN_TIGER_ID', 'TIGEROPEN_ACCOUNT', 'TIGEROPEN_LICENSE'):  # stray spaces from pasting
+        if name in os.environ:
+            os.environ[name] = os.environ[name].strip()
     try:
         from tigeropen.tiger_open_config import TigerOpenClientConfig
         from tigeropen.trade.trade_client import TradeClient
@@ -160,7 +165,31 @@ def send(fund, broker, error=None, allow_live=False):
             o.update(status='failed', error=f'Tiger refused the order: {err}')
 
 
+def check():
+    """Read-only connection test. Prints nothing secret: the account number is masked."""
+    broker, error = connect()
+    if broker is None:
+        raise SystemExit(error)
+    account = str(broker.account)
+    print(f'Connected to Tiger: {account_type(broker)} account ending {account[-4:]}, license {os.environ.get("TIGEROPEN_LICENSE")}')
+    if not broker.is_paper:  # Actions logs of a public repo are public: no real balances or holdings
+        if os.environ.get('TIGER_LIVE_TRADING', '').lower() != 'yes':
+            print('  Live account: orders stay blocked until the TIGER_LIVE_TRADING variable is yes.')
+        return
+    try:
+        assets = broker.client.get_prime_assets(account=broker.account)
+        for name, seg in (getattr(assets, 'segments', None) or {}).items():
+            print(f'  segment {name}: cash {seg.cash_balance:,.2f} {seg.currency}, net value {seg.net_liquidation:,.2f}, buying power {seg.buying_power:,.2f}')
+    except Exception as err:  # noqa: BLE001 - only informative
+        print(f'  (could not read balances: {err})')
+    positions = broker.positions()
+    print(f'  {len(positions)} open positions')
+
+
 def main():
+    if sys.argv[1] == 'check':
+        check()
+        return
     mode, path = sys.argv[1], sys.argv[2]
     try:
         with open(path, encoding='utf-8') as f:

@@ -1,0 +1,26 @@
+name: Check Tiger connection
+
+# Run by hand (Actions → Check Tiger connection → Run workflow). Read-only: it connects to Tiger with
+# the TIGEROPEN_* secrets and prints the account type, cash and number of positions. It places no orders.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      TIGEROPEN_TIGER_ID: ${{ secrets.TIGEROPEN_TIGER_ID }}
+      TIGEROPEN_ACCOUNT: ${{ secrets.TIGEROPEN_ACCOUNT }}
+      TIGEROPEN_PRIVATE_KEY: ${{ secrets.TIGEROPEN_PRIVATE_KEY }}
+      TIGEROPEN_LICENSE: ${{ secrets.TIGEROPEN_LICENSE }}
+      TIGER_LIVE_TRADING: ${{ vars.TIGER_LIVE_TRADING }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet tigeropen
+      - run: python scripts/tiger_broker.py check
