@@ -13,6 +13,7 @@ account is refused unless TIGER_LIVE_TRADING=yes is also set.
 
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 
@@ -78,10 +79,17 @@ class Broker:
         } for p in (self.client.get_positions(account=self.account) or [])]
 
 
+def clean_key(key):
+    """The private key as Tiger's SDK wants it: the bare base64 text, whatever way it was pasted
+    (with or without the -----BEGIN/END ... PRIVATE KEY----- lines, line breaks or spaces)."""
+    return ''.join(re.sub(r'-----(BEGIN|END)[A-Z ]*-----', '', key).split())
+
+
 def connect():
     """Returns (Broker, None) or (None, reason)."""
     if not (os.environ.get('TIGEROPEN_TIGER_ID') and os.environ.get('TIGEROPEN_ACCOUNT') and os.environ.get('TIGEROPEN_PRIVATE_KEY')):
         return None, NOT_CONNECTED
+    os.environ['TIGEROPEN_PRIVATE_KEY'] = clean_key(os.environ['TIGEROPEN_PRIVATE_KEY'])
     try:
         from tigeropen.tiger_open_config import TigerOpenClientConfig
         from tigeropen.trade.trade_client import TradeClient

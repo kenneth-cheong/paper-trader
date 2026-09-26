@@ -89,6 +89,31 @@ class FeeTests(unittest.TestCase):
         self.assertIsNone(tb.fee_of(tiger_order('Filled')))
 
 
+try:
+    from tigeropen.common.util.signature_utils import load_private_key
+except ImportError:  # the SDK is only installed where Tiger is used
+    load_private_key = None
+
+
+class KeyTests(unittest.TestCase):
+    BARE = 'MIIBOgIBAAJBAKj34GkxFhD90vcNLYLInFEX6Ppy1tPf9Cnzj4p4WGeKLs1Pt8Qu'
+
+    def test_private_key_is_cleaned_however_it_was_pasted(self):
+        pem = f'-----BEGIN RSA PRIVATE KEY-----\n{self.BARE[:30]}\n{self.BARE[30:]}\n-----END RSA PRIVATE KEY-----\n'
+        for pasted in (pem, '  ' + pem.replace('\n', '\r\n'), pem.replace('RSA PRIVATE', 'PRIVATE'), self.BARE):
+            self.assertEqual(tb.clean_key(pasted), self.BARE)
+
+    @unittest.skipUnless(load_private_key, 'tigeropen not installed')
+    def test_tiger_sdk_accepts_the_cleaned_key(self):
+        from cryptography.hazmat.primitives import serialization
+        from cryptography.hazmat.primitives.asymmetric import rsa
+        key = rsa.generate_private_key(public_exponent=65537, key_size=1024)
+        for fmt in (serialization.PrivateFormat.TraditionalOpenSSL, serialization.PrivateFormat.PKCS8):
+            pem = key.private_bytes(serialization.Encoding.PEM, fmt, serialization.NoEncryption()).decode()
+            cleaned = tb.clean_key(pem.replace('\n', '\r\n'))
+            self.assertEqual(load_private_key(cleaned).private_numbers(), key.private_numbers())
+
+
 class SyncTests(unittest.TestCase):
     def test_brings_back_fills_rejections_and_positions(self):
         fund = {'brokerOrders': [
