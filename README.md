@@ -46,7 +46,7 @@ The page reloads everything every 5 minutes. Prices can be 20–30 minutes old, 
 1. Create a **public** GitHub repository, e.g. `paper-trader`, and push this folder to its `main` branch. GitHub Pages is free only for public repos. Your own trades stay in your browser, but AI picks and the AI fund are published on the site.
 2. **Settings → Pages → Build and deployment → Source:** choose **GitHub Actions**.
 3. **Settings → Secrets and variables → Actions → New repository secret:** add `ANTHROPIC_API_KEY` with your key from [console.anthropic.com](https://console.anthropic.com). This powers the scheduled AI picks and the AI fund. Set a spending limit on the key.
-4. Optional: under the same page's **Variables** tab, add `AI_MODEL` = `claude-sonnet-5` to use the cheaper model. The default is `claude-opus-5`.
+4. Optional: choose the models on the same page's **Variables** tab (see *Which model does what* below).
 5. **Actions → Update prices, AI picks and AI fund → Run workflow.** When it finishes, the site is at `https://<your-username>.github.io/paper-trader/`.
 
 For the **AI strategist** and the **Refresh now** button on AI picks, add your API key in the app under *Settings*. It is stored only in that browser and sent straight to Anthropic.
@@ -60,9 +60,20 @@ Go to **Actions → Update prices, AI picks and AI fund → Run workflow** and f
 - *How many times a trading day the AI decides*: 1, 2 or 4.
 - *Stop the AI fund*: closes all its positions and stops it.
 
+### Which model does what
+
+The work is split by difficulty to keep costs down:
+
+| Task | Model | Why |
+|---|---|---|
+| Searching the web and summarising the news | **Claude Haiku 4.5** (cheapest) | Simple but reads a lot: search results are most of the tokens. |
+| AI picks, AI strategist, AI fund trades | **Claude Sonnet 5** | Real judgement, but it only reads Haiku's short news summary and the price statistics. |
+
+One news summary per run is shared by the picks and the AI fund. To change the models, add repository variables (**Settings → Secrets and variables → Actions → Variables**): `AI_NEWS_MODEL` for the news step and `AI_MODEL` for the decisions (`claude-haiku-4-5`, `claude-sonnet-5` or `claude-opus-5`). In the app, *Settings → Model for picks and strategies* does the same for what you run in the browser.
+
 ### Costs
 
-Each Claude call uses web search and, on Claude Opus 5, typically costs about US$0.20–1.00. The picks refresh about twice a day, and the fund makes 1–4 decisions a day, so expect roughly US$1–5 per trading day with the defaults. Switching `AI_MODEL` to `claude-sonnet-5` cuts that by about 60%. Every AI result in the app shows its approximate cost.
+A picks refresh (news plus picks) typically costs about US$0.10–0.30, and an AI fund decision about US$0.05–0.15 when it reuses that news. Web searches are US$0.01 each. The picks refresh about twice a day, and a new fund makes 1 decision a day unless you choose more, so expect well under US$1 per trading day. For comparison, a picks refresh done entirely on Opus 5 cost US$1.50. Every AI result in the app shows its approximate cost.
 
 GitHub turns off scheduled workflows in a public repo after 60 days with no commits. The `ai-state` commits count toward that, but if everything stops, re-enable the workflow on the Actions tab.
 
@@ -87,7 +98,7 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `portfolio.js` | The ledger: cash accounts, long and short positions, buying power, profit/loss. |
 | `rules.js` | Auto-trading rules engine and backtester. |
 | `fund.js` | The AI fund: budget limit, order execution, protections, decision schedule. |
-| `ai.js` | Every Claude call (picks, strategist, fund decisions): web search plus a validated "submit" tool. |
+| `ai.js` | Every Claude call: the Haiku news digest, then picks, strategies and fund decisions, each answered through a validated "submit" tool. |
 | `markets.js` | Exchange trading hours. |
 | `app.js`, `index.html`, `styles.css` | The web app. |
 | `scripts/` | The scheduled jobs: prices, AI picks, AI fund. |

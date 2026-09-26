@@ -5,15 +5,18 @@
 //   FUND_CURRENCY           USD (US stocks) or SGD (SGX stocks), with FUND_START_AMOUNT
 //   FUND_DECISIONS_PER_DAY  1, 2 or 4, with FUND_START_AMOUNT
 //   FUND_STOP=true          close every position and stop the fund
-//   ANTHROPIC_API_KEY, AI_MODEL
+//   ANTHROPIC_API_KEY, AI_MODEL (decisions, default Sonnet), AI_NEWS_MODEL (news, default Haiku)
 // Every run checks stop-loss / take-profit / forced-cover levels against the new prices. When a
 // decision is due (spread through the market's trading day), Claude reads the news and decides.
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { decideFund, DEFAULT_MODEL } from '../ai.js';
+import { dirname, join } from 'node:path';
+import { decideFund, TIERS } from '../ai.js';
 import { newFund, decisionDue, applyOrders, setProtections, checkProtections, recordValue, stopFund } from '../fund.js';
 
 const [file, picksFile] = process.argv.slice(2);
+const newsFile = join(dirname(file), 'news.json');
+const NEWS_MAX_AGE_MS = 4 * 3600 * 1000; // reuse the picks job's digest when it's this fresh
 const env = process.env;
 const readJson = async (path) => { try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; } };
 const now = new Date();
@@ -48,10 +51,16 @@ if (!fund.stoppedAt) {
     } else {
       try {
         const { default: Anthropic } = await import('@anthropic-ai/sdk');
-        const d = await decideFund({ client: new Anthropic(), Anthropic, model: env.AI_MODEL || DEFAULT_MODEL, fund, quotes, picks: await readJson(picksFile), now });
+        const cached = await readJson(newsFile);
+        const news = cached && now - Date.parse(cached.createdAt) < NEWS_MAX_AGE_MS ? cached : undefined;
+        const d = await decideFund({
+          client: new Anthropic(), Anthropic, fund, quotes, picks: await readJson(picksFile), news, now,
+          model: env.AI_MODEL || TIERS.advanced, newsModel: env.AI_NEWS_MODEL || TIERS.simple,
+        });
+        if (d.news) await writeFile(newsFile, JSON.stringify(d.news, null, 1));
         const orders = applyOrders(fund, d.orders ?? [], quotes, now);
         setProtections(fund, d.protections);
-        fund.decisions.push({ time: now.toISOString(), outlook: d.outlook, orders, protections: d.protections, source_urls: d.source_urls, model: d.model, usage: d.usage });
+        fund.decisions.push({ time: now.toISOString(), outlook: d.outlook, orders, protections: d.protections, source_urls: d.source_urls, model: d.model, newsModel: d.newsModel, usage: d.usage });
         fund.decisions = fund.decisions.slice(-500);
         fund.lastDecisionAt = now.toISOString();
         fund.lastError = null;

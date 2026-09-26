@@ -2,8 +2,10 @@
 //   - strategist: proposes auto-trading rules for your own portfolio (runs in your browser with your key)
 //   - picks: long/short ideas for the home page (runs on GitHub on a schedule, or in your browser)
 //   - fund decisions: the AI fund's trades (runs on GitHub on a schedule)
-// Each call lets Claude search the web for current news, then answer through a "submit" tool whose
-// input the app validates before using anything. Works with the official Anthropic SDK in Node or,
+// Work is split by difficulty to keep costs down: a cheap model (Haiku) searches the web and boils the
+// news down to a short digest, then a stronger model (Sonnet by default) makes the actual decision from
+// that digest plus price data, without ever reading the long search results. Every answer comes back
+// through a "submit" tool whose input the app validates before using anything. Works with the official Anthropic SDK in Node or,
 // loaded from a CDN, in the browser.
 
 import { CONDITIONS, UNITS, REPEATS, newRule, checkRule, describeRule } from './rules.js';
@@ -11,11 +13,16 @@ import { summarize, buyingPower, SHORT_MARGIN } from './portfolio.js';
 
 const SDK_URL = 'https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.128.0/+esm';
 
+// Cheapest first. Haiku 4.5 uses the basic web search tool and no extended thinking; the newer
+// models use web search with dynamic filtering and adaptive thinking at the given effort.
 export const MODELS = {
-  'claude-opus-5': { label: 'Claude Opus 5 (best analysis)', inPerM: 5, outPerM: 25 },
-  'claude-sonnet-5': { label: 'Claude Sonnet 5 (cheaper, faster)', inPerM: 2, outPerM: 10 },
+  'claude-haiku-4-5': { label: 'Claude Haiku 4.5 (cheapest)', inPerM: 1, outPerM: 5, search: 'web_search_20250305' },
+  'claude-sonnet-5': { label: 'Claude Sonnet 5 (better analysis, about 2x the cost)', inPerM: 2, outPerM: 10, search: 'web_search_20260209', effort: 'medium' },
+  'claude-opus-5': { label: 'Claude Opus 5 (best analysis, about 5x the cost)', inPerM: 5, outPerM: 25, search: 'web_search_20260209', effort: 'high' },
 };
-export const DEFAULT_MODEL = 'claude-opus-5';
+// simple: gathering and summarising news. advanced: picks, strategies and fund trades.
+export const TIERS = { simple: 'claude-haiku-4-5', advanced: 'claude-sonnet-5' };
+export const DEFAULT_MODEL = TIERS.simple;
 const SEARCH_COST = 0.01; // USD per web search
 
 export class AIError extends Error {}
@@ -30,18 +37,14 @@ export async function loadClient(apiKey) {
 // Runs one question to completion: Claude may search the web (server-side), then must call `tool`.
 // Returns the tool's input plus the web pages Claude read and what the call cost.
 export async function askClaude({ client, Anthropic, model = DEFAULT_MODEL, system, content, tool, maxSearches = 5, maxRounds = 4 }) {
+  if (!MODELS[model]) model = DEFAULT_MODEL;
+  const spec = MODELS[model];
   const tools = [
-    { type: 'web_search_20260209', name: 'web_search', max_uses: maxSearches },
+    ...(maxSearches > 0 ? [{ type: spec.search, name: 'web_search', max_uses: maxSearches }] : []),
     { ...tool, strict: true, eager_input_streaming: true },
   ];
-  const request = {
-    model,
-    max_tokens: 32000,
-    thinking: { type: 'adaptive' },
-    output_config: { effort: 'high' },
-    system,
-    tools,
-  };
+  const request = { model, max_tokens: 32000, system, tools };
+  if (spec.effort) Object.assign(request, { thinking: { type: 'adaptive' }, output_config: { effort: spec.effort } });
   // On Opus 5, if a safety classifier declines, let the API retry on its recommended fallback model.
   if (model === 'claude-opus-5') Object.assign(request, { betas: ['server-side-fallback-2026-07-01'], fallbacks: 'default' });
 
@@ -71,7 +74,7 @@ export async function askClaude({ client, Anthropic, model = DEFAULT_MODEL, syst
     if (message.stop_reason === 'refusal') throw new AIError('Claude declined this request.');
     const call = message.content.find((b) => b.type === 'tool_use' && b.name === tool.name);
     if (call && message.stop_reason !== 'max_tokens') {
-      const price = MODELS[model] ?? MODELS[DEFAULT_MODEL];
+      const price = spec;
       return {
         input: typeof call.input === 'string' ? parseJson(call.input) : call.input,
         sources: [...sources.values()],
@@ -103,6 +106,11 @@ function friendlyError(err, Anthropic) {
 }
 
 const round2 = (n) => Math.round(n * 100) / 100;
+
+// Adds up the cost of the news step and the decision step.
+export const addUsage = (...us) => us.filter(Boolean).reduce((a, u) => ({
+  input: a.input + u.input, output: a.output + u.output, searches: a.searches + u.searches, costUsd: round2(a.costUsd + u.costUsd),
+}), { input: 0, output: 0, searches: 0, costUsd: 0 });
 const pct = (x) => Math.round(x * 1000) / 10; // 0.1234 -> 12.3
 
 // Keeps only source links Claude actually got from its searches.
@@ -152,7 +160,63 @@ const stockList = (quotes, symbols, withWeekly) => symbols.filter((s) => quotes[
   ...(withWeekly ? { weekly_closes: weekly(quotes[s]) } : {}),
 }));
 
-const NEWS = 'Use web search to check the latest news that moves these stocks: company news, sector trends, macro data, central banks, geopolitics and overall market mood in Singapore and the US. Prefer sources from the last few days and say what you found.';
+const NEWS = 'A research assistant has just searched the web; the latest relevant news is in `news` (a market summary plus dated items with links). You have no other news source, so base your views on it and the price data, say when the news is thin, and cite the source_url of the items you rely on.';
+
+// ---------- 0. news digest (simple tier) ----------
+
+export const NEWS_SYSTEM = `You are a markets research assistant. Search the web for the latest news that could move the listed Singapore (SGX) and US stocks: company news and results, sector trends, macro data, central banks, commodities, geopolitics and overall market mood. Prefer reports from the last few days, check dates, and don't speculate or give trading advice: just report what happened, briefly and accurately. Finish by calling submit_news.`;
+
+export const NEWS_TOOL = {
+  name: 'submit_news',
+  description: 'Submit the news digest.',
+  input_schema: {
+    type: 'object',
+    additionalProperties: false,
+    required: ['market_summary', 'items'],
+    properties: {
+      market_summary: { type: 'string', description: 'Four to six sentences on what is driving markets now, with key numbers.' },
+      items: {
+        type: 'array',
+        description: 'Up to about 20 of the most relevant recent developments.',
+        items: {
+          type: 'object',
+          additionalProperties: false,
+          required: ['symbols', 'date', 'headline', 'summary', 'source_url'],
+          properties: {
+            symbols: { type: 'array', items: { type: 'string' }, description: 'Watchlist symbols affected; empty for market-wide news.' },
+            date: { type: 'string', description: 'When it happened, e.g. 2026-09-24.' },
+            headline: { type: 'string' },
+            summary: { type: 'string', description: 'One or two sentences of facts and figures.' },
+            source_url: { type: 'string' },
+          },
+        },
+      },
+    },
+  },
+};
+
+// Searches and summarises the news for the given stocks (all of them by default) with the cheap model.
+export async function gatherNews({ client, Anthropic, model = TIERS.simple, quotes, symbols = Object.keys(quotes), now = new Date(), maxSearches = 5 }) {
+  const watchlist = symbols.filter((s) => quotes[s]).map((s) => `${s} (${quotes[s].name}, ${quotes[s].market})`);
+  const res = await askClaude({
+    client, Anthropic, model,
+    system: NEWS_SYSTEM,
+    content: `Today is ${now.toUTCString()}. Find the latest news for these stocks and the markets they trade in:\n${watchlist.join('\n')}`,
+    tool: NEWS_TOOL,
+    maxSearches,
+  });
+  const ok = new Set(res.sources.map((x) => x.url));
+  const items = (res.input.items ?? []).map((i) => ({ ...i, source_url: ok.has(i.source_url) ? i.source_url : null, symbols: (i.symbols ?? []).filter((x) => quotes[x]) }));
+  return { market_summary: res.input.market_summary ?? '', items, sources: res.sources, model: res.model, usage: res.usage, createdAt: now.toISOString() };
+}
+
+// The part of a digest a decision model sees: no raw search results, just the summary and items.
+const newsForPrompt = (news, symbols) => news && {
+  gathered_at: news.createdAt,
+  market_summary: news.market_summary,
+  items: news.items.filter((i) => !symbols || !i.symbols.length || i.symbols.some((x) => symbols.includes(x))),
+};
+const newsUrls = (news) => (news?.items ?? []).map((i) => ({ url: i.source_url })).filter((x) => x.url);
 
 // ---------- 1. strategist ----------
 
@@ -286,21 +350,27 @@ export function parseStrategies(json, quotes, sources = []) {
   return { summary: json.summary ?? '', observations: json.observations ?? [], caveats: json.caveats ?? '', strategies };
 }
 
-export async function analyze({ client, Anthropic, model, context, quotes }) {
+export async function analyze({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, context, quotes, news }) {
+  const symbols = context.stocks.map((s) => s.symbol);
+  news ??= await gatherNews({ client, Anthropic, model: newsModel, quotes, symbols, maxSearches: 4 });
   const res = await askClaude({
     client, Anthropic, model,
     system: STRATEGIST_SYSTEM,
-    content: `Here is my simulator data as JSON. Analyse it and propose strategies.\n\n${JSON.stringify(context)}`,
+    content: `Here is my simulator data as JSON. Analyse it and propose strategies.\n\n${JSON.stringify({ ...context, news: newsForPrompt(news, symbols) })}`,
     tool: STRATEGIES_TOOL,
+    maxSearches: 0,
   });
-  return { ...parseStrategies(res.input, quotes, res.sources), sources: res.sources, model: res.model, usage: res.usage, createdAt: new Date().toISOString() };
+  return {
+    ...parseStrategies(res.input, quotes, newsUrls(news)), sources: news.sources,
+    model: res.model, newsModel: news.model, usage: addUsage(news.usage, res.usage), createdAt: new Date().toISOString(),
+  };
 }
 
 // ---------- 2. home-page picks ----------
 
 export const PICKS_SYSTEM = `You are the market analyst for a paper-trading simulator covering a watchlist of Singapore (SGX) and US stocks and ETFs. Your job is to say which of these stocks look best to go long (buy) and which look best to short (bet on a fall) right now, for a horizon of days to a few months.
 
-${NEWS} Combine what you find with the price statistics provided. Only pick from the watchlist, include only stocks where you have a real view (it's fine to have few shorts), and rank by conviction. Keep each thesis concrete: what is happening, why it should move the price, and what would prove you wrong. Cite the pages you relied on. This is an educational simulator with virtual money; be honest about uncertainty and never promise returns. Finish by calling submit_picks.`;
+${NEWS} Combine it with the price statistics provided. Only pick from the watchlist, include only stocks where you have a real view (it's fine to have few shorts), and rank by conviction. Keep each thesis concrete: what is happening, why it should move the price, and what would prove you wrong. Cite the pages you relied on. This is an educational simulator with virtual money; be honest about uncertainty and never promise returns. Finish by calling submit_picks.`;
 
 export const PICKS_TOOL = {
   name: 'submit_picks',
@@ -343,17 +413,26 @@ export function parsePicks(json, quotes, sources = []) {
   return { market_summary: json.market_summary ?? '', picks };
 }
 
-export async function recommend({ client, Anthropic, model, prices, now = new Date() }) {
+// Pass a fresh `news` digest to reuse it; otherwise one is gathered first with the cheap model.
+export async function recommend({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, prices, news, now = new Date() }) {
   const quotes = prices.quotes ?? {};
-  const context = { now: now.toISOString(), prices_as_of: prices.updatedAt, sample_data: !!prices.sample, watchlist: stockList(quotes, Object.keys(quotes), false) };
+  const fresh = !news;
+  news ??= await gatherNews({ client, Anthropic, model: newsModel, quotes, now });
+  const context = {
+    now: now.toISOString(), prices_as_of: prices.updatedAt, sample_data: !!prices.sample,
+    news: newsForPrompt(news), watchlist: stockList(quotes, Object.keys(quotes), false),
+  };
   const res = await askClaude({
     client, Anthropic, model,
     system: PICKS_SYSTEM,
-    content: `Today is ${now.toUTCString()}. Here is the watchlist with price statistics as JSON. Research the latest news, then give your long and short picks.\n\n${JSON.stringify(context)}`,
+    content: `Today is ${now.toUTCString()}. Here are the latest news and the watchlist with price statistics as JSON. Give your long and short picks.\n\n${JSON.stringify(context)}`,
     tool: PICKS_TOOL,
-    maxSearches: 8,
+    maxSearches: 0,
   });
-  return { ...parsePicks(res.input, quotes, res.sources), sources: res.sources, model: res.model, usage: res.usage, createdAt: now.toISOString() };
+  return {
+    ...parsePicks(res.input, quotes, newsUrls(news)), sources: news.sources, model: res.model, newsModel: news.model,
+    usage: addUsage(fresh ? news.usage : null, res.usage), createdAt: now.toISOString(), news: fresh ? news : undefined,
+  };
 }
 
 // ---------- 3. AI fund decisions ----------
@@ -409,7 +488,7 @@ export const FUND_TOOL = {
   },
 };
 
-export function fundContext({ fund, quotes, picks, now = new Date() }) {
+export function fundContext({ fund, quotes, picks, news, now = new Date() }) {
   const ccy = fund.currency;
   const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === ccy);
   const { accounts, positions } = summarize(fund.portfolio, quotes);
@@ -432,18 +511,29 @@ export function fundContext({ fund, quotes, picks, now = new Date() }) {
     recent_automatic_events: fund.events.slice(-10),
     analyst_picks: picks?.picks?.filter((p) => quotes[p.symbol]?.currency === ccy)
       .map((p) => ({ symbol: p.symbol, stance: p.stance, conviction: p.conviction, thesis: p.thesis, as_of: picks.createdAt })) ?? [],
+    news: newsForPrompt(news, symbols),
     stocks: stockList(quotes, symbols, false),
   };
 }
 
-export async function decideFund({ client, Anthropic, model, fund, quotes, picks, now = new Date() }) {
-  const context = fundContext({ fund, quotes, picks, now });
+// `news` should be a recent digest (the scheduled job shares one between picks and the fund);
+// without one, a digest for the fund's market is gathered first with the cheap model.
+export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, now = new Date() }) {
+  const fresh = !news;
+  if (fresh) {
+    const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === fund.currency);
+    news = await gatherNews({ client, Anthropic, model: newsModel, quotes, symbols, now, maxSearches: 3 });
+  }
+  const context = fundContext({ fund, quotes, picks, news, now });
   const res = await askClaude({
     client, Anthropic, model,
     system: FUND_SYSTEM,
-    content: `Decision time. Here is the fund's state and the market data as JSON.\n\n${JSON.stringify(context)}`,
+    content: `Decision time. Here is the fund's state, the latest news and the market data as JSON.\n\n${JSON.stringify(context)}`,
     tool: FUND_TOOL,
-    maxSearches: 5,
+    maxSearches: 0,
   });
-  return { ...res.input, source_urls: knownUrls(res.input.source_urls, res.sources), model: res.model, usage: res.usage };
+  return {
+    ...res.input, source_urls: knownUrls(res.input.source_urls, newsUrls(news)),
+    model: res.model, newsModel: news.model, usage: addUsage(fresh ? news.usage : null, res.usage), news: fresh ? news : undefined,
+  };
 }

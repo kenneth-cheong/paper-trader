@@ -2,10 +2,12 @@
 // Usage: node scripts/fetch-picks.mjs <picks.json path>
 // Keeps the existing picks when they are younger than PICKS_MAX_AGE_HOURS (default 10, so about
 // two refreshes per weekday), when ANTHROPIC_API_KEY isn't set, or when the call fails.
-// FORCE_PICKS=true refreshes regardless of age.
+// FORCE_PICKS=true refreshes regardless of age. News is gathered with AI_NEWS_MODEL (default Haiku) and
+// the picks are made with AI_MODEL (default Sonnet); the digest is also saved as news.json for the AI fund.
 
 import { readFile, writeFile } from 'node:fs/promises';
-import { recommend, DEFAULT_MODEL } from '../ai.js';
+import { dirname, join } from 'node:path';
+import { recommend, TIERS } from '../ai.js';
 
 const file = process.argv[2];
 const readJson = async (path) => { try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; } };
@@ -25,9 +27,14 @@ if (process.env.FORCE_PICKS !== 'true' && ageH < maxAgeH && previous?.picks?.len
   const prices = await readJson('data/prices.json');
   try {
     const { default: Anthropic } = await import('@anthropic-ai/sdk');
-    const picks = await recommend({ client: new Anthropic(), Anthropic, model: process.env.AI_MODEL || DEFAULT_MODEL, prices });
+    const { news, ...picks } = await recommend({
+      client: new Anthropic(), Anthropic, prices,
+      model: process.env.AI_MODEL || TIERS.advanced, newsModel: process.env.AI_NEWS_MODEL || TIERS.simple,
+    });
     await writeFile(file, JSON.stringify(picks, null, 1));
-    console.log(`Wrote ${picks.picks.length} picks from ${picks.sources.length} sources (~US$${picks.usage.costUsd}).`);
+    // The AI fund reuses this digest instead of searching again.
+    await writeFile(join(dirname(file), 'news.json'), JSON.stringify(news, null, 1));
+    console.log(`Wrote ${picks.picks.length} picks (${picks.model}, news by ${picks.newsModel} from ${picks.sources.length} sources, ~US$${picks.usage.costUsd}).`);
   } catch (err) {
     console.warn(`! AI picks failed, keeping the previous ones: ${err.message}`);
   }

@@ -1,6 +1,6 @@
 import { newPortfolio, applyTrade, summarize, validatePortfolio, buyingPower, DEFAULT_START, SHORT_MARGIN } from './portfolio.js';
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest } from './rules.js';
-import { MODELS, DEFAULT_MODEL, loadClient, analyze, recommend, buildContext } from './ai.js';
+import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
 import { MARKETS, isOpen, marketForCurrency } from './markets.js';
 
 const KEYS = { portfolio: 'paper-trader:portfolio', ai: 'paper-trader:ai', picks: 'paper-trader:picks', strategist: 'paper-trader:strategist' };
@@ -11,7 +11,7 @@ const state = {
   prices: { quotes: {}, fx: {} },
   sample: false,
   portfolio: loadPortfolio(),
-  ai: readStore(KEYS.ai) ?? { key: '', model: DEFAULT_MODEL },
+  ai: readStore(KEYS.ai) ?? { key: '', model: TIERS.advanced }, // model = the one that makes decisions
   sitePicks: null,
   localPicks: readStore(KEYS.picks),
   strategist: readStore(KEYS.strategist),
@@ -132,6 +132,10 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const fmtDateTime = (t) => new Date(t).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 const fmtDate = (t) => new Date(t).toLocaleDateString(undefined, { dateStyle: 'medium' });
 const domain = (url) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; } };
+const MODEL_NAMES = { 'claude-haiku-4-5': 'Haiku 4.5', 'claude-sonnet-5': 'Sonnet 5', 'claude-opus-5': 'Opus 5' };
+const modelName = (id) => MODEL_NAMES[id] ?? id ?? '';
+// "Sonnet 5, news by Haiku 4.5"
+const madeBy = (x) => x.newsModel && x.newsModel !== x.model ? `${modelName(x.model)}, news by ${modelName(x.newsModel)}` : modelName(x.model);
 const safeUrl = (url) => /^https?:\/\//i.test(url) ? url : '#';
 const shares = (n) => `${n.toLocaleString()} share${n === 1 ? '' : 's'}`;
 
@@ -285,7 +289,7 @@ function renderPicks() {
     return;
   }
   const n = picks.sources?.length ?? 0;
-  $('picks-meta').textContent = `${ago(picks.createdAt)} · ${n} source${n === 1 ? '' : 's'} · ${picks.model}`;
+  $('picks-meta').textContent = `${ago(picks.createdAt)} · ${n} source${n === 1 ? '' : 's'} · ${madeBy(picks)}${picks.usage ? ` · about US$${picks.usage.costUsd.toFixed(2)}` : ''}`;
   const card = (p) => {
     const q = quote(p.symbol);
     const since = q && p.priceAtPick ? q.price / p.priceAtPick - 1 : null;
@@ -662,7 +666,7 @@ function renderStrategist() {
   a.strategies.forEach((s, i) => { state.backtests[`s${i}`] ??= s.rules.length ? backtest(s.rules, quote(s.symbol)) : null; });
   $('strategist').innerHTML = `
     <div class="analysis">
-      <p class="muted small">From ${fmtDateTime(a.createdAt)} · ${esc(a.model)} · about US$${a.usage.costUsd.toFixed(2)}</p>
+      <p class="muted small">From ${fmtDateTime(a.createdAt)} · ${esc(madeBy(a))} · about US$${a.usage.costUsd.toFixed(2)}</p>
       <p class="lead">${esc(a.summary)}</p>
       ${a.observations.length ? `<ul>${a.observations.map((o) => `<li>${esc(o)}</li>`).join('')}</ul>` : ''}
       ${a.strategies.map((s, i) => {
@@ -739,7 +743,7 @@ function renderFund() {
         <li>Come back here in a few minutes.</li>
       </ol>
       <p class="small"><strong>Hard limit:</strong> the fund's ledger starts with exactly that amount and nothing is ever added, so any order costing more than its buying power is rejected. Shorts need 150% collateral and are closed automatically at a 40% loss, so the fund can't lose more than its amount.</p>
-      <p class="muted small">Cost: each decision is one Claude call with web search, roughly US$0.30–1.00 on Claude Opus 5.</p>
+      <p class="muted small">Cost: each decision is one Claude call with web search, roughly US$0.05–0.15: Claude Haiku 4.5 reads the news and Claude Sonnet 5 decides.</p>
     </section>`;
     return;
   }
@@ -782,7 +786,7 @@ function renderFund() {
     <section class="panel">
       <div class="panel-head"><h2>Decisions</h2></div>
       ${f.decisions.slice().reverse().slice(0, 30).map((d) => `<article class="decision">
-        <header><strong>${fmtDateTime(d.time)}</strong>${d.usage ? ` <span class="muted small">${esc(d.model)} · about US$${d.usage.costUsd.toFixed(2)}</span>` : ''}</header>
+        <header><strong>${fmtDateTime(d.time)}</strong>${d.usage ? ` <span class="muted small">${esc(madeBy(d))} · about US$${d.usage.costUsd.toFixed(2)}</span>` : ''}</header>
         <p>${esc(d.outlook)}</p>
         ${d.orders.length ? `<ul class="orders">${d.orders.map((o) => `<li><span class="chip ${o.action === 'buy' || o.action === 'cover' ? 'buy' : 'sell'}">${esc(o.action)}</span>
           ${Number(o.shares).toLocaleString()} ${esc(o.symbol)} ${o.status === 'filled' ? `at ${price(o.price)}` : `<span class="down">rejected: ${esc(o.message)}</span>`}
@@ -803,7 +807,7 @@ function openSettings() {
   const a = state.portfolio.accounts;
   $('api-key').value = state.ai.key;
   $('ai-model').innerHTML = Object.entries(MODELS).map(([id, m]) => `<option value="${id}">${esc(m.label)}</option>`).join('');
-  $('ai-model').value = MODELS[state.ai.model] ? state.ai.model : DEFAULT_MODEL;
+  $('ai-model').value = MODELS[state.ai.model] ? state.ai.model : TIERS.advanced;
   $('start-sgd').value = a.SGD?.start ?? DEFAULT_START.SGD;
   $('start-usd').value = a.USD?.start ?? DEFAULT_START.USD;
   $('settings-started').textContent = `Current portfolio started ${fmtDate(state.portfolio.createdAt)}, ${state.portfolio.trades.length} trades.`;
@@ -812,7 +816,7 @@ function openSettings() {
 }
 
 function saveAiSettings() {
-  state.ai = { key: $('api-key').value.trim(), model: $('ai-model').value || DEFAULT_MODEL };
+  state.ai = { key: $('api-key').value.trim(), model: $('ai-model').value || TIERS.advanced };
   writeStore(KEYS.ai, state.ai);
 }
 

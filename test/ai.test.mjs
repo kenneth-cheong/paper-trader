@@ -2,8 +2,8 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import {
-  askClaude, analyze, recommend, decideFund, buildContext, fundContext, stockStats, parseStrategies, parsePicks,
-  AIError, STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL,
+  askClaude, gatherNews, analyze, recommend, decideFund, buildContext, fundContext, stockStats, parseStrategies, parsePicks,
+  AIError, STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL,
 } from '../ai.js';
 import { newPortfolio, applyTrade } from '../portfolio.js';
 import { newFund } from '../fund.js';
@@ -27,6 +27,18 @@ const fakeClient = (...messages) => {
   };
 };
 
+const digest = {
+  market_summary: 'Oil is up and the Fed hiked.',
+  items: [
+    { symbols: ['NVDA'], date: '2026-09-25', headline: 'AI capex beats', summary: 'Hyperscalers raised capex.', source_url: SRC },
+    { symbols: ['FAKE', 'TSLA'], date: '2026-09-24', headline: 'Deliveries cut', summary: 'Estimates cut.', source_url: 'https://never-searched.example' },
+    { symbols: [], date: '2026-09-16', headline: 'Fed hikes', summary: 'First hike since 2023.', source_url: SRC },
+  ],
+};
+// A news step (Haiku, with web search) followed by a decision step (no search).
+const newsMsg = () => msg([searchBlock, toolUse(NEWS_TOOL.name, digest)]);
+const decisionMsg = (name, input) => msg([toolUse(name, input)], { usage: { input_tokens: 10000, output_tokens: 2000 } });
+
 const strategies = {
   summary: 'Mixed year.', observations: ['NVDA trends up.'], caveats: 'Past prices only.',
   strategies: [
@@ -49,19 +61,41 @@ test('stockStats summarises a year of closes', () => {
   assert.ok(s.max_drawdown_1y_pct >= 0);
 });
 
-test('askClaude offers web search plus the submit tool, and prices tokens and searches', async () => {
+test('askClaude defaults to Haiku with basic web search, no thinking, and prices tokens and searches', async () => {
   const client = fakeClient(msg([searchBlock, toolUse('submit_picks', { market_summary: 'x', picks: [] })]));
   const res = await askClaude({ client, system: 's', content: 'c', tool: PICKS_TOOL, maxSearches: 3 });
   const req = client.calls[0];
-  assert.equal(req.model, 'claude-opus-5');
-  assert.deepEqual(req.thinking, { type: 'adaptive' });
-  assert.deepEqual(req.tools[0], { type: 'web_search_20260209', name: 'web_search', max_uses: 3 });
+  assert.equal(req.model, 'claude-haiku-4-5');
+  assert.deepEqual(req.tools[0], { type: 'web_search_20250305', name: 'web_search', max_uses: 3 });
   assert.equal(req.tools[1].name, 'submit_picks');
   assert.equal(req.tools[1].strict, true);
+  assert.equal(req.thinking, undefined);
+  assert.equal(req.output_config, undefined);
+  assert.equal(req.fallbacks, undefined);
+  assert.deepEqual(res.sources, [{ url: SRC, title: 'Nvidia news', age: '1 day' }]);
+  assert.equal(res.usage.costUsd, 0.04); // 10k in @ $1/M + 2k out @ $5/M + 2 searches @ $0.01
+});
+
+test('askClaude on Opus uses dynamic web search, adaptive thinking and the refusal fallback', async () => {
+  const client = fakeClient(msg([toolUse('submit_picks', { market_summary: 'x', picks: [] })]));
+  const res = await askClaude({ client, model: 'claude-opus-5', tool: PICKS_TOOL });
+  const req = client.calls[0];
+  assert.equal(req.tools[0].type, 'web_search_20260209');
+  assert.deepEqual(req.thinking, { type: 'adaptive' });
+  assert.deepEqual(req.output_config, { effort: 'high' });
   assert.equal(req.fallbacks, 'default');
   assert.deepEqual(req.betas, ['server-side-fallback-2026-07-01']);
-  assert.deepEqual(res.sources, [{ url: SRC, title: 'Nvidia news', age: '1 day' }]);
-  assert.equal(res.usage.costUsd, 0.12); // 10k in @ $5/M + 2k out @ $25/M + 2 searches @ $0.01
+  assert.equal(res.usage.costUsd, 0.12); // 10k in @ $5/M + 2k out @ $25/M + 2 searches
+});
+
+test('askClaude on Sonnet uses medium effort and no Opus-only fallback; unknown models fall back to the default', async () => {
+  let client = fakeClient(msg([toolUse('submit_picks', { market_summary: 'x', picks: [] })]));
+  await askClaude({ client, model: 'claude-sonnet-5', tool: PICKS_TOOL });
+  assert.deepEqual(client.calls[0].output_config, { effort: 'medium' });
+  assert.equal(client.calls[0].fallbacks, undefined);
+  client = fakeClient(msg([toolUse('submit_picks', { market_summary: 'x', picks: [] })]));
+  await askClaude({ client, model: 'claude-made-up', tool: PICKS_TOOL });
+  assert.equal(client.calls[0].model, 'claude-haiku-4-5');
 });
 
 test('askClaude resumes a paused turn and nudges once when Claude answers without the tool', async () => {
@@ -82,12 +116,6 @@ test('askClaude explains refusals, truncation and giving up', async () => {
   await assert.rejects(askClaude({ client: fakeClient(msg([toolUse('submit_picks', {})], { stop_reason: 'max_tokens' })), tool: PICKS_TOOL }), /cut off/);
   const talk = () => msg([{ type: 'text', text: 'hmm' }], { stop_reason: 'end_turn' });
   await assert.rejects(askClaude({ client: fakeClient(talk(), talk()), tool: PICKS_TOOL, maxRounds: 2 }), /did not return/);
-});
-
-test('askClaude on Sonnet skips the Opus-only fallback option', async () => {
-  const client = fakeClient(msg([toolUse('submit_picks', { market_summary: 'x', picks: [] })]));
-  await askClaude({ client, model: 'claude-sonnet-5', tool: PICKS_TOOL });
-  assert.equal(client.calls[0].fallbacks, undefined);
 });
 
 test('buildContext includes portfolio, record and focused stock only', () => {
@@ -113,12 +141,32 @@ test('parseStrategies keeps valid rules paused, reports invalid ones, drops unkn
   assert.deepEqual(s.source_urls, [SRC]);
 });
 
-test('analyze returns parsed strategies with sources and cost', async () => {
-  const client = fakeClient(msg([searchBlock, toolUse(STRATEGIES_TOOL.name, strategies)]));
-  const out = await analyze({ client, context: {}, quotes: prices.quotes });
+test('gatherNews uses Haiku with web search and drops unseen links and unknown symbols', async () => {
+  const client = fakeClient(newsMsg());
+  const news = await gatherNews({ client, quotes: prices.quotes, symbols: ['NVDA', 'TSLA'], now: new Date('2026-09-26T00:00:00Z') });
+  const req = client.calls[0];
+  assert.equal(req.model, 'claude-haiku-4-5');
+  assert.equal(req.tools[0].type, 'web_search_20250305');
+  assert.match(req.messages[0].content, /NVDA \(Nvidia, US\)\nTSLA/);
+  assert.equal(news.items[1].source_url, null);
+  assert.deepEqual(news.items[1].symbols, ['TSLA']);
+  assert.equal(news.sources.length, 1);
+  assert.equal(news.model, 'claude-opus-5'); // whatever the API reports serving (the fake echoes a fixed id)
+});
+
+test('analyze gathers news with Haiku, then decides with Sonnet from the digest only', async () => {
+  const client = fakeClient(newsMsg(), decisionMsg(STRATEGIES_TOOL.name, strategies));
+  const context = buildContext({ prices, portfolio: newPortfolio(), focus: 'NVDA' });
+  const out = await analyze({ client, context, quotes: prices.quotes });
+  assert.equal(client.calls[0].model, 'claude-haiku-4-5');
+  const decide = client.calls[1];
+  assert.equal(decide.model, 'claude-sonnet-5');
+  assert.deepEqual(decide.tools.map((t) => t.name), ['submit_strategies']); // no web search
+  const sent = JSON.parse(decide.messages[0].content.split('\n\n')[1]);
+  assert.deepEqual(sent.news.items.map((i) => i.headline), ['AI capex beats', 'Fed hikes']); // NVDA + market-wide
   assert.equal(out.strategies.length, 1);
-  assert.equal(out.sources.length, 1);
-  assert.ok(out.usage.costUsd > 0);
+  assert.equal(out.usage.input, 20000); // both steps counted
+  assert.equal(out.usage.searches, 2);
 });
 
 test('parsePicks keeps watchlist stocks once each and records the price at the time', () => {
@@ -136,12 +184,28 @@ test('parsePicks keeps watchlist stocks once each and records the price at the t
   assert.deepEqual(out.picks[1].source_urls, []);
 });
 
-test('recommend sends the whole watchlist and the date', async () => {
-  const client = fakeClient(msg([toolUse('submit_picks', { market_summary: 'm', picks: [] })]));
+test('recommend gathers news once, then picks from it without searching', async () => {
+  const client = fakeClient(newsMsg(), msg([toolUse('submit_picks', {
+    market_summary: 'm',
+    picks: [{ symbol: 'NVDA', stance: 'long', conviction: 'high', horizon: 'weeks', thesis: 't', news: 'n', risks: 'r', source_urls: [SRC, 'https://never-searched.example'] }],
+  })]));
   const out = await recommend({ client, prices, now: new Date('2026-09-26T00:00:00Z') });
-  assert.match(client.calls[0].messages[0].content, /Sat, 26 Sep 2026/);
-  assert.equal(JSON.parse(client.calls[0].messages[0].content.split('\n\n')[1]).watchlist.length, 20);
+  assert.equal(client.calls.length, 2);
+  assert.match(client.calls[1].messages[0].content, /Sat, 26 Sep 2026/);
+  const sent = JSON.parse(client.calls[1].messages[0].content.split('\n\n')[1]);
+  assert.equal(sent.watchlist.length, 20);
+  assert.equal(sent.news.items.length, 3);
+  assert.deepEqual(out.picks[0].source_urls, [SRC]);
+  assert.equal(out.news.items.length, 3); // returned so the fund can reuse it
   assert.equal(out.createdAt, '2026-09-26T00:00:00.000Z');
+});
+
+test('recommend reuses a digest it is given and only pays for the decision', async () => {
+  const client = fakeClient(decisionMsg('submit_picks', { market_summary: 'm', picks: [] }));
+  const out = await recommend({ client, prices, news: { ...digest, sources: [], model: 'claude-haiku-4-5', usage: { input: 1, output: 1, searches: 1, costUsd: 9 } } });
+  assert.equal(client.calls.length, 1);
+  assert.equal(out.usage.costUsd, 0.04); // decision only: 10k in @ $2/M + 2k out @ $10/M on Sonnet
+  assert.equal(out.news, undefined);
 });
 
 test('fund context covers only the fund\'s market and its own state', async () => {
@@ -152,9 +216,14 @@ test('fund context covers only the fund\'s market and its own state', async () =
   assert.equal(ctx.fund.buying_power, 10000);
   assert.deepEqual(ctx.analyst_picks.map((p) => p.symbol), ['D05.SI']);
 
-  const client = fakeClient(msg([toolUse(FUND_TOOL.name, { outlook: 'o', orders: [], protections: [], source_urls: [] })]));
+  const client = fakeClient(newsMsg(), msg([toolUse(FUND_TOOL.name, { outlook: 'o', orders: [], protections: [], source_urls: [SRC] })]));
   const d = await decideFund({ client, fund, quotes: prices.quotes });
   assert.equal(d.outlook, 'o');
+  assert.match(client.calls[0].messages[0].content, /D05\.SI/);
+  assert.doesNotMatch(client.calls[0].messages[0].content, /AAPL/); // news only for the fund's market
+  assert.equal(client.calls[1].model, 'claude-sonnet-5');
+  assert.deepEqual(d.source_urls, [SRC]);
+  assert.ok(d.news);
 });
 
 test('every tool schema forbids extra properties and requires every field (strict tool use)', () => {
@@ -166,5 +235,5 @@ test('every tool schema forbids extra properties and requires every field (stric
     }
     if (s.type === 'array') walk(s.items);
   };
-  for (const t of [STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL]) walk(t.input_schema);
+  for (const t of [STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL]) walk(t.input_schema);
 });
