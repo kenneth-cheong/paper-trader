@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Paper Trader</title>
+  <meta name="description" content="Simulate trading SGX and US stocks with virtual cash and see whether you end up with a net profit or loss.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M1 12l4-4 3 3 6-7' fill='none' stroke='%2316a34a' stroke-width='2'/></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1 12l4-4 3 3 6-7" /></svg>
+      <h1>Paper Trader</h1>
+    </div>
+    <div class="top-actions">
+      <span id="updated" class="muted small"></span>
+      <button id="refresh" class="ghost" title="Reload prices">Refresh</button>
+      <button id="open-settings" class="ghost">Portfolio settings</button>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <main>
+    <section class="cards" id="cards" aria-label="Profit and loss"></section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Holdings</h2>
+      </div>
+      <div class="table-wrap"><table id="holdings"></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Markets</h2>
+        <div class="seg" role="tablist" id="market-filter">
+          <button role="tab" data-market="all" aria-selected="true">All</button>
+          <button role="tab" data-market="SGX">SGX</button>
+          <button role="tab" data-market="US">US</button>
+        </div>
+      </div>
+      <p class="muted small" id="market-status"></p>
+      <div class="table-wrap"><table id="markets"></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Trade history</h2>
+      </div>
+      <div class="table-wrap"><table id="trades"></table></div>
+    </section>
+
+    <p class="muted small foot">
+      Virtual money only. Prices come from Yahoo Finance via a scheduled job and may be delayed.
+      Your portfolio is saved in this browser; use Portfolio settings to export it or move it to another device.
+    </p>
+  </main>
+
+  <dialog id="trade-dialog">
+    <form method="dialog" id="trade-form">
+      <h3 id="trade-title"></h3>
+      <div class="seg wide" id="side">
+        <button type="button" data-side="buy" aria-pressed="true">Buy</button>
+        <button type="button" data-side="sell" aria-pressed="false">Sell</button>
+      </div>
+      <label>Shares
+        <div class="qty-row">
+          <input id="qty" type="number" min="1" step="1" inputmode="numeric" required>
+          <button type="button" id="qty-max" class="ghost">Max</button>
+        </div>
+      </label>
+      <dl class="trade-facts" id="trade-facts"></dl>
+      <p class="note" id="trade-note"></p>
+      <p class="error" id="trade-error" role="alert"></p>
+      <div class="dialog-actions">
+        <button type="button" class="ghost" id="trade-cancel">Cancel</button>
+        <button type="submit" id="trade-submit" class="primary">Buy</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="settings-dialog">
+    <form method="dialog" id="settings-form">
+      <h3>Portfolio settings</h3>
+      <p class="muted small" id="settings-started"></p>
+      <h4>Start over</h4>
+      <p class="small">Wipes all holdings and trades and starts again with this much virtual cash.</p>
+      <div class="two">
+        <label>SGD cash <input id="start-sgd" type="number" min="0" step="1000" required></label>
+        <label>USD cash <input id="start-usd" type="number" min="0" step="1000" required></label>
+      </div>
+      <button type="button" id="reset" class="danger">Reset portfolio</button>
+      <h4>Back up or move</h4>
+      <div class="row">
+        <button type="button" id="export" class="ghost">Export portfolio</button>
+        <label class="file-btn ghost">Import portfolio<input type="file" id="import" accept="application/json,.json" hidden></label>
+      </div>
+      <p class="error" id="settings-error" role="alert"></p>
+      <div class="dialog-actions">
+        <button type="submit" class="primary">Done</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

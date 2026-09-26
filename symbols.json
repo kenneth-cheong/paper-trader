@@ -1,0 +1,22 @@
+[
+  { "symbol": "D05.SI",  "name": "DBS Group",                         "market": "SGX" },
+  { "symbol": "O39.SI",  "name": "OCBC Bank",                         "market": "SGX" },
+  { "symbol": "U11.SI",  "name": "UOB",                               "market": "SGX" },
+  { "symbol": "Z74.SI",  "name": "Singtel",                           "market": "SGX" },
+  { "symbol": "C6L.SI",  "name": "Singapore Airlines",                "market": "SGX" },
+  { "symbol": "S68.SI",  "name": "Singapore Exchange",                "market": "SGX" },
+  { "symbol": "BN4.SI",  "name": "Keppel",                            "market": "SGX" },
+  { "symbol": "C38U.SI", "name": "CapitaLand Integrated Comm. Trust", "market": "SGX" },
+  { "symbol": "Y92.SI",  "name": "Thai Beverage",                     "market": "SGX" },
+  { "symbol": "ES3.SI",  "name": "SPDR STI ETF",                      "market": "SGX" },
+  { "symbol": "AAPL",    "name": "Apple",                             "market": "US" },
+  { "symbol": "MSFT",    "name": "Microsoft",                         "market": "US" },
+  { "symbol": "NVDA",    "name": "Nvidia",                            "market": "US" },
+  { "symbol": "AMZN",    "name": "Amazon",                            "market": "US" },
+  { "symbol": "GOOGL",   "name": "Alphabet",                          "market": "US" },
+  { "symbol": "META",    "name": "Meta Platforms",                    "market": "US" },
+  { "symbol": "TSLA",    "name": "Tesla",                             "market": "US" },
+  { "symbol": "BRK-B",   "name": "Berkshire Hathaway B",              "market": "US" },
+  { "symbol": "SPY",     "name": "SPDR S&P 500 ETF",                  "market": "US" },
+  { "symbol": "QQQ",     "name": "Invesco QQQ (Nasdaq-100)",          "market": "US" }
+]

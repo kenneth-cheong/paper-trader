@@ -1,0 +1,47 @@
+name: Fetch prices and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+  schedule:
+    # Every 15 minutes on weekdays while SGX (01:00-09:00 UTC) or US markets (13:30-21:00 UTC) trade,
+    # plus one run after the US close so the day's closing prices land. GitHub may start scheduled runs late.
+    - cron: '*/15 1-9,13-21 * * 1-5'
+    - cron: '30 22 * * 1-5'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --test
+      - id: pages
+        uses: actions/configure-pages@v5
+      # Passing the live prices.json lets a symbol that fails this run keep its last price.
+      - run: node scripts/fetch-prices.mjs "${{ steps.pages.outputs.base_url }}/data/prices.json"
+      - name: Collect site files
+        run: |
+          mkdir -p _site/data
+          cp index.html app.js portfolio.js styles.css _site/
+          cp data/prices.json data/sample-prices.json _site/data/
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

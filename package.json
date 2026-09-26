@@ -1,0 +1,1 @@
+{"type":"module","private":true,"scripts":{"test":"node --test","prices":"node scripts/fetch-prices.mjs"}}
