@@ -47,6 +47,12 @@
 // expected moves hardly vary, it says they're formulaic instead of judging them. At most 3 of these
 // lessons reach the AI.
 //
+// Every order and idea passed on also carries its factors at the time (factors.js: six point-in-time
+// factors and the regime, a compact array), stored at decision time, or worked out from the two years of
+// prices (data/ohlcv.json) for ideas made before that; they go in the idea log as columns. The factor lab
+// (factors.js factorLab) pools each market's funds and can make at most three lessons, on splits fixed in
+// advance (conditionLessons); the AI sees one only while its condition holds (playbookForPrompt).
+//
 // A trade the owner declines keeps the reason they chose (fund.js DECLINE_REASONS), in the idea log
 // too, so their own calls are graded like the fund's: how the trades declined for each reason would
 // have done (learningStats declinedByReason, the page's "Your calls"). The AI sees a reason once it
@@ -59,6 +65,7 @@ import { DECLINE_REASONS } from './fund.js';
 import { marketForCurrency } from './markets.js';
 import { thesisOf, lessonsAppliedOf, catalystPassed, moveWords, CATALYST_TYPES, CATALYST_LABELS, HORIZON_DAYS, HORIZON_LABELS, STALE_DAYS } from './thesis.js';
 import { matchesRegime } from './memory-long.js';
+import { FACTOR_KEYS, factorsAt, revealedStyle, conditionHolds } from './factors.js';
 import {
   betaAt, peerBaseline, peerLabel, roundTripFee, separateBets, estimate, difference, lessonStatus, confidenceOf, betsNeeded,
   weekdaysBetween, weeklyMean, isoWeek, seeded, gauss, quantile, GATE, BANKS,
@@ -143,6 +150,7 @@ export function collectIdeas(fund) {
         fee: !exit && o.fee > 0 && o.shares > 0 && o.price > 0 ? o.fee / (o.shares * o.price) : null,
         shares: o.shares > 0 ? o.shares : null,
         thesis: exit ? null : o.thesis ?? null, lessons: o.lessonsApplied?.length ?? 0,
+        ...(!exit && Array.isArray(o.factors) ? { factors: o.factors } : {}),
         ...(why && Object.hasOwn(DECLINE_REASONS, why) ? { declineWhy: why } : {}),
       });
     });
@@ -150,6 +158,7 @@ export function collectIdeas(fund) {
       id: `${d.time}#c${i}`, t, symbol: c.symbol, action: c.stance === 'short' ? 'short' : 'buy', direction: c.stance === 'short' ? -1 : 1,
       kind: 'entry', outcome: 'passed', ideaType: c.idea_type ?? 'other', conviction: null, reason: c.why_not ?? '', price: null, fee: null,
       thesis: c.thesis !== undefined ? c.thesis : thesisOf(c), lessons: c.lessonsApplied?.length ?? lessonsAppliedOf(c).length,
+      ...(Array.isArray(c.factors) ? { factors: c.factors } : {}),
     }));
   }
   for (const e of fund.events ?? []) {
@@ -170,7 +179,10 @@ export function collectIdeas(fund) {
 // month index, month dividends, fee, beta, weekly stock-specific volatility, week peers' move, trade
 // value, price, quarter move, quarter index, expected move, horizon days, catalyst, catalyst age in
 // trading days, catalyst came within the horizon (1/0), lessons applied, the owner's reason for
-// declining it], moves as fractions, the fee a round trip. The code lists are append-only: stored rows
+// declining it, then an entry's factors at the time, one column each (factors.js FACTOR_KEYS: vs its
+// 50-day average, from its 52-week high, volume ratio, the month's move in typical months, trading days
+// to or since results, the index vs its 200-day average, the VIX, USD/SGD over a month)], moves as
+// fractions, the fee a round trip. The code lists are append-only: stored rows
 // refer to their positions, and new columns only ever go on the end (older rows simply lack them;
 // trailing empty columns are left off). A row is frozen at the month, so its quarter columns are
 // filled in later (completeQuarters).
@@ -179,7 +191,7 @@ export const TYPE_CODES = ['other', 'news', 'earnings', 'momentum', 'value', 'te
 export const CONVICTION_CODES = [null, 'low', 'medium', 'high'];
 export const CATALYST_CODES = CATALYST_TYPES; // append-only too
 export const DECLINE_CODES = [null, 'risky', 'timing', 'stock', 'other']; // fund.js DECLINE_REASONS, append-only
-const COL = { price: 17, qMove: 18, qIdx: 19, expected: 20, horizon: 21, catalyst: 22, age: 23, passed: 24, lessons: 25, why: 26 };
+const COL = { price: 17, qMove: 18, qIdx: 19, expected: 20, horizon: 21, catalyst: 22, age: 23, passed: 24, lessons: 25, why: 26, factors: 27 };
 const ACTIONS = { entry: { 1: 'buy', '-1': 'short' }, exit: { 1: 'sell', '-1': 'cover' } };
 const r5 = (x) => (x == null || !Number.isFinite(x) ? null : Math.round(x * 1e5) / 1e5);
 
@@ -196,6 +208,7 @@ export function ideaRow(g) {
     ...(th ? [r5(th.expected == null ? null : th.expected / 100), th.horizon ?? null, Math.max(0, CATALYST_CODES.indexOf(th.catalyst)), th.age ?? null,
       g.catalystPassed == null ? null : Number(g.catalystPassed), g.lessons || null] : [null, null, null, null, null, null]),
     DECLINE_CODES.indexOf(g.declineWhy ?? null) > 0 ? DECLINE_CODES.indexOf(g.declineWhy) : null,
+    ...(g.kind === 'entry' && Array.isArray(g.factors) ? FACTOR_KEYS.map((_, i) => g.factors[i] ?? null) : []),
   ];
   while (row.length > COL.price && row.at(-1) == null) row.pop();
   return row;
@@ -212,13 +225,15 @@ export function frozenIdeas(log) {
       expected: expected == null ? null : Math.round(expected * 1e4) / 100, horizon: horizon ?? null, catalyst: CATALYST_CODES[catalyst] ?? 'none',
       catalystDate: '', wrongIf: '', age: age ?? null, stale: age == null ? null : age > STALE_DAYS,
     } : null;
+    const factors = r.slice(COL.factors, COL.factors + FACTOR_KEYS.length);
     return [{
       id: `log:${t}:${symbol}:${cls}`, t, symbol, direction, kind, outcome, action: ACTIONS[kind][direction],
       ideaType: TYPE_CODES[type] ?? 'other', conviction: CONVICTION_CODES[conv] ?? null, repeats: repeats ?? 1, reason: '', price: price ?? null, fee,
       beta: beta ?? null, idio: idio ?? null, value: value ?? null,
       week: { move: wMove, index: wIdx, peer: wPeer ?? null }, month: mMove == null ? null : { move: mMove, index: mIdx, divs },
       quarter: qMove == null ? null : { move: qMove, index: qIdx ?? null }, thesis, catalystPassed: passed == null ? null : passed === 1, lessons: lessons ?? 0,
-      ...(DECLINE_CODES[why] ? { declineWhy: DECLINE_CODES[why] } : {}), frozen: true,
+      ...(DECLINE_CODES[why] ? { declineWhy: DECLINE_CODES[why] } : {}),
+      ...(factors.some((v) => v != null) ? { factors: FACTOR_KEYS.map((_, i) => factors[i] ?? null) } : {}), frozen: true,
     }];
   });
 }
@@ -255,6 +270,22 @@ export function completeQuarters(fund, quotes, currency, now = new Date(), { cal
       if (passed != null) row[COL.passed] = Number(passed);
     }
     for (let i = 0; i < row.length; i++) if (row[i] === undefined) row[i] = null;
+    n++;
+  }
+  return n;
+}
+
+// Adds the factor columns to frozen entry rows that have none (ideas logged before factors were kept),
+// worked out from the prices (factors.js factorInputs: the two years of data/ohlcv.json) where they cover
+// the idea's time. Returns how many rows got them.
+export function completeFactors(fund, inputs) {
+  let n = 0;
+  for (const row of Array.isArray(fund.ideaLog) ? fund.ideaLog : []) {
+    if (!String(CLASS_CODES[row[3]] ?? '').startsWith('entry:') || row.slice(COL.factors).some((v) => v != null)) continue;
+    const f = factorsAt(inputs, row[1], row[0]);
+    if (!f) continue;
+    while (row.length < COL.factors) row.push(null);
+    row.splice(COL.factors, FACTOR_KEYS.length, ...f);
     n++;
   }
   return n;
@@ -1191,6 +1222,7 @@ function updateBook(pb, { graded, ideas, decisions, now }) {
   }
   for (const [id, e] of Object.entries(book)) if (e.on && !live.has(id)) { e.on = false; delete e.gated; }
   for (const l of pb.calibrationLessons ?? []) record(l.id, { source: 'calibration' });
+  for (const l of pb.conditionLessons ?? []) record(l.id, { source: 'conditions' });
   for (const l of pb.review ?? []) {
     const checked = lessonKind(l) === 'checked' && !isOpinion(l.filter);
     const e = record(l.id, { source: 'weekly review', text: shortText(l.text), ...(checked ? { filter: cleanFilter(l.filter), claim: l.claim } : {}) }, l.bornAt ?? iso);
@@ -1274,26 +1306,34 @@ function sameIdeas(pb) {
 // ---------- the playbook ----------
 
 // lessonHistory: each lesson's evidence week by week, for the weekly report (report.js); ownerSummary:
-// { at, text }, the latest weekly review's summary for the owner.
+// { at, text }, the latest weekly review's summary for the owner; conditionLessons: the factor lab's
+// lessons for its market (factors.js factorLab); style: its revealed style (factors.js revealedStyle).
 export const emptyPlaybook = () => ({
   updatedAt: null, graded: 0, stats: null, lessons: [], review: [], reviewedAt: null, reviewGraded: 0, own: [], hidden: [], kept: [], recent: [],
   watching: [], lessonBook: {}, trackRecord: null, edgeFrom: null, calibration: null, calibrationLessons: [], stocks: {}, lessonHistory: {}, ownerSummary: null,
+  conditionLessons: [], style: null,
 });
 
 // Re-grades everything and refreshes the rule-made lessons, the calibration and the lesson book. Keeps
 // the review, the owner's lessons and hidden ids. `recent`: the latest graded ideas, for the fund page.
 // `calendar`: calendar.js resultsCalendar, for checking results catalysts; `pooled`: the market's pooled
-// calibration (poolCalibration, from the last run), for the calibration lessons.
-export function updatePlaybook(fund, quotes, now = new Date(), { calendar = null, pooled = null } = {}) {
+// calibration (poolCalibration, from the last run), for the calibration lessons. `factors`: factors.js
+// factorInputs, for the factors of ideas that don't have theirs yet and the fund's revealed style; `lab`:
+// its market's factor lab (factors.js factorLab, from the last run), whose lessons it takes (left as they
+// were when it's undefined).
+export function updatePlaybook(fund, quotes, now = new Date(), { calendar = null, pooled = null, factors = null, lab = undefined } = {}) {
   const pb = migratePlaybook({ ...emptyPlaybook(), ...(fund.playbook ?? {}) }, now);
   completeQuarters(fund, quotes, fund.currency, now, { calendar });
-  const ideas = collectIdeas(fund);
+  if (factors) completeFactors(fund, factors);
+  const ideas = collectIdeas(fund).map((i) => (factors && i.kind === 'entry' && !i.factors ? { ...i, factors: factorsAt(factors, i.symbol, i.t) } : i));
   const graded = chargeFees(gradeIdeas(ideas, quotes, fund.currency, now, { calendar }), fund, quotes);
   freezeIdeas(fund, graded);
   pb.calibration = calibration(graded);
   pb.calibrationLessons = calibrationLessons(pb.calibration, pooled);
   pb.stats = learningStats(graded);
   pb.stocks = stockRecords(graded);
+  if (factors) pb.style = revealedStyle(graded, factors);
+  if (lab !== undefined) pb.conditionLessons = lab?.lessons ?? [];
   pb.graded = graded.length;
   // Merging repeats can lower the count; don't let that hold the weekly review back for weeks.
   if ((pb.reviewGraded ?? 0) > pb.graded) pb.reviewGraded = pb.graded;
@@ -1317,21 +1357,31 @@ export function updatePlaybook(fund, quotes, now = new Date(), { calendar = null
   return { pb, graded };
 }
 
-// The lessons in force: the owner's first, then the review's checked ones, calibration's and the
-// rule-made ones, then the review's opinions (not checked), minus hidden ones.
-export function activeLessons(pb) {
+// The lessons in force: the owner's first, then the review's checked ones, calibration's, the factor
+// lab's and the rule-made ones, then the review's opinions (not checked), minus hidden ones; the first 12.
+// With `conditions` (factors.js conditionsNow; for the AI), a factor lab lesson counts only while its
+// condition holds today, with appliesNow saying why, and one that doesn't hold is left out before the 12
+// are counted, so it never takes the place of another lesson.
+export function activeLessons(pb, { conditions } = {}) {
   if (!pb) return [];
   const hidden = new Set(pb.hidden ?? []);
   const review = pb.review ?? [];
   const opinion = (l) => lessonKind(l) === 'opinion';
-  return [...(pb.own ?? []), ...review.filter((l) => !opinion(l)), ...(pb.calibrationLessons ?? []), ...(pb.lessons ?? []), ...review.filter(opinion)]
-    .filter((l) => !hidden.has(l.id) && String(l.text ?? '').trim() && l.text !== 'undefined').slice(0, 12);
+  const forAI = conditions !== undefined;
+  return [...(pb.own ?? []), ...review.filter((l) => !opinion(l)), ...(pb.calibrationLessons ?? []), ...(pb.conditionLessons ?? []), ...(pb.lessons ?? []), ...review.filter(opinion)]
+    .filter((l) => !hidden.has(l.id) && String(l.text ?? '').trim() && l.text !== 'undefined')
+    .flatMap((l) => {
+      if (!forAI || !l.condition) return [l];
+      const holds = conditionHolds(l.condition, conditions);
+      return holds ? [{ ...l, appliesNow: holds }] : [];
+    })
+    .slice(0, 12);
 }
 
 // A lesson's numbers for the AI (percent a week), named for what they measure, or nothing for the
 // owner's lessons and the review's opinions.
 const pct1 = (x) => Math.round(x * 1000) / 10;
-const MEASURE_KEYS = { edge: 'edge_pct_per_week', index: 'vs_index_pct_per_week', peers: 'vs_peers_pct_per_week', diff: 'high_minus_low_conviction_pct_per_week' };
+const MEASURE_KEYS = { edge: 'edge_pct_per_week', index: 'vs_index_pct_per_week', peers: 'vs_peers_pct_per_week', diff: 'high_minus_low_conviction_pct_per_week', split: 'vs_the_other_side_pct_per_week' };
 function lessonNumbers(l) {
   if (!l.confidence) return {};
   return {
@@ -1354,9 +1404,11 @@ function lessonStatusForAI(l, book) {
 // ten-year and the past year's, memory-long.js promptMarketLessons), at most 6, those whose evidence
 // covers days like today's `regime` (memory-long.js regimeNow) first; the regime only orders them.
 // The owner's calls on the trades they declined come as owner_declines, only reasons with
-// DECLINE_MIN_CASES cases (declinesForPrompt).
-export function playbookForPrompt(pb, { picksRecord = null, marketLessons = [], regime = null } = {}) {
-  const lessons = activeLessons(pb);
+// DECLINE_MIN_CASES cases (declinesForPrompt). A factor lab lesson (pb.conditionLessons) comes only while
+// its condition holds today (`conditions`: factors.js conditionsNow), with applies_now saying why; one
+// whose condition doesn't hold is left out.
+export function playbookForPrompt(pb, { picksRecord = null, marketLessons = [], regime = null, conditions = null } = {}) {
+  const lessons = activeLessons(pb, { conditions });
   const hidden = new Set(pb?.hidden ?? []);
   const shown = marketLessons.filter((l) => !hidden.has(l.id));
   const market = (regime ? [...shown.filter((l) => matchesRegime(l, regime)), ...shown.filter((l) => !matchesRegime(l, regime))] : shown).slice(0, 6);
@@ -1368,6 +1420,7 @@ export function playbookForPrompt(pb, { picksRecord = null, marketLessons = [], 
     // its text isn't sent
     lessons: lessons.map((l) => ({
       id: l.id, lesson: l.text, ...lessonNumbers(l), ...lessonStatusForAI(l, pb?.lessonBook),
+      ...(l.appliesNow ? { applies_now: l.appliesNow } : {}),
       ...(l.source === 'weekly review' ? {} : { evidence: l.evidence ?? null }), from: l.source,
     })),
     ...(market.length ? { market_memory: market.map((l) => ({ id: l.id, lesson: l.text, ...lessonNumbers(l), evidence: l.evidence })) } : {}),
@@ -1501,7 +1554,7 @@ function bookWords(id, e, { hidden, kept, live }) {
 export function reviewLessonBook(pb, max = 30) {
   const hidden = new Set(pb?.hidden ?? []), kept = new Set(pb?.kept ?? []);
   const book = pb?.lessonBook ?? {};
-  const lessons = [...(pb?.own ?? []), ...(pb?.review ?? []), ...(pb?.calibrationLessons ?? []), ...(pb?.lessons ?? [])];
+  const lessons = [...(pb?.own ?? []), ...(pb?.review ?? []), ...(pb?.calibrationLessons ?? []), ...(pb?.conditionLessons ?? []), ...(pb?.lessons ?? [])];
   const live = new Set(lessons.map((l) => l.id));
   const text = new Map(lessons.map((l) => [l.id, l.text]));
   const source = new Map(lessons.map((l) => [l.id, l.source]));
@@ -1635,7 +1688,7 @@ export function applyReview(fund, lessons, graded = [], now = new Date(), { summ
   pb.review = listed.filter((l) => !unlisted.has(l.id));
   pb.hidden = [...hidden];
   pb.kept = [...kept].filter((id) => pb.review.some((l) => l.id === id));
-  capBook(book, new Set([...pb.own, ...pb.review, ...(pb.calibrationLessons ?? []), ...(pb.lessons ?? [])].map((l) => l.id)));
+  capBook(book, new Set([...pb.own, ...pb.review, ...(pb.calibrationLessons ?? []), ...(pb.conditionLessons ?? []), ...(pb.lessons ?? [])].map((l) => l.id)));
   pb.trackRecord = trackRecord(book);
   pb.reviewedAt = iso;
   pb.reviewGraded = graded.length;

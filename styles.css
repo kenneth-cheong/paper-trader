@@ -477,3 +477,25 @@ textarea { font: inherit; width: 100%; padding: 7px 10px; border: 1px solid var(
   .week-pick { width: 100%; }
   .week-pick select { flex: 1; }
 }
+/* the reading guide (home) */
+.reading-honest { margin: 10px 0 4px; }
+.reading-list li { margin: 8px 0; overflow-wrap: anywhere; }
+.reading-list .chip { margin: 0 6px 0 0; }
+.reading-own { margin-top: 18px; }
+.reading-form, .ask-form { margin: 10px 0 4px; max-width: 640px; }
+.reading-form label, .ask-form label { margin-top: 8px; }
+.reading-form input, .reading-form textarea, .ask-form textarea { margin-top: 4px; }
+.ask-list li { overflow-wrap: anywhere; }
+.chart-table.reading-table td:last-child, .chart-table.reading-table th:last-child { text-align: left; white-space: normal; min-width: 170px; }
+/* the factor and regime lab (fund page) */
+.lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 24px; }
+.lab-cell { min-width: 0; }
+.lab-title { font-size: 13px; font-weight: 600; margin: 10px 0 0; }
+.lab-splits { padding-left: 18px; }
+.lab-splits li { margin: 6px 0; }
+.lab-splits .chip { white-space: normal; }
+.chart .bar-row.muted-row .cat, .chart .bar-row.muted-row .val { fill: var(--muted); }
+.chart-table tr.muted-row td { color: var(--muted); }
+@media (max-width: 800px) {
+  .lab-grid { grid-template-columns: minmax(0, 1fr); }
+}

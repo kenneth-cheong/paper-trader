@@ -35,8 +35,11 @@
 //    GATE.edge (over its horizon); 2024 onwards, which it wasn't found on, must then show the same sign
 //    at half its size or more. Otherwise the lesson is that there's no reliable pattern, which stops the
 //    AI assuming one. holdoutNoiseCheck measures how often pure noise gets through.
-// 5. The regime (regimeNow): the index against its 200-day average and, for US stocks, the VIX. It's
-//    descriptive only: no lesson depends on it; lessons with evidence from days like today come first.
+// 5. The regime (regimeNow): the index against its 200-day average and, for US stocks, the VIX. Here it's
+//    descriptive only: no ten-year lesson depends on it; lessons with evidence from days like today come
+//    first. (The factor lab's lessons on the funds' own ideas, factors.js, can depend on it.)
+// 6. The owner's own questions (Ask the data, hypotheses.js) are answered from the same cases (longCases),
+//    each also with the day after, and the same held-out check.
 // The universe is today's 17 stocks, which survived the ten years and mostly won: tendencies, not laws.
 
 import { BENCHMARKS } from './benchmark.js';
@@ -53,6 +56,7 @@ export const LONG = {
   flatRun: 5, // this many unchanged closes in a row: no trading
   maxDividend: 0.2, // a dividend over 20% of the price is a data error
   horizons: [5, 21],
+  caseHorizons: [1, 5, 21], // every case also carries its next day, for the owner's questions (hypotheses.js)
   stopKs: [1.5, 2, 2.5, 3], hold: 21, stopShare: 0.2, // suggested stop: hit by ordinary swings in 1 hold in 5
   minBars: 250, maxBadShare: 0.05, // a series needs a year of prices, with at most 5% of days left out
 };
@@ -360,7 +364,7 @@ function stockFrame(symbol, s, market, idx, trend, vix) {
   const item = (i, dir, extra = {}) => {
     const { beta, idio } = betaOf(i);
     const out = { symbol, t: s.t[i], date: s.date[i], direction: dir, beta, idio, ...regimeAt(i) };
-    for (const h of LONG.horizons) { out[`x${h}`] = abnormal(i, h, dir); out[`end${h}`] = i + h < n ? s.date[i + h] : null; }
+    for (const h of LONG.caseHorizons) { out[`x${h}`] = abnormal(i, h, dir); out[`end${h}`] = i + h < n ? s.date[i + h] : null; }
     return Object.assign(out, extra);
   };
   return { symbol, s, market, n, pos, idxR, sd, vol, betaOf, driftOf, abnormal, vsIndex, regimeAt, item, q, iq };
@@ -422,7 +426,7 @@ function resultsReactions(F, dates) {
     const dir = tone === 'positive' ? 1 : tone === 'negative' ? -1 : 0;
     // and, for the stock's card, the week and month from the close before, against the index
     const it = F.item(i, dir || 1, { day, tone, from: d.from, week: F.vsIndex(i - 1, i + 4), month: F.vsIndex(i - 1, i + 20) });
-    if (!dir) for (const h of LONG.horizons) it[`x${h}`] = null; // in line: no side to drift to
+    if (!dir) for (const h of LONG.caseHorizons) it[`x${h}`] = null; // in line: no side to drift to
     out.push(it);
   }
   return out;
@@ -500,9 +504,11 @@ const brief = (e) => (e ? { bets: e.bets, clusters: e.clusters, mean: e.mean, ed
 //   didnt-hold  it looked real on 2016-2023 but 2024 on disagreed
 //   no-pattern  under a 90% chance on 2016-2023, or too small to matter
 //   too-few     too few cases in either period to check
-export function holdoutCheck(items, h) {
-  const train = horizonEstimate(items.filter((x) => x[`end${h}`] && x[`end${h}`] <= HOLDOUT.trainTo), h);
-  const test = horizonEstimate(items.filter((x) => x.date >= HOLDOUT.testFrom), h);
+// `cut`: other periods ({ trainTo, testFrom }), for the owner's questions on the funds' own ideas
+// (hypotheses.js), which only go back months.
+export function holdoutCheck(items, h, cut = HOLDOUT) {
+  const train = horizonEstimate(items.filter((x) => x[`end${h}`] && x[`end${h}`] <= cut.trainTo), h);
+  const test = horizonEstimate(items.filter((x) => x.date >= cut.testFrom), h);
   let status;
   if (!train || train.bets < GATE.bets || !test || test.bets < HOLDOUT.testBets) status = 'too-few';
   else if (train.p < HOLDOUT.p || Math.abs(train.edge * (h / 5)) < GATE.edge) status = 'no-pattern';
@@ -807,6 +813,85 @@ export function buildLongMemory({ series, symbols, filings = null, company = nul
     }
   }
   return { version: 1, updatedAt: now.toISOString(), from, to, train: [from, HOLDOUT.trainTo], test: [HOLDOUT.testFrom, to], data, markets, stocks };
+}
+
+// Each stock's weeks, for the owner's questions (hypotheses.js): one case at each week's last session,
+// in the direction the stock went against its index that week (up if it beat it), with the week's own
+// move (its total return) and whether that last session came on heavy volume.
+function weeklyCases(F) {
+  const { s } = F, out = [];
+  const last = new Map();
+  s.t.forEach((t, i) => last.set(isoWeek(t), i));
+  const ends = [...last.values()];
+  for (let w = 1; w < ends.length; w++) {
+    const i0 = ends[w - 1], i1 = ends[w];
+    if (i0 < 1 || s.bad[i1] !== s.bad[i0]) continue;
+    const vs = F.vsIndex(i0, i1);
+    if (vs == null) continue;
+    const heavy = F.vol[i1] > 0 && s.volume[i1] > 0 ? s.volume[i1] >= LONG.heavy * F.vol[i1] : null;
+    out.push(F.item(i1, vs >= 0 ? 1 : -1, { move: s.tr[i1] / s.tr[i0] - 1, heavy }));
+  }
+  return out;
+}
+
+// The cases behind the owner's questions (hypotheses.js), from the same cleaned series as the weekly
+// build: for each market, every big move, ex-date, results day and stock-week, each with its outcomes
+// a day, a week and a month on (x1, x5, x21: abnormal returns in the case's direction, as the studies
+// measure them) and the regime that day (the VIX's level for SGX stocks too). The stocks the build
+// leaves out are listed with why. A market whose prices came back but can't be used (its index left
+// out, or every stock) is in `unusable` with why, apart from one whose prices didn't arrive this time
+// (it's simply missing: try again). { from, to, leftOut, unusable: { [market]: why }, markets: { [market]:
+// { index, stocks, cases: { big_moves, ex_dividend, results_days, weekly_stock_sample } } } }.
+export function longCases({ series, symbols, filings = null, company = null }) {
+  const vix = series[VIX] && !series[VIX].leftOut ? series[VIX] : null;
+  const leftOut = [], markets = {}, unusable = {};
+  let from = null, to = null;
+  for (const market of Object.keys(INDEX_OF)) {
+    const indexSymbol = INDEX_OF[market], idx = series[indexSymbol];
+    const rows = symbols.filter((x) => x.market === market && !x.etf && x.symbol !== indexSymbol);
+    if (!idx || idx.leftOut) {
+      for (const row of rows) leftOut.push({ symbol: row.symbol, why: idx ? `its index ${indexSymbol} isn't usable (${idx.leftOut})` : `its index ${indexSymbol} had no prices this time` });
+      if (idx) unusable[market] = `${indexSymbol}, the ${market} index the answers are measured against, isn't usable in the ten-year data: ${idx.leftOut}`;
+      continue;
+    }
+    const trend = trendOf(idx);
+    const frames = [];
+    for (const row of rows) {
+      const s = series[row.symbol];
+      if (!s || s.leftOut) { leftOut.push({ symbol: row.symbol, why: s?.leftOut ?? 'no prices this time' }); continue; }
+      frames.push(stockFrame(row.symbol, s, market, idx, trend, vix));
+      from = !from || s.date[0] < from ? s.date[0] : from;
+      to = !to || s.date.at(-1) > to ? s.date.at(-1) : to;
+    }
+    if (!frames.length) {
+      if (rows.length && rows.every((row) => series[row.symbol]?.leftOut)) unusable[market] = `None of the ${market} stocks has usable prices in the ten-year data`;
+      continue;
+    }
+    // the VIX's level on every case's day (the build keeps it for US stocks only). For an SGX case, the
+    // last VIX close before the SGX session ended: SGX closes (09:00 UTC) before the US opens, so that is
+    // the previous US session's close, never the same date's, which comes inside the case's outcome.
+    const withVix = (items) => {
+      if (vix) {
+        for (const it of items) {
+          if (it.vix != null) continue;
+          let k = onOrBefore(vix.date, it.date);
+          if (market === 'SGX' && k >= 0 && vix.date[k] === it.date) k--;
+          if (k >= 0) it.vix = vixLevel(vix.close[k]);
+        }
+      }
+      return items;
+    };
+    markets[market] = {
+      index: indexSymbol, stocks: frames.map((F) => F.symbol),
+      cases: {
+        big_moves: withVix(frames.flatMap(bigMoves)),
+        ex_dividend: withVix(frames.flatMap(exDividends)),
+        results_days: withVix(frames.flatMap((F) => resultsReactions(F, resultsDates(F.symbol, { filings, company })))),
+        weekly_stock_sample: withVix(frames.flatMap(weeklyCases)),
+      },
+    };
+  }
+  return { from, to, leftOut, unusable, markets };
 }
 
 // Rounds the numbers and, if it's still over MAX_BYTES, drops the least needed detail until it fits:

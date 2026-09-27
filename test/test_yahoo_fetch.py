@@ -65,15 +65,19 @@ class LongHistoryTest(unittest.TestCase):
         self.assertNotIn('crumb', session.calls[0][1])
 
     @mock.patch.object(yf.time, 'sleep', lambda s: None)
-    def test_the_daily_download_adds_a_year_of_the_vix(self):
+    def test_the_daily_download_asks_for_two_years_and_a_year_of_usdsgd(self):
         session = FakeSession()
         with tempfile.TemporaryDirectory() as out, mock.patch.object(yf, 'yahoo_session', lambda: (session, 'c')), \
                 mock.patch.object(sys, 'argv', ['yahoo_fetch.py', out]):
             yf.main()
             files = set(os.listdir(out))
-        self.assertIn(yf.raw_name('^VIX', '1y', '1d'), files)
-        self.assertIn(yf.raw_name('SGD=X', '5d', '1d'), files)
+        self.assertIn(yf.raw_name('^VIX', '2y', '1d'), files)
+        self.assertIn(yf.raw_name('SGD=X', '1y', '1d'), files)  # a year of daily rates (fx.USDSGD is still the latest)
+        self.assertIn(yf.raw_name('AAPL', '2y', '1d'), files)
+        self.assertIn(yf.raw_name('AAPL', '5d', '15m'), files)
         self.assertEqual(len(files), 2 * len(self.symbols) + 2)
+        params = dict((s, p) for s, p in session.calls)
+        self.assertEqual(params['SGD%3DX'], {'range': '1y', 'interval': '1d', 'crumb': 'c'})  # no dividends for the rate
 
 
 if __name__ == '__main__':

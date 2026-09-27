@@ -86,7 +86,7 @@ test('the week\'s report: the fund against its index, the ideas graded that week
     A: { results: { next: { date: '2026-10-20', source: 'estimated' } } }, C: { results: { next: { date: '2026-12-20', source: 'yahoo' } } },
     D: { dividends: { next: { date: '2026-10-09', estimate: true }, yield_pct: 1.5, drop_vs_dividend: 0.8 }, results: { next: { date: '2026-10-06', source: 'yahoo' } } },
   };
-  const spend = { months: { '2026-10': { total: 1.5, fund: 1.2, learning: 0.2, backfill: 0.1 } } };
+  const spend = { months: { '2026-10': { total: 1.54, fund: 1.2, learning: 0.2, backfill: 0.1, articles: 0.04 } } }; // articles: the searches behind big moves
   const r = fileReport(f, { week: '2026-W40', graded, dossiers, quotes: QUOTES, spend, cap: '30', now: FRIDAY });
   assert.deepEqual([r.week, r.to, r.short, r.graded], ['2026-W40', '2026-10-02', false, 7]);
   assert.equal(r.fund.pct, 0.008); // 10,000 at the end of the week before, 10,080 now (Monday's point is next week's)
@@ -97,7 +97,7 @@ test('the week\'s report: the fund against its index, the ideas graded that week
   assert.deepEqual(r.calls.map((c) => [c.why, c.declined, c.right, c.of]), [['risky', 1, 1, 1], ['none', 1, 1, 1]]); // both would have lost money
   assert.deepEqual(r.comingUp.map((x) => [x.symbol, x.kind, x.date]), [['D', 'results', '2026-10-06'], ['D', 'ex', '2026-10-09'], ['A', 'results', '2026-10-20']]); // C's is too far off
   assert.equal(r.comingUp[1].dropPct, 1.2);
-  assert.deepEqual(r.cost, { month: '2026-10', decisions: 0, learning: 0.3, total: 1.5, cap: 30 });
+  assert.deepEqual(r.cost, { month: '2026-10', decisions: 0, learning: 0.34, total: 1.54, cap: 30 });
   assert.equal(r.first, true);
   const lines = reportLines(r);
   assert.equal(lines[0].text, `Week to 2 Oct: fund +0.8%, SPY +${(r.index.pct * 100).toFixed(1)}%.`);
@@ -109,7 +109,7 @@ test('the week\'s report: the fund against its index, the ideas graded that week
   assert.match(text, /When you declined for "too risky", you were right 1 time out of 1 \(the trade would have lost money a week later, after fees\); it would have made −[\d.]+% against SPY\./);
   assert.match(text, /When you declined without giving a reason/);
   assert.match(text, /Coming up: D reports results on 6 Oct; D goes ex-dividend around 9 Oct \(an estimate; the price usually drops about 1\.2% that day\); A reports results around 20 Oct \(an estimate\)\./);
-  assert.match(text, /AI cost in October so far: its decisions US\$0\.00; learning US\$0\.30 \(the weekly reviews and news look-ups, shared by every fund\); all scheduled AI US\$1\.50 of the US\$30 cap\./);
+  assert.match(text, /AI cost in October so far: its decisions US\$0\.00; learning US\$0\.34 \(the weekly reviews and news look-ups, shared by every fund\); all scheduled AI US\$1\.54 of the US\$30 cap\./);
   assert.match(text, /From next week, this report says how each lesson's evidence changed/);
   // stored with the fund; the same week isn't filed twice
   assert.equal(f.reports.length, 1);

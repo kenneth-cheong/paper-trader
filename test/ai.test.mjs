@@ -4,7 +4,7 @@ import { readFile } from 'node:fs/promises';
 import {
   askClaude, gatherNews, analyze, recommend, decideFund, buildContext, fundContext, stockStats, parseStrategies, parsePicks,
   BACKFILL_TOOL, REVIEW_TOOL, backfillNews, newsForPrompt, FUND_SYSTEM, PICKS_SYSTEM, NEWS_SYSTEM,
-  AIError, STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL,
+  AIError, STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL, MOVE_TOOL, explainMove, knownUrls, READING_TOOL, readCalls, ASK_TOOL, askSpec,
 } from '../ai.js';
 import { resultsCalendar } from '../calendar.js';
 import { newPortfolio, applyTrade } from '../portfolio.js';
@@ -125,6 +125,26 @@ test('askClaude explains refusals, truncation and giving up', async () => {
   await assert.rejects(askClaude({ client: fakeClient(talk(), talk()), tool: PICKS_TOOL, maxRounds: 2 }), /did not return/);
 });
 
+test('an error after the API answered carries what those answers cost; one before any answer carries nothing', async () => {
+  const talk = () => msg([{ type: 'text', text: 'hmm' }], { stop_reason: 'end_turn' }); // 10k in, 2k out, 2 searches each
+  const err = await askClaude({ client: fakeClient(talk(), talk()), tool: PICKS_TOOL, maxRounds: 2 }).catch((e) => e);
+  assert.match(err.message, /did not return/);
+  assert.deepEqual([err.usage.input, err.usage.output, err.usage.searches], [20000, 4000, 4]);
+  assert.equal(err.usage.costUsd, 0.08); // Haiku: 20k × US$1/M + 4k × US$5/M + 4 × US$0.01
+  const cut = await askClaude({ client: fakeClient(msg([toolUse('submit_picks', {})], { stop_reason: 'max_tokens' })), tool: PICKS_TOOL }).catch((e) => e);
+  assert.ok(cut.usage.costUsd > 0);
+  const refused = await askClaude({ client: fakeClient(msg([], { stop_reason: 'refusal' })), tool: PICKS_TOOL }).catch((e) => e);
+  assert.ok(refused.usage.costUsd > 0);
+  // the API unreachable on the first request: nothing billed
+  const down = { beta: { messages: { stream: () => ({ finalMessage: async () => { throw new Error('socket hang up'); } }) } } };
+  const none = await askClaude({ client: down, tool: PICKS_TOOL }).catch((e) => e);
+  assert.equal(none.usage, undefined);
+  // unreachable on the second round, after a billed first one
+  let n = 0;
+  const flaky = { beta: { messages: { stream: () => ({ finalMessage: async () => { if (n++) throw new Error('socket hang up'); return talk(); } }) } } };
+  assert.equal((await askClaude({ client: flaky, tool: PICKS_TOOL, maxRounds: 2 }).catch((e) => e)).usage.input, 10000);
+});
+
 test('buildContext includes portfolio, record and focused stock only', () => {
   let p = applyTrade(newPortfolio(), { symbol: 'AAPL', side: 'buy', qty: 10, price: 100, currency: 'USD', time: '2026-01-01T00:00:00Z' });
   p = applyTrade(p, { symbol: 'AAPL', side: 'sell', qty: 5, price: 120, currency: 'USD', time: '2026-01-02T00:00:00Z' });
@@ -243,7 +263,7 @@ test('every tool schema forbids extra properties and requires every field (stric
     }
     if (s.type === 'array') walk(s.items);
   };
-  for (const t of [STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL, BACKFILL_TOOL, REVIEW_TOOL]) walk(t.input_schema);
+  for (const t of [STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL, BACKFILL_TOOL, REVIEW_TOOL, MOVE_TOOL, READING_TOOL, ASK_TOOL]) walk(t.input_schema);
 });
 
 test('a fund decision puts the shared market data first, cached only when asked, with the playbook in the fund part', async () => {
@@ -334,4 +354,114 @@ test('results due soon and analysts reach the AI, the shared market data stays i
   const plain = fundContext({ fund: holder, quotes: prices.quotes, news, now });
   assert.equal(plain.upcoming_results, undefined);
   assert.equal(plain.positions[0].results_soon, undefined);
+});
+
+// ---------- the news feeds' headlines as leads, and the search behind a big move ----------
+
+const LEAD = 'https://www.businesstimes.com.sg/companies-markets/dbs-posts-record-profit';
+const feedArticles = [
+  { id: 'a1', symbols: ['D05.SI'], source: 'businesstimes.com.sg', feed: 'bt', pubDate: '2026-09-25T09:00:00Z', headline: 'DBS posts record profit', url: LEAD },
+  { id: 'a2', symbols: ['NVDA'], source: 'cnbc.com', feed: 'cnbc-top', pubDate: '2026-09-25T20:00:00Z', headline: 'Nvidia wows Wall Street', url: 'https://www.cnbc.com/nvda.html' },
+  { id: 'a3', symbols: ['D05.SI'], source: 'x.example', feed: 'f', pubDate: '2026-09-10T09:00:00Z', headline: 'Too old', url: 'https://x.example/old' },
+];
+
+test('the digest gets the feeds\' freshest headlines as leads, and may cite their links', async () => {
+  const cited = { market_summary: 'm', items: [
+    { symbols: ['D05.SI'], date: '2026-09-25', headline: 'DBS record profit', summary: 's', type: 'earnings', tone: 'positive', source_url: `${LEAD}?utm_source=rss` },
+    { symbols: ['NVDA'], date: '2026-09-25', headline: 'AI capex beats', summary: 's', type: 'earnings', tone: 'positive', source_url: SRC },
+    { symbols: ['NVDA'], date: '2026-09-25', headline: 'Made up', summary: 's', type: 'other', tone: 'mixed', source_url: 'https://never-given.example' },
+  ] };
+  const client = fakeClient(msg([searchBlock, toolUse(NEWS_TOOL.name, cited)]));
+  const now = new Date('2026-09-26T00:00:00Z');
+  const news = await gatherNews({ client, quotes: prices.quotes, symbols: ['D05.SI', 'NVDA'], now, articles: feedArticles });
+  const content = client.calls[0].messages[0].content;
+  assert.match(content, /Leads \(headlines only\)/);
+  assert.match(content, /- \[NVDA\] Nvidia wows Wall Street \(cnbc\.com, 4h ago\) https:\/\/www\.cnbc\.com\/nvda\.html/);
+  assert.match(content, /- \[D05\.SI\] DBS posts record profit/);
+  assert.doesNotMatch(content, /Too old/); // over 4 days old
+  assert.equal(client.calls[0].system, NEWS_SYSTEM); // the system prompt doesn't change
+  assert.deepEqual(news.items.map((i) => i.source_url), [LEAD, SRC, null]); // a lead's link counts, as it was given
+  assert.deepEqual(news.leads.map((l) => l.url), ['https://www.cnbc.com/nvda.html', LEAD]);
+  // without articles (the page, or NEWS_LEADS=off) the request is as before
+  const plain = fakeClient(newsMsg());
+  const without = await gatherNews({ client: plain, quotes: prices.quotes, symbols: ['D05.SI', 'NVDA'], now });
+  assert.doesNotMatch(plain.calls[0].messages[0].content, /Leads/);
+  assert.equal(without.leads, undefined);
+  // and a digest for one market gets only its own stocks' leads
+  const us = fakeClient(newsMsg());
+  await gatherNews({ client: us, quotes: prices.quotes, symbols: ['NVDA', 'AAPL'], now, articles: feedArticles });
+  assert.doesNotMatch(us.calls[0].messages[0].content, /DBS/);
+});
+
+test('known links: a page it read, or a lead, also when cited with tracking parameters', () => {
+  const seen = [{ url: SRC }, { url: LEAD }];
+  assert.deepEqual(knownUrls([SRC, `${LEAD}?.tsrc=rss`, `${LEAD}#comments`, 'https://never-seen.example', null], seen), [SRC, LEAD, LEAD]);
+  assert.deepEqual(knownUrls(undefined, seen), []);
+});
+
+test('recommend passes the feeds\' headlines to the digest it gathers', async () => {
+  const client = fakeClient(newsMsg(), msg([toolUse('submit_picks', { market_summary: 'm', picks: [] })]));
+  const out = await recommend({ client, prices, articles: feedArticles, now: new Date('2026-09-26T00:00:00Z') });
+  assert.match(client.calls[0].messages[0].content, /Leads \(headlines only\)/);
+  assert.equal(out.news.leads.length, 2);
+});
+
+test('a big move without news gets one search; what it finds counts only with a source it read, dated near the move', async () => {
+  const good = 'https://example.com/nvda-deal';
+  const read = { type: 'web_search_tool_result', content: [{ type: 'web_search_result', url: good, title: 'Nvidia deal' }] };
+  const answer = (input) => fakeClient(msg([read, toolUse(MOVE_TOOL.name, input)], { usage: { input_tokens: 8000, output_tokens: 300, server_tool_use: { web_search_requests: 1 } } }));
+  const found = { found: true, date: '2026-09-29', headline: 'Nvidia to buy a chip designer', type: 'deal', tone: 'positive', source_url: good };
+  let client = answer(found);
+  const r = await explainMove({ client, symbol: 'NVDA', name: 'Nvidia', market: 'US', date: '2026-09-30', excess: 0.061 });
+  const req = client.calls[0];
+  assert.equal(req.model, 'claude-haiku-4-5');
+  assert.deepEqual(req.tools[0], { type: 'web_search_20250305', name: 'web_search', max_uses: 1 });
+  assert.match(req.messages[0].content, /On 2026-09-30 it moved up 6\.1% more than its index/);
+  assert.deepEqual(r.event, { symbol: 'NVDA', date: '2026-09-29', headline: 'Nvidia to buy a chip designer', type: 'deal', tone: 'positive', source_url: good, from: 'search' });
+  assert.equal(r.found, true);
+  assert.equal(r.usage.costUsd, 0.0195); // 8k in @ $1/M + 300 out @ $5/M + 1 search @ $0.01
+  // a source it didn't read, a date two sessions away, or nothing found: no event
+  for (const bad of [{ ...found, source_url: 'https://invented.example' }, { ...found, date: '2026-09-25' }, { found: false, date: '', headline: '', type: 'other', tone: 'mixed', source_url: '' }]) {
+    client = answer(bad);
+    const x = await explainMove({ client, symbol: 'NVDA', name: 'Nvidia', market: 'US', date: '2026-09-30', excess: -0.05 });
+    assert.deepEqual([x.found, x.event], [false, null]);
+  }
+});
+
+test('the reading guide\'s call: the articles in one message on the cheap model, no web search, and only calls that hold up', async () => {
+  const items = [
+    { n: 1, source: 'fool.com', symbols: ['NVDA', 'BRK-B'], text: '3 Reasons Why Nvidia Fits Warren Buffett\'s Investment Style — The chipmaker has a wide moat.' },
+    { n: 2, source: 'sg.finance.yahoo.com', symbols: ['D05.SI'], text: 'Singapore\'s gold hub plan gets lift with DBS vault expansion' },
+  ];
+  const answer = { calls: [
+    { item: 1, symbol: 'NVDA', call: 'buy', target_price: 0, reasons_cited: ['growth', 'valuation'] },
+    { item: 1, symbol: 'BRK-B', call: 'none', target_price: 0, reasons_cited: [] },
+    { item: 2, symbol: 'D05.SI', call: 'none', target_price: 0, reasons_cited: [] },
+    { item: 2, symbol: 'O39.SI', call: 'sell', target_price: 0, reasons_cited: [] }, // not a stock that item names
+  ] };
+  const client = fakeClient(msg([toolUse(READING_TOOL.name, answer)], { usage: { input_tokens: 4000, output_tokens: 1200 } }));
+  const r = await readCalls({ client, items, names: { NVDA: 'Nvidia', 'D05.SI': 'DBS Group' } });
+  const req = client.calls[0];
+  assert.equal(req.model, 'claude-haiku-4-5');
+  assert.deepEqual(req.tools.map((t) => t.name), ['submit_calls']); // no web search
+  assert.equal(req.messages[0].content, `Items (number, site, the stocks it names, its text):
+[1] fool.com | NVDA (Nvidia), BRK-B | 3 Reasons Why Nvidia Fits Warren Buffett's Investment Style — The chipmaker has a wide moat.
+[2] sg.finance.yahoo.com | D05.SI (DBS Group) | Singapore's gold hub plan gets lift with DBS vault expansion`);
+  assert.match(req.system, /reports what a broker, analyst or fund manager said or did .* without making it its own view/);
+  assert.deepEqual(r.calls, [{ item: 1, symbol: 'NVDA', call: 'buy', target: 0, reasons: ['growth', 'valuation'] }]);
+  assert.equal(r.usage.costUsd, 0.01); // 4k in @ $1/M + 1.2k out @ $5/M
+});
+
+test('askSpec: the owner\'s question on the cheap model, no web search, with the watchlist; the query comes back for code to check', async () => {
+  const query = { answerable: true, reason: '', population: 'ex_dividend', market: 'SGX', symbols: ['D05.SI'], direction: 'any', size: 'any', volume: 'any', vix: 'any', index_trend: 'any', results: 'any', horizon: '1_month', expect: 'up' };
+  const client = fakeClient(msg([toolUse(ASK_TOOL.name, query)], { usage: { input_tokens: 2000, output_tokens: 150 } }));
+  const symbols = [{ symbol: 'D05.SI', name: 'DBS Group', market: 'SGX' }, { symbol: 'ES3.SI', name: 'SPDR STI ETF', market: 'SGX', etf: true }];
+  const res = await askSpec({ client, question: 'Does DBS recover after going ex-dividend?', symbols });
+  const req = client.calls[0];
+  assert.equal(req.model, 'claude-haiku-4-5');
+  assert.deepEqual(req.tools.map((t) => t.name), ['submit_query']);
+  assert.equal(req.messages[0].content, 'The watchlist\'s stocks: D05.SI (DBS Group, SGX).\n\nThe owner\'s question:\nDoes DBS recover after going ex-dividend?');
+  assert.match(req.system, /never answer the question yourself/);
+  assert.deepEqual(res.input, query);
+  assert.equal(res.usage.costUsd, 0.0028); // 2k in @ $1/M + 150 out @ $5/M
 });

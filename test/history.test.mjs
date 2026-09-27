@@ -138,10 +138,14 @@ test('daily bars carrying volume ([t, close, volume]) give the same results ever
     newRule({ symbol: 'AAPL', when: { type: 'below_ma', value: 20 }, action: { side: 'sell', unit: 'all', amount: 0 }, repeat: 'repeat' })];
   const picks = [{ createdAt: new Date(t0 * 1000).toISOString(), picks: [{ symbol: 'AAPL', stance: 'long', priceAtPick: sample.AAPL.daily[100][1] }] }];
   const idea = [{ id: 'i', t: t0, symbol: 'AAPL', direction: 1, kind: 'entry', outcome: 'traded', ideaType: 'news', price: sample.AAPL.daily[100][1] }];
+  // (all but the volume ratio, which needs volumes: without them it's null)
+  const statsOf = (q) => { const { rel_volume_20d: _, ...rest } = stockStats(q); return rest; };
   const run = (quotes) => JSON.stringify([
-    stockStats(quotes.AAPL), backtest(rules, quotes.AAPL, { feePlan: 'none' }), valueHistory(p, quotes, 'USD').slice(0, -1), // the last point is the time now
+    statsOf(quotes.AAPL), backtest(rules, quotes.AAPL, { feePlan: 'none' }), valueHistory(p, quotes, 'USD').slice(0, -1), // the last point is the time now
     benchmarkFor({ currency: 'USD', amount: 10000, since: '2025-06-01T00:00:00Z', quotes }),
     buildMemory([], quotes, 'US', now), scorePicks(picks, quotes, now), gradeIdeas(idea, quotes, 'USD', now),
   ]);
   assert.equal(run(withVolume), run(sample));
+  assert.equal(stockStats(sample.AAPL).rel_volume_20d, null);
+  assert.ok(stockStats(withVolume.AAPL).rel_volume_20d > 0.99 && stockStats(withVolume.AAPL).rel_volume_20d < 1.01);
 });

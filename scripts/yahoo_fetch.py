@@ -8,8 +8,10 @@ Usage: python scripts/yahoo_fetch.py <out_dir>
        python scripts/yahoo_fetch.py summary <out_dir>
        python scripts/yahoo_fetch.py long <out_dir>
 
-The first form also fetches the VIX (a year of daily closes), which fetch-prices.mjs keeps apart from
-the watchlist, under prices.json's `macro`. The second downloads each stock's quoteSummary instead
+The first form fetches two years of daily prices and 5 days of 15-minute prices for every symbol, two
+years of the VIX and a year of USD/SGD's daily rate. fetch-prices.mjs keeps the last year of each in
+prices.json (the VIX apart from the watchlist, under `macro`) and the two years in data/ohlcv.json, for
+the scripts only. The second downloads each stock's quoteSummary instead
 (results dates, earnings surprises, analysts' ratings and targets), once a day;
 scripts/company-data.mjs turns it into state/company-data.json. Index funds are skipped, since they
 have no results or analysts. The third downloads ten years of daily prices with dividends and splits
@@ -25,7 +27,10 @@ import urllib.parse
 
 FX_SYMBOL = "SGD=X"
 VIX = "^VIX"  # the market's fear gauge: a macro series, never a watchlist quote
-REQUESTS = [("1y", "1d"), ("5d", "15m")]
+# Must match DAILY, INTRADAY and FX_RANGE in fetch-prices.mjs.
+REQUESTS = [("2y", "1d"), ("5d", "15m")]
+DAILY_MACRO = ("2y", "1d")  # the VIX
+FX_RANGE = ("1y", "1d")
 LONG = ("10y", "1d")
 SUMMARY_MODULES = "calendarEvents,earningsHistory,upgradeDowngradeHistory,recommendationTrend,financialData"
 
@@ -165,7 +170,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
     symbols = [s["symbol"] for s in json.loads(pathlib.Path("symbols.json").read_text())]
     session, crumb = yahoo_session()
-    jobs = [(s, r, i) for s in symbols for r, i in REQUESTS] + [(FX_SYMBOL, "5d", "1d"), (VIX, "1y", "1d")]
+    jobs = [(s, r, i) for s in symbols for r, i in REQUESTS] + [(FX_SYMBOL, *FX_RANGE), (VIX, *DAILY_MACRO)]
     ok, failed = download(out, jobs, session, crumb, 0.3)
     print(f"Yahoo: {ok} fetched, {failed} failed (crumb {'yes' if crumb else 'no'}).")
 

@@ -62,6 +62,7 @@ jobs:
       AI_NEWS_MODEL: ${{ vars.AI_NEWS_MODEL }} # news gathering; default claude-haiku-4-5
       AI_REVIEW_MODEL: ${{ vars.AI_REVIEW_MODEL }} # opt-in: the weekly review, once its market has 150 graded ideas (README)
       AI_MONTHLY_CAP_USD: ${{ vars.AI_MONTHLY_CAP_USD || '30' }} # scheduled AI stops for the month at this spend; 0 = no cap
+      NEWS_LEADS: ${{ vars.NEWS_LEADS }} # 'off' stops giving the news digest the feeds' headlines as leads (README → News feeds)
       # Tiger Brokers, for an AI fund that trades through Tiger (see README → Tiger Brokers)
       TIGEROPEN_TIGER_ID: ${{ secrets.TIGEROPEN_TIGER_ID }}
       TIGEROPEN_ACCOUNT: ${{ secrets.TIGEROPEN_ACCOUNT }}
@@ -82,6 +83,9 @@ jobs:
         uses: actions/configure-pages@v5
       # Passing the live prices.json lets a symbol that fails this run keep its last price.
       # If every price fails, the site still deploys (it falls back to sample prices with a banner).
+      # Each stock's daily prices come for 2 years: prices.json keeps the last year, and data/ohlcv.json
+      # (the two years, for the AI fund step's factor lab) stays on this runner: .gitignore'd, and
+      # "Collect site files" below never copies it.
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -147,6 +151,25 @@ jobs:
       - name: 'Stock cards (daily)'
         continue-on-error: true
         run: node scripts/build-history.mjs dossiers state/dossiers.json
+      # News feeds (feeds.json, articles.js), at most every 6 hours: each feed is downloaded to this runner
+      # (scripts/feed_fetch.py, never saved), and only the headlines naming a watchlist stock are kept, with
+      # their links (state/articles/YYYY-MM.json), as leads for the news digest. A feed that keeps failing
+      # is tried once a day until it answers. Then each big move against the index is judged on whether it
+      # had news, and those without get one web search each (at most 10 a month, in the spend ledger).
+      # Once a day, the reading guide reads up to 40 new headlines, investing sites first, with the start
+      # of each summary from these downloads (never stored), and keeps each site's calls
+      # (state/reading-calls.json, reading.js) for the page. One cheap call, in the spend ledger as
+      # 'reading'; nothing from it reaches the AI funds or the picks.
+      - name: 'Articles: news feeds (every 6 hours)'
+        continue-on-error: true
+        run: |
+          if node scripts/fetch-articles.mjs due state raw-feeds; then
+            pip install --quiet curl_cffi
+            python scripts/feed_fetch.py raw-feeds
+            node scripts/fetch-articles.mjs build raw-feeds state
+            node scripts/fetch-articles.mjs moves state || echo "::warning::Big moves: the step failed (see above); the reading guide still runs."
+            node scripts/fetch-articles.mjs calls raw-feeds state
+          fi
       # A failure in an AI step must not stop prices from updating.
       - name: AI picks
         continue-on-error: true
@@ -168,9 +191,18 @@ jobs:
         run: |
           if [ -n "$TIGEROPEN_TIGER_ID" ]; then pip install --quiet tigeropen; fi
           python scripts/tiger_broker.py sync state/ai-fund.json
+      # An article the owner logged in the app (reading.js): when the app's command has a link, its page is
+      # downloaded to this runner (never saved) for the AI fund step to read. The script reads the command
+      # from the event file, like the next step, and prints only whether the download worked.
+      - name: 'Your reading: fetch a logged article'
+        if: steps.fundstore.outputs.ok == 'true' && github.event_name == 'workflow_dispatch'
+        continue-on-error: true
+        run: |
+          pip install --quiet curl_cffi
+          python scripts/page_fetch.py raw-page
       # The app's command (the fund_command input) is read by the script from the event file on the
       # runner: an env value would be printed in this public log, and it can hold the owner's notes on
-      # stocks and reasons for declining trades.
+      # stocks, reasons for declining trades and the articles they log.
       - name: AI fund
         if: steps.fundstore.outputs.ok == 'true'
         continue-on-error: true
@@ -189,6 +221,22 @@ jobs:
         if: steps.fundstore.outputs.ok == 'true'
         continue-on-error: true
         run: APP_URL="https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/" node scripts/notify.mjs state/ai-fund.json
+      # Ask the data (hypotheses.js): the owner's questions wait in the fund collection, loaded above, so
+      # they're answered here rather than in the weekly step. The answer comes from the ten years of raw
+      # prices: this run's weekly download when there was one, else a new download (at most once every
+      # 20 hours while a question waits). Questions on the funds' own ideas are answered in the AI fund
+      # step. The script reads the collection from the file, and prints counts only.
+      - name: 'Ask the data: answer the owner''s questions'
+        if: steps.fundstore.outputs.ok == 'true'
+        continue-on-error: true
+        run: |
+          if node scripts/build-history.mjs asked state/ai-fund.json raw-long; then
+            if [ ! -f raw-long/SPY_10y_1d.json ]; then
+              pip install --quiet curl_cffi
+              python scripts/yahoo_fetch.py long raw-long
+            fi
+            node scripts/build-history.mjs answer raw-long state/ai-fund.json
+          fi
       - name: Store the AI fund
         id: fundsave
         if: steps.fundstore.outputs.ok == 'true'
@@ -221,6 +269,7 @@ jobs:
           cp state/results-dates.json _site/data/ 2>/dev/null || true
           cp state/memory-long.json _site/data/ 2>/dev/null || true   # the ten-year memory, for the page
           cp state/dossiers.json _site/data/ 2>/dev/null || true      # the stock cards, for the page
+          cp state/reading-calls.json _site/data/ 2>/dev/null || true # the reading guide's calls, for the page
           node -e "const fs=require('fs');let l={months:{}};try{l=JSON.parse(fs.readFileSync('state/ai-spend.json','utf8'))}catch{}l.cap=Number(process.env.AI_MONTHLY_CAP_USD)||null;fs.writeFileSync('_site/data/ai-spend.json',JSON.stringify(l))"
           # The public copy of the AI fund, unless it's kept private (then only admins see it, from Supabase)
           if [ "${{ steps.fundstore.outputs.private }}" != "true" ]; then

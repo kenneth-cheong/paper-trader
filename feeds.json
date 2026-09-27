@@ -1,0 +1,13 @@
+[
+  { "id": "bt", "name": "The Business Times: Companies & Markets", "url": "https://www.businesstimes.com.sg/rss/companies-markets", "market": "SGX", "kind": "news" },
+  { "id": "st", "name": "The Straits Times: Business", "url": "https://www.straitstimes.com/news/business/rss.xml", "market": "SGX", "kind": "news" },
+  { "id": "cna", "name": "CNA: Business", "url": "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6936", "market": "SGX", "kind": "news" },
+  { "id": "smartinvestor", "name": "The Smart Investor", "url": "https://thesmartinvestor.com.sg/feed/", "market": "SGX", "kind": "opinion",
+    "note": "Cloudflare blocks it at times (HTTP 403); the health counters switch it off and on, and its articles also reach us through Yahoo Finance Singapore." },
+  { "id": "cnbc-top", "name": "CNBC: Top News", "url": "https://www.cnbc.com/id/100003114/device/rss/rss.html", "market": "US", "kind": "news" },
+  { "id": "cnbc-earnings", "name": "CNBC: Earnings", "url": "https://www.cnbc.com/id/15839135/device/rss/rss.html", "market": "US", "kind": "news" },
+  { "id": "cnbc-tech", "name": "CNBC: Technology", "url": "https://www.cnbc.com/id/19854910/device/rss/rss.html", "market": "US", "kind": "news" },
+  { "id": "yahoo", "name": "Yahoo Finance headlines", "template": "https://feeds.finance.yahoo.com/rss/2.0/headline?s={symbol}&region={region}&lang=en-{region}", "market": "all", "kind": "per-stock",
+    "regions": { "US": "US", "SGX": "SG" },
+    "note": "One feed per stock in symbols.json (index funds left out). Many of its items are about other stocks, so items are tagged by what they say, never by the feed they came from." }
+]

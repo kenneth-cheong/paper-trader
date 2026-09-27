@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The Straits Times, business: the two items of the probe of 27 Sep 2026 as fetched (escaped <p> in the description, +0800 dates, a <source> element). -->
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xml:base="https://www.straitstimes.com/">
+  <channel>
+    <title>The Straits Times World News</title>
+    <link>https://www.straitstimes.com/</link>
+    <description>The Straits Times - Get exclusive stories, in-depth analyses and award-winning multimedia content about Singapore, Asia and the world.</description>
+    <item>
+      <title>Keppel, StarHub discuss M1 deal; Grab execs buy shares after stock falls: Markets this week</title>
+      <link>https://www.straitstimes.com/business/companies-markets/keppel-starhub-discuss-potential-m1-deal-grab-execs-buy-shares-after-stock-falls-markets-this-week</link>
+      <description>&lt;p&gt;The STI closed higher on Sept 25 at 5,710.65 despite uncertainty over Trump-Xi talks and a jump in US Treasury yields.&lt;/p&gt;</description>
+      <guid isPermaLink="true">https://www.straitstimes.com/business/companies-markets/keppel-starhub-discuss-potential-m1-deal-grab-execs-buy-shares-after-stock-falls-markets-this-week</guid>
+      <pubDate>Sun, 27 Sep 2026 12:00:00 +0800</pubDate>
+      <source url="https://www.straitstimes.com/news/business/rss.xml">The Straits Times</source>
+    </item>
+    <item>
+      <title>Track expenses down to the cent – or keep it simple? Find something that works for you</title>
+      <link>https://www.straitstimes.com/business/invest/track-expenses-down-to-the-cent-or-keep-it-simple-find-something-that-works-for-you</link>
+      <description>&lt;p&gt;Tracking expenses is recommended, but people can find their own ways to stay on top of finances.&lt;/p&gt;</description>
+      <guid isPermaLink="true">https://www.straitstimes.com/business/invest/track-expenses-down-to-the-cent-or-keep-it-simple-find-something-that-works-for-you</guid>
+      <pubDate>Sun, 27 Sep 2026 05:00:00 +0800</pubDate>
+      <source url="https://www.straitstimes.com/news/business/rss.xml">The Straits Times</source>
+    </item>
+  </channel>
+</rss>

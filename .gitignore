@@ -1,8 +1,11 @@
 node_modules/
 data/prices.json
+data/ohlcv.json
 data/picks.json
 data/ai-fund.json
 state/
 raw/
 raw-long/
 __pycache__/
+raw-feeds/
+raw-page/

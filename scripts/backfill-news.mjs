@@ -7,7 +7,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { backfillNews, TIERS } from '../ai.js';
-import { mergeEvents } from '../memory.js';
+import { mergeEvents, BACKFILL_NONE } from '../memory.js';
 import { addSpend, capReached, monthSpend } from '../spend.js';
 import { BENCHMARKS } from '../benchmark.js';
 
@@ -32,13 +32,14 @@ let found = 0, cost = 0;
 for (const [symbol, q] of Object.entries(quotes)) {
   if (indexes.has(symbol) || done.has(symbol) || !q.daily?.length) continue;
   const spend = await readJson(spendFile);
-  if (capReached(spend, env.AI_MONTHLY_CAP_USD)) { console.log(`Stopped: this month's AI spend (about US$${monthSpend(spend)}) reached the cap.`); break; }
+  if (capReached(spend, env.AI_MONTHLY_CAP_USD)) { console.log(`Stopped: this month's AI spend (about US$${monthSpend(spend).toFixed(2)}) reached the cap.`); break; }
   const from = new Date(q.daily[0][0] * 1000).toISOString().slice(0, 10);
   try {
     const r = await backfillNews({ client, Anthropic, model: env.AI_NEWS_MODEL || TIERS.simple, symbol, name: q.name ?? symbol, from, to });
     events = mergeEvents(events, r.events, quotes);
-    // Mark the stock done even when nothing was found, so it isn't searched again.
-    if (!r.events.length) events.push({ symbol, date: from, headline: '(no events found)', type: 'other', tone: 'mixed', source_url: null, from: 'backfill' });
+    // Mark the stock done even when nothing new was kept (nothing found, or only news the digests
+    // already had on those days), so it isn't searched again.
+    if (!events.some((e) => e.symbol === symbol && e.from === 'backfill')) events.push({ symbol, date: from, headline: BACKFILL_NONE, type: 'other', tone: 'mixed', source_url: null, from: 'backfill' });
     found += r.events.length;
     cost += r.usage.costUsd;
     await writeFile(spendFile, JSON.stringify(addSpend(spend, 'backfill', r.usage.costUsd)));

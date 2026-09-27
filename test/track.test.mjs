@@ -83,6 +83,21 @@ test('AI spend adds up by month and task, and the cap stops at the limit', () =>
   assert.equal(fundAiCost({ decisions: [{ usage: { costUsd: 0.1 } }, {}, { usage: { costUsd: 0.25 } }] }), 0.35);
 });
 
+test('calls that cost a fraction of a cent add up in the ledger and count toward the cap', () => {
+  const now = new Date('2026-09-28T00:00:00Z');
+  let l = null;
+  for (let i = 0; i < 100; i++) l = addSpend(l, 'ask', 0.003, now);
+  assert.equal(l.months['2026-09'].ask, 0.3);
+  assert.equal(monthSpend(l, now), 0.3);
+  assert.equal(capReached(l, 0.3, now), true);
+  l = addSpend(l, 'reading', 0.0118, now); // the daily reading call isn't rounded down to a cent either
+  assert.equal(l.months['2026-09'].reading, 0.0118);
+  assert.equal(monthSpend(l, now), 0.3118);
+  // an old ledger kept in cents goes on adding
+  const old = { months: { '2026-09': { total: 0.42, picks: 0.12, fund: 0.3 } } };
+  assert.equal(addSpend(old, 'ask', 0.0025, now).months['2026-09'].total, 0.4225);
+});
+
 test('picks are scored on total return (dividends count), and picks from before the price history are left out', () => {
   const T = new Date((T0 + 8 * 3600) * 1000).toISOString();
   const sgx = (closes, dividends) => ({ market: 'SGX', currency: 'SGD', price: closes.at(-1), daily: daily(closes), intraday: [], events: { dividends } });

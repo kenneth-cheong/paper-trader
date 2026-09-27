@@ -14,7 +14,8 @@
 //   - a paused fund makes no new trades (stop-losses and take-profits still close positions), and its
 //     open Tiger orders are cancelled.
 // Every order keeps the AI's thesis (thesis.js) for grading later; what code checks about it (a stale
-// catalyst, an expected move under the fees) is noted on the order and never blocks it.
+// catalyst, an expected move under the fees) is noted on the order and never blocks it. An opening order
+// also keeps its stock's factors at that moment (factors.js), for the factor lab.
 // With Tiger and approval 'manual', the AI's trades wait as proposals until an admin approves them;
 // a proposal expires after PROPOSAL_MINUTES or if the price moves more than PROPOSAL_MAX_DRIFT. One the
 // owner declines keeps the reason they chose (DECLINE_REASONS), which is graded like the idea itself.
@@ -217,8 +218,9 @@ const opens = (action) => action === 'buy' || action === 'short';
 // would prove it wrong), or thesis null (a sell or cover, or an order from before theses). Two checks
 // are only logged on it, never blocking the order: `stale`, the catalyst is over 10 trading days old
 // (results dated from `calendar`, calendar.js resultsCalendar), and `beatsFees` false, the expected
-// move doesn't cover the round trip's fees at this size.
-export function applyOrders(fund, orders, quotes, now = new Date(), { send = false, others = {}, calendar = null } = {}) {
+// move doesn't cover the round trip's fees at this size. `factorsOf(symbol)`: the stock's factors now
+// (factors.js factorsAt), kept on an opening order as `factors` when there are some.
+export function applyOrders(fund, orders, quotes, now = new Date(), { send = false, others = {}, calendar = null, factorsOf = null } = {}) {
   const time = now.toISOString();
   const broker = usesBroker(fund);
   const s = settingsOf(fund);
@@ -232,6 +234,8 @@ export function applyOrders(fund, orders, quotes, now = new Date(), { send = fal
       thesis: opens(o.action) ? checkedThesis(o, o.symbol, { calendar, quotes, now }) : null,
       ...(lessonsAppliedOf(o).length ? { lessonsApplied: lessonsAppliedOf(o) } : {}),
     };
+    const factors = opens(o.action) && factorsOf ? factorsOf(o.symbol) : null;
+    if (factors) res.factors = factors;
     try {
       const q = quotes[o.symbol];
       if (!q || q.currency !== fund.currency) throw new Error(`${o.symbol} is not tradable in this ${fund.currency} fund.`);
@@ -282,8 +286,8 @@ function queueBrokerOrder(fund, r, source, now) {
 }
 
 // The AI's decision: fills in the simulator, or turns into proposals / queued Tiger orders.
-export function executeDecision(fund, orders, quotes, now = new Date(), { others = {}, calendar = null } = {}) {
-  const results = applyOrders(fund, orders, quotes, now, { others, calendar });
+export function executeDecision(fund, orders, quotes, now = new Date(), { others = {}, calendar = null, factorsOf = null } = {}) {
+  const results = applyOrders(fund, orders, quotes, now, { others, calendar, factorsOf });
   for (const r of results) {
     if (r.status === 'sent to Tiger') r.brokerOrderId = queueBrokerOrder(fund, r, 'decision', now).id;
     if (r.status === 'awaiting approval') {

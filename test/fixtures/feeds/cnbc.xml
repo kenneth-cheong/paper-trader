@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:metadata="http://search.cnbc.com/rss/2.0/modules/siteContentMetadata" version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <!-- CNBC top news: the probe of 27 Sep 2026 (CDATA descriptions, metadata:type, a numeric guid, GMT dates, &apos; in a title). -->
+  <channel>
+    <atom:link rel="self" type="application/rss+xml" href="https://www.cnbc.com/id/100003114/device/rss/rss.html"/>
+    <language>en-us</language>
+    <ttl>6</ttl>
+    <title>US Top News and Analysis</title>
+    <item>
+      <link>https://www.cnbc.com/2026/09/26/openai-agent-model-behavior-review.html</link>
+      <guid isPermaLink="false">108368447</guid>
+      <metadata:type>cnbcnewsstory</metadata:type>
+      <metadata:id>108368447</metadata:id>
+      <metadata:sponsored>false</metadata:sponsored>
+      <title>OpenAI expands review of model behavior after more rogue agent incidents emerge</title>
+      <description><![CDATA[OpenAI is conducting an extensive review of misaligned model activity after disclosures involving an Australian government portal and other websites.]]></description>
+      <pubDate>Sat, 26 Sep 2026 17:10:32 GMT</pubDate>
+    </item>
+    <item>
+      <link>https://www.cnbc.com/2026/09/26/apple-taction-technology-patent-infringement-verdict.html</link>
+      <guid isPermaLink="false">108368445</guid>
+      <metadata:type>cnbcnewsstory</metadata:type>
+      <metadata:id>108368445</metadata:id>
+      <metadata:sponsored>false</metadata:sponsored>
+      <title>Apple faces $5.7 billion patent infringement verdict over iPhone and Apple Watch haptics</title>
+      <description><![CDATA[A federal jury awarded Taction Technology more than $5.7 billion after finding Apple infringed claims from two haptics patents. Apple plans to appeal.]]></description>
+      <pubDate>Sat, 26 Sep 2026 16:57:57 GMT</pubDate>
+    </item>
+    <item>
+      <link>https://www.cnbc.com/2026/09/27/funflation-consumer-spending-pricier-hobbies.html</link>
+      <guid isPermaLink="false">108368460</guid>
+      <metadata:type>cnbcnewsstory</metadata:type>
+      <metadata:id>108368460</metadata:id>
+      <metadata:sponsored>false</metadata:sponsored>
+      <title>&apos;Funflation&apos; is on the rise as hobbies get pricier, but consumers keep spending anyway</title>
+      <description><![CDATA[Concert tickets, golf and pickleball all cost more than they did a year ago, but Americans are still paying up for them.]]></description>
+      <pubDate>Sun, 27 Sep 2026 05:00:02 GMT</pubDate>
+    </item>
+    <item>
+      <link>https://www.cnbc.com/2026/09/24/costco-makes-progress-on-a-key-membership-metric-heres-our-new-price-target-on-the-stock.html</link>
+      <guid isPermaLink="false">108367820</guid>
+      <metadata:type>cnbcnewsstory</metadata:type>
+      <metadata:id>108367820</metadata:id>
+      <metadata:sponsored>false</metadata:sponsored>
+      <title>Costco makes progress on a key membership metric. Here&apos;s our new price target on the stock</title>
+      <description><![CDATA[Costco's membership renewal rates moved in the right direction. But the debate isn't totally settled just yet.]]></description>
+      <pubDate>Fri, 25 Sep 2026 00:29:48 GMT</pubDate>
+    </item>
+  </channel>
+</rss>

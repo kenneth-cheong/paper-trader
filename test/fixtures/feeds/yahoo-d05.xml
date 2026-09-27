@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Yahoo Finance headlines for D05.SI (region=SG): the probe of 27 Sep 2026 (sg.finance.yahoo.com links, S&amp;P in a title, The Smart Investor's syndicated piece). -->
+<rss version="2.0">
+    <channel>
+        <copyright>Copyright (c) 2026 Yahoo! Inc. All rights reserved.</copyright>
+        <description>Latest Financial News for D05.SI</description>
+        <item>
+            <description>The bank will add storage for 200 tonnes of gold as Singapore courts bullion traders.</description>
+            <guid isPermaLink="false">0f9b1c2d-2123-3e4f-a567-212300957000</guid>
+            <link>https://sg.finance.yahoo.com/news/singapores-gold-hub-plan-gets-212300957.html?.tsrc=rss</link>
+            <pubDate>Wed, 16 Sep 2026 21:23:00 +0000</pubDate>
+            <title>Singapore's gold hub plan gets lift with DBS vault expansion</title>
+        </item>
+        <item>
+            <description>Singapore's index and the US one have taken turns to lead. We compare what each offers an investor today, from dividends to growth.</description>
+            <guid isPermaLink="false">1a2b3c4d-0330-4000-8000-033000125000</guid>
+            <link>https://sg.finance.yahoo.com/news/sti-p-500-where-invest-033000125.html?.tsrc=rss</link>
+            <pubDate>Wed, 16 Sep 2026 03:30:00 +0000</pubDate>
+            <title>STI or S&amp;P 500: Where Should You Invest Your Next Dollar?</title>
+        </item>
+        <item>
+            <description>We look at which of Singapore's three banks pays an investor the most.</description>
+            <guid isPermaLink="false">2b3c4d5e-0600-4000-8000-060000874000</guid>
+            <link>https://sg.finance.yahoo.com/news/dbs-ocbc-uob-bank-pays-060000874.html?.tsrc=rss</link>
+            <pubDate>Fri, 18 Sep 2026 09:30:00 +0000</pubDate>
+            <title>S$10,000 in DBS, OCBC or UOB: Which Bank Pays the Most Dividends?</title>
+        </item>
+        <language>en-SG</language>
+        <lastBuildDate>Sun, 27 Sep 2026 11:09:56 +0000</lastBuildDate>
+        <link>http://finance.yahoo.com/q/h?s=D05.SI</link>
+        <title>Yahoo! Finance: D05.SI News</title>
+    </channel>
+</rss>

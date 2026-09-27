@@ -5,14 +5,18 @@
 
 export const monthKey = (now = new Date()) => now.toISOString().slice(0, 7);
 const cents = (n) => Math.round(n * 100) / 100;
+// The ledger adds to a hundredth of a cent (as ai.js prices a call): a question or a logged article
+// costs a fraction of a cent, which rounding each addition to whole cents would drop every time.
+// Rounded to cents only where it's shown.
+const r4 = (n) => Math.round(n * 1e4) / 1e4;
 
 // Adds a cost to a ledger ({ months: { 'YYYY-MM': { total, [task]: cost } } }) and returns it.
 export function addSpend(ledger, task, costUsd, now = new Date()) {
   const l = ledger?.months ? ledger : { months: {} };
   const cost = Number(costUsd) || 0;
   const m = (l.months[monthKey(now)] ??= { total: 0 });
-  m[task] = cents((m[task] ?? 0) + cost);
-  m.total = cents(m.total + cost);
+  m[task] = r4((m[task] ?? 0) + cost);
+  m.total = r4(m.total + cost);
   const keys = Object.keys(l.months).sort();
   for (const k of keys.slice(0, -24)) delete l.months[k]; // two years is plenty
   return l;

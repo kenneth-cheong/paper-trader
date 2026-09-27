@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Yahoo Finance headlines for AAPL (region=US): the probe of 27 Sep 2026. Elements in Yahoo's alphabetical order; the first item as fetched. The feed's first item on 26 Sep was about Tesla, not Apple. -->
+<rss version="2.0">
+    <channel>
+        <copyright>Copyright (c) 2026 Yahoo! Inc. All rights reserved.</copyright>
+        <description>Latest Financial News for AAPL</description>
+        <item>
+            <description>Jim Cramer recently labelled Apple Inc. (NASDAQ:AAPL) as a standout performer, reflecting on the company’s product focus under the leadership of new CEO, John Ternus. He anticipated a strong demand trend for the company’s latest Duo foldable iPhone as Apple enters the premium foldable smartphone market. Read Also: Apple Raised Stakes with its $2000-Priced Foldable. […]</description>
+            <guid isPermaLink="false">d48e75f4-7ef2-3b4b-8146-397b433aa22b</guid>
+            <link>https://finance.yahoo.com/technology/articles/foldables-ai-servers-india-expansion-092447891.html?.tsrc=rss</link>
+            <pubDate>Sun, 27 Sep 2026 09:24:47 +0000</pubDate>
+            <title>Foldables, AI Servers and India Expansion: What Lies Ahead for Apple (AAPL) Under the New CEO?</title>
+        </item>
+        <item>
+            <description>Shares of the electric-car maker and the rocket company moved after the state dinner, where their chief executive sat with the president.</description>
+            <guid isPermaLink="false">6d48c29e-1367-39b5-99b4-a628243d31c9</guid>
+            <link>https://finance.yahoo.com/m/6d48c29e-1367-39b5-99b4-a628243d31c9/what-musk%E2%80%99s-tesla-and-spacex.html?.tsrc=rss</link>
+            <pubDate>Sat, 26 Sep 2026 14:25:00 +0000</pubDate>
+            <title>What Musk’s Tesla and SpaceX Stocks Are Doing After That White House State Dinner</title>
+        </item>
+        <item>
+            <description>A push into fitness tracking could open a new stream of revenue.</description>
+            <guid isPermaLink="false">4815776a-0001-3000-8000-140002000000</guid>
+            <link>https://www.barchart.com/story/news/4815776/apple-eyes-the-rapidly-growing-fitness-tracker-segment-what-that-could-mean-for-aapl-stock?.tsrc=rss</link>
+            <pubDate>Sat, 26 Sep 2026 14:00:02 +0000</pubDate>
+            <title>Apple Eyes the Rapidly Growing Fitness Tracker Segment. What That Could Mean for AAPL Stock.</title>
+        </item>
+        <item>
+            <description>Growth stocks have led for years. Here's what history says about what comes next.</description>
+            <guid isPermaLink="false">7c1e2f30-a1b2-3c4d-9e8f-105601000001</guid>
+            <link>https://www.fool.com/investing/2026/09/27/witnessing-stock-market-do-something-3rd-time-in-156-years/?.tsrc=rss</link>
+            <pubDate>Sun, 27 Sep 2026 10:56:01 +0000</pubDate>
+            <title>We're Witnessing the Stock Market Do Something for Only the 3rd Time in 156 Years, and History Is Crystal Clear About What Comes Next</title>
+        </item>
+        <language>en-US</language>
+        <lastBuildDate>Sun, 27 Sep 2026 11:09:59 +0000</lastBuildDate>
+        <link>http://finance.yahoo.com/q/h?s=AAPL</link>
+        <title>Yahoo! Finance: AAPL News</title>
+    </channel>
+</rss>

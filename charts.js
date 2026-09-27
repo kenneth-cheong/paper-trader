@@ -227,7 +227,8 @@ function columnPath(x, w, y0, y1, r = 4) {
 
 // ---------- horizontal bars ----------
 
-// rows: [{ label, sub?, value, display, color?, marker?, tip: [{ value, label, key? }] }].
+// rows: [{ label, sub?, value, display, color?, marker?, muted?, tip: [{ value, label, key? }] }]. A `muted`
+// row (too few cases to read much into) is drawn in grey: its bar, label and value.
 // Bars grow from zero, so negative values go left. `color` defaults to the sign (gain/loss) when
 // `signColors` is set, else --series-1. `marker`: a thin tick on the same scale (e.g. the index),
 // explained by `markerLabel` in a legend under the chart. `ref`: a vertical reference line (e.g. 50%
@@ -292,7 +293,7 @@ export function hbars(el, rows, { signColors = false, markerLabel = '', ref = nu
   const body = rows.map((r, i) => {
     const top = T + i * rowH;
     const y = stacked ? top + 20 : top + (rowH - barH) / 2;
-    const color = r.color ?? (signColors ? (r.value > 0 ? 'var(--up)' : r.value < 0 ? 'var(--down)' : 'var(--muted)') : 'var(--series-1)');
+    const color = r.muted ? 'var(--series-other)' : r.color ?? (signColors ? (r.value > 0 ? 'var(--up)' : r.value < 0 ? 'var(--down)' : 'var(--muted)') : 'var(--series-1)');
     const x0 = x(0);
     let endX = x(r.value);
     // A value too small to see still gets a mark: a 2px stub, or a dot at zero for exactly zero.
@@ -319,7 +320,7 @@ export function hbars(el, rows, { signColors = false, markerLabel = '', ref = nu
       label = `<text class="cat" x="2" y="${top + 13}">${escText(lab)}${sub ? `<tspan class="cat-sub" dx="6">${escText(sub)}</tspan>` : ''}</text>`;
     } else label = `<text class="cat" x="${labelW - 8}" y="${y + barH / 2 + (r.sub ? -1 : 4)}" text-anchor="end">${escText(r.label)}</text>
         ${r.sub ? `<text class="cat-sub" x="${labelW - 8}" y="${y + barH / 2 + 12}" text-anchor="end">${escText(r.sub)}</text>` : ''}`;
-    return `<g class="bar-row" data-tip="${i}" tabindex="0" role="listitem" aria-label="${escText(`${r.label}${r.sub ? ` (${r.sub})` : ''}: ${r.display}`)}">
+    return `<g class="bar-row${r.muted ? ' muted-row' : ''}" data-tip="${i}" tabindex="0" role="listitem" aria-label="${escText(`${r.label}${r.sub ? ` (${r.sub})` : ''}: ${r.display}`)}">
       <rect class="hit" x="1" y="${top + 1}" width="${W - 2}" height="${rowH - 2}" rx="4"/>
       ${label}${mark}
       ${r.marker != null ? `<line class="marker" x1="${x(r.marker)}" x2="${x(r.marker)}" y1="${y - 4}" y2="${y + barH + 4}"/>` : ''}
@@ -776,11 +777,12 @@ export function sparkTrend(el, points, { label = 'Trend' } = {}) {
 
 // A "Table" switch under a chart that shows the same numbers as a table (for screen readers,
 // exact values, and anyone who'd rather read than hover). `head`: column titles; `rows`: arrays of text.
-export function tableToggle(head, rows, numericFrom = 1, { className = '' } = {}) {
+// `rowClass(row, i)`: a class for a row (e.g. 'muted-row', greyed like its bar).
+export function tableToggle(head, rows, numericFrom = 1, { className = '', rowClass = null } = {}) {
   if (!rows.length) return '';
   return `<details class="chart-table${className ? ` ${escText(className)}` : ''}"><summary>Table</summary><div class="table-wrap" tabindex="0"><table>
     <thead><tr>${head.map((h, i) => `<th class="${i >= numericFrom ? 'num' : ''}">${escText(h)}</th>`).join('')}</tr></thead>
-    <tbody>${rows.map((r) => `<tr>${r.map((c, i) => `<td class="${i >= numericFrom ? 'num' : ''}">${escText(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+    <tbody>${rows.map((r, k) => `<tr${rowClass?.(r, k) ? ` class="${escText(rowClass(r, k))}"` : ''}>${r.map((c, i) => `<td class="${i >= numericFrom ? 'num' : ''}">${escText(c)}</td>`).join('')}</tr>`).join('')}</tbody>
   </table></div></details>`;
 }
 

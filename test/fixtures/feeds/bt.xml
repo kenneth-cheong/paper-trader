@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The Business Times, companies-markets: shaped on the probe of 27 Sep 2026 (the first two items as fetched; the rest keep the real titles, with short descriptions). -->
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+  <channel>
+    <title>companies-markets</title>
+    <link>https://www.businesstimes.com.sg/companies-markets</link>
+    <description>The Business Times</description>
+    <item>
+      <title>UBS leaving home would be more expensive, Swiss minister says</title>
+      <link>https://www.businesstimes.com.sg/companies-markets/banking-finance/ubs-leaving-home-would-be-more-expensive-swiss-minister-says</link>
+      <pubDate>Sun, 27 Sep 2026 09:32:17 +0000</pubDate>
+      <category>Banking &amp; Finance</category>
+      <category>Companies &amp; Markets</category>
+      <category>International</category>
+      <guid isPermaLink="false">/companies-markets/banking-finance/ubs-leaving-home-would-be-more-expensive-swiss-minister-says</guid>
+      <description>This is amid a plan that would force Switzerland’s largest lender to hold more equity capital</description>
+    </item>
+    <item>
+      <title>India lets wealth-focused funds with US$463 billion invest abroad</title>
+      <link>https://www.businesstimes.com.sg/wealth/wealth-investing/india-lets-wealth-focused-funds-us463-billion-invest-abroad</link>
+      <pubDate>Sun, 27 Sep 2026 09:15:54 +0000</pubDate>
+      <category>Wealth &amp; Investing</category>
+      <category>Companies &amp; Markets</category>
+      <category>Wealth</category>
+      <guid isPermaLink="false">/wealth/wealth-investing/india-lets-wealth-focused-funds-us463-billion-invest-abroad</guid>
+      <description>The changes significantly expand options for an industry that has grown rapidly in recent years</description>
+    </item>
+    <item>
+      <title>Discussing the future of AI in Singapore and Asia: DBS conference</title>
+      <link>https://www.businesstimes.com.sg/companies-markets/discussing-future-ai-singapore-and-asia-dbs-conference</link>
+      <pubDate>Sun, 27 Sep 2026 07:00:00 +0000</pubDate>
+      <category>Companies &amp; Markets</category>
+      <guid isPermaLink="false">/companies-markets/discussing-future-ai-singapore-and-asia-dbs-conference</guid>
+      <description>Leaders from business and government weigh what AI will mean for jobs and growth</description>
+    </item>
+    <item>
+      <title>SIA Engineering, Rolls-Royce JV SAESL to offer 30 work-study places from 2027</title>
+      <link>https://www.businesstimes.com.sg/companies-markets/transport-logistics/sia-engineering-rolls-royce-jv-saesl-offer-30-work-study-places-2027</link>
+      <pubDate>Sat, 26 Sep 2026 10:05:00 +0000</pubDate>
+      <category>Transport &amp; Logistics</category>
+      <category>Companies &amp; Markets</category>
+      <guid isPermaLink="false">/companies-markets/transport-logistics/sia-engineering-rolls-royce-jv-saesl-offer-30-work-study-places-2027</guid>
+      <description>The engine repair joint venture will take students from the polytechnics</description>
+    </item>
+    <item>
+      <title>Stocks to watch: Keppel Reit, Thai Beverage, Nio, Olam, Multi-Chem</title>
+      <link>https://www.businesstimes.com.sg/companies-markets/stocks-watch-keppel-reit-thai-beverage-nio-olam-multi-chem</link>
+      <pubDate>Fri, 25 Sep 2026 23:40:00 +0000</pubDate>
+      <category>Companies &amp; Markets</category>
+      <guid isPermaLink="false">/companies-markets/stocks-watch-keppel-reit-thai-beverage-nio-olam-multi-chem</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>Carro is said to mull first dual Nasdaq-SGX IPO</title>
+      <link>https://www.businesstimes.com.sg/companies-markets/capital-markets-currencies/carro-said-mull-first-dual-nasdaq-sgx-ipo</link>
+      <pubDate>Fri, 25 Sep 2026 06:12:40 +0000</pubDate>
+      <category>Capital Markets &amp; Currencies</category>
+      <category>Companies &amp; Markets</category>
+      <guid isPermaLink="false">/companies-markets/capital-markets-currencies/carro-said-mull-first-dual-nasdaq-sgx-ipo</guid>
+      <description>The car marketplace could list on the Singapore Exchange and in New York at the same time</description>
+    </item>
+    <item>
+      <title>Singapore stocks dip 0.2% as OCBC, Seatrium weigh on STI</title>
+      <link>https://www.businesstimes.com.sg/companies-markets/singapore-stocks-dip-0-2-ocbc-seatrium-weigh-sti</link>
+      <pubDate>Thu, 24 Sep 2026 09:30:00 +0000</pubDate>
+      <category>Companies &amp; Markets</category>
+      <guid isPermaLink="false">/companies-markets/singapore-stocks-dip-0-2-ocbc-seatrium-weigh-sti</guid>
+      <description>Across the broader market, losers outnumbered gainers</description>
+    </item>
+  </channel>
+</rss>

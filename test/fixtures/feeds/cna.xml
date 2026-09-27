@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/static/rss/nolsol.xsl"?>
+<!-- CNA, business: the two items of the probe of 27 Sep 2026 as fetched (an empty description, a media:thumbnail, the category 'Commentary ,Business'). -->
+<rss version="2.0" xml:base="https://www.channelnewsasia.com/"  xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:foaf="http://xmlns.com/foaf/0.1/">
+  <channel>
+    <title>CNA - Business</title>
+    <link>https://www.channelnewsasia.com/</link>
+  <item>
+  <title>OpenAI, Anthropic CEOs called to appear at Australian AI probe</title>
+  <link>https://www.channelnewsasia.com/business/openai-anthropic-ceos-called-appear-australian-ai-probe-6413341</link>
+    <description></description>
+  <pubDate>Sun, 27 Sep 2026 12:26:50 +0800</pubDate>
+    <guid isPermaLink="false">https://www.channelnewsasia.com/business/openai-anthropic-ceos-called-appear-australian-ai-probe-6413341</guid>
+    <category>Business</category>
+    <media:thumbnail url="https://dam.mediacorp.sg/image/upload/s--jMZ1WYKm--/fl_relative,g_south_east,l_mediacorp:cna:watermark:2024-04:reuters_1,w_0.1/f_auto,q_auto/c_fill,g_auto,h_468,w_830/v1/one-cms/core/2026-09-27T042650Z_1_LYNXMPEM8Q03C_RTROPTP_3_OPENAI-CYBERSECURITY-AUSTRALIA.JPG?itok=Tb-4X7S3" width="830" height="468" />
+    </item>
+  <item>
+  <title>Commentary: Zuckerberg’s ‘Tamagotchi-like’ AI could be Meta’s iPod moment</title>
+  <link>https://www.channelnewsasia.com/commentary/mark-zuckerberg-meta-muse-ai-agent-6411051</link>
+    <description>For someone mocked as a robotic, out-of-touch nerd, Mark Zuckerberg has struck the right tone with the Muse assistant, says Dave Lee for Bloomberg Opinion.</description>
+  <pubDate>Sun, 27 Sep 2026 06:00:00 +0800</pubDate>
+    <guid isPermaLink="false">https://www.channelnewsasia.com/commentary/mark-zuckerberg-meta-muse-ai-agent-6411051</guid>
+    <category>Commentary ,Business</category>
+    <media:thumbnail url="https://dam.mediacorp.sg/image/upload/s--cF47GZVS--/fl_relative,g_south_east,l_mediacorp:cna:watermark:2024-04:reuters_1,w_0.1/f_auto,q_auto/c_fill,g_auto,h_468,w_830/v1/one-cms/core/2026-09-24T043955Z_2_LYNXMPEM8N0A6_RTROPTP_3_META-PLATFORMS-CONFERENCE.JPG?itok=H7Dwkzg7" width="830" height="468" />
+    </item>
+  </channel>
+</rss>

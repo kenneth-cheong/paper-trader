@@ -16,14 +16,18 @@
 // after the close count from the next day), and is then measured from that day instead of its date.
 // Where primary sources exist they replace what the AI recalled (marketEvents): US results come from
 // SEC filings with their exact release time, and rating changes from Yahoo's dated list. SGX news
-// dates are checked against the day's trading volume, since results and big news trade heavily.
+// dates are checked against the day's trading volume, since results and big news trade heavily. A
+// stock has at most one event per trading day and tone (dedupeEvents), the best-sourced: two digests
+// wording one story differently, or a filing and a digest on the same results, are one price move.
+// A third, descriptive study (moveNewsStudy) compares what followed big moves against the index that
+// had news with those that had none, judged before any search; no lesson comes from it.
 // Lessons use the same evidence engine as the funds' own (stats.js): the drift after allowing for each
 // stock's beta, in separate bets (the same stock moving the same way within a week is one), with the
 // uncertainty worked out by date, so one market-wide selloff that hit every stock counts once.
 
 import { BENCHMARKS, sessionLength } from './benchmark.js';
 import { divsBetween, dividendReturn } from './actions.js';
-import { sessionDateFor, marketDate, tradingDaysBetween } from './markets.js';
+import { sessionDateFor, sessionDateAfter, marketDate, tradingDaysBetween } from './markets.js';
 import { describeChange } from './analysts.js';
 import { betaAt, separateBets, estimate, lessonStatus, confidenceOf } from './stats.js';
 
@@ -39,12 +43,50 @@ const dateOf = (t) => new Date(t * 1000).toISOString().slice(0, 10); // a daily 
 
 // ---------- the event list ----------
 
-const eventKey = (e) => `${e.symbol}|${e.date}|${String(e.headline).toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 40)}`;
+// The backfill's note that it found nothing for a stock, so the stock isn't searched again: never an
+// event, and never merged away.
+export const BACKFILL_NONE = '(no events found)';
 
-// Adds events (deduplicated), keeping only watchlist stocks and well-formed ones. Newest last.
+// Which event of a day stays, best first: an SEC filing; then the AI's news (the daily digest, the
+// one-off backfill, and the search for a big move that had none); then Yahoo's rating changes, which
+// mostly follow the news of the day; then a news feed's headline. From the same source, results come
+// first: they drive the day, and the results calendar reads its past dates from them.
+const SOURCE_RANK = { filing: 0, digest: 1, backfill: 1, search: 1, yahoo: 2, rss: 3 };
+const rankOf = (e) => (SOURCE_RANK[e.from] ?? 1) * 2 + (e.type === 'earnings' ? 0 : 1);
+
+// The trading day an event is measured from: its effectiveDate (or date), moved to the first session on
+// or after it in the stock's daily bars. Before the first bar (the prices hold one year, the events
+// more) or past the last one, the next weekday: snapping an old event to the first bar would give every
+// event older than a year the same day, and dedupeEvents would then keep only one of them.
+export function eventDay(e, q) {
+  const day = e.effectiveDate ?? e.date;
+  const bars = q?.daily ?? [];
+  if (bars.length && day >= dateOf(bars[0][0])) {
+    const bar = bars.find(([t]) => dateOf(t) >= day);
+    if (bar) return dateOf(bar[0]);
+  }
+  return q?.market ? sessionDateAfter(q.market, day) : day;
+}
+
+// One event per stock, trading day and tone: the same story worded differently by two digests, or a
+// filing and a digest on the same results, is one price move, not two. The best one stays (SOURCE_RANK
+// and results first), else the first. The backfill's notes stay as they are.
+export function dedupeEvents(events, quotes) {
+  const best = new Map();
+  const notes = [];
+  for (const e of events ?? []) {
+    if (e.headline === BACKFILL_NONE) { notes.push(e); continue; }
+    const k = `${e.symbol}|${eventDay(e, quotes?.[e.symbol])}|${e.tone}`;
+    const b = best.get(k);
+    if (!b || rankOf(e) < rankOf(b)) best.set(k, e);
+  }
+  return [...best.values(), ...notes];
+}
+
+// Adds events, keeping only watchlist stocks and well-formed ones, and one per stock, trading day and
+// tone (dedupeEvents). Newest last.
 export function mergeEvents(list, fresh, quotes) {
   const all = Array.isArray(list) ? [...list] : [];
-  const seen = new Set(all.map(eventKey));
   for (const e of fresh ?? []) {
     if (!quotes[e.symbol] || !/^\d{4}-\d{2}-\d{2}$/.test(e.date ?? '') || !e.headline) continue;
     const ev = {
@@ -54,12 +96,9 @@ export function mergeEvents(list, fresh, quotes) {
     };
     const effective = effectiveDateOf(e, quotes[e.symbol].market);
     if (effective) ev.effectiveDate = effective;
-    const k = eventKey(ev);
-    if (seen.has(k)) continue;
-    seen.add(k);
     all.push(ev);
   }
-  return all.sort((a, b) => a.date.localeCompare(b.date)).slice(-3000);
+  return dedupeEvents(all, quotes).sort((a, b) => a.date.localeCompare(b.date)).slice(-3000);
 }
 
 // The first trading day that could react to an event: its `effectiveDate` if it has a valid one, else
@@ -183,11 +222,12 @@ export function checkVolumeDate(e, q) {
   return best ? { ...e, effectiveDate: dateOf(bars[best.k][0]) } : null;
 }
 
-// The events the memory measures: the saved news events (from the digests and the backfill) with
-// primary sources taking over where they exist. SEC filings replace the AI's results events for
-// those US stocks (from 3 days before the first filing on, so a misdated duplicate can't survive);
-// Yahoo's rating changes replace its analyst events for stocks Yahoo covers; and SGX dates from the
-// AI must pass the volume check.
+// The events the memory measures: the saved news events (from the digests, the backfill and the
+// searches for big moves without news) with primary sources taking over where they exist. SEC filings
+// replace the AI's results events for those US stocks (from 3 days before the first filing on, so a
+// misdated duplicate can't survive); Yahoo's rating changes replace its analyst events for stocks Yahoo
+// covers; and SGX dates from the AI must pass the volume check. Then one event per stock, trading day
+// and tone (dedupeEvents: a filing, then the AI's news, then Yahoo's rating changes, then a feed).
 export function marketEvents(newsEvents, quotes, { filings = null, company = null } = {}) {
   const filed = eventsFromFilings(filings, company, quotes);
   const rated = analystEvents(company, quotes);
@@ -200,10 +240,10 @@ export function marketEvents(newsEvents, quotes, { filings = null, company = nul
     if (!q) continue;
     if (e.type === 'earnings' && filedFrom[e.symbol] && Date.parse(e.date) >= Date.parse(filedFrom[e.symbol]) - 3 * dayMs) continue;
     if (e.type === 'analyst' && covered.has(e.symbol)) continue;
-    const checked = q.market === 'SGX' && ['digest', 'backfill', undefined].includes(e.from) ? checkVolumeDate(e, q) : e;
+    const checked = q.market === 'SGX' && ['digest', 'backfill', 'search', undefined].includes(e.from) ? checkVolumeDate(e, q) : e;
     if (checked) kept.push(checked);
   }
-  return [...kept, ...filed, ...rated].sort((a, b) => a.date.localeCompare(b.date));
+  return dedupeEvents([...kept, ...filed, ...rated], quotes).sort((a, b) => a.date.localeCompare(b.date));
 }
 
 // ---------- measuring ----------
@@ -302,6 +342,135 @@ export function driftStats(list, horizon = 'week') {
   };
 }
 
+// ---------- big moves with and without news ----------
+// A day a stock moved 4% or more against its index either had news (a digest's or the backfill's
+// event, an SEC filing, a rating change, or a news feed's headline naming it) within a trading day of
+// it, or it didn't. Each such move is judged once, after the session following it is over and before
+// anything is searched (state/move-news.json), so the search for news behind the unexplained ones (one
+// web search each, at most MOVE_NEWS.perMonth a month, scripts/fetch-articles.mjs moves) can't move a
+// case from one group to the other. The study then compares what followed in each group. It starts on
+// the day the news feeds first answered: before them, far fewer moves would have had news on record.
+
+export const MOVE_NEWS = {
+  move: 0.04, // a day's total return this far from the index's
+  window: 1, // news within this many trading days either side counts
+  waitDays: 2, // judged this many trading days after the move, when the next session is over...
+  maxAgeDays: 10, // ...and not later than this (the feeds may not have been running)
+  perMonth: 10, // web searches for moves without news, a month
+  tries: 2, // a search that failed before the API answered is tried again this many times in all
+  keepDays: 400, // moves kept (a year of prices, and some)
+};
+
+// Every one-day move of MOVE_NEWS.move or more against the index among the market's stocks (index
+// funds left out): { symbol, date, t, excess (the day's total return minus the index's) }.
+export function movesAgainstIndex(quotes, market) {
+  const index = indexBars(quotes, market);
+  if (!index.q) return [];
+  const ib = index.q.daily, isl = sessionLength(index.q);
+  const at = new Map(ib.map((b, k) => [dateOf(b[0]), k]));
+  const out = [];
+  for (const [symbol, q] of Object.entries(quotes)) {
+    if (q.market !== market || q.etf || q === index.q) continue;
+    const bars = q.daily ?? [];
+    const sl = sessionLength(q);
+    for (let i = 1; i < bars.length; i++) {
+      const k = at.get(dateOf(bars[i][0])) ?? -1;
+      if (k < 1) continue;
+      const r = bars[i][1] / bars[i - 1][1] - 1 + divsBetween(q, bars[i - 1][0] + sl, bars[i][0] + sl) / bars[i - 1][1];
+      const ri = ib[k][1] / ib[k - 1][1] - 1 + divsBetween(index.q, ib[k - 1][0] + isl, ib[k][0] + isl) / ib[k - 1][1];
+      if (Math.abs(r - ri) >= MOVE_NEWS.move) out.push({ symbol, date: dateOf(bars[i][0]), t: bars[i][0], excess: r - ri });
+    }
+  }
+  return out.sort((a, b) => a.t - b.t);
+}
+
+// Whether any news about `symbol` came out within MOVE_NEWS.window trading days of `date` (the market's
+// calendar): an event (not the backfill's notes, and not one a search for this study found) dated then
+// or measured from then, or a feed's headline naming it (articles.js) published then.
+export function newsNear(symbol, date, market, { events = [], articles = [] } = {}) {
+  const near = (day) => /^\d{4}-\d{2}-\d{2}$/.test(day ?? '') && Math.abs(tradingDaysBetween(day, date)) <= MOVE_NEWS.window;
+  if ((events ?? []).some((e) => e.symbol === symbol && e.from !== 'search' && e.headline !== BACKFILL_NONE && (near(e.date) || near(e.effectiveDate)))) return true;
+  return (articles ?? []).some((a) => a.symbols?.includes(symbol) && near(marketDate(market, new Date(a.pubDate))));
+}
+
+// The record (state/move-news.json: { since, moves: [{ symbol, date, excess, news, searched? }] }) with
+// the moves that can be judged now added: from `since` (the day the feeds first answered) on, once the
+// session after the move is over (MOVE_NEWS.waitDays) and no more than MOVE_NEWS.maxAgeDays trading days
+// back. `news` is fixed then, and a later search never changes it. Moves over MOVE_NEWS.keepDays old go.
+export function classifyMoves(record, { quotes, events = [], articles = [], since = null, now = new Date() } = {}) {
+  const start = record?.since ?? since;
+  if (!start) return record ?? null;
+  const moves = [...(record?.moves ?? [])];
+  const known = new Set(moves.map((m) => `${m.symbol}|${m.date}`));
+  for (const market of Object.keys(MARKET_CURRENCY)) {
+    const today = marketDate(market, now);
+    for (const m of movesAgainstIndex(quotes, market)) {
+      if (m.date < start || known.has(`${m.symbol}|${m.date}`)) continue;
+      const age = tradingDaysBetween(m.date, today);
+      if (age < MOVE_NEWS.waitDays || age > MOVE_NEWS.maxAgeDays) continue;
+      moves.push({ symbol: m.symbol, date: m.date, excess: Math.round(m.excess * 10000) / 10000, news: newsNear(m.symbol, m.date, market, { events, articles }) });
+    }
+  }
+  const from = new Date(now - MOVE_NEWS.keepDays * dayMs).toISOString().slice(0, 10);
+  return { since: start, moves: moves.filter((m) => m.date >= from).sort((a, b) => a.date.localeCompare(b.date) || a.symbol.localeCompare(b.symbol)) };
+}
+
+// Marks a move whose search failed (in place). One the API had already answered (and billed: the error
+// carries `usage`, see ai.js askClaude) counts as searched and found nothing, so it uses up one of the
+// month's searches and isn't paid for again at every fetch; one that failed before any answer (the API
+// out of reach) is tried again at the next fetch, until MOVE_NEWS.tries attempts.
+export function searchFailed(m, err, now = new Date()) {
+  m.tries = (m.tries ?? 0) + 1;
+  if (err?.usage || m.tries >= MOVE_NEWS.tries) m.searched = { at: now.toISOString(), found: false, failed: true };
+  return m;
+}
+
+// The moves without news to search now: not searched yet, the newest first, within what's left of this
+// month's MOVE_NEWS.perMonth (counted by when each search ran).
+export function movesToSearch(record, now = new Date(), perMonth = MOVE_NEWS.perMonth) {
+  const month = now.toISOString().slice(0, 7);
+  const used = (record?.moves ?? []).filter((m) => String(m.searched?.at ?? '').startsWith(month)).length;
+  return (record?.moves ?? []).filter((m) => !m.news && !m.searched).reverse().slice(0, Math.max(0, perMonth - used));
+}
+
+// What followed the market's big moves against the index, with news and without it (as judged before
+// any search): the next week and month in the move's direction, against the index and after beta, as
+// the market memory's other studies (driftStats). Over the moves since `from`: the day the feeds started
+// or, a year on, the start of the year of prices. With the counts: moves judged, how many had no news,
+// searched and found; and the latest moves without news, with what their search found.
+export function moveNewsStudy(record, quotes, market) {
+  if (!record?.since) return null;
+  const index = indexBars(quotes, market);
+  const first = index.q?.daily?.length ? dateOf(index.q.daily[0][0]) : '';
+  const from = first > record.since ? first : record.since;
+  const mine = (record.moves ?? []).filter((m) => quotes[m.symbol]?.market === market && m.date >= from);
+  const cases = [];
+  for (const m of mine) {
+    const q = quotes[m.symbol];
+    const bars = q.daily ?? [];
+    const i = bars.findIndex(([t]) => dateOf(t) === m.date);
+    if (i < 1 || !index.q) continue;
+    const direction = m.excess < 0 ? -1 : 1;
+    const after = movesAfter(q, i, index, direction);
+    if (!after.week) continue;
+    const { beta, idio } = betaAt(q, bars[i][0], index.q);
+    cases.push({ symbol: m.symbol, date: m.date, t: bars[i][0], direction, beta, idio, week: after.week, month: after.month, news: m.news });
+  }
+  const without = mine.filter((m) => !m.news);
+  const searched = without.filter((m) => m.searched && !m.searched.failed);
+  const group = (news) => cases.filter((c) => c.news === news);
+  return {
+    since: record.since, from, moves: mine.length, withoutNews: without.length, measured: cases.length,
+    searched: searched.length, found: searched.filter((m) => m.searched.found).length,
+    withNews: { week: driftStats(group(true)), month: driftStats(group(true), 'month') },
+    noNews: { week: driftStats(group(false)), month: driftStats(group(false), 'month') },
+    recent: without.slice(-6).reverse().map((m) => ({
+      symbol: m.symbol, date: m.date, excess: m.excess,
+      ...(m.searched ? { searched: m.searched.found ? { found: true, headline: m.searched.headline, url: m.searched.url ?? null } : { found: false, ...(m.searched.failed ? { failed: true } : {}) } } : {}),
+    })),
+  };
+}
+
 // ---------- lessons ----------
 
 // A lesson when the drift after beta passes the gate (stats.js lessonStatus): it kept going, or gave
@@ -321,8 +490,10 @@ function driftLesson(id, what, st, lessons, { broader = null, was = new Set() } 
 }
 
 // The market's memory: statistics, lessons and the latest measured events (for the page). `prev`:
-// the last memory for this market, whose lessons stay on until their evidence fades.
-export function buildMemory(events, quotes, market, now = new Date(), prev = null) {
+// the last memory for this market, whose lessons stay on until their evidence fades. `moveNews`: the
+// record of big moves against the index and whether they had news (state/move-news.json), for the study
+// of what followed each (moveNewsStudy; the page shows it, and no lesson comes from it).
+export function buildMemory(events, quotes, market, now = new Date(), prev = null, { moveNews = null } = {}) {
   const measured = measureEvents(events, quotes, market);
   const moves = bigMoves(quotes, market);
   const lessons = [];
@@ -347,5 +518,6 @@ export function buildMemory(events, quotes, market, now = new Date(), prev = nul
     },
     lessons,
     recent: measured.slice(-25).reverse().map((e) => ({ symbol: e.symbol, date: e.date, headline: e.headline, type: e.type, tone: e.tone, from: e.from, day: e.day, week: e.week })),
+    ...(moveNews?.since ? { moveNews: moveNewsStudy(moveNews, quotes, market) } : {}),
   };
 }

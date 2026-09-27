@@ -3,8 +3,9 @@
 // outside the funds) and Tiger's order numbers are left out; only a check of whether Tiger holds what
 // the funds think they hold is kept. Each fund's log of graded ideas (learning.js fund.ideaLog) is cut
 // to its latest PUBLIC_IDEA_LOG rows, without the columns from PUBLIC_IDEA_COLUMNS on (each idea's
-// price, its quarter grade and its thesis: expected move, horizon, catalyst, lessons applied); the page
-// shows only the calibration built from them. Its lesson book (learning.js pb.lessonBook) keeps only the
+// price, its quarter grade, its thesis: expected move, horizon, catalyst, lessons applied, and its factors
+// at the time); the page shows only the calibration and the factor lab (c.factorLab, each playbook's
+// style) built from them. Its lesson book (learning.js pb.lessonBook) keeps only the
 // records of the lessons in its playbook, without their words (the page shows the lessons themselves):
 // the review's dropped proposals and the lessons that have gone are left out, and only the track
 // record's counts of them stay.
@@ -17,6 +18,10 @@
 // the playbook's statistics (pb.stats.declinedByReason, the page's "Your calls") and in the idea log
 // (its last column, beyond PUBLIC_IDEA_COLUMNS). The weekly reports (fund.reports, report.js) are cut
 // to the latest few, without the owner's calls (report.js publicReports).
+// The articles the owner logged (reading.js, c.reading: links, titles and calls) are left out; only how
+// many there are stays (c.readingLogged), so the page can tell an admin where to see them.
+// The owner's questions (Ask the data, hypotheses.js, c.questions: their words and answers) are left out
+// too; only how many there are stays (c.questionsAsked).
 // Usage: node scripts/public-fund.mjs <ai-fund.json> <output.json>
 
 import { readFile, writeFile } from 'node:fs/promises';
@@ -34,6 +39,14 @@ try { c = loadFunds(JSON.parse(await readFile(src, 'utf8'))); } catch { process.
 c.brokerCheck = reconcileAll(c);
 delete c.notified;
 if (c.stockNotes) c.stockNotes = Object.fromEntries(Object.entries(c.stockNotes).map(([s, n]) => [s, { at: n?.at ?? null }]));
+if (c.reading) {
+  c.readingLogged = Array.isArray(c.reading) ? c.reading.length : 0;
+  delete c.reading;
+}
+if (c.questions) {
+  c.questionsAsked = Array.isArray(c.questions) ? c.questions.length : 0;
+  delete c.questions;
+}
 for (const fund of c.funds) {
   if (Array.isArray(fund.protectionLog)) fund.protectionLog = fund.protectionLog.slice(-PUBLIC_STOP_LOG);
   if (fund.tracks) fund.tracks = Object.fromEntries(Object.entries(fund.tracks).map(([s, t]) => [s, { worst: t?.worst ?? null, best: t?.best ?? null, ...(t?.late ? { late: true, openedAt: t.openedAt ?? null } : {}) }]));
@@ -46,7 +59,7 @@ for (const fund of c.funds) {
   const pb = fund.playbook;
   if (pb?.stats) delete pb.stats.declinedByReason;
   if (pb?.lessonBook) {
-    const shown = new Set([...(pb.own ?? []), ...(pb.review ?? []), ...(pb.calibrationLessons ?? []), ...(pb.lessons ?? [])].map((l) => l.id));
+    const shown = new Set([...(pb.own ?? []), ...(pb.review ?? []), ...(pb.calibrationLessons ?? []), ...(pb.conditionLessons ?? []), ...(pb.lessons ?? [])].map((l) => l.id));
     pb.lessonBook = Object.fromEntries(Object.entries(pb.lessonBook).filter(([id]) => shown.has(id)).map(([id, { text, ...e }]) => [id, e]));
   }
 }

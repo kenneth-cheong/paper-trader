@@ -5,7 +5,7 @@ import { scorePicks, summarizeScores } from './scorecard.js';
 import { addSpend, monthSpend, fundAiCost } from './spend.js';
 import { hbars, stackBar, columns, lineChart, rangeBars, sparkTrend, tableToggle, focusQuietly, tipOpenFor, hideTips, SERIES, OTHER, CASH, TRACK } from './charts.js';
 import { valueHistory, indexHistory, realizedHistory } from './history.js';
-import { MIN_CASES as MEMORY_MIN_CASES } from './memory.js';
+import { MIN_CASES as MEMORY_MIN_CASES, MOVE_NEWS } from './memory.js';
 import { regimeNow, regimeWords, yearLessons, studyNumbers, STUDY_LABELS, STUDY_SHORT, LONG, HOLDOUT_NOISE } from './memory-long.js';
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest, fillPendingOrders } from './rules.js';
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
@@ -22,6 +22,9 @@ import { reportLines, reportLabel, dayWords, lessonName, weekOf, droppedWords, R
 import { positionThesis, thesisProgress, moveWords, CATALYST_LABELS, HORIZON_LABELS, STALE_DAYS } from './thesis.js';
 import { buildDossiers, picksRecord, positionRisk, exDateVsStop, exDateLate, stopLogSummary, indexName, DOSSIER } from './dossier.js';
 import { GATE, confidenceOf, fundBeta, FUND_BETA_DAYS } from './stats.js';
+import { READING, READING_NOISE, REASON_LABELS, siteName, siteRecords, latestCalls, monthResults, recordOf, soFar, gradeDay } from './reading.js';
+import { FACTOR_LABELS, BUCKETS, PAGE_MIN_BETS, LAB, CASE_DAYS, COND_NOISE_CHECK, conditionWords } from './factors.js';
+import { statusLabel, describeSpec, ASK } from './hypotheses.js';
 import { calcFee, planFor, fxSpreadFor, FEE_PLANS } from './fees.js';
 import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus, loadPrivateFund } from './auth.js';
 import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
@@ -44,6 +47,9 @@ const state = {
   filings: null, // US results releases from SEC filings (calendar.js)
   longMemory: null, // the ten-year market memory (memory-long.js), rebuilt weekly
   dossiers: null, // the stock cards' public part (dossier.js, data/dossiers.json), refreshed daily
+  readingCalls: null, // the reading guide: investing sites' calls (reading.js, data/reading-calls.json), read once a day
+  readingDraft: null, // an article being logged ("Log an article"): { url, text }, kept while the page re-renders
+  askDraft: null, // a question being written (Ask the data), kept while the page re-renders
   stockView: null, // the stock whose notes are open: { symbol, fundId }
   noteDraft: null, // the owner's note being written in it: { symbol, text }
   noteCmd: null, // the stock whose note the latest command saves or clears
@@ -223,13 +229,15 @@ async function loadPrices() {
 async function loadSideData() {
   // A private fund (admins, from Supabase) wins over the public copy.
   const fundSource = async () => (authEnabled && state.user?.isAdmin && (await loadPrivateFund().catch(() => null))) || fetchJson('data/ai-fund.json');
-  const [picks, fund, history, spend, company, filings, longMemory, dossierFile] = await Promise.allSettled([
+  const [picks, fund, history, spend, company, filings, longMemory, dossierFile, reading] = await Promise.allSettled([
     fetchJson('data/picks.json'), fundSource(), fetchJson('data/picks-history.json'), fetchJson('data/ai-spend.json'),
     fetchJson('data/company-data.json'), fetchJson('data/results-dates.json'), fetchJson('data/memory-long.json'), fetchJson('data/dossiers.json'),
+    fetchJson('data/reading-calls.json'),
   ]);
   state.company = company.status === 'fulfilled' ? company.value : null;
   state.longMemory = longMemory.status === 'fulfilled' && longMemory.value?.markets ? longMemory.value : null;
   state.dossiers = dossierFile.status === 'fulfilled' && dossierFile.value?.stocks ? dossierFile.value : null;
+  state.readingCalls = reading.status === 'fulfilled' && Array.isArray(reading.value?.calls) ? reading.value : null;
   state.filings = filings.status === 'fulfilled' ? filings.value : null;
   state.sitePicks = picks.status === 'fulfilled' ? picks.value : null;
   state.picksHistory = history.status === 'fulfilled' ? history.value : null;
@@ -425,7 +433,7 @@ function render() {
 
   const { accounts, positions } = summarize(state.portfolio, state.prices.quotes);
   renderCards(accounts);
-  if (view === 'home') { renderOverview(); renderPicks(); renderScorecard(); renderHoldings(positions, accounts); }
+  if (view === 'home') { renderOverview(); renderPicks(); renderScorecard(); renderHoldings(positions, accounts); renderReading(); }
   if (view === 'markets') renderMarkets();
   if (view === 'auto') renderRules();
   if (view === 'strategist') renderStrategist();
@@ -500,13 +508,16 @@ function focusKey() {
   if (!a || a === document.body) return null;
   if (a.dataset?.fundSelect) return { sel: `[data-fund-select="${CSS.escape(a.dataset.fundSelect)}"]` };
   if (a.id === 'report-week') return { sel: '#report-week' };
-  // the owner's lesson (lessonForm) or note on a stock (stockNoteSection) being written, with the caret where it was
-  if (a.id && a.closest?.('#lesson-form, #stock-note-form')) return { sel: `#${CSS.escape(a.id)}`, caret: typeof a.selectionStart === 'number' ? a.selectionStart : null };
+  // the owner's lesson (lessonForm), note on a stock (stockNoteSection), logged article (readingForm) or
+  // question (askForm) being written, with the caret where it was
+  if (a.id && a.closest?.('#lesson-form, #stock-note-form, #reading-form, #ask-form')) return { sel: `#${CSS.escape(a.id)}`, caret: typeof a.selectionStart === 'number' ? a.selectionStart : null };
   const box = a.closest?.('.chart-card[data-key], [data-bt]');
   if (!box) return null;
   const scope = box.matches('[data-bt]') ? `[data-bt="${CSS.escape(box.dataset.bt)}"]` : `.chart-card[data-key="${CSS.escape(box.dataset.key)}"]`;
   const tip = a.getAttribute('data-tip'), open = tipOpenFor(a);
-  if (tip != null) return { sel: `${scope} [data-tip="${CSS.escape(tip)}"]`, open };
+  // a card holding several small charts (the factor lab's) numbers each one's marks from 0: the chart too
+  const sub = a.closest?.('[data-lab]');
+  if (tip != null) return { sel: `${scope} ${sub ? `[data-lab="${CSS.escape(sub.dataset.lab)}"] ` : ''}[data-tip="${CSS.escape(tip)}"]`, open };
   for (const s of ['svg.line-chart', 'details.chart-table > summary', '.chart-table .table-wrap']) if (a.matches(s)) return { sel: `${scope} ${s}`, at: a.dataset.at, open };
   return null;
 }
@@ -735,6 +746,127 @@ function renderScorecard() {
     <p class="muted small">"Right" means the pick made money in its direction (a short gains when the price falls). "Beat index" compares it with the S&P 500 (US) or STI (SGX) over the same days. Before fees.
       ${recent.length ? `Latest after a week: ${recent.map((x) => `<span class="${tone(x.ret)}">${esc(x.symbol)} ${x.stance} ${pct(x.ret)}</span>`).join(', ')}.` : ''}</p>`;
   flushCharts();
+}
+
+// ----- home: the reading guide (reading.js) -----
+
+// What investing sites recommended for the watchlist's stocks (data/reading-calls.json: read once a day
+// from the news feeds' headlines and the start of their summaries), each site's calls graded a month
+// later as the AI picks are, with the honest limits; and your own reading (admins): the articles you log
+// here, kept with the funds and graded the same way. None of it reaches the AI.
+const READING_TEXT = { log: ['Logging your article', 'Your article is logged.'] };
+const VERDICT_WORDS = { unclear: 'no evidence either way yet', better: 'did better than the index so far', worse: 'did worse than the index so far' };
+const verdictWords = (r) => (r.verdict === 'too-few' ? `too early for a verdict (${r.n} of ${READING.verdict} graded calls)` : VERDICT_WORDS[r.verdict]);
+const CALL_WORDS = { long: 'buy', short: 'sell', hold: 'hold' };
+const CALL_CHIP = { long: 'buy', short: 'sell', hold: '' };
+const likelyRange = (r) => (r.lo == null ? '–' : `${pct(r.lo)} to ${pct(r.hi)}`);
+const readingLeft = (text) => `${Math.max(0, READING.pasteMax - String(text ?? '').length).toLocaleString()} characters left`;
+const siteLabel = (site) => (site == null ? 'All sites' : siteName(site));
+const callChip = (p) => `<span class="chip ${CALL_CHIP[p.stance]}">${CALL_WORDS[p.stance]}</span>`;
+
+function renderReading() {
+  const el = $('reading');
+  const admin = authEnabled && state.user?.isAdmin;
+  const record = state.readingCalls;
+  $('reading-panel').hidden = !record?.calls?.length && !admin;
+  if (!record?.calls?.length && !admin) { el.innerHTML = ''; return; }
+  const latest = latestCalls(record, 30);
+  el.innerHTML = `
+    <p class="small muted">Once a day, Claude Haiku reads up to ${READING.perDay} new headlines from the news feeds that name a watchlist stock, investing sites first, with the start of each one's summary, and notes the article's own call on the stock: buy, sell or hold (a news report, or a broker's rating it only reports, isn't a call). One call per site, per stock, per week. Each is graded like the AI picks: a month later, in the call's direction, against the same bet on the index (dividends count; fees don't).</p>
+    ${readingSites(record)}
+    <p class="small reading-honest">A site's record takes a year or more to mean anything. There are 17 stocks, a site calls a few of them a month and calls bunch after results, so the same few price moves count again and again, and for months a record is mostly luck. So there's no verdict before ${READING.verdict} graded calls, and then only when the average is well clear of noise: of ${READING_NOISE.sims.toLocaleString()} made-up sites with no skill at all, ${(READING_NOISE.any * 100).toFixed(1)}% showed one at some point in a year, checked every week. Calls are graded against the index without allowing for beta, so buying stocks that swing more than the index looks good in a rising market. For your reading only: the AI funds and the picks never see these calls.</p>
+    ${latest.length ? `<details class="fund-new"><summary>Latest calls (the last ${READING.listDays / 7} weeks)</summary><ul class="orders reading-list">${latest.map((c) => `<li>${esc(shortDay(c.createdAt))} ${callChip(c.pick)}${stockLink(c.pick.symbol)}
+      <span class="muted small">${esc(siteLabel(c.source))}${c.pick.target ? ` · target ${price(c.pick.target)}` : ''}${c.pick.reasons?.length ? ` · ${esc(c.pick.reasons.map((x) => REASON_LABELS[x] ?? x).join(', '))}` : ''}</span>
+      <br><a class="small" href="${esc(safeUrl(c.url))}" target="_blank" rel="noopener noreferrer">${esc(c.headline)}</a></li>`).join('')}</ul>
+      <p class="muted small">What the sites wrote, not advice. Each will be graded a month after it was published.</p></details>` : ''}
+    ${admin ? yourReading() : ''}`;
+  flushCharts();
+}
+
+// Each site's record (reading.js siteRecords): the calls a month old, against the index, with the
+// likely range, as a chart of the sites with enough of them and a table of every site.
+function readingSites(record) {
+  if (!record?.calls?.length) return '<p class="muted small">No calls yet: the first read comes with the news feeds\' next fetch.</p>';
+  if (state.sample) return '<p class="muted small">Each site\'s record appears once real prices are loaded.</p>';
+  const rows = siteRecords(record, state.prices.quotes ?? {});
+  const all = rows[0];
+  const shown = rows.filter((r) => r.n >= READING.chartMin);
+  const counts = `${plural(all.calls, 'call')} from ${plural(rows.length - 1, 'site')} since ${esc(fmtDate(record.calls[0].createdAt))}${all.holds ? ` (${all.holds} of them ${all.holds === 1 ? 'a hold' : 'holds'}, which ${all.holds === 1 ? 'isn\'t' : 'aren\'t'} graded: a hold has no direction)` : ''}; ${all.n ? `${all.n} a month old, graded` : 'none a month old yet'}.`;
+  const chart = chartSlot((box) => (shown.length ? rangeBars(box, shown.map((r) => ({
+    label: siteLabel(r.site), sub: `${r.n} graded · ${plural(r.weeks, 'week')}`, // graded calls: the table's Graded column
+    value: r.avg * 100, lo: (r.lo ?? r.avg) * 100, hi: (r.hi ?? r.avg) * 100, display: pct(r.avg),
+    tip: [
+      { value: pct(r.avg), label: 'a month later against the same bet on the index, on average (each week once)' },
+      { value: likelyRange(r), label: 'likely range (an 8-in-10 chance)' },
+      { value: `${r.beat} of ${r.n}`, label: 'beat the index' },
+      { label: verdictWords(r) },
+    ],
+  })), { tickFmt: pctTick, ariaLabel: 'Each site\'s calls a month later, against the index', dotLabel: 'Average, each week once' })
+    : (box.innerHTML = `<p class="muted small">No site has ${READING.chartMin} graded calls yet: a call is graded once a month of trading has passed.</p>`)), {
+    title: 'Each site\'s calls, a month later',
+    caption: `In the call's direction, against the same bet on the index (SPY or ES3): right of 0, the calls did better than the index. The dot is the average, counting each week once (calls on the same stock and side within a month are one bet), and the bar its likely range (an 8-in-10 chance it's inside). Sites with fewer than ${READING.chartMin} graded calls are only in the Table.`,
+    key: 'reading-sites',
+    table: tableToggle(['Site', 'Calls', 'Graded', 'Separate weeks', 'Beat the index', 'A month later vs index', 'Likely range', 'Verdict'],
+      rows.map((r) => [siteLabel(r.site), `${r.calls}${r.holds ? ` (${plural(r.holds, 'hold')})` : ''}`, String(r.n), String(r.weeks), r.n ? `${r.beat} of ${r.n}` : '–',
+        r.avg == null ? '–' : pct(r.avg), likelyRange(r), verdictWords(r)]), 1, { className: 'wrap-head reading-table' }),
+  });
+  return `<p class="small">${counts}</p>${chart}`;
+}
+
+// Your reading (admins): the articles you logged (the funds' c.reading, in their private copy), each call
+// graded a month on from when you logged it, the record of all of them, and the box to log another.
+function yourReading() {
+  const quotes = state.prices.quotes ?? {};
+  const list = Array.isArray(state.funds?.reading) ? state.funds.reading : [];
+  const results = state.sample ? [] : monthResults(list, quotes);
+  const rec = recordOf(results);
+  const hidden = !list.length && state.funds?.readingLogged;
+  const line = (e) => {
+    const t = Date.parse(e.createdAt) / 1000;
+    const calls = e.picks.map((p) => {
+      const idx = esc(indexName(BENCHMARKS[quotes[p.symbol]?.currency]?.symbol ?? 'the index'));
+      const r = p.stance === 'hold' ? null : results.find((x) => x.t === t && x.symbol === p.symbol && x.direction === (p.stance === 'short' ? -1 : 1));
+      let grade;
+      if (p.stance === 'hold') grade = 'not graded: a hold has no direction';
+      else if (r) grade = `a month later <span class="${tone(r.x)}">${pct(r.x)}</span> against ${idx}`;
+      else {
+        const s = state.sample ? null : soFar(e.createdAt, p, quotes);
+        grade = `${s?.vsIndex != null ? `so far <span class="${tone(s.vsIndex)}">${pct(s.vsIndex)}</span> against ${idx}; ` : ''}graded around ${esc(dayOf(gradeDay(e.createdAt)))}`;
+      }
+      return `${callChip(p)}${stockLink(p.symbol)}${p.target ? ` <span class="muted small">target ${price(p.target)}</span>` : ''} · ${grade}`;
+    }).join('<br>');
+    const name = e.title || (e.site ? siteLabel(e.site) : 'Your pasted text');
+    return `<li>${calls}<br><span class="small">${e.url ? `<a href="${esc(safeUrl(e.url))}" target="_blank" rel="noopener noreferrer">${esc(name)}</a>` : esc(name)}</span>
+      <span class="muted small">(${esc(e.site ? siteLabel(e.site) : 'pasted text')}, logged ${esc(fmtDate(e.createdAt))}${e.published ? `, published ${esc(fmtDate(e.published))}` : ''})</span></li>`;
+  };
+  const picks = list.reduce((n, e) => n + e.picks.length, 0);
+  const summary = list.length ? `<p class="small">${plural(list.length, 'article')} logged, with ${plural(picks, 'call')}${rec.n
+    ? `; ${rec.n} a month old: ${pct(rec.avg)} against the index on average${rec.lo != null ? ` (likely ${likelyRange(rec)})` : ''}, beating it ${rec.beat} of ${rec.n} times; ${verdictWords(rec)}`
+    : '; none a month old yet'}.</p>` : '';
+  return `<h3 class="col-head reading-own">Your reading</h3>
+    <p class="small muted">Articles you read, in Tiger, Standard Chartered or anywhere: give the link, or paste the text when the page is behind a paywall. The job reads the page (or your text) the same way, and each call is graded the same way, from when you log it, so an older article isn't graded on moves you'd already seen. Kept with the funds, so private only when they're kept private (README: Keeping the AI fund private); the AI never sees them.</p>
+    ${hidden ? `<p class="small">You've logged ${plural(hidden, 'article')}. The public copy of the funds leaves your reading out, so it isn't shown here; keep the funds private to see it.</p>` : ''}
+    ${summary}
+    ${list.length ? `<ul class="orders reading-list">${[...list].reverse().slice(0, 20).map(line).join('')}</ul>` : ''}
+    ${readingForm()}`;
+}
+
+// The box that logs an article: a link, or pasted text (up to READING.pasteMax characters), sent to the
+// job as 'settings' ({ fund: 'all', reading }), which reaches it whole. If the job can't read the page, its
+// message says so and the box keeps the link, so the text can be added.
+function readingForm() {
+  const d = state.readingDraft ?? { url: '', text: '' };
+  const cmd = state.fundCmd?.text === READING_TEXT.log ? state.fundCmd : null;
+  const busy = state.fundCmd && ['sending', 'sent', 'accepted'].includes(state.fundCmd.phase) ? 'disabled' : '';
+  return `<form id="reading-form" class="reading-form" novalidate>
+    <label for="reading-url">Log an article: its link</label>
+    <input id="reading-url" type="url" inputmode="url" maxlength="500" autocomplete="off" placeholder="https://" value="${esc(d.url)}">
+    <label for="reading-text">Or its text, pasted</label>
+    <textarea id="reading-text" maxlength="${READING.pasteMax}" rows="3" placeholder="e.g. Buy Singtel, target S$4.20: its dividend looks safe…">${esc(d.text)}</textarea>
+    <div class="row"><button type="submit" class="primary small-btn" ${busy}>Log the article</button><span class="muted small" id="reading-left">${readingLeft(d.text)}</span></div>
+    <p class="error" id="reading-error" role="alert"></p>
+    ${cmd?.message ? `<p class="small ${cmd.phase === 'failed' ? 'down' : 'muted'}" role="status">${esc(cmd.message)}</p>` : ''}
+  </form>`;
 }
 
 function renderPendingOrders() {
@@ -1466,12 +1598,14 @@ async function watchFundCommand(cmd) {
           cmd.phase = own && !lc.ok ? 'failed' : 'done';
           cmd.message = own && lc.message ? lc.message : doneText;
           if (cmd.action === 'start' && own && lc.ok && lc.fund) selectFund(lc.fund); // show the new fund
+          if (cmd.text === READING_TEXT.log && cmd.phase === 'done') state.readingDraft = null; // logged: the box empties (a failure keeps it, to add the text)
+          if (cmd.text === ASK_TEXT.ask && cmd.phase === 'done') state.askDraft = null; // asked: the box empties (a failure keeps it)
         }
       }
     } catch (err) {
       console.warn('Checking the fund request failed', err);
     }
-    if (currentView() === 'fund' || $('stock-dialog').open) render();
+    if (currentView() === 'fund' || currentView() === 'home' || $('stock-dialog').open) render();
     if (['done', 'failed'].includes(cmd.phase)) return;
   }
   if (state.fundCmd === cmd && cmd.phase !== 'done') {
@@ -1513,6 +1647,23 @@ document.addEventListener('submit', (e) => {
     state.noteCmd = symbol;
     state.noteDraft = null;
     submitFundCommand('settings', { payload: { fund: 'all', stockNote: { symbol, text } } }, NOTE_TEXT.save);
+  }
+  if (e.target.id === 'reading-form') {
+    e.preventDefault();
+    const url = $('reading-url').value.trim(), text = $('reading-text').value.trim().slice(0, READING.pasteMax);
+    const err = $('reading-error');
+    if (!url && !text) { err.textContent = 'Give a link to the article, or paste its text.'; return; }
+    if (url && !/^https?:\/\/[^\s/]+\.[^\s]+$/i.test(url)) { err.textContent = 'That doesn\'t look like a link to a web page (it should start with https://).'; return; }
+    state.readingDraft = { url, text };
+    submitFundCommand('settings', { payload: { fund: 'all', reading: { ...(url ? { url } : {}), ...(text ? { text } : {}) } } }, READING_TEXT.log);
+  }
+  if (e.target.id === 'ask-form') {
+    e.preventDefault();
+    const text = $('ask-text').value.replace(/\s+/g, ' ').trim().slice(0, ASK.maxChars);
+    if (!text) { $('ask-error').textContent = 'Type a question first.'; return; }
+    if (text.length < 8) { $('ask-error').textContent = 'Write the question out in a few words (at least 8 characters).'; return; }
+    state.askDraft = text;
+    submitFundCommand('settings', { payload: { fund: 'all', ask: text } }, ASK_TEXT.ask);
   }
   if (e.target.id === 'fund-settings-form') {
     e.preventDefault();
@@ -1630,8 +1781,8 @@ function renderBrokerOrders(f) {
 // ----- AI fund: what it has learned -----
 
 // What a lesson's number per week measures (learning.js evaluateLessons `measure`).
-const measureLabel = (l) => ({ index: 'Against the index', peers: `Against ${l.vs ?? 'its peers'}`, diff: 'High minus low conviction' }[l.measure] ?? 'Edge');
-const LESSON_SOURCE = { results: 'from its results', 'weekly review': 'weekly review', owner: 'added by you', 'market memory': 'market memory', calibration: 'calibration' };
+const measureLabel = (l) => ({ index: 'Against the index', peers: `Against ${l.vs ?? 'its peers'}`, diff: 'High minus low conviction', split: 'Against the other side' }[l.measure] ?? 'Edge');
+const LESSON_SOURCE = { results: 'from its results', 'weekly review': 'weekly review', owner: 'added by you', 'market memory': 'market memory', calibration: 'calibration', conditions: 'when its ideas work' };
 const moveCell = (h) => (h ? `<span class="${tone(h.move)}">${pct(h.move)}</span>${h.index != null ? ` <span class="muted small">(${pct(h.move - h.index)} vs index)</span>` : ''}` : '<span class="muted small">not yet</span>');
 const rate = (x) => (x == null ? '–' : `${Math.round(x * 100)}%`);
 
@@ -1697,14 +1848,14 @@ function positionThesisLine(f, p, quotes) {
   return `<span class="thesis small">${esc(thesisWords(th, { soFar, short: p.short }))}${left}</span>`;
 }
 
-// Every lesson the fund could have cited, by id: its own, the review's, calibration's, the rule-made
+// Every lesson the fund could have cited, by id: its own, the review's, calibration's, the factor lab's, the rule-made
 // ones and the market memory's, and the wording of lessons it cited that have since gone
 // (fund.citedLessons, learning.js rememberCited).
 function lessonsById(f, c) {
   const pb = f.playbook ?? {};
   const market = marketForCurrency(f.currency);
   const memory = [...(c.marketMemory?.[market]?.lessons ?? []), ...(state.longMemory?.markets?.[market]?.lessons ?? [])];
-  return new Map([...Object.entries(f.citedLessons ?? {}), ...[...(pb.own ?? []), ...(pb.review ?? []), ...(pb.calibrationLessons ?? []), ...(pb.lessons ?? []), ...memory].map((l) => [l.id, l.text])]);
+  return new Map([...Object.entries(f.citedLessons ?? {}), ...[...(pb.own ?? []), ...(pb.review ?? []), ...(pb.calibrationLessons ?? []), ...(pb.conditionLessons ?? []), ...(pb.lessons ?? []), ...memory].map((l) => [l.id, l.text])]);
 }
 
 // The lessons an order or idea says it applied, as chips (the text on hover). An unknown entry that
@@ -1830,6 +1981,18 @@ function lessonDraft() {
 }
 for (const type of ['input', 'change']) document.addEventListener(type, (e) => { if (e.target.closest?.('#lesson-form')) state.lessonDraft = lessonDraft(); });
 document.addEventListener('input', (e) => { if (e.target.id === 'stock-note-text') state.noteDraft = { symbol: e.target.closest('form')?.dataset.symbol, text: e.target.value }; });
+document.addEventListener('input', (e) => {
+  if (!e.target.closest?.('#reading-form')) return;
+  state.readingDraft = { url: $('reading-url').value, text: $('reading-text').value };
+  $('reading-error').textContent = '';
+  $('reading-left').textContent = readingLeft(state.readingDraft.text);
+});
+document.addEventListener('input', (e) => {
+  if (e.target.id !== 'ask-text') return;
+  state.askDraft = e.target.value;
+  $('ask-error').textContent = '';
+  $('ask-left').textContent = askLeft(e.target.value);
+});
 document.addEventListener('toggle', (e) => { if (e.target.id === 'lesson-filter') state.lessonDraft = lessonDraft(); }, true);
 
 // Words for the dropdowns that say which of its ideas an owner's lesson is about (learning.js FILTER_VALUES).
@@ -1920,7 +2083,8 @@ function renderLearning(f, c) {
     const opinion = l.source === 'weekly review' && lessonKind(l) === 'opinion';
     const status = opinion ? ['opinion, not checked', ''] : e?.filter ? [TRACK_LABELS[e.status ?? 'too-early'], TRACK_CHIP[e.status] ?? '']
       : l.source !== 'market memory' ? ['not checked on new data', '', unchecked(l)] : null;
-    return `<li><strong>${esc(l.text)}</strong><span class="chip">${esc(LESSON_SOURCE[l.source] ?? l.source)}</span>${status ? `<span class="chip ${status[1]}"${status[2] ? ` title="${esc(status[2])}"` : ''}>${esc(status[0])}</span>` : ''}${l.confidence ? `<span class="chip">${esc(l.confidence)} confidence</span>` : ''}
+    const when = l.condition ? `<span class="chip" title="A lesson from When its ideas work reaches the AI only while its condition holds.">the AI sees it ${esc(conditionWords(l.condition, market))}</span>` : '';
+    return `<li><strong>${esc(l.text)}</strong><span class="chip">${esc(LESSON_SOURCE[l.source] ?? l.source)}</span>${when}${status ? `<span class="chip ${status[1]}"${status[2] ? ` title="${esc(status[2])}"` : ''}>${esc(status[0])}</span>` : ''}${l.confidence ? `<span class="chip">${esc(l.confidence)} confidence</span>` : ''}
       ${l.confidence ? `<br><span class="small">${esc(measureLabel(l))} ${pct(l.edge)} a week, likely ${pct(l.lo)} to ${pct(l.hi)}, from ${plural(l.bets, 'separate bet')}${l.stockEdge != null ? `; stock-specific edge ${pct(l.stockEdge)}` : ''}.</span>${trendLine(lessonTrend(pb, l.id), lessonName(l.text))}` : ''}
       ${sinceLearned(l, e, { opinion, kept: kept.has(l.id), admin })}
       ${l.evidence ? `<br><span class="muted small">${esc(opinion ? `The review's words, not checked: ${l.evidence}` : l.evidence)}</span>` : ''}
@@ -1956,6 +2120,7 @@ function renderLearning(f, c) {
       <span class="chip ${g.action === 'buy' || g.action === 'cover' ? 'buy' : 'sell'}">${esc(g.action)}</span> ${esc(g.symbol)} <span class="muted small">(${esc(OUTCOME_LABELS[g.outcome] ?? g.outcome)}, ${esc(IDEA_LABELS[g.ideaType] ?? g.ideaType)}${g.repeats > 1 ? `, came up ${g.repeats} times that week` : ''})</span>
       · a week later ${moveCell(g.week)} · a month later ${moveCell(g.month)}${g.quarter ? ` · a quarter later ${moveCell(g.quarter)}` : ''}${g.thesis?.expected != null && g.thesis.horizon ? ` <span class="muted small">(expected ${moveWords(g.thesis.expected / 100, g.action === 'short')} in ${HORIZON_LABELS[g.thesis.horizon]})</span>` : ''}${g.reason ? `<br><span class="muted small">${esc(g.reason)}</span>` : ''}</li>`).join('')}</ul></details>` : ''}
   </section>
+  ${renderFactorLab(f, c)}
   <section class="panel">
     <div class="panel-head"><h2>${esc(MARKETS[market].label)} market memory</h2></div>
     <p class="small muted">How ${esc(MARKETS[market].label)} stocks have moved after company news and after big one-day moves over the past year, measured from prices (not the AI's opinion). Every fund trading ${esc(MARKETS[market].label)} stocks sees these.
@@ -1976,18 +2141,155 @@ function renderLearning(f, c) {
         table: tableToggle(['After', 'Cases', 'Kept going', 'Next week vs index'], cases.map(({ label, st }) => [label, String(st.n), rate(st.continued), pct(st.vsIndex)])),
       }) : '';
     })() : ''}
+    ${moveNewsSection(memory?.moveNews, market)}
     ${memory?.recent?.length ? `<details class="fund-new"><summary>Latest news measured</summary><ul class="orders">${memory.recent.slice(0, 15).map((e) => `<li>${esc(e.date)} <strong>${esc(e.symbol)}</strong> ${esc(e.headline)}
       <span class="muted small">(${esc(e.tone)} ${esc(e.type)}${e.from === 'filing' ? ', SEC filing' : e.from === 'yahoo' ? ', Yahoo Finance' : ''})</span> · on the day ${e.day ? `<span class="${tone(e.day.move)}">${pct(e.day.move)}</span>` : '–'} · next week ${moveCell(e.week)}</li>`).join('')}</ul>
       <p class="muted small">Moves are shown in the direction of the news: + means the price went the way the news pointed. US results come from the companies' SEC filings when those are set up.</p></details>` : ''}
     ${renderRatingChanges(market)}
     ${!memory?.events ? `<p class="small">To fill this in from the past year's news (one-off, about US$1–2), run ${repoActionsUrl() ? `<a href="${repoActionsUrl()}" target="_blank" rel="noopener">Actions → Update prices, AI picks and AI fund</a>` : 'Actions → Update prices, AI picks and AI fund'} → Run workflow with <em>Learning: look up the past year of news</em> ticked. New news is added every day by itself.</p>` : ''}
   </section>
-  ${renderLongMemory(market, { hidden, admin })}`;
+  ${renderLongMemory(market, { hidden, admin })}
+  ${admin ? renderAskData() : ''}`;
+}
+
+// ----- AI fund: the factor and regime lab (factors.js) -----
+
+const ordinal = (n) => `${n}${n % 100 >= 11 && n % 100 <= 13 ? 'th' : ['th', 'st', 'nd', 'rd'][n % 10] ?? 'th'}`;
+const share100 = (x) => `${Math.round(x * 100)}%`;
+const STYLE_FACTORS = ['move1m', 'ma50', 'high52', 'volume20'];
+const STYLE_SHORT = { move1m: 'the month\'s move for its volatility', ma50: 'price against its 50-day average', high52: 'nearness to its 52-week high', volume20: 'volume against its 20-day average' };
+// the same, short enough for a chart row on a phone (the table and the sentences say it in full)
+const STYLE_CHART = { move1m: 'month\'s move vs usual', ma50: 'vs 50-day average', high52: 'near 52-week high', volume20: 'volume vs 20-day avg.' };
+const LAB_WHY = {
+  bets: `each side needs ${LAB.bets} separate bets`, weeks: `each side needs bets from ${LAB.weeks} different weeks`, episodes: `each side needs ${LAB.episodes} separate episodes`,
+  t: 'the difference isn\'t clear of noise', halves: 'the difference isn\'t the same in both halves of the record',
+};
+const SPLIT_NAMES = { results: ['In the 5 trading days before results', 'other ideas'], index: ['Index below its 200-day average', 'above it'], vix: ['VIX stressed (over 25)', 'calm (under 16)'] };
+
+// A style factor's average: a volume ratio as "1.02x", the month's move in typical months as "+0.17",
+// the rest as percentages.
+const styleValue = ({ k, avg }) => (avg == null ? '–' : k === 'volume20' ? `${avg.toFixed(2)}x` : k === 'move1m' ? `${avg > 0 ? '+' : avg < 0 ? '−' : ''}${Math.abs(avg).toFixed(2)}` : pct(avg));
+
+// "Its buys (14 since 6 Oct) sat at the 78th percentile of its market's stocks on the month's move for
+// its volatility, ...": where the stocks it chose sat among its market's, at the time.
+function styleWords(st, what, index) {
+  const ranked = STYLE_FACTORS.filter((k) => st.percentile[k] != null);
+  const parts = ranked.map((k, i) => `${i ? '' : 'the '}${ordinal(st.percentile[k])}${i ? '' : ` percentile of its market's stocks`} on ${STYLE_SHORT[k]}`);
+  const avgHigh = st.average.high52 != null ? ` and ${Math.abs(st.average.high52 * 100).toFixed(1)}% below their 52-week high on average` : '';
+  const shares = [st.beforeResults != null ? `${share100(st.beforeResults)} were opened in the ${LAB.window} trading days before results` : '', st.indexAbove != null ? `${share100(st.indexAbove)} with ${index} above its 200-day average` : ''].filter(Boolean);
+  return `Its ${what} (${plural(st.cases, 'case')}) ${parts.length ? `sat at ${parts.join(', ')}${avgHigh}` : 'can\'t be ranked against its market yet'}.${shares.length ? ` ${shares.join(', and ')}.` : ''} It called ${share100(st.topShare)} of them ${IDEA_LABELS[st.topType] ?? st.topType} ideas.`;
+}
+
+// The fund's revealed style (pb.style) and its market's "When its ideas work" (c.factorLab): each factor's
+// buckets, fixed in advance, with the stock-specific edge a week later and how much evidence is behind
+// it (greyed below PAGE_MIN_BETS separate bets); the three splits that can become lessons, and why each
+// isn't one yet. Descriptive: only a split that passes every gate reaches the AI.
+function renderFactorLab(f, c) {
+  const market = marketForCurrency(f.currency);
+  const lab = c.factorLab?.[market];
+  const style = f.playbook?.style;
+  const idx = indexName(BENCHMARKS[f.currency].symbol);
+  const pooled = lab?.funds >= 2 ? `the ${lab.funds} ${f.currency} funds' ideas pooled` : 'its ideas';
+  // its revealed style
+  const sides = [['buys', style?.buys], ['shorts', style?.shorts]].filter(([, st]) => st);
+  const styleRows = sides.flatMap(([what, st]) => STYLE_FACTORS.filter((k) => st.percentile[k] != null).map((k) => ({ what, k, p: st.percentile[k], avg: st.average[k] })));
+  const styleChart = styleRows.length ? chartSlot((el) => hbars(el, styleRows.map((r) => ({
+    label: `${r.what === 'buys' ? 'Buys' : 'Shorts'}: ${STYLE_CHART[r.k]}`, value: r.p, display: ordinal(r.p),
+    tip: [{ label: `${r.what === 'buys' ? 'Buys' : 'Shorts'}: ${STYLE_SHORT[r.k]}` }, { value: ordinal(r.p), label: 'percentile among its market\'s stocks, on average' }, { value: styleValue(r), label: 'the average value' }],
+  })), { ref: 50, refLabel: 'Middle', domain: [0, 100], tickFmt: (v) => String(v), ariaLabel: 'Where the stocks it chose sat among its market\'s' }), {
+    title: 'Where its stocks sat among its market\'s',
+    caption: 'The average percentile, at the time of each idea, of the stock it chose among its market\'s stocks (index funds left out): 0 the lowest that day, 100 the highest. Right of 50, it chose stocks higher on that measure than most.',
+    key: `style-${f.id}`,
+    table: tableToggle(['Measure', 'Percentile', 'Average value'], styleRows.map((r) => [`${r.what === 'buys' ? 'Buys' : 'Shorts'}: ${STYLE_SHORT[r.k]}`, ordinal(r.p), styleValue(r)])),
+  }) : '';
+  const styleHtml = `<h3 class="col-head">Its revealed style</h3>
+    ${sides.length ? `<p class="small">${sides.map(([what, st]) => esc(styleWords(st, what, idx))).join(' ')}</p>` : '<p class="muted small">Not enough of its ideas have been graded yet: an idea counts from a week after it was made.</p>'}
+    <p class="small muted">From the trades it made or proposed since ${style?.from ? esc(fmtDate(`${style.from}T12:00:00Z`)) : 'it started'} (not the ideas it passed on), one case per stock and side per ${CASE_DAYS} trading days, each measured from the prices before it. What it calls an idea (value, momentum...) is its own label; this is what it actually chose.</p>
+    ${styleChart}`;
+  // when its ideas work
+  const groups = ['results', 'index200', market === 'US' ? 'vix' : 'usdsgd1m', 'move1m', 'ma50', 'high52', 'volume20']
+    .map((key) => ({ key, rows: (lab?.rows ?? []).filter((r) => r.key === key) })).filter((g) => g.rows.length);
+  const bucketName = (r) => BUCKETS[r.key][r.bucket]?.label ?? '';
+  // bets and weeks fit beside a phone's bars; the episodes are in the tooltip and the table
+  const rowWords = (r) => `${plural(r.bets, 'bet')} · ${plural(r.weeks, 'week')}`;
+  const range = (r) => (r.lo == null ? '–' : `${pct(r.lo)} to ${pct(r.hi)}`);
+  const allRows = groups.flatMap((g) => g.rows);
+  const works = allRows.length ? chartSlot((el) => {
+    el.innerHTML = `<div class="lab-grid">${groups.map((g, i) => `<div class="lab-cell"><h4 class="lab-title">${esc(FACTOR_LABELS[g.key])}</h4><div class="lab-chart" data-lab="${i}"></div></div>`).join('')}</div>`;
+    groups.forEach((g, i) => hbars(el.querySelector(`[data-lab="${i}"]`), g.rows.map((r) => ({
+      label: bucketName(r), sub: rowWords(r), value: r.mean * 100, display: pct(r.mean), muted: r.bets < PAGE_MIN_BETS,
+      tip: [{ value: pct(r.mean), label: 'edge a week later, after beta and fees' }, { value: range(r), label: 'likely range' },
+        { value: String(r.n), label: 'cases' }, { value: String(r.bets), label: `separate bets${r.bets < PAGE_MIN_BETS ? ` (under ${PAGE_MIN_BETS}: too few to read much into)` : ''}` },
+        { value: `${r.weeks} / ${r.episodes}`, label: 'weeks / episodes' }, { value: share100(r.right), label: 'of bets made money after fees' }],
+    })), { signColors: true, tickFmt: pctTick, ariaLabel: FACTOR_LABELS[g.key] }));
+  }, {
+    title: 'The edge a week later, by condition',
+    caption: `What its ideas made a week later beyond what the market explains (after beta and fees), per week, in each bucket fixed in advance. Grey rows have fewer than ${PAGE_MIN_BETS} separate bets: too few to read much into.`,
+    key: `lab-${market}`,
+    table: tableToggle(['Condition', 'Cases', 'Separate bets', 'Weeks', 'Episodes', 'Edge a week later', 'Likely range', 'Made money'],
+      allRows.map((r) => [`${FACTOR_LABELS[r.key]}: ${bucketName(r)}`, String(r.n), String(r.bets), String(r.weeks), String(r.episodes), pct(r.mean), range(r), share100(r.right)]), 1,
+      { className: 'wrap-head', rowClass: (_, i) => (allRows[i].bets < PAGE_MIN_BETS ? 'muted-row' : '') }),
+  }) : '';
+  const splitLine = (sp) => {
+    const [a, b] = sp.sides, [na, nb] = SPLIT_NAMES[sp.id];
+    const counts = `${esc(na)}: ${plural(a.bets ?? 0, 'separate bet')}${a.bets ? ` from ${plural(a.weeks, 'week')}` : ''}; ${esc(nb)}: ${plural(b.bets ?? 0, 'separate bet')}${b.bets ? ` from ${plural(b.weeks, 'week')}` : ''}`;
+    const diff = sp.diff != null ? ` Difference ${pct(sp.diff)} a week, ${Math.abs(sp.t).toFixed(1)} times what noise alone would usually give.` : '';
+    return `<li>${counts}.${diff} <span class="chip ${sp.passes ? 'held' : ''}">${sp.passes ? 'a lesson' : `not a lesson: ${esc(LAB_WHY[sp.why] ?? '')}`}</span></li>`;
+  };
+  const worksHtml = `<h3 class="col-head">When its ideas work</h3>
+    <p class="small muted">${lab?.cases ? `${plural(lab.cases, 'case')} from ${esc(pooled)} since ${esc(fmtDate(`${lab.from}T12:00:00Z`))}` : 'No graded ideas with their conditions yet'}: trades made or proposed, one case per fund, stock and side per ${CASE_DAYS} trading days, each with the conditions measured from the prices before it and graded a week later. Separate bets count the same stock and side within a week once; episodes are separate spells of a condition (for results, separate stocks' quarters).</p>
+    ${works}
+    <p class="small muted">Only three comparisons, fixed in advance, can become lessons for the AI. Each side needs ${LAB.bets} separate bets from ${LAB.weeks} different weeks and ${LAB.episodes} separate episodes, the difference at least ${LAB.t} times what noise alone would usually give (counted by week), and the same sign in both halves of the record. On ${COND_NOISE_CHECK.sims} made-up markets with no skill, re-checked every week for a year, ${share100(COND_NOISE_CHECK.any)} showed a false lesson at some point. The AI sees one only while its condition holds.</p>
+    ${lab?.splits?.length ? `<ul class="small lab-splits">${lab.splits.map(splitLine).join('')}</ul>` : ''}
+    <p class="small muted">A condition bucket here is often one or two stocks, and a regime can last months: read it as a description of its ideas so far, not as a rule.</p>`;
+  return `<section class="panel lab">
+    <div class="panel-head"><h2>Its style, and when its ideas work</h2></div>
+    ${styleHtml}
+    ${worksHtml}
+  </section>`;
+}
+
+// Big moves against the index with and without news (memory.js moveNewsStudy): what followed each group
+// in the move's direction, with the counts. Whether a move had news was judged before any search, so
+// the searches can't move a move from one group to the other. Descriptive: no lesson comes from it.
+function moveNewsSection(s, market) {
+  if (!s) return '';
+  const label = MARKETS[market].label;
+  const rows = [['With news', s.withNews], ['Without news', s.noNews]].filter(([, g]) => g?.week?.vsIndex != null).map(([name, g]) => ({ name, w: g.week, m: g.month }));
+  const shown = rows.filter(({ w }) => w.n >= MEMORY_MIN_CASES);
+  const est = (w) => (w.est ? `${pct(w.est.edge)} (${pct(w.est.lo)} to ${pct(w.est.hi)})` : '–');
+  const chart = rows.length ? chartSlot((el) => (shown.length ? hbars(el, shown.map(({ name, w }) => ({
+    label: name, sub: `${plural(w.n, 'move')} · ${rate(w.continued)} kept going`, value: w.vsIndex * 100, display: pct(w.vsIndex),
+    tip: [{ value: pct(w.vsIndex), label: 'the next week vs the index, in the move\'s direction' }, { value: rate(w.continued), label: `kept going, of ${w.n}` },
+      ...(w.est ? [{ value: `${pct(w.est.lo)} to ${pct(w.est.hi)}`, label: `likely range after beta, ${plural(w.est.bets, 'separate bet')}` }] : [])],
+  })), { tickFmt: pctTick, ariaLabel: 'Big moves with and without news' }) : (el.innerHTML = '<p class="muted small">Not enough moves for a chart yet.</p>')), {
+    title: 'What followed big moves, with and without news',
+    caption: `Right of 0 (+): the move tended to keep going the same way, against the index. Left (−): it tended to reverse.${shown.length < rows.length ? ` Rows with fewer than ${MEMORY_MIN_CASES} moves are only in the Table.` : ''}`,
+    key: `move-news-${market}`,
+    table: tableToggle(['Moves', 'Measured', 'Kept going', 'Next week vs index', 'After beta (likely range)', 'Next month vs index'],
+      rows.map(({ name, w, m }) => [name, String(w.n), rate(w.continued), pct(w.vsIndex), est(w), m?.vsIndex != null ? `${pct(m.vsIndex)} (${m.n})` : '–']), 1),
+  }) : '';
+  const found = (m) => (!m.searched ? 'not searched' : m.searched.failed ? 'the search failed' : !m.searched.found ? 'a search found nothing'
+    : `a search found: ${m.searched.url ? `<a href="${esc(safeUrl(m.searched.url))}" target="_blank" rel="noopener noreferrer">${esc(m.searched.headline)}</a>` : esc(m.searched.headline)}`);
+  const recent = s.recent?.length ? `<details class="fund-new"><summary>Latest moves with no news</summary><ul class="orders">${s.recent.map((m) => `<li>${esc(fmtDate(`${m.date}T12:00:00Z`))} <strong>${esc(m.symbol)}</strong>
+    <span class="${tone(m.excess)}">${pct(m.excess)}</span> <span class="muted small">vs the index</span> · ${found(m)}</li>`).join('')}</ul></details>` : '';
+  const measuring = s.measured < s.moves ? ` ${plural(s.moves - s.measured, 'move')} ${s.moves - s.measured === 1 ? 'is' : 'are'} too recent to have a week after ${s.moves - s.measured === 1 ? 'it' : 'them'} yet.` : '';
+  // since the feeds started, or over the year of prices once they're older than that
+  const when = !s.from || s.from === s.since ? `Since the news feeds started (${esc(fmtDate(`${s.since}T12:00:00Z`))})` : `Over the past year (since ${esc(fmtDate(`${s.from}T12:00:00Z`))})`;
+  const times = (n) => (n === 1 ? 'once' : n === 2 ? 'twice' : `${n} times`);
+  const which = !s.withoutNews ? (s.moves === 1 ? 'it had news' : 'each had news')
+    : s.withoutNews === s.moves ? (s.moves === 1 ? 'it had no news' : 'none of them had news') : `${s.withoutNews} of them had no news`;
+  const counts = s.moves
+    ? `${when}, ${label} stocks moved ${MOVE_NEWS.move * 100}% or more against the index in a day ${times(s.moves)}; ${which} within a trading day (a news item, filing, rating change or news feed headline naming the stock), judged before anything was searched.${measuring}`
+    : `${when}, no ${label} stock has moved ${MOVE_NEWS.move * 100}% or more against the index in a day, as far as can be judged: a move is judged once the session after it is over.`;
+  return `<h3 class="col-head">Big moves with and without news</h3>
+    <p class="small muted">${counts} For each move with no news the job searches the web once (at most ${MOVE_NEWS.perMonth} a month)${s.searched ? `: ${s.searched} searched so far, ${s.found} found news, which joins the news events above` : ''}. What followed is shown in the move's direction, against the index. A comparison with few cases for months: no lesson comes from it.</p>
+    ${chart}${recent}`;
 }
 
 // ----- AI fund: ten years of prices (memory-long.js) -----
 
-const REGIME_NOTE = 'Descriptive only: the index against the average of its last 200 closes and, for US stocks, the VIX (under 16 calm, over 25 stressed). No lesson depends on it.';
+const REGIME_NOTE = 'Descriptive: the index against the average of its last 200 closes and, for US stocks, the VIX (under 16 calm, over 25 stressed). No ten-year lesson depends on it; a lesson from When its ideas work can.';
 const LONG_STATUS = { held: ['held on 2024 onwards', 'held'], 'didnt-hold': ['didn\'t hold on 2024 onwards', ''], 'no-pattern': ['no reliable pattern', ''], fact: ['base rate', ''], 'too-few': ['too few to check', ''] };
 function regimeChip(market) {
   const r = state.sample ? null : regimeNow(state.prices.quotes ?? {}, state.prices.macro, market);
@@ -2072,6 +2374,48 @@ function renderLongMemory(market, { hidden, admin }) {
   </section>`;
 }
 
+// ----- AI fund: Ask the data (hypotheses.js) -----
+
+// The owner's questions (admins): each with its status, how the code read it and its answer, newest
+// first, and the box to ask another, sent as 'settings' ({ fund: 'all', ask }), which reaches the job
+// whole. Kept with the funds (c.questions), so shown only from their private copy.
+const ASK_TEXT = { ask: ['Sending your question', 'Your question is in.'] };
+const askLeft = (text) => `${Math.max(0, ASK.maxChars - String(text ?? '').length)} characters left`;
+function renderAskData() {
+  const c = state.funds;
+  const list = Array.isArray(c?.questions) ? c.questions : [];
+  const hidden = !list.length && c?.questionsAsked;
+  const item = (q) => {
+    const [label, cls] = statusLabel(q);
+    const body = q.status === 'cant-answer' ? (q.answer ?? q.reason ?? '') : q.status === 'waiting'
+      ? `Waiting for the ${q.spec?.population === 'fund_ideas' ? 'funds\' next run' : 'ten years of prices'}: answered within a day.` : q.answer ?? '';
+    return `<li><strong>${esc(q.text)}</strong> <span class="chip ${cls}">${esc(label)}</span>
+      ${q.spec ? `<br><span class="muted small">Read as: ${esc(describeSpec(q.spec))}</span>` : ''}
+      ${body ? `<br><span class="small">${esc(body)}</span>` : ''}${q.note ? `<br><span class="muted small">${esc(q.note)}</span>` : ''}
+      <br><span class="muted small">Asked ${esc(fmtDate(q.askedAt))}${q.answeredAt && q.status !== 'cant-answer' ? `, answered ${esc(fmtDate(q.answeredAt))}` : ''}</span></li>`;
+  };
+  const newest = [...list].reverse(), recent = newest.slice(0, 8), older = newest.slice(8);
+  const d = state.askDraft ?? '';
+  const cmd = state.fundCmd?.text === ASK_TEXT.ask ? state.fundCmd : null;
+  const busy = state.fundCmd && ['sending', 'sent', 'accepted'].includes(state.fundCmd.phase) ? 'disabled' : '';
+  return `<section class="panel" id="ask-data">
+    <div class="panel-head"><h2>Ask the data</h2></div>
+    <p class="small muted">Ask how the watchlist's stocks have behaved: after big one-day moves, ex-dividend dates or results, or in ordinary weeks; for a stock or a market; with the VIX calm or stressed, or the index above or below its 200-day average; over the next day, week or month. Once the funds have ${ASK.ideaMonths} months of graded ideas, you can ask about those too. Claude Haiku turns your question into a fixed kind of query, or says why this data can't answer it; code answers it from ten years of prices the same way as the ten-year studies above: found on 2016–2023, then checked on 2024 onwards, which it wasn't found on. "No reliable pattern" is a common, honest answer. Answered within a day.</p>
+    <p class="small muted">Measured on today's watchlist, which survived and mostly won: tendencies, not laws. Kept with the funds, so private only when they're kept private (README: Keeping the AI fund private); the AI funds never see your questions or the answers.</p>
+    ${hidden ? `<p class="small">You've asked ${plural(hidden, 'question')}. The public copy of the funds leaves them out, so they aren't shown here; keep the funds private to see them.</p>` : ''}
+    <form id="ask-form" class="ask-form" novalidate>
+      <label for="ask-text">Your question</label>
+      <textarea id="ask-text" maxlength="${ASK.maxChars}" rows="2" placeholder="e.g. Do SGX banks recover after going ex-dividend?">${esc(d)}</textarea>
+      <div class="row"><button type="submit" class="primary small-btn" ${busy}>Ask</button><span class="muted small" id="ask-left">${askLeft(d)}</span></div>
+      <p class="error" id="ask-error" role="alert"></p>
+      ${cmd?.message ? `<p class="small ${cmd.phase === 'failed' ? 'down' : 'muted'}" role="status">${esc(cmd.message)}</p>` : ''}
+    </form>
+    <p class="muted small">For example: "Does NVDA keep falling the week after a big drop?", "After US results that beat, does the stock keep rising for a month?", "Do stocks that beat the index one week lag it the next?"</p>
+    ${recent.length ? `<ul class="lessons ask-list">${recent.map(item).join('')}</ul>` : ''}
+    ${older.length ? `<details class="fund-new"><summary>Earlier questions (${older.length})</summary><ul class="lessons ask-list">${older.map(item).join('')}</ul></details>` : ''}
+  </section>`;
+}
+
 // Brokers' real upgrades and downgrades in the market over the last 30 days, with how the stock has
 // moved since: dated facts, with no ranking of the brokers.
 function renderRatingChanges(market) {
@@ -2087,16 +2431,19 @@ function renderRatingChanges(market) {
 const SPEND_SERIES = [
   { key: 'picks', label: 'AI picks', color: SERIES[0] }, { key: 'fund', label: 'AI fund decisions', color: SERIES[1] },
   { key: 'learning', label: 'Weekly reviews', color: SERIES[2] }, { key: 'backfill', label: 'News backfill', color: SERIES[3] },
+  { key: 'articles', label: 'Article look-ups', color: SERIES[4] }, { key: 'reading', label: 'Reading guide', color: SERIES[5] },
+  { key: 'ask', label: 'Ask the data', color: SERIES[6] },
 ];
 function renderSpend() {
   const months = Object.entries(state.spend?.months ?? {}).sort(([a], [b]) => a.localeCompare(b)).slice(-6);
   if (!months.length) return '';
   const monthName = (ym, opts = { month: 'short', year: 'numeric' }) => new Date(`${ym}-15T00:00:00Z`).toLocaleDateString(undefined, { ...opts, timeZone: 'UTC' });
   const series = SPEND_SERIES.filter((s) => months.some(([, v]) => v[s.key] > 0));
-  const usd = (v) => `US$${v.toFixed(2)}`;
+  // the ledger keeps fractions of a cent (a question costs about a quarter of one): shown as such, not as 0.00
+  const usd = (v) => (v > 0 && v < 0.005 ? 'under US$0.01' : `US$${v.toFixed(2)}`);
   const cap = state.spend?.cap;
   const table = tableToggle(['Month', 'Total', ...series.map((x) => x.label)], months.map(([ym, v]) => [monthName(ym, { month: 'long', year: 'numeric' }), usd(v.total ?? 0), ...series.map((x) => usd(v[x.key] ?? 0))]).reverse());
-  const about = 'Estimated cost of the scheduled AI (picks, AI fund decisions, weekly reviews and the news backfill). What you run in this browser with your own key isn\'t included.';
+  const about = 'Estimated cost of the scheduled AI (picks, AI fund decisions, weekly reviews, the news backfill, article look-ups: the searches behind big moves with no news, and the reading guide: its daily read of the headlines and the articles you log, and Ask the data: reading your questions). What you run in this browser with your own key isn\'t included.';
   let chart;
   if (months.length < 2) {
     // One month: how much of the cap is used, by job.

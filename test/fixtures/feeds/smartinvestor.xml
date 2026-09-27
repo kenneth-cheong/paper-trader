@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0"
+	xmlns:content="http://purl.org/rss/1.0/modules/content/"
+	xmlns:wfw="http://wellformedweb.org/CommentAPI/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:sy="http://purl.org/rss/1.0/modules/syndication/"
+	xmlns:slash="http://purl.org/rss/1.0/modules/slash/"
+	>
+<!-- The Smart Investor (WordPress), when Cloudflare let it through on 27 Sep 2026: real titles and dates, links with &#038;-escaped utm_ parameters, CDATA categories and HTML descriptions (shortened here). -->
+<channel>
+	<title>The Smart Investor</title>
+	<atom:link href="https://thesmartinvestor.com.sg/feed/" rel="self" type="application/rss+xml" />
+	<link>https://thesmartinvestor.com.sg</link>
+	<description>Making the Smart Investor in You</description>
+	<lastBuildDate>Sat, 26 Sep 2026 23:30:02 +0000</lastBuildDate>
+	<language>en-US</language>
+	<item>
+		<title>Smart Reads of the Week: Singapore Dividend Stocks, REIT Payouts, and Small-Cap Opportunities</title>
+		<link>https://thesmartinvestor.com.sg/smart-reads-of-the-week-singapore-dividend-stocks-reit-payouts-and-small-cap-opportunities/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=smart-reads-of-the-week-singapore-dividend-stocks-reit-payouts-and-small-cap-opportunities</link>
+		<dc:creator><![CDATA[The Smart Investor]]></dc:creator>
+		<pubDate>Sat, 26 Sep 2026 23:30:00 +0000</pubDate>
+		<category><![CDATA[Smart Reads]]></category>
+		<category><![CDATA[Yahoo]]></category>
+		<guid isPermaLink="false">https://thesmartinvestor.com.sg/?p=412771</guid>
+		<description><![CDATA[<p>This week&#8217;s reads cover <strong>CapitaLand Integrated Commercial Trust</strong> (SGX: C38U) and its payout, dividend stocks&nbsp;for the year ahead, and three small caps.</p>
+<p>The post <a href="https://thesmartinvestor.com.sg/smart-reads-of-the-week-singapore-dividend-stocks-reit-payouts-and-small-cap-opportunities/">Smart Reads of the Week: Singapore Dividend Stocks, REIT Payouts, and Small-Cap Opportunities</a> appeared first on <a href="https://thesmartinvestor.com.sg">The Smart Investor</a>.</p>
+]]></description>
+	</item>
+	<item>
+		<title>Smart Look At The Week Ahead: Micron, Nike And Accenture</title>
+		<link>https://thesmartinvestor.com.sg/smart-look-at-the-week-ahead-micron-nike-and-accenture/?utm_source=rss&#038;utm_medium=rss&#038;utm_campaign=smart-look-at-the-week-ahead-micron-nike-and-accenture</link>
+		<dc:creator><![CDATA[The Smart Investor]]></dc:creator>
+		<pubDate>Sat, 26 Sep 2026 08:21:48 +0000</pubDate>
+		<category><![CDATA[Investing Strategy]]></category>
+		<category><![CDATA[Smart Investing]]></category>
+		<guid isPermaLink="false">https://thesmartinvestor.com.sg/?p=412702</guid>
+		<description><![CDATA[<p>Three companies report results this week. Here is what to watch.</p>
+<p>The post <a href="https://thesmartinvestor.com.sg/smart-look-at-the-week-ahead-micron-nike-and-accenture/">Smart Look At The Week Ahead: Micron, Nike And Accenture</a> appeared first on <a href="https://thesmartinvestor.com.sg">The Smart Investor</a>.</p>
+]]></description>
+	</item>
+</channel>
+</rss>

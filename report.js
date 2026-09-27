@@ -18,8 +18,8 @@
 //     declineCalls), in a week when one of them was graded;
 //   - coming up: results and ex-dividend dates for what it holds or has waiting for approval, from the
 //     stock cards (dossier.js), whose results dates come from the results calendar;
-//   - this month's AI cost: its decisions, and learning (the weekly reviews and the news backfill,
-//     shared by every fund) from the spend ledger (spend.js).
+//   - this month's AI cost: its decisions, and learning (the weekly reviews, the news backfill and the
+//     searches behind big moves without news, shared by every fund) from the spend ledger (spend.js).
 // A week with fewer than REPORT.minGraded ideas graded gets one line saying so. A report is filed on
 // the first run after the last session of the fund's market in an ISO week (reportWeek), whether or
 // not the weekly review ran; the latest REPORT.keep stay with the fund (fund.reports), so they're
@@ -283,7 +283,7 @@ export function weeklyReport(fund, { week, graded = [], pb = fund.playbook ?? nu
   const m = spend?.months?.[month] ?? {};
   const cost = {
     month, decisions: cents((fund.decisions ?? []).filter((d) => String(d.time ?? '').startsWith(month)).reduce((s, d) => s + (d.usage?.costUsd ?? 0), 0)),
-    learning: cents((m.learning ?? 0) + (m.backfill ?? 0)), total: cents(m.total), cap: Number(cap) > 0 ? Number(cap) : null,
+    learning: cents((m.learning ?? 0) + (m.backfill ?? 0) + (m.articles ?? 0)), total: cents(m.total), cap: Number(cap) > 0 ? Number(cap) : null,
   };
 
   return {

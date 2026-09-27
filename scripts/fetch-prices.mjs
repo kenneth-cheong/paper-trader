@@ -1,5 +1,11 @@
-// Builds data/prices.json from Yahoo Finance chart data for every symbol in symbols.json.
+// Builds data/prices.json from Yahoo Finance chart data for every symbol in symbols.json, and
+// data/ohlcv.json for the scheduled scripts only (never copied to the site).
 // Usage: node scripts/fetch-prices.mjs [previousPricesUrl]
+// Each stock's daily data is requested for 2 years (still one request per stock): prices.json keeps the
+// last year, as every reader of it expects (charts, moving averages, backtests, grading, the AI's price
+// statistics), and data/ohlcv.json keeps the two years of open, high, low, close and volume, with the
+// VIX's two years and USD/SGD's year of daily closes, for the factor lab (factors.js). USD/SGD is
+// requested for a year of daily closes; prices.json's fx.USDSGD is still its latest rate.
 // In GitHub Actions, scripts/yahoo_fetch.py downloads the raw data first (Yahoo blocks Node's HTTP
 // client on cloud servers) and YAHOO_RAW_DIR points here at it; run locally, this fetches directly.
 // When a symbol fails, its entry from previousPricesUrl (the live site's prices.json) is carried
@@ -37,6 +43,12 @@ async function yahooSession() {
   session = { cookie, crumb };
   return session;
 }
+
+// The requests, which must match REQUESTS, DAILY_MACRO and FX_RANGE in yahoo_fetch.py.
+export const DAILY = ['2y', '1d'];
+const INTRADAY = ['5d', '15m'];
+const FX_RANGE = ['1y', '1d'];
+const YEAR_S = 366 * 86400;
 
 // Must match raw_name() in yahoo_fetch.py.
 const rawPath = (dir, symbol, range, interval) => `${dir}/${encodeURIComponent(symbol)}_${range}_${interval}.json`;
@@ -103,11 +115,15 @@ export function events(result) {
   return dividends.length || splits.length ? { dividends: dividends.sort(byDate), splits: splits.sort(byDate) } : undefined;
 }
 
-// daily: ~1 year of daily bars [t, close, volume] (for charts, moving averages, backtests and the AI);
-// intraday: ~5 days of 15-minute bars (so auto-trading rules can catch up on missed moves).
+// The last year of `list` ([[unixSeconds, ...]], oldest first): from a year before its last entry.
+export const lastYear = (list, last = list.at(-1)?.[0]) => (last == null ? list : list.filter(([t]) => t > last - YEAR_S));
+
+// daily: the last year of daily bars [t, close, volume] (for charts, moving averages, backtests and the
+// AI), from the 2 years requested; its dividends and splits over the same year. intraday: ~5 days of
+// 15-minute bars (so auto-trading rules can catch up on missed moves).
 export function toQuote(daily, intraday) {
   const meta = intraday?.meta ?? daily.meta;
-  const d = bars(daily, true);
+  const d = lastYear(bars(daily, true));
   const price = meta.regularMarketPrice ?? d.at(-1)?.[1];
   if (!(price > 0)) throw new Error('no price');
   // Yahoo's daily bars include the current session, so the bar before the last is the previous close.
@@ -119,15 +135,37 @@ export function toQuote(daily, intraday) {
     time: meta.regularMarketTime ? new Date(meta.regularMarketTime * 1000).toISOString() : null,
     daily: d,
     intraday: intraday ? bars(intraday) : [],
-    events: events(daily),
+    events: yearEvents(events(daily), d[0]?.[0]),
   };
+}
+
+// Dividends and splits from `from` (unix seconds) on, or undefined when none are left.
+function yearEvents(ev, from) {
+  if (!ev || from == null) return ev;
+  const dividends = ev.dividends.filter(([t]) => t >= from), splits = ev.splits.filter(([t]) => t >= from);
+  return dividends.length || splits.length ? { dividends, splits } : undefined;
+}
+
+// Every daily bar with a close, [t, open, high, low, close, volume] (null where Yahoo has none), for
+// data/ohlcv.json.
+export function ohlcvBars(result) {
+  const ts = result?.timestamp ?? [];
+  const q = result?.indicators?.quote?.[0] ?? {};
+  const num = (x) => (typeof x === 'number' && x > 0 ? round(x) : null);
+  const out = [];
+  ts.forEach((t, i) => {
+    if (!(q.close?.[i] > 0)) return;
+    out.push([t, num(q.open?.[i]), num(q.high?.[i]), num(q.low?.[i]), round(q.close[i]), q.volume?.[i] > 0 ? Math.round(q.volume[i]) : null]);
+  });
+  return out;
 }
 
 const round = (n) => Math.round(n * 10000) / 10000;
 
-// A macro series for prices.json's `macro`: its latest value and a year of daily closes [[t, close]].
+// A macro series for prices.json's `macro`: its latest value and a year of daily closes [[t, close]]
+// (the last year of what was requested).
 export function toMacro(daily) {
-  const d = bars(daily);
+  const d = lastYear(bars(daily));
   const price = daily?.meta?.regularMarketPrice ?? d.at(-1)?.[1];
   if (!(price > 0) || !d.length) throw new Error('no value');
   const time = daily.meta?.regularMarketTime;
@@ -148,17 +186,19 @@ async function main() {
   const symbols = JSON.parse(await readFile(new URL('symbols.json', ROOT), 'utf8'));
   const previous = await loadPrevious(process.argv[2]);
   const quotes = {};
+  const ohlcv = { updatedAt: new Date().toISOString(), symbols: {}, macro: {} };
   let failures = 0;
 
   for (const { symbol, name, market, etf } of symbols) {
     const kind = etf ? { etf: true } : {}; // index funds aren't compared as a stock's peers (stats.js)
     try {
-      const daily = await fetchChart(symbol, '1y', '1d');
-      const intraday = await fetchChart(symbol, '5d', '15m').catch((err) => {
+      const daily = await fetchChart(symbol, ...DAILY);
+      const intraday = await fetchChart(symbol, ...INTRADAY).catch((err) => {
         console.warn(`! ${symbol} intraday: ${err.message}`);
         return null;
       });
       quotes[symbol] = { name, market, ...kind, ...toQuote(daily, intraday) };
+      ohlcv.symbols[symbol] = { market, ...kind, bars: ohlcvBars(daily) };
     } catch (err) {
       failures++;
       console.warn(`! ${symbol}: ${err.message}`);
@@ -170,7 +210,9 @@ async function main() {
 
   let usdsgd = previous?.fx?.USDSGD ?? null;
   try {
-    usdsgd = toQuote(await fetchChart(FX_SYMBOL, '5d', '1d')).price;
+    const fx = await fetchChart(FX_SYMBOL, ...FX_RANGE);
+    usdsgd = toQuote(fx).price;
+    ohlcv.macro[FX_SYMBOL] = bars(fx);
   } catch (err) {
     console.warn(`! ${FX_SYMBOL}: ${err.message}`);
   }
@@ -178,7 +220,9 @@ async function main() {
   const macro = {};
   for (const symbol of MACRO) {
     try {
-      macro[symbol] = toMacro(await fetchChart(symbol, '1y', '1d'));
+      const daily = await fetchChart(symbol, ...DAILY);
+      macro[symbol] = toMacro(daily);
+      ohlcv.macro[symbol] = bars(daily);
     } catch (err) {
       console.warn(`! ${symbol}: ${err.message}`);
       // the last value, marked stale, until it's a week old (memory-long.js regimeNow uses it only while
@@ -195,6 +239,8 @@ async function main() {
   const out = { updatedAt: new Date().toISOString(), fx: { USDSGD: usdsgd }, quotes, ...(Object.keys(macro).length ? { macro } : {}) };
   await mkdir(new URL('data/', ROOT), { recursive: true });
   await writeFile(new URL('data/prices.json', ROOT), JSON.stringify(out));
+  // for the scripts only: .gitignore'd, and the workflow's "Collect site files" step never copies it
+  await writeFile(new URL('data/ohlcv.json', ROOT), JSON.stringify(ohlcv));
   console.log(`Wrote ${Object.keys(quotes).length}/${symbols.length} quotes (${failures} failed), USDSGD=${usdsgd}`);
 }
 

@@ -16,11 +16,16 @@
 //                           { remove: true } (a stopped fund), { playbook: { add, filter, claim } | { remove } |
 //                           { restore } | { keep } } (the owner's lessons, learning.js editPlaybook) or, with fund
 //                           "all", { stockNote: { symbol, text } } (the owner's note on a stock, shared by every
-//                           fund, dossier.js setStockNote; empty text clears it). The app sends the last two, and a
-//                           reject with a reason, as 'settings', which reach here whole.
+//                           fund, dossier.js setStockNote; empty text clears it), { reading: { url?, text? } }
+//                           (an article the owner logged, below) or { ask: text } (the owner's question, Ask the
+//                           data, below). The app sends the last four, and a reject with a reason, as 'settings',
+//                           which reach here whole.
+//   READING_PAGE_DIR        where scripts/page_fetch.py downloaded a logged article's page (default raw-page)
+//   OHLCV_FILE              the two years of daily prices for the factor lab (default data/ohlcv.json)
 //   ANTHROPIC_API_KEY, AI_MODEL (decisions, default Sonnet; a fund can choose its own), AI_NEWS_MODEL (news, default Haiku)
 //   AI_REVIEW_MODEL         opt-in: the weekly review's model once the fund's market has 150 graded ideas (else the news model)
 //   AI_MONTHLY_CAP_USD      skip AI decisions once the month's scheduled AI spend reaches this (ai-spend.json)
+//   NEWS_LEADS=off          a digest a fund gathers itself gets no news feed headlines as leads (on otherwise)
 //   FUND_PRIVATE=true       print nothing about the funds' trades (the Actions log is public)
 // Learning (learning.js, memory.js): every run re-grades each fund's ideas against what prices did next
 // and refreshes its playbook (graded ideas are kept in a compact log, fund.ideaLog, so trimming old
@@ -29,14 +34,35 @@
 // lesson book tracks every lesson on the ideas after it (learning.js). The market memory (price moves
 // after past news and after big moves) is rebuilt each run,
 // with SEC filings and Yahoo's rating changes taking over from the AI's recollection where they exist,
-// and joined by the ten-year memory (memory-long.js, state/memory-long.json, rebuilt weekly by
+// one event per stock, trading day and tone, and the study of big moves with and without news
+// (state/move-news.json, from scripts/fetch-articles.mjs moves); and joined by the ten-year memory
+// (memory-long.js, state/memory-long.json, rebuilt weekly by
 // scripts/build-history.mjs), whose lessons were checked on held-out years; lessons whose evidence
 // covers days like today's regime (the index against its 200-day average, and the VIX) come first.
 // Every decision sees the results due in the next 10 trading days and analysts' views (calendar.js,
 // analysts.js; state/results-dates.json and state/company-data.json, fetched earlier in the job).
+// Your reading (reading.js): an article the owner logs in the app arrives as { reading: { url?, text? } }.
+// Its page, downloaded to the runner just before this step (scripts/page_fetch.py), or the text the
+// owner pasted is read by the same call as the reading guide's (ai.js readCalls, counted as 'reading' in
+// the spend ledger), and its calls are kept with the funds (c.reading), priced now, to be graded a month
+// on like the reading guide's. If the page couldn't be read, the app's message asks for its text. The
+// article's link, title and text are never printed, and no AI prompt ever sees the owner's reading.
+// Ask the data (hypotheses.js): the owner's question arrives as { ask: text }. One cheap call (ai.js
+// askSpec, counted as 'ask' in the spend ledger) turns it into a query that code checks against a
+// whitelist, or says why the data can't answer it, and it's kept with the funds (c.questions, the newest
+// 30) to be answered: one on the funds' own ideas at the end of this step, one on the ten years of prices
+// by scripts/build-history.mjs answer, in a later step of this job (within a day). The question's words
+// are never printed, the app's message only says how it went, and no AI prompt of the funds sees them.
 // Every order and idea carries the AI's thesis (thesis.js); after all funds have run, the theses are
 // graded for calibration pooled across each market's funds (c.calibration), which the next run's
 // lessons use.
+// The factor lab (factors.js): every opening order and idea passed on keeps its stock's factors at that
+// moment, measured from bars closed before it (data/ohlcv.json: two years of daily prices, written by
+// scripts/fetch-prices.mjs this run and never saved; prices.json's year without it), and ideas from
+// before that get theirs from the same prices. After all funds have run, each market's funds' ideas are
+// pooled (c.factorLab: the page's "When its ideas work", and at most three lessons on splits fixed in
+// advance, which the next run's playbooks take); each fund's revealed style goes in its playbook. A
+// lesson from it reaches the AI only while its condition holds today.
 // The weekly report (report.js, "What we learned"): after the last session of each fund's market in
 // a week, each fund's week is written up from its graded ideas, its lessons' evidence week by week
 // (pb.lessonHistory), the owner's calls on the trades they declined, the stock cards' dates and the
@@ -59,7 +85,7 @@
 import { readFileSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { decideFund, reviewPlaybook, TIERS } from '../ai.js';
+import { decideFund, reviewPlaybook, readCalls, askSpec, TIERS } from '../ai.js';
 import {
   decisionDue, executeDecision, setProtections, checkProtections, recordValue, stopFund,
   approveProposals, rejectProposals, expireProposals, applyBrokerFills, pauseFund, resumeFund, checkDailyLoss, syncGuards, DECLINE_REASONS,
@@ -69,16 +95,20 @@ import { applyCorporateActions, describeAction } from '../actions.js';
 import { addSpend, capReached, monthSpend } from '../spend.js';
 import {
   updatePlaybook, playbookForPrompt, editPlaybook, reviewDue, reviewExamples, reviewCells, reviewLessonBook, applyReview, reviewModel, marketIdeas,
-  quietReason, decisionSnapshot, trimDecisions, poolCalibration, rememberCited, cleanFilter, REVIEW_MODEL_MIN,
+  quietReason, decisionSnapshot, trimDecisions, poolCalibration, rememberCited, cleanFilter, frozenIdeas, REVIEW_MODEL_MIN,
 } from '../learning.js';
 import { checkedThesis, lessonsAppliedOf } from '../thesis.js';
 import { reportWeek, fileReport, comparableFunds } from '../report.js';
 import { buildMemory, marketEvents } from '../memory.js';
 import { promptMarketLessons, regimeNow } from '../memory-long.js';
-import { resultsCalendar } from '../calendar.js';
+import { resultsCalendar, upcomingResults } from '../calendar.js';
+import { factorInputs, factorsAt, factorLab, conditionsNow, LAB } from '../factors.js';
 import { scorePicks, summarizeScores } from '../scorecard.js';
 import { buildDossiers, stockCards, heldByMarket, setStockNote } from '../dossier.js';
 import { MARKETS, marketForCurrency, isOpen } from '../markets.js';
+import { recentMonths, digestQuality, addQuality, makeTagger, siteOf } from '../articles.js';
+import { pageFacts, readable, ownText, publicUrl, pickOf, addOwn, ownId, loggedLately, READING } from '../reading.js';
+import { questionFrom, addQuestion, answerWaitingIdeas, ASK } from '../hypotheses.js';
 
 const [file, picksFile] = process.argv.slice(2);
 if (process.env.FUND_PRIVATE === 'true') console.log = () => {};
@@ -189,6 +219,81 @@ try {
   note({ playbook: 'lessons', stockNote: 'notes' }[what] ?? what ?? (env.FUND_STOP === 'true' ? 'stop' : 'command'), err.message, false);
 }
 
+// An article the owner logged (reading.js): read, and its calls kept with the funds. The messages say
+// only how it went: never the article's link, site, title, text or calls (the log is public, and so is
+// the funds' copy unless they're kept private).
+async function logArticle(r) {
+  const pasted = typeof r?.text === 'string' ? r.text.slice(0, READING.pasteMax).trim() : '';
+  const url = r?.url ? publicUrl(r.url) : null;
+  if (r?.url && !url) return note('reading', 'That link isn\'t to a public web page. Check it, or paste the article\'s text instead.', false);
+  if (!url && !pasted) return note('reading', 'Give a link to the article, or paste its text.', false);
+  let facts = null;
+  if (url) {
+    const dir = env.READING_PAGE_DIR || 'raw-page';
+    const fetched = await readJson(join(dir, 'page.json'));
+    const html = fetched?.status === 200 ? await readFile(join(dir, 'page.html'), 'utf8').catch(() => '') : '';
+    facts = html ? pageFacts(html) : null;
+    if (!readable(facts) && !pasted) return note('reading', 'Couldn\'t read enough of that page: it may be behind a paywall, or block automated readers. Paste the article\'s text into the box and log it again.', false);
+    if (facts?.blocked) facts = null;
+  }
+  const article = ownText({ facts, pasted });
+  const tag = makeTagger(JSON.parse(await readFile(new URL('../symbols.json', import.meta.url), 'utf8')));
+  const symbols = tag(`${article.title} ${article.text}`);
+  const id = ownId(url, pasted);
+  if (!symbols.length) return note('reading', 'That article doesn\'t name a stock on the watchlist, so there\'s nothing to grade: it wasn\'t logged.', false);
+  if (loggedLately(c.reading, id, now)) return note('reading', 'You logged that article in the last week, so it wasn\'t added again.', true);
+  if (!env.ANTHROPIC_API_KEY) return note('reading', 'ANTHROPIC_API_KEY isn\'t set, so the article couldn\'t be read.', false);
+  if (capReached(await readJson(spendFile), env.AI_MONTHLY_CAP_USD, now)) return note('reading', 'This month\'s AI spend has reached the cap, so the article can\'t be read until next month.', false);
+  if (!Object.keys(quotes).length) return note('reading', 'There are no prices this run to grade the article from; log it again in a few minutes.', false);
+  try {
+    const { default: Anthropic } = await import('@anthropic-ai/sdk');
+    const names = Object.fromEntries(Object.entries(quotes).map(([s, q]) => [s, q.name]));
+    const item = { n: 1, source: url ? siteOf(url) : 'pasted text', symbols, text: article.text };
+    const res = await readCalls({ client: new Anthropic(), Anthropic, model: env.AI_NEWS_MODEL || TIERS.simple, items: [item], names });
+    await writeFile(spendFile, JSON.stringify(addSpend(await readJson(spendFile), 'reading', res.usage?.costUsd, now)));
+    const picks = res.calls.map((x) => pickOf(x, quotes[x.symbol], now.getTime() / 1000)).filter(Boolean);
+    if (!picks.length) return note('reading', 'That article makes no buy, sell or hold call on a watchlist stock, so there\'s nothing to grade: it wasn\'t logged.', true);
+    const entry = {
+      id, createdAt: now.toISOString(), site: url ? siteOf(url) : '', title: article.title, ...(url ? { url: url.slice(0, 300) } : {}),
+      ...(article.published ? { published: article.published } : {}), picks,
+    };
+    c.reading = addOwn(c.reading, entry, now).list;
+    note('reading', `Logged your article: ${picks.length === 1 ? 'one call' : `${picks.length} calls`}, graded a month from now under Your reading.`, true);
+  } catch (err) {
+    // what the API billed before it failed still counts (ai.js askClaude)
+    if (err?.usage?.costUsd) await writeFile(spendFile, JSON.stringify(addSpend(await readJson(spendFile), 'reading', err.usage.costUsd, now)));
+    console.warn(`! Your reading: the article couldn't be read this time (${err?.name ?? 'error'}).`);
+    note('reading', 'The AI couldn\'t read the article this time. Try again later.', false);
+  }
+}
+if (command.reading) await logArticle(command.reading);
+
+// The owner's question (hypotheses.js): turned into a query and kept with the funds, waiting for its
+// answer. The messages never hold its words, nor the reason the data can't answer it (that's shown on the
+// page, from the funds' copy).
+async function askQuestion(raw) {
+  const text = typeof raw === 'string' ? raw.replace(/\s+/g, ' ').trim().slice(0, ASK.maxChars) : '';
+  if (!text) return note('ask', 'Type a question first.', false);
+  if (!env.ANTHROPIC_API_KEY) return note('ask', 'ANTHROPIC_API_KEY isn\'t set, so the question couldn\'t be read.', false);
+  if (capReached(await readJson(spendFile), env.AI_MONTHLY_CAP_USD, now)) return note('ask', 'This month\'s AI spend has reached the cap, so the question can\'t be read until next month.', false);
+  try {
+    const { default: Anthropic } = await import('@anthropic-ai/sdk');
+    const symbols = JSON.parse(await readFile(new URL('../symbols.json', import.meta.url), 'utf8'));
+    const res = await askSpec({ client: new Anthropic(), Anthropic, model: env.AI_NEWS_MODEL || TIERS.simple, question: text, symbols });
+    await writeFile(spendFile, JSON.stringify(addSpend(await readJson(spendFile), 'ask', res.usage?.costUsd, now)));
+    const q = questionFrom(text, res.input, symbols, now);
+    c.questions = addQuestion(c.questions, q);
+    if (q.status === 'cant-answer') return note('ask', 'Read your question: this data can\'t answer it. The reason is under Ask the data.', true);
+    note('ask', q.spec.population === 'fund_ideas' ? 'Read your question: it\'s answered from the funds\' own ideas in this run.' : 'Read your question: it\'s answered from the ten years of prices within a day, usually in this run.', true);
+  } catch (err) {
+    // what the API billed before it failed still counts (ai.js askClaude)
+    if (err?.usage?.costUsd) await writeFile(spendFile, JSON.stringify(addSpend(await readJson(spendFile), 'ask', err.usage.costUsd, now)));
+    console.warn(`! Ask the data: the question couldn't be read this time (${err?.name ?? 'error'}).`);
+    note('ask', 'The AI couldn\'t read the question this time. Try again later.', false);
+  }
+}
+if (command.ask !== undefined) await askQuestion(command.ask);
+
 // ---------- what every fund learns from ----------
 
 const spent = async () => readJson(spendFile);
@@ -197,10 +302,18 @@ const company = await readJson(join(dirname(file), 'company-data.json'));
 const filings = await readJson(join(dirname(file), 'results-dates.json'));
 const newsEvents = marketEvents((await readJson(join(dirname(file), 'news-events.json'))) ?? [], quotes, { filings, company });
 const calendar = resultsCalendar({ company, filings, quotes, events: newsEvents, now });
-if (Object.keys(quotes).length) c.marketMemory = Object.fromEntries(Object.keys(MARKETS).map((m) => [m, buildMemory(newsEvents, quotes, m, now, c.marketMemory?.[m])]));
+// with the study of big moves with and without news (state/move-news.json, scripts/fetch-articles.mjs moves)
+const moveNews = await readJson(join(dirname(file), 'move-news.json'));
+if (Object.keys(quotes).length) c.marketMemory = Object.fromEntries(Object.keys(MARKETS).map((m) => [m, buildMemory(newsEvents, quotes, m, now, c.marketMemory?.[m], { moveNews })]));
 const longMemory = await readJson(join(dirname(file), 'memory-long.json'));
 if (longMemory?.updatedAt && now - Date.parse(longMemory.updatedAt) > 30 * 86400000) console.warn(`! The ten-year memory is from ${longMemory.updatedAt.slice(0, 10)}: its weekly update keeps failing.`);
 const regimes = Object.fromEntries(Object.keys(MARKETS).map((m) => [m, regimeNow(quotes, prices?.macro, m)]));
+// The factor lab's prices (factors.js): the two years in data/ohlcv.json, or prices.json's year without it.
+const factorData = Object.keys(quotes).length ? factorInputs({ ohlcv: await readJson(env.OHLCV_FILE || 'data/ohlcv.json'), quotes, calendar, macro: prices?.macro }) : null;
+const factorsNow = (symbol) => (factorData ? factorsAt(factorData, symbol, now.getTime() / 1000) : null);
+const withFactors = (symbol) => { const f = factorsNow(symbol); return f ? { factors: f } : {}; };
+// What holds today for the factor lab's lessons: the regime, and which stocks report within 5 trading days.
+const conditionsFor = (market, currency) => conditionsNow(regimes[market], calendar ? upcomingResults(calendar, quotes, Object.keys(quotes).filter((s) => quotes[s].currency === currency), now, LAB.window + 1) : [], market);
 const picksHistory = await readJson(join(dirname(file), 'picks-history.json'));
 const picksScores = picksHistory ? scorePicks(picksHistory, quotes, now) : [];
 const picksSum = picksHistory && summarizeScores(picksScores).week;
@@ -208,6 +321,13 @@ const picksRecord = picksSum?.n >= 5 ? `The home page's AI picks, a week after b
 const picks = await readJson(picksFile);
 const cachedNews = await readJson(newsFile);
 const marks = { picksAt: picks?.createdAt ?? null, newsAt: cachedNews?.createdAt ?? null };
+// The news feeds' tagged headlines (state/articles), read when a fund gathers its own digest: its leads,
+// unless NEWS_LEADS is 'off'. Each such digest's quality joins news-quality.json (counts only), except
+// when the funds are private: its time would say when a fund decided.
+const leadsOn = env.NEWS_LEADS !== 'off';
+let feedArticles = null;
+const leadArticles = async () => (leadsOn ? (feedArticles ??= (await Promise.all(recentMonths(now, 2).map((m) => readJson(join(dirname(file), 'articles', `${m}.json`))))).flat().filter(Boolean)) : null);
+const qualityFile = join(dirname(file), 'news-quality.json');
 
 // Every stock's card (dossier.js), in memory: the same as state/dossiers.json, but with this run's prices.
 const dossiers = Object.keys(quotes).length ? buildDossiers({ quotes, long: longMemory, calendar, picksScores, now }).stocks : {};
@@ -249,7 +369,7 @@ for (const fund of c.funds) {
     if (Object.keys(quotes).length && checkDailyLoss(fund, quotes, now)) log(`! Daily loss limit hit: ${fund.paused.reason}`);
 
     // re-grade its ideas (free)
-    gradedBy[fund.id] = updatePlaybook(fund, quotes, now, { calendar, pooled: c.calibration?.[marketForCurrency(fund.currency)] }).graded;
+    gradedBy[fund.id] = updatePlaybook(fund, quotes, now, { calendar, pooled: c.calibration?.[marketForCurrency(fund.currency)], factors: factorData, lab: c.factorLab?.[marketForCurrency(fund.currency)] }).graded;
     const quiet = decisionDue(fund, now, prices) && quietReason(fund, quotes, marks);
     if (quiet) {
       fund.decisions.push({ time: now.toISOString(), outlook: quiet, orders: [], skipped: true });
@@ -263,7 +383,7 @@ for (const fund of c.funds) {
       } else if (!env.ANTHROPIC_API_KEY) {
         log('A decision is due but ANTHROPIC_API_KEY is not set.');
       } else if (capReached(await spent(), env.AI_MONTHLY_CAP_USD, now)) {
-        const message = `This month's AI spend (about US$${monthSpend(await spent(), now)}) reached the US$${env.AI_MONTHLY_CAP_USD} cap, so the AI isn't deciding until next month. Stop-losses still work. Raise the cap with the AI_MONTHLY_CAP_USD repository variable.`;
+        const message = `This month's AI spend (about US$${monthSpend(await spent(), now).toFixed(2)}) reached the US$${env.AI_MONTHLY_CAP_USD} cap, so the AI isn't deciding until next month. Stop-losses still work. Raise the cap with the AI_MONTHLY_CAP_USD repository variable.`;
         if (fund.aiCapped?.message !== message) fund.aiCapped = { time: now.toISOString(), message };
         log(message);
       } else {
@@ -273,20 +393,27 @@ for (const fund of c.funds) {
           const news = newsFor[fund.currency] ?? (cachedNews && now - Date.parse(cachedNews.createdAt) < NEWS_MAX_AGE_MS ? cachedNews : undefined);
           const market = marketForCurrency(fund.currency);
           const playbook = fund.settings.learning === false ? null
-            : playbookForPrompt(fund.playbook, { picksRecord, marketLessons: promptMarketLessons(c.marketMemory?.[market], longMemory, market, { hidden: fund.playbook?.hidden }), regime: regimes[market] });
+            : playbookForPrompt(fund.playbook, {
+              picksRecord, marketLessons: promptMarketLessons(c.marketMemory?.[market], longMemory, market, { hidden: fund.playbook?.hidden }), regime: regimes[market],
+              conditions: conditionsFor(market, fund.currency),
+            });
           const d = await decideFund({
             client: new Anthropic(), Anthropic, fund, quotes, picks, news, now, playbook, company, calendar, macro: prices?.macro ?? null,
-            cards: cardsFor(market), notes: c.stockNotes ?? null, dossiers,
+            cards: cardsFor(market), notes: c.stockNotes ?? null, dossiers, articles: news ? null : await leadArticles(),
             model: modelOf(fund), newsModel: env.AI_NEWS_MODEL || TIERS.simple,
             cacheShared: (deciding[`${fund.currency}|${modelOf(fund)}`] ?? 0) >= 2,
           });
-          if (d.news) newsFor[fund.currency] = d.news;
+          if (d.news) {
+            newsFor[fund.currency] = d.news;
+            if (env.FUND_PRIVATE !== 'true') await writeFile(qualityFile, JSON.stringify(addQuality(await readJson(qualityFile), digestQuality(d.news, { by: 'fund', on: leadsOn }))));
+          }
           await writeFile(spendFile, JSON.stringify(addSpend(await spent(), 'fund', d.usage?.costUsd, now)));
-          const orders = executeDecision(fund, d.orders ?? [], quotes, now, { others: otherTigerHoldings(c, fund.id), calendar });
+          const orders = executeDecision(fund, d.orders ?? [], quotes, now, { others: otherTigerHoldings(c, fund.id), calendar, factorsOf: factorsNow });
           // ideas it passed on keep their thesis, checked like an order's (a stale catalyst)
           const considered = (d.considered ?? []).slice(0, 3).map((x) => ({
             symbol: x.symbol, stance: x.stance, idea_type: x.idea_type, why_not: x.why_not,
             thesis: checkedThesis(x, x.symbol, { calendar, quotes, now }), ...(lessonsAppliedOf(x).length ? { lessonsApplied: lessonsAppliedOf(x) } : {}),
+            ...withFactors(x.symbol),
           }));
           setProtections(fund, d.protections, { now, dailyMoves });
           fund.decisions.push({
@@ -328,6 +455,15 @@ for (const fund of c.funds) {
 
 // Each market's theses graded for calibration across all its funds; the next run's lessons use it.
 if (Object.keys(quotes).length) c.calibration = poolCalibration(c.funds, gradedBy);
+// Each market's funds' ideas pooled by factor and regime (factors.js factorLab); the next run's playbooks
+// take its lessons. Counts only in the log.
+if (factorData) {
+  c.factorLab = factorLab(c.funds, gradedBy, (f) => frozenIdeas(f.ideaLog));
+  for (const [m, lab] of Object.entries(c.factorLab)) console.log(`Factor lab, ${m}: ${lab.cases} case(s), ${lab.lessons.length} lesson(s).`);
+}
+// The owner's questions on the funds' own ideas (hypotheses.js), from the same graded ideas. Counts only.
+const askedIdeas = answerWaitingIdeas(c.questions, { funds: c.funds, gradedBy, frozen: (f) => frozenIdeas(f.ideaLog), now });
+if (askedIdeas) console.log(`Ask the data: answered ${askedIdeas} question(s) from the funds' own ideas.`);
 
 // ---------- the weekly review (cheap model, only with enough new evidence, after the market closes) ----------
 // It reads cells computed from the graded ideas and the lesson book with each lesson's status, and each
@@ -340,7 +476,7 @@ for (const fund of c.funds) {
   if (capReached(await spent(), env.AI_MONTHLY_CAP_USD, now)) break;
   try {
     const { default: Anthropic } = await import('@anthropic-ai/sdk');
-    const { pb, graded } = updatePlaybook(fund, quotes, now, { calendar, pooled: c.calibration?.[marketForCurrency(fund.currency)] });
+    const { pb, graded } = updatePlaybook(fund, quotes, now, { calendar, pooled: c.calibration?.[marketForCurrency(fund.currency)], factors: factorData });
     const inMarket = marketIdeas(c.funds, gradedBy, fund.currency).length;
     const model = reviewModel({ optIn: env.AI_REVIEW_MODEL, cheap: env.AI_NEWS_MODEL || TIERS.simple, graded: inMarket });
     if (env.AI_REVIEW_MODEL && model !== env.AI_REVIEW_MODEL) console.log(`[${fund.name}] Weekly review on the cheap model: AI_REVIEW_MODEL takes over once the market has ${REVIEW_MODEL_MIN} graded ideas (${inMarket} so far).`);
