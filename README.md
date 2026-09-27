@@ -6,12 +6,12 @@ Practice trading Singapore (SGX) and US stocks with virtual cash at real market 
 
 | Tab | What it does |
 |---|---|
-| **Home** | Your profit/loss, **AI picks** (which watchlist stocks to go long or short now, based on current news, with sources) and your holdings. |
+| **Home** | Your profit/loss, a chart of each account's value over time against the index, **AI picks** (which watchlist stocks to go long or short now, based on current news, with sources) with their track record, and your holdings with where your money is and each holding's profit or loss. |
 | **Markets** | Prices, day change and a 1-month sparkline for every stock. Buy, sell or short from here. |
 | **Auto-trading** | Rules that trade for you: limit buys, stop-losses, take-profits, trailing stops, moving-average crossovers and scheduled buys. Each rule can be backtested on the past year. |
 | **AI strategist** | Claude reads a year of prices, current news and your own trades, then proposes strategies written as auto-trading rules. Each strategy is backtested automatically, and you can add it as paused rules. |
-| **AI fund** | Give Claude an amount and it trades on its own to make as much profit as possible, without ever using more than that amount. Run up to 5 funds side by side, each with its own style, focus and model, and compare them. |
-| **History** | Every trade, with automatic ones marked. |
+| **AI fund** | Give Claude an amount and it trades on its own to make as much profit as possible, without ever using more than that amount. Run up to 5 funds side by side, each with its own style, focus and model, and compare them on a chart. Charts show its value, positions, what it has learned and the AI's monthly cost. |
+| **History** | Realized profit over time, and every trade, with automatic ones marked. |
 
 ### Accounts and trading rules
 
@@ -48,6 +48,14 @@ Choose the fees in *Settings → Trading fees*:
 
 The **AI fund** uses the Tiger, Standard Chartered or no-fee plan you choose when starting it. When trading through Tiger, it records the fees Tiger actually charged, using the Tiger plan only as an estimate until Tiger reports them. The AI is told what a round trip costs, so it avoids trades too small to cover their fees.
 
+### Charts
+
+Each account's **value over time** is rebuilt from your trades at each day's closing prices, with the money you put in (dashed; it steps when you convert currency) and what the same money would be worth in the index (grey; it gets the same money in and out). Other charts show where your money is, each holding's profit or loss, the AI picks' track record against a coin flip, realized profit over time, and on the AI fund page the funds side by side, what its ideas did a week later, the market memory and the AI's monthly spend against the cap.
+
+Hover, tap or drag a chart for exact numbers; line charts also take keyboard focus (the arrow keys step through the days, Escape closes the tooltip). Every chart has a **Table** switch with the same numbers.
+
+For anyone changing them: the charts are hand-drawn SVG in `charts.js` with no library. Colours come from CSS variables in `styles.css` (`--series-1` to `--series-8` for identity, in a fixed order checked for colour-blind separation in light and dark mode; green and red only where a value is good or bad). Marks are thin (bars at most 14px, 2px lines), axis ticks are round numbers, labels are measured so nothing is cut off (on phones, bar labels move above their bars), there's never a second y-axis, and every chart needs a table twin.
+
 ### AI picks' track record
 
 Every scheduled set of picks is kept with each stock's price when it was picked. Under the picks, the **track record** scores each one after a week and a month of trading: whether it made money in its direction (a short gains when the price falls), and whether it beat the index over the same days (the S&P 500 for US stocks, the STI for SGX). Before fees. If the picks can't beat the index, don't follow them.
@@ -60,7 +68,7 @@ Rules run whenever the page is open. When you come back after being away, they r
 
 The fund's ledger starts with exactly the amount you give it, and nothing is ever added. The code, not the AI, rejects any order that costs more than the fund's buying power. Shorts need 150% collateral and are covered automatically at a 40% loss, so the fund can't lose more than its amount. The fund trades one market, set by the currency you choose: USD for US stocks, SGD for SGX stocks. It can hold long and short positions and set its own stop-loss and take-profit levels, which are checked every 15 minutes. It only makes decisions while its market is actually trading, never on a holiday or after an early close.
 
-The fund page compares the fund with **the same money in the index** (SPY or ES3, bought when the fund started, after fees), draws the index as a dashed line on the value chart, and shows **what the AI has cost** next to the profit after that cost. Dividends and splits on its holdings are applied as for your portfolio.
+The fund page compares the fund with **the same money in the index** (SPY or ES3, bought when the fund started, after fees), draws the index as a grey line on the value chart, and shows **what the AI has cost** next to the profit after that cost. Dividends and splits on its holdings are applied as for your portfolio.
 
 ## How it runs
 
@@ -237,6 +245,7 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `portfolio.js` | The ledger: cash accounts, long and short positions, buying power, profit/loss, currency conversion. |
 | `actions.js` | Dividends and stock splits. |
 | `benchmark.js` | Comparisons with an index fund bought at the same time. |
+| `charts.js`, `history.js` | The charts, and each account's value over time rebuilt from its trades. |
 | `scorecard.js` | The AI picks' track record. |
 | `spend.js` | The AI's monthly spend and cap. |
 | `alerts.js`, `scripts/notify.mjs` | Telegram alerts. |

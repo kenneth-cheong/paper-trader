@@ -6,7 +6,10 @@
 import { calcFee } from './fees.js';
 
 export const BENCHMARKS = { USD: { symbol: 'SPY', label: 'S&P 500 (SPY)' }, SGD: { symbol: 'ES3.SI', label: 'Straits Times Index (ES3)' } };
-const DAY_CLOSE_S = 7 * 3600; // a daily bar is stamped at the open; its close comes about a session later
+// A daily bar is stamped at its session's open; the close comes this many seconds later
+// (US 9:30 to 16:00 New York time, SGX 9:00 to 17:00 Singapore time).
+const SESSION_S = { US: 6.5 * 3600, SGX: 8 * 3600 };
+export const sessionLength = (quote) => SESSION_S[quote?.market] ?? 7 * 3600;
 
 // The last known price of `quote` at unix time `t` (15-minute bars where there are some, else daily
 // closes), or null if `t` is before its price history.
@@ -18,7 +21,8 @@ export function priceAt(quote, t) {
     return p;
   }
   let p = null;
-  for (const [bt, v] of quote?.daily ?? []) { if (bt + DAY_CLOSE_S <= t) p = v; else break; }
+  const after = sessionLength(quote);
+  for (const [bt, v] of quote?.daily ?? []) { if (bt + after <= t) p = v; else break; }
   return p;
 }
 

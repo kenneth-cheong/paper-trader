@@ -47,6 +47,11 @@
     <!-- Home -->
     <div class="view" data-view="home">
       <section class="panel">
+        <div class="panel-head"><h2>Your money over time</h2></div>
+        <p class="muted small">Each account's value every trading day since it started, against the money put in (dashed) and the same money in an index fund (grey). Hover or tap for the numbers.</p>
+        <div class="chart-grid" id="overview"></div>
+      </section>
+      <section class="panel">
         <div class="panel-head">
           <h2>AI picks: what to long and short</h2>
           <div class="row">
@@ -60,6 +65,7 @@
       </section>
       <section class="panel">
         <div class="panel-head"><h2>Holdings</h2></div>
+        <div id="holding-charts"></div>
         <div class="table-wrap"><table id="holdings"></table></div>
         <div id="pending" class="pending" hidden></div>
       </section>
@@ -133,6 +139,11 @@
 
     <!-- History -->
     <div class="view" data-view="history">
+      <section class="panel">
+        <div class="panel-head"><h2>Realized profit over time</h2></div>
+        <p class="muted small">Profit or loss locked in by selling (after fees), plus dividends, added up over time.</p>
+        <div class="chart-grid" id="realized-charts"></div>
+      </section>
       <section class="panel">
         <div class="panel-head"><h2>Trade history</h2></div>
         <div class="table-wrap"><table id="trades"></table></div>

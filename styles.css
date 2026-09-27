@@ -14,6 +14,14 @@
   --warn-bg: #fff4d6;
   --warn-text: #6b4a00;
   --radius: 10px;
+  /* Charts: the validated categorical palette (identity), chrome, and the de-emphasis grey. */
+  --series-1: #2a78d6; --series-2: #eb6834; --series-3: #1baf7a; --series-4: #eda100;
+  --series-5: #e87ba4; --series-6: #008300; --series-7: #4a3aa7; --series-8: #e34948;
+  --series-other: #b4b2aa;
+  --series-cash: #7d7b74;
+  --series-compare: #898781; /* the index line: grey, but at least 3:1 on the surface */
+  --grid: #eceae4;
+  --axis: #c3c2b7;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -32,11 +40,25 @@
     --down-bg: #3a1a1c;
     --warn-bg: #3a3014;
     --warn-text: #f3d68a;
+    --series-1: #3987e5; --series-2: #d95926; --series-3: #199e70; --series-4: #c98500;
+    --series-5: #d55181; --series-6: #008300; --series-7: #9085e9; --series-8: #e66767;
+    --series-other: #5d5c57;
+    --series-cash: #8e8c85;
+    --series-compare: #898781;
+    --grid: #2a2e36;
+    --axis: #3b404b;
     color-scheme: dark;
   }
 }
 
 * { box-sizing: border-box; }
+.show-sm, .show-md { display: none; }
+/* The trade history drops its money columns below 800px: price and realized profit go under the shares. */
+@media (max-width: 800px) {
+  .hide-md { display: none; }
+  .show-md { display: inline; }
+  #trades .chip { display: table; margin: 2px 0 0; }
+}
 body {
   margin: 0;
   background: var(--bg);
@@ -105,7 +127,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 16px; }
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 12px; margin-bottom: 16px; }
 .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
 .card .label { font-size: 13px; color: var(--muted); }
-.card .big { font-size: 26px; font-weight: 650; margin: 2px 0; }
+.card .big { font-size: 26px; font-weight: 650; margin: 2px 0; font-variant-numeric: proportional-nums; }
 .card .sub { font-size: 13px; color: var(--muted); display: grid; grid-template-columns: auto auto; gap: 2px 12px; margin-top: 8px; }
 .card .sub span:nth-child(even) { text-align: right; color: var(--text); }
 
@@ -219,19 +241,18 @@ select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border
 /* charts */
 .chart { display: block; max-width: 100%; height: auto; }
 .chart .grid { stroke: var(--border); stroke-width: 1; }
-.chart .ref { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 4 4; }
+.chart .ref { fill: none; stroke: var(--series-other); stroke-width: 1; stroke-dasharray: 4 4; }
 .chart .axis { fill: var(--muted); font-size: 11px; }
-.chart .line { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
-.chart .line2 { fill: none; stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 5 4; stroke-linejoin: round; }
-.legend { display: flex; gap: 6px; align-items: center; color: var(--muted); margin: 4px 0 0; }
-.legend .key { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--accent); margin-left: 8px; }
-.legend .key:first-child { margin-left: 0; }
-.legend .key-compare { border-top: 2px dashed var(--muted); }
+.chart .line { fill: none; stroke: var(--series-1); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.chart .line2 { fill: none; stroke: var(--series-compare); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
 .scorecard { margin-top: 14px; }
 .chart .cross { stroke: var(--muted); stroke-width: 1; }
-.chart .dot { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
+.chart .dot, .chart .end-dot { fill: var(--series-1); stroke: var(--halo, var(--surface)); stroke-width: 2; }
 .chart .hit { fill: transparent; cursor: crosshair; }
-.tooltip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 13px; box-shadow: 0 4px 14px rgb(0 0 0 / .12); }
+.chart.line-chart { touch-action: pan-y; border-radius: 4px; }
+.chart.line-chart:focus { outline: none; }
+.chart.line-chart:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tooltip { position: fixed; z-index: 10; pointer-events: none; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 13px; box-shadow: 0 4px 14px rgb(0 0 0 / .12); width: max-content; max-width: min(320px, calc(100vw - 16px)); }
 
 /* orders waiting for the open */
 .pending { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px; }
@@ -274,15 +295,18 @@ body.locked { overflow: hidden; }
   .rule-actions { grid-column: 1 / -1; justify-content: flex-start; }
   .card .big { font-size: 22px; }
   .hide-sm { display: none; }
+  .show-sm { display: inline; }
+  #scorecard th { white-space: normal; }
   th, td { padding: 8px 6px; }
   td:first-child { white-space: normal; }
+  #trades td.when { white-space: nowrap; }
   td .name { max-width: 120px; white-space: nowrap; }
   #markets .chip { display: none; }
 }
 
 .leaderboard tbody tr { cursor: pointer; }
 .leaderboard tbody tr:hover { background: var(--hover, rgba(127, 127, 127, .08)); }
-.leaderboard tbody tr.selected { background: var(--up-bg); }
+.leaderboard tbody tr.selected { background: var(--surface-2); box-shadow: inset 3px 0 0 var(--accent); }
 .leaderboard tbody tr:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .fund-title { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; margin: 18px 0 8px; }
 .fund-title h2 { margin: 0; }
@@ -291,3 +315,44 @@ body.locked { overflow: hidden; }
 .lesson-form { margin: 8px 0; }
 .lesson-form input { flex: 1; min-width: 0; }
 .decision-skip { margin: 6px 0; }
+
+/* ---------- charts ---------- */
+.chart text { font-size: 12px; font-family: inherit; }
+.chart .grid { stroke: var(--grid); stroke-width: 1; }
+.chart .baseline { stroke: var(--axis); stroke-width: 1; }
+.chart .cat { fill: var(--text); }
+.chart .cat-sub { fill: var(--muted); font-size: 11px; }
+.chart .cat, .chart .ref-label { paint-order: stroke; stroke: var(--halo); stroke-width: 4px; stroke-linejoin: round; }
+.chart { --halo: var(--surface); }
+.backtest .chart { --halo: var(--surface-2); }
+.chart .val { fill: var(--text); font-weight: 600; paint-order: stroke; stroke: var(--halo); stroke-width: 3px; stroke-linejoin: round; }
+.chart .marker { stroke: var(--text); stroke-width: 2; stroke-linecap: round; }
+.chart .hit { fill: transparent; pointer-events: all; }
+.chart .ring { fill: none; stroke: none; pointer-events: none; }
+.chart.stack [data-tip]:focus-visible .hit { stroke: none; }
+.chart.stack [data-tip]:focus-visible .ring { stroke: var(--accent); stroke-width: 2; }
+.chart [data-tip] { cursor: default; outline: none; }
+.chart [data-tip].hot .bar, .chart [data-tip].hot .seg, .chart [data-tip].hot path, .chart [data-tip].hot rect:not(.hit) { filter: brightness(1.12); }
+.chart [data-tip].hot .hit { fill: var(--surface-2); opacity: .6; }
+.chart [data-tip]:focus-visible .hit, .chart [data-tip].hot:focus-visible .hit { fill: none; stroke: var(--accent); stroke-width: 2; opacity: 1; }
+.chart .seg { stroke: none; }
+.legend-list { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 0; margin: 6px 0 0; font-size: 13px; }
+.legend-list li { display: inline-flex; align-items: flex-start; gap: 6px; }
+.legend-list .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex: none; margin-top: 4px; }
+.legend-list .swatch.track { box-shadow: inset 0 0 0 1px var(--axis); }
+.legend-list .swatch-tick { width: 2px; height: 12px; border-radius: 1px; background: var(--text); margin-top: 3px; }
+.legend-list .line-key { width: 16px; height: 2px; border-radius: 1px; background: var(--series-1); display: inline-block; flex: none; margin-top: 9px; }
+.legend-list .line-key.compare { background: var(--series-compare); }
+.legend-list .line-key.ref { background: none; border-top: 1px dashed var(--muted); height: 0; }
+.chart .seg.track { stroke: var(--axis); stroke-width: 1; }
+#tooltip .tip-row { display: flex; align-items: center; gap: 6px; }
+#tooltip .tip-key { width: 12px; height: 2px; border-radius: 1px; display: inline-block; }
+.chart-card { margin: 10px 0 4px; }
+.chart-card h3 { font-size: 14px; margin: 0 0 2px; }
+.chart-card .caption { margin: 0 0 6px; }
+.chart-table { margin-top: 4px; }
+.chart-table summary { font-size: 12px; color: var(--muted); cursor: pointer; }
+.chart-table .table-wrap { max-height: 320px; overflow: auto; }
+.chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 12px 20px; }
+.chart-grid > * { min-width: 0; }
+.chart-grid { align-items: start; }

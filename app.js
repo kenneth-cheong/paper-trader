@@ -3,6 +3,9 @@ import { applyCorporateActions, describeAction } from './actions.js';
 import { BENCHMARKS, benchmarkFor, benchmarkSeries } from './benchmark.js';
 import { scorePicks, summarizeScores } from './scorecard.js';
 import { addSpend, monthSpend, fundAiCost } from './spend.js';
+import { hbars, stackBar, columns, lineChart, tableToggle, focusQuietly, tipOpenFor, SERIES, OTHER, CASH, TRACK } from './charts.js';
+import { valueHistory, indexHistory, realizedHistory } from './history.js';
+import { MIN_CASES as MEMORY_MIN_CASES } from './memory.js';
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest, fillPendingOrders } from './rules.js';
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
 import { MARKETS, marketForCurrency, tradingStatus, STATUS_LABELS } from './markets.js';
@@ -278,10 +281,10 @@ function money(n, ccy, { sign = false } = {}) {
     style: 'currency', currency: ccy, currencyDisplay: 'code',
     minimumFractionDigits: 2, maximumFractionDigits: 2, signDisplay: sign ? 'exceptZero' : 'auto',
   });
-  return fmtCache[key].format(n);
+  return fmtCache[key].format(n).replace('-', '−');
 }
 const price = (n) => n == null ? '–' : n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: n < 1 ? 4 : 2 });
-const pct = (n) => { const v = Math.abs(n) < 0.00005 ? 0 : n; return (v > 0 ? '+' : '') + (v * 100).toFixed(2) + '%'; };
+const pct = (n) => { const v = Math.abs(n) < 0.00005 ? 0 : n; return (v > 0 ? '+' : v < 0 ? '−' : '') + Math.abs(v * 100).toFixed(2) + '%'; };
 const tone = (n) => (n > 0.00001 ? 'up' : n < -0.00001 ? 'down' : '');
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const fmtDateTime = (t) => new Date(t).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
@@ -316,63 +319,6 @@ const sources = (urls) => urls?.length
   ? `<p class="sources">Sources: ${urls.map((u) => `<a href="${esc(safeUrl(u))}" target="_blank" rel="noopener noreferrer">${esc(domain(u))}</a>`).join(' · ')}</p>`
   : '';
 
-// A single-series line chart with a hover crosshair and tooltip. points: [{ label, value }].
-// Axis labels are plain numbers (the currency is in the tooltip and the text around the chart).
-const axisNumber = (v) => v.toLocaleString(undefined, { maximumFractionDigits: Math.abs(v) >= 1000 ? 0 : 2 });
-
-// points: [{ label, axis?, value, compare? }]; `compare` values (e.g. an index) draw a second, dashed line.
-function lineChart(el, points, { ref = null, refLabel = '', fmt = (v) => v, height = 180, compareLabel = '' } = {}) {
-  if (points.length < 2) { el.innerHTML = '<p class="muted small">Not enough data for a chart yet.</p>'; return; }
-  const W = Math.max(280, el.clientWidth || 600), H = height, L = 56, R = 12, T = 10, B = 22;
-  const hasCompare = points.filter((p) => p.compare != null).length >= 2;
-  const vals = points.map((p) => p.value).concat(ref == null ? [] : [ref], hasCompare ? points.map((p) => p.compare).filter((v) => v != null) : []);
-  let lo = Math.min(...vals), hi = Math.max(...vals);
-  const pad = (hi - lo) * 0.08 || Math.abs(hi) * 0.02 || 1;
-  lo -= pad; hi += pad;
-  const x = (i) => L + (i / (points.length - 1)) * (W - L - R);
-  const y = (v) => T + (1 - (v - lo) / (hi - lo)) * (H - T - B);
-  const ticks = [lo + pad, (lo + hi) / 2, hi - pad];
-  const path = points.map((p, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(p.value).toFixed(1)}`).join('');
-  let drawing = false;
-  const path2 = hasCompare ? points.map((p, i) => {
-    if (p.compare == null) { drawing = false; return ''; }
-    const cmd = drawing ? 'L' : 'M';
-    drawing = true;
-    return `${cmd}${x(i).toFixed(1)},${y(p.compare).toFixed(1)}`;
-  }).join('') : '';
-  el.innerHTML = `
-    <svg class="chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="Line chart of value over time">
-      ${ticks.map((v) => `<line class="grid" x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}"/><text class="axis" x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${esc(axisNumber(v))}</text>`).join('')}
-      ${ref == null ? '' : `<line class="ref" x1="${L}" x2="${W - R}" y1="${y(ref)}" y2="${y(ref)}"/><text class="axis" x="${W - R}" y="${y(ref) - 5}" text-anchor="end">${esc(refLabel)}</text>`}
-      <text class="axis" x="${L}" y="${H - 4}">${esc(points[0].axis ?? points[0].label)}</text>
-      <text class="axis" x="${W - R}" y="${H - 4}" text-anchor="end">${esc(points.at(-1).axis ?? points.at(-1).label)}</text>
-      ${path2 ? `<path class="line2" d="${path2}"/>` : ''}
-      <path class="line" d="${path}"/>
-      <line class="cross" y1="${T}" y2="${H - B}" visibility="hidden"/>
-      <circle class="dot" r="4" visibility="hidden"/>
-      <rect class="hit" x="${L}" y="0" width="${W - L - R}" height="${H}"/>
-    </svg>${path2 ? `<p class="legend small"><span class="key key-main"></span>Value <span class="key key-compare"></span>${esc(compareLabel)}</p>` : ''}`;
-  const svg = el.querySelector('svg'), cross = svg.querySelector('.cross'), dot = svg.querySelector('.dot'), tip = $('tooltip');
-  const hit = svg.querySelector('.hit');
-  hit.addEventListener('pointermove', (e) => {
-    const box = svg.getBoundingClientRect();
-    const px = (e.clientX - box.left) * (W / box.width);
-    const i = Math.max(0, Math.min(points.length - 1, Math.round((px - L) / (W - L - R) * (points.length - 1))));
-    const p = points[i];
-    cross.setAttribute('x1', x(i)); cross.setAttribute('x2', x(i)); cross.setAttribute('visibility', 'visible');
-    dot.setAttribute('cx', x(i)); dot.setAttribute('cy', y(p.value)); dot.setAttribute('visibility', 'visible');
-    tip.innerHTML = `<div class="muted">${esc(p.label)}</div><strong>${esc(fmt(p.value))}</strong>${p.compare != null ? `<div class="muted">${esc(compareLabel)}: ${esc(fmt(p.compare))}</div>` : ''}`;
-    tip.hidden = false;
-    tip.style.left = `${Math.max(8, Math.min(e.clientX + 12, innerWidth - tip.offsetWidth - 8))}px`;
-    tip.style.top = `${e.clientY - tip.offsetHeight - 10}px`;
-  });
-  hit.addEventListener('pointerleave', () => {
-    cross.setAttribute('visibility', 'hidden');
-    dot.setAttribute('visibility', 'hidden');
-    tip.hidden = true;
-  });
-}
-
 // ---------- rendering ----------
 
 function showBanner(text) {
@@ -385,25 +331,163 @@ const currentView = () => (VIEWS.includes(location.hash.slice(1)) ? location.has
 
 function render() {
   const view = currentView();
+  const focused = focusKey();
   for (const v of document.querySelectorAll('.view')) v.hidden = v.dataset.view !== view;
   for (const a of $('tabs').children) a.setAttribute('aria-selected', a.getAttribute('href') === `#${view}`);
+  // On a phone the tab strip scrolls sideways: keep the current tab in sight.
+  const tabs = $('tabs'), sel = tabs.querySelector('[aria-selected="true"]');
+  if (sel && tabs.scrollWidth > tabs.clientWidth) {
+    const a = sel.getBoundingClientRect(), b = tabs.getBoundingClientRect();
+    if (a.left < b.left || a.right > b.right) tabs.scrollLeft += a.left - b.left - 12;
+  }
   $('cards').hidden = view === 'fund';
 
   const { accounts, positions } = summarize(state.portfolio, state.prices.quotes);
   renderCards(accounts);
-  if (view === 'home') { renderPicks(); renderScorecard(); renderHoldings(positions); }
+  if (view === 'home') { renderOverview(); renderPicks(); renderScorecard(); renderHoldings(positions, accounts); }
   if (view === 'markets') renderMarkets();
   if (view === 'auto') renderRules();
   if (view === 'strategist') renderStrategist();
   if (view === 'fund') { renderFundControls(); renderFund(); }
   if (view === 'history') renderTrades();
   if ($('trade-dialog').open) updateTradeDialog();
+  restoreFocus(focused);
 
   $('updated').textContent = state.sample ? 'Sample prices'
     : state.prices.updatedAt ? `Prices updated ${ago(state.prices.updatedAt)}` : '';
   showBanner(state.sample
     ? 'Showing made-up sample prices so you can try the app. Real prices appear once the price job has run on GitHub (see README).'
     : '');
+}
+
+// ---------- charts ----------
+
+// A chart is drawn after its HTML is on the page (it sizes itself to its box): chartSlot returns the
+// box's HTML and remembers how to draw it; flushCharts draws every waiting chart. Drawn charts are
+// kept (by box id, with the width they were drawn at) so a resize redraws just the ones whose box
+// changed width, and an open "Table" stays open when the page re-renders (keyed by the chart's
+// `key`, else its title).
+let chartJobs = [];
+let chartSeq = 0;
+const chartDraws = new Map();
+const openTables = new Set();
+document.addEventListener('toggle', (e) => {
+  const d = e.target;
+  if (d.classList?.contains('chart-table') && d.dataset.key) d.open ? openTables.add(d.dataset.key) : openTables.delete(d.dataset.key);
+}, true);
+function chartSlot(draw, { title = '', caption = '', table = '', key = '' } = {}) {
+  const id = `chart-${++chartSeq}`;
+  const k = key || title || caption;
+  chartJobs.push([id, draw]);
+  const tableHtml = table && k ? table.replace('<details class="chart-table">', `<details class="chart-table" data-key="${esc(k)}"${openTables.has(k) ? ' open' : ''}>`) : table;
+  return `<figure class="chart-card" data-key="${esc(k)}">${title ? `<h3>${esc(title)}</h3>` : ''}${caption ? `<p class="caption muted small">${caption}</p>` : ''}<div id="${id}" class="chart-box"></div>${tableHtml}</figure>`;
+}
+function flushCharts() {
+  const jobs = chartJobs;
+  chartJobs = [];
+  for (const [id, draw] of jobs) { const el = $(id); if (el) drawChart(id, el, draw); }
+  for (const id of chartDraws.keys()) if (!$(id)) chartDraws.delete(id);
+}
+function drawChart(id, el, draw) {
+  draw(el);
+  chartDraws.set(id, { draw, w: el.clientWidth });
+}
+function redrawCharts() {
+  const focused = focusKey();
+  for (const [id, c] of chartDraws) {
+    const el = $(id);
+    if (!el) chartDraws.delete(id);
+    else if (el.clientWidth && el.clientWidth !== c.w) drawChart(id, el, c.draw);
+  }
+  restoreFocus(focused);
+}
+// Keyboard focus on a chart, its table or a fund row survives the page re-rendering around it, with
+// its tooltip open again only if it was open. A line chart keeps the point being read.
+function focusKey() {
+  const a = document.activeElement;
+  if (!a || a === document.body) return null;
+  if (a.dataset?.fundSelect) return { sel: `[data-fund-select="${CSS.escape(a.dataset.fundSelect)}"]` };
+  const box = a.closest?.('.chart-card[data-key], [data-bt]');
+  if (!box) return null;
+  const scope = box.matches('[data-bt]') ? `[data-bt="${CSS.escape(box.dataset.bt)}"]` : `.chart-card[data-key="${CSS.escape(box.dataset.key)}"]`;
+  const tip = a.getAttribute('data-tip'), open = tipOpenFor(a);
+  if (tip != null) return { sel: `${scope} [data-tip="${CSS.escape(tip)}"]`, open };
+  for (const s of ['svg.line-chart', 'details.chart-table > summary', '.chart-table .table-wrap']) if (a.matches(s)) return { sel: `${scope} ${s}`, at: a.dataset.at, open };
+  return null;
+}
+function restoreFocus(f) {
+  const el = f && document.querySelector(f.sel);
+  if (!el || el === document.activeElement) return;
+  if (f.at) el.dataset.at = f.at;
+  if (f.open) el.focus({ preventScroll: true });
+  else focusQuietly(el);
+}
+const pctTick = (v, d = 0) => `${v < 0 ? '−' : ''}${Math.abs(v).toFixed(d)}%`;
+const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
+// Value over time for one account, against the money put in and against the same money in the index.
+function valueChart(portfolio, currency, quotes, plan) {
+  const a = portfolio.accounts[currency];
+  const hist = valueHistory(portfolio, quotes, currency);
+  const moved = hist.some(([, , inv]) => inv !== a.start);
+  // An account that started empty gets its index line from the money converted into it.
+  const b0 = a.start > 0 || moved ? benchmarkFor({ currency, amount: a.start || 1, since: portfolio.createdAt, quotes, plan }) : null;
+  const b = b0 && (a.start > 0 ? b0 : { ...b0, shares: 0 });
+  const idx = b ? indexHistory(portfolio, quotes, currency, b, hist) : null;
+  const flat = hist.every(([, v, inv]) => Math.abs(v - inv) < 0.005);
+  const refLabel = moved ? 'Money put in' : 'Started with';
+  const compareLabel = idx ? `${b.label}, same money${idx.rebased ? ` from ${fmtDate(idx.since)}` : ''}` : '';
+  const pts = hist.map(([t, v, inv], i) => ({ label: fmtDate(t), axis: fmtDate(t), value: v, ref: inv, compare: idx?.values[i] ?? null }));
+  const table = tableToggle(['Date', 'Value', ...(moved ? ['Money put in'] : []), ...(idx ? [compareLabel] : [])],
+    pts.slice().reverse().map((p) => [p.label, money(p.value, currency), ...(moved ? [money(p.ref, currency)] : []), ...(idx ? [p.compare == null ? '–' : money(p.compare, currency)] : [])]));
+  const caption = flat && !moved ? `No trades in this account yet, so it's still worth the ${money(a.start, currency)} it started with.`
+    : flat ? (new Set(hist.map(([, , inv]) => inv)).size > 1 ? 'No trades in this account yet, so it\'s worth exactly the money put in; the steps are money converted into or out of it.'
+      : `No trades in this account yet, so it's worth exactly the money put in: ${money(hist.at(-1)[2], currency)}, counting money converted into or out of it.`)
+    : idx?.rebased ? `The index line starts on ${fmtDate(idx.since)}, the first day with its prices, at the account's value then.` : '';
+  return chartSlot((el) => lineChart(el, pts, { refLabel, fmt: (v) => money(v, currency), compareLabel, title: `${currency} account value` }),
+    { title: `${currency} account`, caption, table, key: `value-${currency}` });
+}
+
+// Where an account's (or a fund's) money is: the biggest holdings, the rest, and cash. Each stock
+// keeps its colour while it's held, whatever its size: it takes the first free colour when it's
+// bought and gives it back when it's sold out.
+function allocationChart(positions, cash, currency, title, portfolio) {
+  const longs = positions.filter((p) => p.currency === currency && p.qty > 0);
+  const slot = new Map(), held = {};
+  const take = (symbol) => { let i = 0; const used = new Set(slot.values()); while (used.has(i)) i++; slot.set(symbol, i); };
+  const splits = (portfolio.actions ?? []).filter((a) => a.kind === 'split' && a.ratio);
+  const laterSplits = (t) => splits.filter((a) => a.symbol === t.symbol && a.time > t.time).reduce((m, a) => m * a.ratio, 1);
+  for (const t of [...portfolio.trades].filter((t) => t.currency === currency).sort((x, y) => x.time.localeCompare(y.time))) {
+    const q = Math.round(((held[t.symbol] ?? 0) + (t.side === 'buy' ? t.qty : -t.qty) * laterSplits(t)) * 1e6) / 1e6;
+    if (q <= 0) slot.delete(t.symbol);
+    else if (!slot.has(t.symbol)) take(t.symbol);
+    held[t.symbol] = q;
+  }
+  for (const p of [...longs].sort((x, y) => x.symbol.localeCompare(y.symbol))) if (!slot.has(p.symbol)) take(p.symbol);
+  const top = [...longs].sort((x, y) => y.marketValue - x.marketValue).filter((p) => slot.get(p.symbol) < SERIES.length).slice(0, 5)
+    .sort((x, y) => slot.get(x.symbol) - slot.get(y.symbol));
+  const topSet = new Set(top.map((p) => p.symbol));
+  const rest = longs.filter((p) => !topSet.has(p.symbol)).reduce((s, p) => s + p.marketValue, 0);
+  const shorts = positions.some((p) => p.currency === currency && p.qty < 0);
+  const segs = top.map((p) => ({ label: p.symbol, value: p.marketValue, color: SERIES[slot.get(p.symbol)], display: money(p.marketValue, currency) }));
+  if (rest > 0) segs.push({ label: 'Other holdings', value: rest, color: OTHER, display: money(rest, currency) });
+  if (cash > 0) segs.push({ label: shorts ? 'Buying power' : 'Cash', value: cash, color: CASH, display: money(cash, currency) });
+  if (segs.length < 2) return '';
+  return chartSlot((el) => stackBar(el, segs, { ariaLabel: title }), { title, caption: shorts ? 'Short positions and the cash set aside for them aren\'t shown.' : '' });
+}
+
+// Profit or loss of each holding, in %, gains to the right and losses to the left.
+function pnlChart(positions, title) {
+  const list = [...positions].sort((x, y) => y.unrealizedPct - x.unrealizedPct);
+  const shown = list.length > 12 ? [...list.slice(0, 6), ...list.slice(-6)] : list;
+  if (!shown.length) return '';
+  const rows = shown.map((p) => ({
+    label: p.symbol, sub: money(p.unrealized, p.currency, { sign: true }), value: p.unrealizedPct * 100, display: pct(p.unrealizedPct),
+    tip: [{ value: pct(p.unrealizedPct), label: p.symbol }, { value: money(p.unrealized, p.currency, { sign: true }), label: p.short ? 'on the short' : 'profit / loss' }],
+  }));
+  return chartSlot((el) => hbars(el, rows, { signColors: true, tickFmt: pctTick, ariaLabel: title }),
+    { title, caption: list.length > shown.length ? `The 6 best and 6 worst of ${list.length} holdings.` : '',
+      table: tableToggle(['Stock', 'Profit / loss', '%'], list.map((p) => [p.symbol, money(p.unrealized, p.currency, { sign: true }), pct(p.unrealizedPct)])) });
 }
 
 // "Index, same period": what the account's starting money would have made in the index fund.
@@ -535,17 +619,26 @@ function renderScorecard() {
     return;
   }
   const rate = (x) => (x == null ? '–' : `${Math.round(x * 100)}%`);
-  const row = (h) => h.n ? `<tr><td>After ${esc(h.label)}</td><td class="num">${h.n}</td><td class="num">${rate(h.right)}</td><td class="num">${rate(h.beat)}</td>
+  const row = (h) => h.n ? `<tr><td>After ${esc(h.label)}</td><td class="num hide-sm">${h.n}</td><td class="num">${rate(h.right)}</td><td class="num">${rate(h.beat)}</td>
     <td class="num ${tone(h.avgRet)}">${pct(h.avgRet)}</td><td class="num hide-sm ${tone(h.avgIndex ?? 0)}">${h.avgIndex == null ? '–' : pct(h.avgIndex)}</td></tr>` : '';
   const recent = scores.filter((x) => x.horizon === 'week').slice(-8).reverse();
+  const bars = [];
+  const of = (k, n) => `${k} of ${n} (${Math.round((k / n) * 100)}%)`;
+  for (const h of [sum.week, sum.month]) {
+    if (!h.n) continue;
+    bars.push({ label: 'Right', sub: `after ${h.label}`, value: h.right * 100, display: of(h.rightN, h.n), tip: [{ value: of(h.rightN, h.n), label: `picks made money in their direction after ${h.label}` }] });
+    if (h.beat != null) bars.push({ label: 'Beat the index', sub: `after ${h.label}`, value: h.beat * 100, display: of(h.beatN, h.nIndex), tip: [{ value: of(h.beatN, h.nIndex), label: `picks did better than the index after ${h.label}` }] });
+  }
   el.innerHTML = `
     <h3 class="col-head">Track record since ${since}</h3>
+    ${chartSlot((box) => hbars(box, bars, { ref: 50, refLabel: 'coin flip', domain: [0, 100], tickFmt: pctTick, ariaLabel: 'AI picks track record' }), { caption: 'Better than a coin flip means right more than 50% of the time.', key: 'scorecard' })}
     <div class="table-wrap"><table>
-      <thead><tr><th>Scored</th><th class="num">Picks</th><th class="num">Right</th><th class="num">Beat index</th><th class="num">Avg return</th><th class="num hide-sm">Same bet on index</th></tr></thead>
+      <thead><tr><th>Scored</th><th class="num hide-sm">Picks</th><th class="num">Right</th><th class="num">Beat index</th><th class="num">Avg return</th><th class="num hide-sm">Same bet on index</th></tr></thead>
       <tbody>${row(sum.week)}${row(sum.month)}</tbody>
     </table></div>
     <p class="muted small">"Right" means the pick made money in its direction (a short gains when the price falls). "Beat index" compares it with the S&P 500 (US) or STI (SGX) over the same days. Before fees.
       ${recent.length ? `Latest after a week: ${recent.map((x) => `<span class="${tone(x.ret)}">${esc(x.symbol)} ${x.stance} ${pct(x.ret)}</span>`).join(', ')}.` : ''}</p>`;
+  flushCharts();
 }
 
 function renderPendingOrders() {
@@ -561,8 +654,18 @@ function renderPendingOrders() {
     }).join('')}</ul>` : '';
 }
 
-function renderHoldings(positions) {
+function renderOverview() {
+  const p = state.portfolio;
+  if (state.sample) { $('overview').innerHTML = '<p class="muted small">Charts appear once real prices are loaded.</p>'; return; }
+  $('overview').innerHTML = Object.keys(p.accounts).map((ccy) => valueChart(p, ccy, state.prices.quotes ?? {}, myPlan())).join('');
+  flushCharts();
+}
+
+function renderHoldings(positions, accounts = {}) {
   renderPendingOrders();
+  const allocs = positions.length ? Object.keys(accounts).map((ccy) => allocationChart(positions, accounts[ccy].buyingPower, ccy, `Where your ${ccy} is`, state.portfolio)).join('') : '';
+  $('holding-charts').innerHTML = positions.length ? `${allocs ? `<div class="chart-grid">${allocs}</div>` : ''}${pnlChart(positions, 'Profit or loss by holding')}` : '';
+  flushCharts();
   if (!positions.length) {
     $('holdings').innerHTML = '<tr><td class="empty">No holdings yet. Pick a stock under Markets or from the AI picks above.</td></tr>';
     return;
@@ -670,7 +773,27 @@ function submitConvert(e) {
   }
 }
 
+function renderRealized() {
+  const p = state.portfolio;
+  const all = Object.keys(p.accounts).map((ccy) => [ccy, realizedHistory(p, ccy)]);
+  if (all.every(([, h]) => !h.length)) { $('realized-charts').innerHTML = '<p class="muted small">No sales or dividends yet.</p>'; return; }
+  $('realized-charts').innerHTML = all.map(([ccy, h]) => {
+    if (!h.length) return `<figure class="chart-card"><h3>${esc(ccy)} account</h3><p class="muted small">No sales or dividends yet.</p></figure>`;
+    const fmt = (v) => money(v, ccy, { sign: true });
+    const start = Math.min(Date.parse(p.createdAt), Date.parse(h[0][0]));
+    const pts = [
+      { t: start, label: fmtDateTime(start), axis: fmtDate(start), value: 0 },
+      ...h.map(([t, v]) => ({ t: Date.parse(t), label: fmtDateTime(t), axis: fmtDate(t), value: v })),
+    ];
+    pts.push({ t: Math.max(Date.now(), pts.at(-1).t), label: 'Today', axis: 'Today', value: h.at(-1)[1] });
+    return chartSlot((el) => lineChart(el, pts, { time: true, step: true, endLabel: true, fmt, height: 160, title: `Realized profit, ${ccy} account` }),
+      { title: `${ccy} account`, key: `realized-${ccy}`, table: tableToggle(['When', 'Realized so far'], pts.slice(1, -1).reverse().map((x) => [x.label, fmt(x.value)])) });
+  }).join('');
+  flushCharts();
+}
+
 function renderTrades() {
+  renderRealized();
   renderCashMoves();
   const trades = state.portfolio.trades.slice().sort((a, b) => b.time.localeCompare(a.time));
   if (!trades.length) {
@@ -680,16 +803,16 @@ function renderTrades() {
   const ruleNote = (id) => state.portfolio.rules.find((r) => r.id === id)?.note;
   $('trades').innerHTML = `
     <thead><tr>
-      <th>When</th><th>Stock</th><th class="num">Shares</th><th class="num">Price</th><th class="num hide-sm">Amount</th><th class="num hide-sm">Fees</th><th class="num">Realized</th>
+      <th>When</th><th>Stock</th><th class="num">Shares</th><th class="num hide-md">Price</th><th class="num hide-md">Amount</th><th class="num hide-md">Fees</th><th class="num hide-md">Realized</th>
     </tr></thead>
     <tbody>${trades.map((t) => `<tr>
-      <td>${fmtDateTime(t.time)}</td>
+      <td class="when">${fmtDate(t.time)}<br><span class="small muted">${new Date(t.time).toLocaleTimeString(undefined, { timeStyle: 'short' })}</span></td>
       <td><strong>${esc(t.symbol)}</strong><span class="chip ${t.side}">${t.side}</span>${t.rule ? `<span class="chip" title="${esc(ruleNote(t.rule) || 'Auto-trading rule')}">auto</span>` : ''}</td>
-      <td class="num">${t.qty.toLocaleString()}</td>
-      <td class="num">${price(t.price)}</td>
-      <td class="num hide-sm">${money(t.value, t.currency)}</td>
-      <td class="num hide-sm">${t.fee ? money(t.fee, t.currency) : '–'}</td>
-      <td class="num ${tone(t.realized)}">${t.realized ? money(t.realized, t.currency, { sign: true }) : ''}</td>
+      <td class="num">${t.qty.toLocaleString()}<span class="show-md small muted"><br>@ ${price(t.price)}</span>${t.realized ? `<span class="show-md small ${tone(t.realized)}"><br>${t.realized > 0 ? '+' : '\u2212'}${price(Math.abs(t.realized))}</span>` : ''}</td>
+      <td class="num hide-md">${price(t.price)}</td>
+      <td class="num hide-md">${money(t.value, t.currency)}</td>
+      <td class="num hide-md">${t.fee ? money(t.fee, t.currency) : '–'}</td>
+      <td class="num hide-md ${tone(t.realized)}">${t.realized ? money(t.realized, t.currency, { sign: true }) : ''}</td>
     </tr>`).join('')}</tbody>`;
 }
 
@@ -826,7 +949,8 @@ function drawBacktestCharts(root) {
     bt.curve.forEach((v, i) => {
       if (i % step === 0 || i === bt.curve.length - 1) pts.push({ value: v, label: fmtDate(from + ((i + 1) / bt.curve.length) * span) });
     });
-    lineChart(chart, pts, { ref: bt.startCash, refLabel: 'Start', fmt: (v) => money(v, bt.currency), height: 120 });
+    chart.id ||= `bt-chart-${++chartSeq}`;
+    drawChart(chart.id, chart, (c) => lineChart(c, pts, { ref: bt.startCash, refLabel: 'Start', fmt: (v) => money(v, bt.currency), height: 120, title: `Past-year test, ${el.dataset.btName ?? 'rule'}` }));
   }
 }
 
@@ -838,7 +962,7 @@ function renderRules() {
   }
   $('rules').innerHTML = rules.map((r) => {
     const q = quote(r.symbol);
-    return `<div class="rule" data-bt="${esc(r.id)}">
+    return `<div class="rule" data-bt="${esc(r.id)}" data-bt-name="${esc(`${r.symbol} rule: ${describeRule(r, { currency: q?.currency, name: q?.name })}`)}">
       <label class="switch" title="Switch on or off"><input type="checkbox" data-toggle-rule="${esc(r.id)}" ${r.enabled ? 'checked' : ''}><span></span></label>
       <div class="rule-body">
         <p class="sentence">${esc(describeRule(r, { currency: q?.currency, name: q?.name }))}</p>
@@ -943,7 +1067,7 @@ function testRuleInEditor() {
   const errs = checkRule(r, Object.keys(state.prices.quotes ?? {}));
   if (errs.length) { $('rule-error').textContent = errs.join(' '); return; }
   state.backtests.editor = backtest([r], quote(r.symbol), btOptions());
-  $('rule-test').innerHTML = `<div data-bt="editor">${renderBacktest(state.backtests.editor)}</div>`;
+  $('rule-test').innerHTML = `<div data-bt="editor" data-bt-name="${esc(`${r.symbol} rule being edited`)}">${renderBacktest(state.backtests.editor)}</div>`;
   drawBacktestCharts($('rule-test'));
 }
 
@@ -967,7 +1091,7 @@ function renderStrategist() {
       ${a.observations.length ? `<ul>${a.observations.map((o) => `<li>${esc(o)}</li>`).join('')}</ul>` : ''}
       ${a.strategies.map((s, i) => {
         const q = quote(s.symbol);
-        return `<article class="strategy" data-bt="s${i}">
+        return `<article class="strategy" data-bt="s${i}" data-bt-name="${esc(`${s.title} (${s.symbol})`)}">
           <header><strong>${esc(s.title)}</strong> <span class="chip">${esc(s.style)}</span><span class="chip">${esc(s.symbol)}</span></header>
           <p>${esc(s.rationale)}</p>
           <ol class="rules-list">${s.rules.map((r) => `<li>${esc(describeRule(r, { currency: q?.currency, name: q?.name }))}</li>`).join('')}</ol>
@@ -1362,6 +1486,8 @@ function renderBrokerOrders(f) {
 const LESSON_SOURCE = { results: 'from its results', 'weekly review': 'weekly review', owner: 'added by you', 'market memory': 'market memory' };
 const moveCell = (h) => (h ? `<span class="${tone(h.move)}">${pct(h.move)}</span>${h.index != null ? ` <span class="muted small">(${pct(h.move - h.index)} vs index)</span>` : ''}` : '<span class="muted small">not yet</span>');
 const rate = (x) => (x == null ? '–' : `${Math.round(x * 100)}%`);
+// What "the price went the idea's way" means for each kind of outcome.
+const hitPhrase = (outcome) => (outcome === 'traded' ? 'went its way' : ['exit', 'stop-loss', 'take-profit'].includes(outcome) ? 'kept going after' : 'would have gone its way');
 
 function renderLearning(f, c) {
   const pb = f.playbook;
@@ -1386,13 +1512,17 @@ function renderLearning(f, c) {
     ${lessons.length ? `<ul class="lessons">${lessons.map(lessonItem).join('')}</ul>` : `<p class="muted">No lessons yet: ideas are graded once a week of trading has passed, and a lesson needs ${MIN_CASES} similar cases.</p>`}
     ${admin ? `<form id="lesson-form" class="row lesson-form" data-fund="${esc(f.id)}"><input id="lesson-text" maxlength="300" placeholder="Add your own lesson, e.g. Avoid airlines before their results"><button type="submit" class="ghost small-btn">Add</button></form>` : ''}
     ${hiddenList.length && admin ? `<p class="small muted">Removed lessons: ${hiddenList.map((id) => `<button type="button" class="ghost small-btn" data-lesson-restore="${esc(id)}" title="${esc(known.get(id))}">Restore: ${esc(known.get(id).slice(0, 50))}${known.get(id).length > 50 ? '…' : ''}</button>`).join(' ')}</p>` : ''}
-    ${outcomes.length ? `<h3 class="col-head">Its ideas, a week later</h3>
-      <div class="table-wrap"><table>
-        <thead><tr><th>Ideas</th><th class="num">Cases</th><th class="num">Right</th><th class="num">Average</th><th class="num hide-sm">vs index</th></tr></thead>
-        <tbody>${outcomes.map(([k, v]) => `<tr><td>${esc(OUTCOME_LABELS[k] ?? k)}</td><td class="num">${v.week.n}</td><td class="num">${rate(v.week.hitRate)}</td>
-          <td class="num ${tone(v.week.avgMove)}">${pct(v.week.avgMove)}</td><td class="num hide-sm">${v.week.avgExcess == null ? '–' : pct(v.week.avgExcess)}</td></tr>`).join('')}</tbody>
-      </table></div>
-      <p class="muted small">"Right" for an exit or stop-loss means the price kept going the position's way afterwards, so it was early.</p>` : ''}
+    ${outcomes.length ? chartSlot((el) => hbars(el, outcomes.map(([k, v]) => {
+        const x = v.week.avgExcess ?? v.week.avgMove;
+        return {
+          label: OUTCOME_LABELS[k] ?? k, sub: `${plural(v.week.n, 'case')} · ${rate(v.week.hitRate)} ${hitPhrase(k)}`, value: x * 100, display: pct(x),
+          tip: [{ value: pct(x), label: v.week.avgExcess != null ? 'vs the index, a week later' : 'a week later' }, { value: pct(v.week.avgMove), label: 'price move in its direction' }, { value: rate(v.week.hitRate), label: `${hitPhrase(k)}, of ${v.week.n}` }],
+        };
+      }), { tickFmt: pctTick, ariaLabel: 'How its ideas did' }), {
+        title: 'Its ideas, a week later',
+        caption: 'The average move a week later in each idea\'s direction, against the index. Right of 0 is good for trades it made; for ideas it didn\'t act on, it means it missed a gain; for exits and stop-losses, that the price kept going the position\'s way, so the exit was early.',
+        table: tableToggle(['Ideas', 'Cases', 'Went its way', 'Average', 'vs index'], outcomes.map(([k, v]) => [OUTCOME_LABELS[k] ?? k, String(v.week.n), rate(v.week.hitRate), pct(v.week.avgMove), v.week.avgExcess == null ? '–' : pct(v.week.avgExcess)])),
+      }) : ''}
     ${pb?.recent?.length ? `<details class="fund-new"><summary>Latest graded ideas</summary><ul class="orders">${pb.recent.slice(0, 15).map((g) => `<li>${fmtDate(g.time)}:
       <span class="chip ${g.action === 'buy' || g.action === 'cover' ? 'buy' : 'sell'}">${esc(g.action)}</span> ${esc(g.symbol)} <span class="muted small">(${esc(OUTCOME_LABELS[g.outcome] ?? g.outcome)}, ${esc(IDEA_LABELS[g.ideaType] ?? g.ideaType)})</span>
       · a week later ${moveCell(g.week)} · a month later ${moveCell(g.month)}${g.reason ? `<br><span class="muted small">${esc(g.reason)}</span>` : ''}</li>`).join('')}</ul></details>` : ''}
@@ -1402,16 +1532,66 @@ function renderLearning(f, c) {
     <p class="small muted">How ${esc(MARKETS[market].label)} stocks have moved after company news and after big one-day moves over the past year, measured from prices (not the AI's opinion). Every fund trading ${esc(MARKETS[market].label)} stocks sees these.
       ${memory ? `${memory.events} news event${memory.events === 1 ? '' : 's'} and ${memory.bigMoves} big moves measured.` : ''}</p>
     ${marketLessons.length ? `<ul class="lessons">${marketLessons.map(lessonItem).join('')}</ul>` : '<p class="muted small">No clear patterns yet.</p>'}
-    ${memory ? `<div class="table-wrap"><table>
-      <thead><tr><th>After</th><th class="num">Cases</th><th class="num">Kept going</th><th class="num">Next week vs index</th></tr></thead>
-      <tbody>${[['bigUp', `a one-day jump of 4%+`], ['bigDown', 'a one-day drop of 4%+'], ['positive', 'good company news'], ['negative', 'bad company news']]
-        .filter(([k]) => memory.stats[k]).map(([k, label]) => `<tr><td>${label}</td><td class="num">${memory.stats[k].n}</td><td class="num">${rate(memory.stats[k].continued)}</td>
-          <td class="num">${memory.stats[k].vsIndex == null ? '–' : pct(memory.stats[k].vsIndex)}</td></tr>`).join('')}</tbody>
-    </table></div>` : ''}
+    ${memory ? (() => {
+      const cases = [['bigUp', 'After a 4%+ jump'], ['bigDown', 'After a 4%+ drop'], ['positive', 'After good news'], ['negative', 'After bad news']]
+        .filter(([k]) => memory.stats[k]?.vsIndex != null).map(([k, label]) => ({ k, label, st: memory.stats[k] }));
+      const shown = cases.filter(({ st }) => st.n >= MEMORY_MIN_CASES);
+      const note = shown.length < cases.length ? ` Rows with fewer than ${MEMORY_MIN_CASES} cases are only in the Table.` : '';
+      return cases.length ? chartSlot((el) => (shown.length ? hbars(el, shown.map(({ label, st }) => ({
+        label, sub: `${plural(st.n, 'case')} · ${rate(st.continued)} kept going`, value: st.vsIndex * 100, display: pct(st.vsIndex),
+        tip: [{ value: pct(st.vsIndex), label: 'next week vs the index, in the move\'s direction' }, { value: rate(st.continued), label: `kept going, of ${st.n}` }],
+      })), { tickFmt: pctTick, ariaLabel: 'Market memory' }) : (el.innerHTML = '<p class="muted small">Not enough cases for a chart yet.</p>')), {
+        title: 'The following week',
+        caption: `Right of 0 (+): the move tended to keep going the same way, against the index. Left (−): it tended to reverse.${note}`,
+        table: tableToggle(['After', 'Cases', 'Kept going', 'Next week vs index'], cases.map(({ label, st }) => [label, String(st.n), rate(st.continued), pct(st.vsIndex)])),
+      }) : '';
+    })() : ''}
     ${memory?.recent?.length ? `<details class="fund-new"><summary>Latest news measured</summary><ul class="orders">${memory.recent.slice(0, 15).map((e) => `<li>${esc(e.date)} <strong>${esc(e.symbol)}</strong> ${esc(e.headline)}
       <span class="muted small">(${esc(e.tone)} ${esc(e.type)})</span> · on the day ${e.day ? `<span class="${tone(e.day.move)}">${pct(e.day.move)}</span>` : '–'} · next week ${moveCell(e.week)}</li>`).join('')}</ul>
       <p class="muted small">Moves are shown in the direction of the news: + means the price went the way the news pointed.</p></details>` : ''}
     ${!memory?.events ? `<p class="small">To fill this in from the past year's news (one-off, about US$1–2), run ${repoActionsUrl() ? `<a href="${repoActionsUrl()}" target="_blank" rel="noopener">Actions → Update prices, AI picks and AI fund</a>` : 'Actions → Update prices, AI picks and AI fund'} → Run workflow with <em>Learning: look up the past year of news</em> ticked. New news is added every day by itself.</p>` : ''}
+  </section>`;
+}
+
+// What the scheduled AI cost, month by month and by job, against the monthly cap.
+const SPEND_SERIES = [
+  { key: 'picks', label: 'AI picks', color: SERIES[0] }, { key: 'fund', label: 'AI fund decisions', color: SERIES[1] },
+  { key: 'learning', label: 'Weekly reviews', color: SERIES[2] }, { key: 'backfill', label: 'News backfill', color: SERIES[3] },
+];
+function renderSpend() {
+  const months = Object.entries(state.spend?.months ?? {}).sort(([a], [b]) => a.localeCompare(b)).slice(-6);
+  if (!months.length) return '';
+  const monthName = (ym, opts = { month: 'short', year: 'numeric' }) => new Date(`${ym}-15T00:00:00Z`).toLocaleDateString(undefined, { ...opts, timeZone: 'UTC' });
+  const series = SPEND_SERIES.filter((s) => months.some(([, v]) => v[s.key] > 0));
+  const usd = (v) => `US$${v.toFixed(2)}`;
+  const cap = state.spend?.cap;
+  const table = tableToggle(['Month', 'Total', ...series.map((x) => x.label)], months.map(([ym, v]) => [monthName(ym, { month: 'long', year: 'numeric' }), usd(v.total ?? 0), ...series.map((x) => usd(v[x.key] ?? 0))]).reverse());
+  const about = 'Estimated cost of the scheduled AI (picks, AI fund decisions, weekly reviews and the news backfill). What you run in this browser with your own key isn\'t included.';
+  let chart;
+  if (months.length < 2) {
+    // One month: how much of the cap is used, by job.
+    const [ym, v] = months[0];
+    const total = v.total ?? series.reduce((s, x) => s + (v[x.key] ?? 0), 0);
+    const segs = series.map((x) => ({ label: x.label, value: v[x.key] ?? 0, color: x.color, display: usd(v[x.key] ?? 0) }));
+    if (cap > total) segs.push({ label: 'Left before the cap', value: cap - total, color: TRACK, display: usd(cap - total), track: true });
+    const over = cap && total > cap;
+    chart = chartSlot((el) => stackBar(el, segs, { shares: false, ariaLabel: 'AI spend this month', mark: over ? cap : null, markLabel: `US$${cap} cap` }), {
+      title: `${usd(total)}${cap ? ` of the US$${cap} cap` : ''} in ${monthName(ym, { month: 'long', year: 'numeric' })}${over ? `, ${usd(total - cap)} over` : ''}`, caption: about, table, key: 'spend',
+    });
+  } else {
+    let year = null;
+    const groups = months.map(([ym, v]) => {
+      const y = ym.slice(0, 4), axis = y !== year ? monthName(ym) : monthName(ym, { month: 'short' });
+      year = y;
+      return { label: monthName(ym, { month: 'long', year: 'numeric' }), axis, axisLong: monthName(ym), values: v };
+    });
+    chart = chartSlot((el) => columns(el, groups, series, { ref: cap || null, refLabel: cap ? `cap ${cap}` : '', fmt: usd, ariaLabel: 'AI spend by month' }), {
+      caption: `${about} Amounts in US$${cap ? `, against the US$${cap} monthly cap` : ''}.`, table, key: 'spend',
+    });
+  }
+  return `<section class="panel">
+    <div class="panel-head"><h2>AI spend by month</h2></div>
+    ${chart}
   </section>`;
 }
 
@@ -1427,8 +1607,19 @@ function renderLeaderboard(c, selected) {
     return { f, a, bench, afterCost: (a.net - cost) / f.budget };
   }).sort((x, y) => Number(Boolean(x.f.stoppedAt)) - Number(Boolean(y.f.stoppedAt)) || y.afterCost - x.afterCost);
   const status = (f) => (f.stoppedAt ? 'stopped' : f.paused ? 'paused' : 'running');
+  const bars = rows.map(({ f, a, bench, afterCost }) => ({
+    label: f.name, sub: `${STYLES[f.style]?.label ?? ''} · ${f.currency}`, value: a.netPct * 100, display: pct(a.netPct),
+    marker: bench ? bench.pct * 100 : null,
+    tip: [
+      { value: pct(a.netPct), label: `${f.name} return` },
+      ...(bench ? [{ value: pct(bench.pct), label: `${bench.label}, same money` }] : []),
+      { value: pct(afterCost), label: 'after AI cost' },
+    ],
+  }));
   return `<section class="panel">
     <div class="panel-head"><h2>${c.funds.length > 1 ? 'Your AI funds, best first' : 'Your AI fund'}</h2></div>
+    ${chartSlot((el) => hbars(el, bars, { signColors: true, markerLabel: 'Its index, same money and time', tickFmt: pctTick, ariaLabel: 'Fund returns' }),
+      { caption: `Each bar is a fund's return since it started.${rows.some((r) => r.bench) ? ` The short upright tick is what the same money made in its index (${esc(BENCHMARKS.USD.label)} for USD funds, ${esc(BENCHMARKS.SGD.label)} for SGD) over the same time.` : ''}`, key: 'leaderboard' })}
     <div class="table-wrap"><table class="leaderboard">
       <thead><tr><th>Fund</th><th class="num">Value</th><th class="num">Return</th><th class="num">vs index</th><th class="num hide-sm">After AI cost</th><th class="hide-sm">Status</th></tr></thead>
       <tbody>${rows.map(({ f, a, bench, afterCost }) => `<tr data-fund-select="${esc(f.id)}" class="${f.id === selected?.id ? 'selected' : ''}" tabindex="0">
@@ -1444,6 +1635,19 @@ function renderLeaderboard(c, selected) {
     <p class="muted small">${c.funds.length > 1 ? 'Tap a fund to see it below. ' : ''}"vs index" is the fund's return minus what the same money made in ${esc(BENCHMARKS.USD.label)} or ${esc(BENCHMARKS.SGD.label)} since it started, after fees.
       ${c.archived?.length ? `Removed earlier: ${c.archived.slice(-5).map((x) => `${esc(x.name)} ${pct((x.finalValue ?? x.budget) / x.budget - 1)}`).join(', ')}.` : ''}</p>
   </section>`;
+}
+
+// The fund's value over time against its budget and the same money in the index.
+function fundValueChart(f, bench, quotes) {
+  const hist = f.history ?? [];
+  const idx = bench && !bench.partial ? benchmarkSeries(bench, quotes[bench.symbol], hist.map(([t]) => t)) : [];
+  const compareLabel = idx.some((v) => v != null) ? `${bench.label}, same money` : '';
+  const pts = hist.map(([t, v], i) => ({ label: fmtDateTime(t), axis: fmtDate(t), value: v, compare: idx[i] ?? null }));
+  const fmt = (v) => money(v, f.currency);
+  return chartSlot((el) => lineChart(el, pts, { ref: f.budget, refLabel: 'Budget', fmt, compareLabel, title: `${f.name ?? 'AI fund'} value` }), {
+    key: `fund-value-${f.id}`,
+    table: pts.length < 2 ? '' : tableToggle(['When', 'Value', ...(compareLabel ? [compareLabel] : [])], pts.slice().reverse().map((p) => [p.label, fmt(p.value), ...(compareLabel ? [p.compare == null ? '–' : fmt(p.compare)] : [])])),
+  });
 }
 
 function renderFund() {
@@ -1467,7 +1671,9 @@ function renderFund() {
       </ol>`}
       <p class="small"><strong>Hard limits:</strong> the fund can only use its amount; any order costing more than its buying power, or more than the per-order limit, is rejected. It pauses itself after losing the daily limit, and shorts are closed automatically at a 40% loss.</p>
       <p class="muted small">Cost: each decision is one Claude call with web search, roughly US$0.05–0.15: Claude Haiku 4.5 reads the news and Claude Sonnet 5 decides.</p>
-    </section>`;
+    </section>
+    ${renderSpend()}`;
+    flushCharts();
     return;
   }
   const quotes = state.prices.quotes ?? {};
@@ -1522,11 +1728,12 @@ function renderFund() {
     </section>
     <section class="panel">
       <div class="panel-head"><h2>Fund value</h2></div>
-      <div id="fund-chart"></div>
+      ${fundValueChart(f, bench, quotes)}
       <p class="muted small">Hard limit: the fund can only use its ${money(f.budget, f.currency)}. Orders beyond its buying power or the per-order limit are rejected, and shorts are closed automatically at a 40% loss.${s.broker === 'tiger' ? ' Values use Tiger\'s actual fill prices.' : ''}</p>
     </section>
     <section class="panel">
       <div class="panel-head"><h2>Positions</h2></div>
+      ${positions.length ? `<div class="chart-grid">${allocationChart(positions, a.buyingPower, f.currency, 'Where the money is', f.portfolio)}${pnlChart(positions, 'Profit or loss by position')}</div>` : ''}
       <div class="table-wrap"><table>${positions.length ? `
         <thead><tr><th>Stock</th><th class="num">Shares</th><th class="num hide-sm">Avg price</th><th class="num hide-sm">Price</th><th class="num">Profit / loss</th><th class="hide-sm">Protection</th></tr></thead>
         <tbody>${positions.map((p) => {
@@ -1558,11 +1765,9 @@ function renderFund() {
     ${f.events.length ? `<section class="panel"><div class="panel-head"><h2>Automatic events</h2></div><ul class="orders">
       ${f.events.slice().reverse().slice(0, 20).map((e) => `<li>${fmtDateTime(e.time)}: ${['split', 'dividend'].includes(e.action) ? esc(e.why) : `${esc(e.action)} ${Number(e.shares).toLocaleString()} ${esc(e.symbol)} at ${price(e.price)} <span class="muted small">(${esc(e.why)})</span>`}</li>`).join('')}
     </ul></section>` : ''}
+    ${renderSpend()}
     ${authEnabled ? '' : `<p class="muted small">To stop the fund and close its positions, or to start a new one, use ${runLink} → Run workflow.</p>`}`;
-  const hist = f.history ?? [];
-  const idx = bench && !bench.partial ? benchmarkSeries(bench, quotes[bench.symbol], hist.map(([t]) => t)) : [];
-  lineChart($('fund-chart'), hist.map(([t, v], i) => ({ label: fmtDateTime(t), axis: fmtDate(t), value: v, compare: idx[i] ?? null })),
-    { ref: f.budget, refLabel: 'Budget', fmt: (v) => money(v, f.currency), compareLabel: bench ? `${bench.symbol} (same money)` : '' });
+  flushCharts();
 }
 
 // ---------- settings ----------
@@ -1772,6 +1977,13 @@ $('reset').addEventListener('click', reset);
 $('export').addEventListener('click', exportPortfolio);
 $('import').addEventListener('change', importPortfolio);
 $('refresh').addEventListener('click', () => { loadPrices(); loadSideData(); });
+
+// Charts size themselves to their box, so redraw them when the window changes size.
+let resizeTimer = null;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(redrawCharts, 250);
+});
 
 // Another tab traded or changed rules: pick up its changes.
 window.addEventListener('storage', (e) => {

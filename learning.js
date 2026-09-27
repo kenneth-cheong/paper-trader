@@ -16,13 +16,12 @@
 // They form the fund's playbook, which the AI sees at every decision. The owner can hide a lesson or
 // add their own. Nothing here changes the fund's hard limits.
 
-import { priceAt, BENCHMARKS } from './benchmark.js';
+import { priceAt, sessionLength, BENCHMARKS } from './benchmark.js';
 
 export const HORIZONS = [{ key: 'week', label: '1 week', days: 5 }, { key: 'month', label: '1 month', days: 21 }];
 export const MIN_CASES = 5;
 export const REVIEW_EVERY_DAYS = 6;
 export const REVIEW_MIN_NEW = 5;
-const DAY_CLOSE_S = 7 * 3600;
 const OUTCOME_OF_PROPOSAL = { approved: 'traded', rejected: 'declined', expired: 'expired', failed: 'expired' };
 export const OUTCOME_LABELS = {
   traded: 'traded', declined: 'declined by you', expired: 'not approved in time', blocked: 'blocked by limits', passed: 'passed on',
@@ -80,7 +79,7 @@ export function collectIdeas(fund) {
 // ---------- grading ----------
 
 function closeAfter(quote, t, days, nowS) {
-  const later = (quote?.daily ?? []).filter(([bt]) => bt > t && bt + DAY_CLOSE_S <= nowS);
+  const later = (quote?.daily ?? []).filter(([bt]) => bt > t && bt + sessionLength(quote) <= nowS);
   return later[days - 1] ?? null;
 }
 
@@ -99,7 +98,7 @@ export function gradeIdeas(ideas, quotes, currency, now = new Date()) {
     for (const h of HORIZONS) {
       const bar = closeAfter(q, idea.t, h.days, nowS);
       if (!bar) { g[h.key] = null; continue; }
-      const i0 = priceAt(iq, idea.t), i1 = priceAt(iq, bar[0] + DAY_CLOSE_S);
+      const i0 = priceAt(iq, idea.t), i1 = priceAt(iq, bar[0] + sessionLength(q));
       g[h.key] = { move: idea.direction * (bar[1] / p0 - 1), index: i0 && i1 ? idea.direction * (i1 / i0 - 1) : null };
     }
     if (g.week) out.push(g);

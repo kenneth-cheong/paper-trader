@@ -6,7 +6,7 @@
 //   - whether it was right (made money) and whether it beat the index (a long rose more than the
 //     index; a short fell more than the index, or rose less).
 
-import { BENCHMARKS, priceAt } from './benchmark.js';
+import { BENCHMARKS, priceAt, sessionLength } from './benchmark.js';
 
 export const HORIZONS = [{ key: 'week', label: '1 week', days: 5 }, { key: 'month', label: '1 month', days: 21 }];
 export const MAX_HISTORY = 400;
@@ -21,12 +21,11 @@ export function recordPicks(history, picks) {
 
 const indexFor = (quote) => BENCHMARKS[quote?.currency]?.symbol;
 
-const DAY_CLOSE_S = 7 * 3600;
 
 // The close `days` trading days after unix time `t`, with its time, or null if not there yet (a day
 // counts once its session is over).
 function closeAfter(quote, t, days, nowS) {
-  const later = (quote?.daily ?? []).filter(([bt]) => bt > t && bt + DAY_CLOSE_S <= nowS);
+  const later = (quote?.daily ?? []).filter(([bt]) => bt > t && bt + sessionLength(quote) <= nowS);
   const bar = later[days - 1];
   return bar ? { t: bar[0], price: bar[1] } : null;
 }
@@ -44,7 +43,7 @@ export function scorePicks(history, quotes, now = new Date()) {
       for (const h of HORIZONS) {
         const end = closeAfter(q, t0, h.days, nowS);
         if (!end) continue;
-        const i0 = priceAt(iq, t0), i1 = priceAt(iq, end.t + DAY_CLOSE_S);
+        const i0 = priceAt(iq, t0), i1 = priceAt(iq, end.t + sessionLength(q));
         const move = end.price / p.price - 1;
         const indexMove = i0 && i1 ? i1 / i0 - 1 : null;
         const dir = p.stance === 'short' ? -1 : 1;
@@ -67,7 +66,8 @@ export function summarizeScores(scores, since = null) {
     const withIndex = s.filter((x) => x.indexRet != null);
     const avg = (xs, f) => (xs.length ? xs.reduce((a, x) => a + f(x), 0) / xs.length : null);
     out[h.key] = {
-      label: h.label, n: s.length,
+      label: h.label, n: s.length, nIndex: withIndex.length,
+      rightN: s.filter((x) => x.right).length, beatN: withIndex.filter((x) => x.beat).length,
       right: s.length ? s.filter((x) => x.right).length / s.length : null,
       beat: withIndex.length ? withIndex.filter((x) => x.beat).length / withIndex.length : null,
       avgRet: avg(s, (x) => x.ret),
