@@ -1,0 +1,18 @@
+# One-off, read-only: prints what Yahoo's analyst and results data and SEC EDGAR return, so the
+# learning features parse the real shapes. Run it from Actions → Probe data sources → Run workflow.
+name: Probe data sources
+on: workflow_dispatch
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install curl_cffi
+      - run: python scripts/probe_sources.py
+        env:
+          SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
