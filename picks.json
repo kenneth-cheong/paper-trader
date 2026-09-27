@@ -1,16 +1,17 @@
 {
- "market_summary": "Markets are in a broad AI-driven risk-on phase: S&P 500 and Nasdaq hit fresh records this week on chip-demand optimism and mega-cap AI product launches (Microsoft Copilot, Meta's Muse agent), even as investors fret about the scale of AI capex. In Singapore, bank earnings (DBS, OCBC) came in very strong on wealth management and non-interest income, extending a multi-month rally in financials to fresh highs, while REITs, telcos and SGX itself have lagged/pulled back on rotation and profit-taking. Volatility remains elevated in high-beta AI names (META, TSLA, NVDA) even as the broader indices grind higher.",
+ "market_summary": "Global equities remain near all-time highs with AI-driven capex spending fueling gains in cloud/semis names (NVDA, MSFT) while consumer-facing tech (TSLA, META, AAPL) shows more divergence. Singapore banks continue to outperform on strong 1H26 earnings, led by OCBC and DBS, while STI has stabilized near 5,675 after a brief pullback, supported by easing oil prices. Rate-sensitive and REIT-like plays (S68.SI, C38U.SI) and telecom (Singtel) are lagging, showing negative 1-3m momentum despite corporate actions like Singtel's data-centre IPO plan. Volatility remains elevated in high-beta AI/EV names (TSLA, META, NVDA), creating both momentum and mean-reversion opportunities.",
  "picks": [
   {
    "symbol": "O39.SI",
    "stance": "long",
    "conviction": "high",
    "horizon": "weeks",
-   "thesis": "OCBC just posted a blow-out 1H2026 result with non-interest income up 36%, and the stock is up almost 97% over the past year yet still only 0.8% off its 52-week high with strong trend (vs MA50 +4.3%, vs MA200 +31.6%). Earnings momentum plus wealth-management tailwinds support continuation of the uptrend into upcoming quarterly updates.",
-   "news": "DBS posted record S$6.01b net profit (+5% YoY); OCBC non-interest income surged 36% to S$3.51b in 1H2026 results reported 2026-08-07.",
-   "risks": "A sharp correction in regional wealth inflows, unexpected credit-quality deterioration, or a hawkish rates surprise that hits bank net interest margins could stall the rally; stock is already up sharply so a pullback/consolidation is possible.",
+   "thesis": "OCBC has the strongest earnings momentum among SG banks, beating expectations in 1H26 driven by wealth fee income, and is compounding a powerful uptrend (+97% 1y, +3.6% 1m) while sitting just 0.8% off its 52w high with a very shallow 6.1% max drawdown - a sign of persistent institutional buying.",
+   "news": "DBS and OCBC outperformed expectations in 2QFY2026 results (2026-08-14); OCBC net profit +5% YoY in 1Q26 (2026-06-22).",
+   "risks": "A sharp rate cut cycle or credit quality shock in SG banks could reverse the wealth-income tailwind; a broad market pullback would hit high-beta financials hardest.",
    "source_urls": [
-    "https://sg.finance.yahoo.com/news/dbs-vs-ocbc-vs-uob-033000563.html"
+    "https://www.theedgesingapore.com/news/banking-finance/analysts-favour-dbs-ocbc-while-uobs-asset-quality-concerns-resurface",
+    "https://growbeansprout.com/dbs-ocbc-uob-income-june-2026"
    ],
    "priceAtPick": 32.01
   },
@@ -19,24 +20,25 @@
    "stance": "long",
    "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "DBS delivered a record S$6.01b net profit with wealth AUM over S$500b, and shares are just 0.8% off 52-week highs with a healthy uptrend (vs MA200 +22.4%). As Singapore's largest bank and a wealth-management proxy, continued regional wealth inflows should support further gains, albeit with less re-rating room than OCBC given its already-large size.",
-   "news": "DBS 1H2026 record net profit +5% YoY, wealth AUM >S$500b, reported 2026-08-07.",
-   "risks": "Valuation is rich after a 55% 1-year run; any softness in fee income or NIM compression from rate cuts could cap upside.",
+   "thesis": "DBS also beat expectations in 1H26 with record profit, is up 55% over 1 year and trading only 0.8% below its 52w high, showing steady uptrend continuation (vs MA200 +22.4%) alongside sector-wide strength in SG financials.",
+   "news": "DBS and OCBC outperformed expectations, DBS posted record 1Q26 profit of S$2.93bn (2026-06-22, 2026-08-14).",
+   "risks": "Valuation is stretched after a 36% 6-month rally; any miss on NIM guidance or regional credit stress could trigger profit-taking.",
    "source_urls": [
-    "https://sg.finance.yahoo.com/news/dbs-vs-ocbc-vs-uob-033000563.html"
+    "https://www.theedgesingapore.com/news/banking-finance/analysts-favour-dbs-ocbc-while-uobs-asset-quality-concerns-resurface"
    ],
    "priceAtPick": 78
   },
   {
    "symbol": "MSFT",
    "stance": "long",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "Microsoft jumped 4% on the back of Copilot's new agentic AI and code-generation features, reinforcing its position as the leading enterprise AI monetizer. Momentum is strong (vs MA50 +8.5%, 3m return +38.4%) yet the stock is still 4.8% below its 52-week high, leaving room to make new highs if enterprise AI adoption continues.",
-   "news": "Microsoft stock rose 4% on 2026-09-25 after revamping Copilot with code generation and agentic AI tools.",
-   "risks": "Elevated AI capex spending across mega-caps is a market concern; any guidance disappointment on margins or slower cloud growth could trigger a sharp pullback given high volatility (32.5% annualized).",
+   "conviction": "high",
+   "horizon": "months",
+   "thesis": "Microsoft is one of the clear winners of AI monetization divergence, with cloud/Azure growth impressing Wall Street; strong recent momentum (+3.7% day, +38.4% 3m, +8.5% vs MA50) reflects durable re-rating around AI infrastructure demand.",
+   "news": "Alphabet, Microsoft and Amazon impressed with strong cloud/AI growth while Meta, Apple and Tesla faced pressure (2026-08-06); nearly $2T in cap shifts after Q2 earnings (2026-07-31).",
+   "risks": "Currently 4.8% below 52w high and volatility is high (32.5% annualized); a slowdown in enterprise AI spend or capex guidance miss would hurt the thesis.",
    "source_urls": [
-    "https://www.fool.com/coverage/stock-market-today/2026/09/25/stock-market-today-sept-25-microsoft-stock-jumps-4-after-revamping-copilot-with-code-generation-and-agentic-ai-tools/"
+    "https://marketwise.com/investing/big-tech-ai-earnings-alphabet-amazon-microsoft-meta-apple-tesla/",
+    "https://www.cnbc.com/2026/07/31/apple-aapl-amazon-amzn-stock-today.html"
    ],
    "priceAtPick": 516.17
   },
@@ -45,52 +47,53 @@
    "stance": "long",
    "conviction": "medium",
    "horizon": "months",
-   "thesis": "Semiconductor stocks are rallying broadly on strong AI infrastructure demand (Intel +12%, AMD hit $1T market cap), and Nvidia remains the core AI compute beneficiary. Shares are still 4.5% below 52-week highs with a solid uptrend (vs MA200 +12.8%), suggesting room to catch up to peers amid the sector-wide AI capex cycle.",
-   "news": "Semiconductor stocks surged on AI demand; Intel +12%, AMD reaches $1T valuation, reported 2026-09-21.",
-   "risks": "Nvidia has high volatility (37.8% annualized) and any signs of AI capex slowdown from hyperscaler customers, export restriction escalation, or margin compression from competition could reverse the trade quickly.",
+   "thesis": "Nvidia's data center revenue is accelerating almost entirely on AI GPU demand (+92% YoY), and major hyperscaler clients continue to ramp capex; the stock is still 4.5% below its 52w high, leaving room to run versus the AI capex supercycle narrative.",
+   "news": "NVIDIA posted record quarterly revenue of $81.6B with data center at $75.2B (+92% YoY) driven by AI infrastructure spend (2026-07-31).",
+   "risks": "Any signs of hyperscaler capex digestion/slowdown, export restrictions, or a broader AI-bubble unwind (high 37.8% volatility) could sharply reverse gains.",
    "source_urls": [
-    "https://www.cnbc.com/2026/09/20/stock-market-today-live-updates.html"
+    "https://valueaddvc.com/big-tech-earnings"
    ],
    "priceAtPick": 225.07
   },
   {
-   "symbol": "META",
+   "symbol": "TSLA",
    "stance": "short",
    "conviction": "medium",
-   "horizon": "days",
-   "thesis": "Meta rallied hard on the Muse AI agent launch but immediately pulled back 3.3% as investors reassess heavy AI capital spending versus earnings upgrades. The stock is extremely extended (vs MA50 +22.1%, 1-month return +30.5%) with high volatility (41.5%), making it prone to a mean-reversion pullback after such a parabolic move.",
-   "news": "Meta launched Muse AI agent on 2026-09-25, stock rallied then pulled back 3.33% on capex spending concerns.",
-   "risks": "If Muse adoption metrics or ad-revenue guidance beat expectations, the stock could resume its uptrend rapidly; short-covering rallies are a real risk given strong recent momentum.",
+   "horizon": "weeks",
+   "thesis": "Tesla is guiding capex above $25B for 2026 to fund AI/robotics ambitions, pressuring margins and cash flow, and the stock has already logged its worst week in over a month; with -15.5% 1y return, -24% from 52w high, and elevated 46% volatility, sentiment remains fragile versus peers who are monetizing AI more directly.",
+   "news": "Tesla capex to exceed $25B in 2026 amid AI ramp; stock down over 6% in a week (2026-08-25); Tesla/Musk singled out as lagging AI monetization winners (2026-08-06).",
+   "risks": "A strong FSD/robotaxi update, surprise margin beat, or short squeeze on high-beta momentum could invalidate the short quickly given Tesla's history of violent rallies.",
    "source_urls": [
-    "https://finance.yahoo.com/quote/META/"
+    "https://stocktwits.com/news-articles/markets/equity/tesla-stock-slips-ross-gerber-calls-tesla-spacex-berkshire-of-ai/cZBN169Re2N",
+    "https://marketwise.com/investing/big-tech-ai-earnings-alphabet-amazon-microsoft-meta-apple-tesla/"
    ],
-   "priceAtPick": 751.66
+   "priceAtPick": 372.11
+  },
+  {
+   "symbol": "S68.SI",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "Singapore Exchange has weakened noticeably, down 11.4% in the last month and 7.5% below its 50-day moving average despite a still-positive 1-year return, suggesting momentum has turned negative even as the broader STI stabilizes - a divergence that often precedes further underperformance.",
+   "news": "Broader Singapore market stabilizing near 5,675 after a pullback, with SGX lagging that recovery (2026-09-22).",
+   "risks": "Higher trading volumes from volatility spikes or new listing/IPO activity (e.g., any large SGX-hosted IPO) could quickly reverse the negative momentum.",
+   "source_urls": [
+    "https://www.pantheregroup.com/2026/09/22/singapore-stock-market-may-break-through-5700-point-level/"
+   ],
+   "priceAtPick": 22.4
   },
   {
    "symbol": "Z74.SI",
    "stance": "short",
    "conviction": "low",
-   "horizon": "weeks",
-   "thesis": "Singtel is in a persistent downtrend (-5.1% 1m, -14.2% 6m, -7.2% vs MA200) and 17.9% off its 52-week high. The potential India data centre IPO is a strategic option but lacks near-term catalysts or confirmed timeline, so the stock may continue to drift lower amid weak sentiment versus the rest of a rallying market.",
-   "news": "Singtel weighing potential IPO for India Data Centre Business, reported 2026-09-21; stock has underperformed with -5.1% 1-month return.",
-   "risks": "Concrete progress or a well-received IPO announcement for the India DC unit could unlock value and reverse the downtrend quickly; telco dividend yield may also attract value buyers on further weakness.",
+   "horizon": "months",
+   "thesis": "Singtel shows persistent negative momentum (-14.2% 6m, -5.1% 1m, -7.2% vs MA200) despite the positive-sounding India data centre IPO news, implying the market has not yet rewarded the announcement and core telecom fundamentals remain under pressure.",
+   "news": "Singtel weighing potential IPO for India data centre business under Nxera (2026-09-21).",
+   "risks": "If the IPO process advances with strong terms/valuation, sentiment could turn quickly positive and squeeze the short; dividend support also limits downside.",
    "source_urls": [
     "https://www.google.com/finance/quote/Z74:SGX"
    ],
    "priceAtPick": 4.28
-  },
-  {
-   "symbol": "S68.SI",
-   "stance": "short",
-   "conviction": "low",
-   "horizon": "weeks",
-   "thesis": "Singapore Exchange has sharply underperformed recently, down 11.4% in the past month and now 7.5% below its 50-day moving average despite a still-positive 1-year return, suggesting a momentum breakdown. With no fresh positive catalysts in the news flow, further consolidation or downside looks more likely than an immediate reversal.",
-   "news": "No specific recent positive catalyst identified for SGX; price action shows a sharp 1-month decline of -11.4% and -12.4% from 52-week high.",
-   "risks": "Higher regional trading volumes (spurred by bank/AI-related volatility) or new listing/IPO pipeline news could quickly reverse the downtrend; SGX earnings are also linked to overall market turnover which has been robust.",
-   "source_urls": [
-    "https://growbeansprout.com/weekly-market-review-3-aug-2026"
-   ],
-   "priceAtPick": 22.4
   }
  ],
  "sources": [
@@ -103,11 +106,6 @@
    "url": "https://www.stashaway.sg/r/ocbc-dbs-uob-singapore-bank-stock",
    "title": "OCBC vs DBS vs UOB Singapore's Leading Bank Stocks for 2026 | StashAway Singapore",
    "age": "1 week ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/dbs-vs-ocbc-vs-uob-033000563.html",
-   "title": "DBS vs OCBC vs UOB: Which Bank Delivered the Best Results and Dividend?",
-   "age": "August 10, 2026"
   },
   {
    "url": "https://www.ig.com/sg/shares/bank-earnings",
@@ -130,6 +128,11 @@
    "age": null
   },
   {
+   "url": "https://www.cbinsights.com/company/uob",
+   "title": "www.cbinsights.com",
+   "age": null
+  },
+  {
    "url": "https://www.itiger.com/news/1171937414",
    "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
    "age": null
@@ -140,13 +143,18 @@
    "age": null
   },
   {
+   "url": "https://www.itiger.com/hant/news/1171937414",
+   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
+   "age": null
+  },
+  {
    "url": "https://www.google.com/finance/quote/Z74:SGX",
    "title": "Singapore Telecommunications Ltd (Z74) Stock Price & News - Google Finance",
    "age": "August 7, 2026"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Keppel_MRT_station",
-   "title": "Keppel MRT station",
+   "url": "https://en.wikipedia.org/wiki/List_of_largest_companies_in_Singapore",
+   "title": "List of largest companies in Singapore",
    "age": null
   },
   {
@@ -155,109 +163,84 @@
    "age": "August 3, 2026"
   },
   {
-   "url": "https://sg.finance.yahoo.com/quote/C6L.SI/",
-   "title": "Singapore Airlines Limited (C6L.SI) stock price, news, quote and history - Yahoo Finance",
-   "age": "August 5, 2026"
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/newsalert-listing/",
-   "title": "Newsalert Listing | Singapore Airlines",
-   "age": null
+   "url": "https://finance.yahoo.com/quote/Z74.SI/",
+   "title": "Singapore Telecommunications Limited (Z74.SI) Stock Price, News, Quote & History - Yahoo Finance",
+   "age": "3 weeks ago"
   },
   {
    "url": "https://sg.headtopics.com/news/singapore-corporate-awards-2026-keppel-singtel-and-others-88002512",
    "title": "Singapore Corporate Awards 2026: Keppel, Singtel and Others Take Home Golden Governance Titles | Business & Finance",
-   "age": "4 days ago"
+   "age": "5 days ago"
   },
   {
-   "url": "https://www.itiger.com/news/1157251114",
+   "url": "https://www.itiger.com/hans/news/1157251114",
    "title": "SG Morning Call | Singapore Stocks Open Lower on Monday; Singtel Sees $2.3B Impairment Hit, Net Loss in 2024 H2",
    "age": null
   },
   {
-   "url": "https://www.singaporeair.com/en_UK/at/media-centre/press-release",
-   "title": "Featured News Release",
+   "url": "https://www.itiger.com/hans/news/1156928237",
+   "title": "SG Morning Call|Thakral Down 4%; Singtel Down 1%; Seatrium And YZG Shipbldg Up 1%",
    "age": null
   },
   {
-   "url": "https://agent360.singaporeair.com/content/dam/agent360/web-assets/pdf/local/de/2025_05_SQ_Hot_News_DACH2.pdf",
-   "title": "2025 05 SQ Hot News DACH2",
+   "url": "https://www.itiger.com/hant/news/1156928237",
+   "title": "SG Morning Call|Thakral Down 4%; Singtel Down 1%; Seatrium And YZG Shipbldg Up 1%",
    "age": null
   },
   {
-   "url": "https://sg.finance.yahoo.com/quote/TBVPY/news/",
-   "title": "Thai Beverage Public Company Limited (TBVPY) latest stock news and headlines – Yahoo Finance",
+   "url": "https://www.itiger.com/hans/news/1101728147",
+   "title": "www.itiger.com",
    "age": null
   },
   {
-   "url": "https://sg.finance.yahoo.com/quote/THAIBEV19.BK/",
-   "title": "Thai Beverage Public Company Limited (THAIBEV19.BK) stock price, news, quote and history - Yahoo Finance",
+   "url": "https://www.moomoo.com/community/feed/singapore-stock-market-fifth-week-of-august-and-first-week-117217665155078",
+   "title": "Singapore Stock Market: 5th Week of August and 1st Week of September 2026 (31/Aug/2026-4/Sep/2026)",
+   "age": "3 weeks ago"
+  },
+  {
+   "url": "https://www.moomoo.com/community/feed/singapore-stock-market-second-week-of-september-2026-7-aug-117255924023302",
+   "title": "Singapore Stock Market: Second Week of September 2026 (Aug 7... - moomoo Community",
+   "age": "2 weeks ago"
+  },
+  {
+   "url": "https://simplywall.st/markets/sg",
+   "title": "Singaporean (SGX) Market Analysis & Valuation - Updated Today",
    "age": null
   },
   {
-   "url": "https://growbeansprout.com/weekly-market-review-26-jan-2026",
-   "title": "UOB and ThaiBev in focus: Weekly Review with SIAS - Growbeansprout.com",
-   "age": "January 26, 2026"
+   "url": "https://www.poems.com.sg/morning-note/",
+   "title": "Stock Market Today: What You Need to Know | Morning Note - POEMS",
+   "age": "3 weeks ago"
   },
   {
-   "url": "https://sginvestors.io/sgx/stock/y92-thaibev/news-article",
-   "title": "Thai Beverage Latest News (SGX:Y92) | SGinvestors.io",
-   "age": null
+   "url": "https://drwealth.com/undervalued-stocks/",
+   "title": "10 undervalued stocks in Singapore (Sep 2026) | Dr Wealth",
+   "age": "3 weeks ago"
   },
   {
-   "url": "https://simplywall.st/news/sg/aerospace-and-defense/page/5",
-   "title": "Singaporean Aerospace & Defense Stock News",
-   "age": null
-  },
-  {
-   "url": "https://simplywall.st/news/sg/construction/page/1",
-   "title": "Singaporean Construction Stock News",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/news/global-markets/sgx-shares-capitalland-and-thai-beverage-price-targets",
-   "title": "sgx shares capitalland and thai beverage price targets",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/TBVPF",
-   "title": "finance.yahoo.com",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/news/company-announcements/thai-beverage-strengthens-presence-in-cambodia",
-   "title": "thai beverage strengthens presence in cambodia",
-   "age": null
-  },
-  {
-   "url": "https://www.cnbc.com/2026/09/20/stock-market-today-live-updates.html",
-   "title": "Stock market news for Sept. 21, 2026",
+   "url": "https://www.pantheregroup.com/2026/09/22/singapore-stock-market-may-break-through-5700-point-level/",
+   "title": "Singapore Stock Market May Break Through 5,700-Point Level - Panthere Group",
    "age": "5 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/2026_in_technology_and_computing",
-   "title": "2026 in technology and computing",
-   "age": null
-  },
-  {
-   "url": "https://www.fool.com/investing/2026/09/18/apple-nvidia-microsoft-i-ranked-the-5-largest-comp/",
-   "title": "Apple, Nvidia, Microsoft, Alphabet, and Amazon: I Ranked the 5 Largest Companies by Market Cap, and 1 Stands Above the Rest | The Motley Fool",
+   "url": "https://www.pantheregroup.com/2026/09/17/singapore-stock-market-may-crack-5700-point-barrier/",
+   "title": "Singapore Stock Market May Crack 5,700-Point Barrier - Panthere Group",
    "age": "1 week ago"
   },
   {
-   "url": "https://www.fool.com/coverage/stock-market-today/2026/09/25/stock-market-today-sept-25-microsoft-stock-jumps-4-after-revamping-copilot-with-code-generation-and-agentic-ai-tools/",
-   "title": "Stock Market Today, Sept. 25: Microsoft Stock Jumps 4% After Revamping Copilot With Code Generation and Agentic AI Tools | The Motley Fool",
-   "age": "17 hours ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/List_of_public_corporations_by_market_capitalization",
-   "title": "List of public corporations by market capitalization",
+   "url": "https://tradingeconomics.com/singapore/stock-market/news/499724",
+   "title": "Shares in Singapore Hits New Peak in Afternoon Deals",
    "age": null
   },
   {
-   "url": "https://finance.yahoo.com/quote/NVDA/",
-   "title": "NVIDIA Corporation (NVDA) Stock Price, News, Quote & History - Yahoo Finance",
-   "age": "2 days ago"
+   "url": "https://www.business-standard.com/article/news-ians/singapore-stocks-end-higher-115093000996_1.html",
+   "title": "Thursday, January 01, 2026 | 05:01 PM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html",
+   "title": "Big Tech earnings: Meta, Apple, Tesla, Microsoft AI spend in focus",
+   "age": "January 27, 2026"
   },
   {
    "url": "https://fortune.com/2026/07/26/big-tech-earnings-meta-microsoft-apple-amazon-market-revolt-ai-spending/",
@@ -265,68 +248,95 @@
    "age": "July 26, 2026"
   },
   {
-   "url": "https://techstartups.com/2026/09/04/top-tech-news-today-september-4-2026-amazon-google-microsoft-nvidia-openai-tesla-more/",
-   "title": "Top Tech News Today, September 4, 2026: Amazon, Google, Microsoft, Nvidia, OpenAI, Tesla & More - Tech Startups",
-   "age": "3 weeks ago"
+   "url": "https://www.cnbc.com/2026/07/31/apple-aapl-amazon-amzn-stock-today.html",
+   "title": "Alphabet, Amazon and Microsoft added nearly $1.5 trillion in combined value this week",
+   "age": "July 31, 2026"
   },
   {
-   "url": "https://techstartups.com/2026/09/24/top-tech-news-today-september-24-2026-amazon-anthropic-deepseek-google-meta-openai-oracle-more/",
-   "title": "Top Tech News Today, September 24, 2026: Amazon, Anthropic, DeepSeek, Google, Meta, OpenAI, Oracle & More - Tech Startups",
-   "age": "2 days ago"
+   "url": "https://www.nbcnews.com/business/markets/big-tech-ai-earnings-alphabet-meta-amazon-microsoft-rcna342796",
+   "title": "Big Tech earnings test record stock market rally as AI spending takes center stage",
+   "age": "April 29, 2026"
   },
   {
-   "url": "https://www.cnbc.com/2026/08/17/5-things-to-know-before-the-stock-market-opens.html",
-   "title": "Berkshire's Alphabet stake, Meta goes back to court, Europe's champagne problems and more in Morning Squawk",
-   "age": "August 17, 2026"
+   "url": "https://valueaddvc.com/big-tech-earnings",
+   "title": "Big Tech Earnings Q2 2026: Apple $143B, Nvidia $81B",
+   "age": "2 weeks ago"
   },
   {
-   "url": "https://github.com/matthewnty/Matthew/issues/131",
-   "title": "📈 Daily Stock Digest — 2026-09-20 · Issue #131 · matthewnty/Matthew",
-   "age": "6 days ago"
+   "url": "https://marketwise.com/investing/big-tech-ai-earnings-alphabet-amazon-microsoft-meta-apple-tesla/",
+   "title": "Big Tech Earnings: The AI Boom's Biggest Winners and Losers - MarketWise",
+   "age": "August 6, 2026"
   },
   {
-   "url": "https://finance.yahoo.com/quote/META/",
-   "title": "Meta Platforms, Inc. (META) Stock Price, News, Quote & History - Yahoo Finance",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.google.com/finance/beta/quote/META:NASDAQ",
-   "title": "Meta Platforms Inc (META) Stock Price & News - Google Finance",
-   "age": "July 29, 2026"
-  },
-  {
-   "url": "https://www.cnbc.com/quotes/TSLA",
-   "title": "TSLA: Tesla Inc - Stock Price, Quote and News - CNBC",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/TSLA/",
-   "title": "Tesla, Inc. (TSLA) Stock Price, News, Quote & History - Yahoo Finance",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.google.com/finance/quote/TSLA:NASDAQ",
-   "title": "Tesla Inc (TSLA) Stock Price & News - Google Finance",
-   "age": "5 days ago"
-  },
-  {
-   "url": "https://seekingalpha.com/user/646497/likes",
-   "title": "seekingalpha.com",
+   "url": "https://www.itiger.com/news/2558049475",
+   "title": "Microsoft, Apple, Amazon, and Meta Just Gave Nvidia Investors Great News",
    "age": null
   },
   {
-   "url": "https://www.teamblind.com/search/berkshire",
+   "url": "https://www.itiger.com/hans/news/2558049475",
+   "title": "Microsoft, Apple, Amazon, and Meta Just Gave Nvidia Investors Great News",
+   "age": null
+  },
+  {
+   "url": "https://www.teamblind.com/search/Earnings",
    "title": "www.teamblind.com",
    "age": null
+  },
+  {
+   "url": "https://www.nasdaq.com/articles/zacks-analyst-blog-highlights-nvidia-tesla-meta-and-berkshire-hathaway",
+   "title": "The Zacks Analyst Blog Highlights Nvidia, Tesla, Meta and Berkshire Hathaway | Nasdaq",
+   "age": "November 19, 2024"
+  },
+  {
+   "url": "https://www.teslarati.com/tag/berkshire-hathaway/",
+   "title": "Berkshire Hathaway News - TESLARATI",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/news/buffett-avoided-tesla-years-now-033110953.html",
+   "title": "Buffett Avoided Tesla for Years — But Now His Company Will Power Elon Musk's Semis",
+   "age": "January 29, 2026"
+  },
+  {
+   "url": "https://www.foxbusiness.com/technology/elon-musk-says-warren-buffett-should-buy-tesla-shares",
+   "title": "Elon Musk says Warren Buffett should put money in Tesla shares | Fox Business",
+   "age": "May 6, 2024"
+  },
+  {
+   "url": "https://www.facebook.com/Benzinga/posts/tesla-ceo-elon-musk-invoked-berkshire-hathaway-inc-ceo-warren-buffetts-investmen/1203084948483840/",
+   "title": "Tesla CEO Elon Musk invoked Berkshire ...",
+   "age": null
+  },
+  {
+   "url": "https://stocktwits.com/news-articles/markets/equity/tesla-stock-slips-ross-gerber-calls-tesla-spacex-berkshire-of-ai/cZBN169Re2N",
+   "title": "Tesla Stock Slips Premarket: Ross Gerber Sees Tesla-SpaceX Merger Forming A ‘Berkshire Hathaway Of AI’",
+   "age": "August 25, 2026"
+  },
+  {
+   "url": "https://www.bitget.com/wiki/does-berkshire-hathaway-own-tesla-stock",
+   "title": "does berkshire hathaway own tesla stock? Quick answer",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/quote/BRK-B/",
+   "title": "Berkshire Hathaway Inc. (BRK-B) Stock Price, News, Quote & History - Yahoo Finance",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/news/warren-buffett-invested-tesla-145216067.html",
+   "title": "Is Warren Buffett Invested in Tesla?",
+   "age": "March 16, 2026"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 45411,
-  "output": 5910,
+  "input": 46385,
+  "output": 5664,
   "searches": 5,
-  "costUsd": 0.15
+  "cacheWrite": 0,
+  "cacheRead": 0,
+  "costUsd": 0.1485
  },
- "createdAt": "2026-09-26T14:46:11.438Z"
+ "createdAt": "2026-09-27T03:07:56.545Z"
 }
