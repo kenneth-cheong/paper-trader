@@ -19,6 +19,9 @@ import { upcomingResults, nextResults } from './calendar.js';
 import { betaAt } from './stats.js';
 import { CATALYST_TYPES, HORIZON_DAYS, positionThesis, thesisProgress } from './thesis.js';
 import { BENCHMARKS } from './benchmark.js';
+import { regimeNow, regimeForPrompt } from './memory-long.js';
+import { FILTER_KEYS, FILTER_VALUES, CLAIMS } from './learning.js';
+import { positionRisk, riskForPrompt, notesForPrompt } from './dossier.js';
 
 const SDK_URL = 'https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.128.0/+esm';
 
@@ -503,7 +506,11 @@ Give every order and considered idea a short thesis. expected_move_pct is your h
 
 upcoming_results lists the stocks reporting results in the next 10 trading days, with how far their results days have typically moved against the index: a position held into results can jump or fall that much overnight, so size it for that move (positions flagged results_soon are already exposed) and don't count on the reaction going your way.
 
-If the context has a playbook, it holds lessons from grading all your earlier ideas against what prices did afterwards: trades made, trades the owner declined or your limits blocked, ideas you passed on, and your exits. Results are split into the market's part (beta: how much the stocks move with the index), fees and the stock-specific edge that's left, counted in separate bets. The confidence is computed for you; treat Moderate as a tilt, not a rule. Weigh each lesson by its evidence, and never let one override the hard limits. Finish by calling submit_decision.`;
+market_regime_now describes today's market (the index against its 200-day average and, for US stocks, the VIX: under 16 calm, over 25 stressed); it's a description, not a signal, and no lesson depends on it. Market-memory lessons from ten years of prices were found on 2016-2023 and checked on 2024 onwards; one that says there's no reliable pattern means don't assume one.
+
+stock_cards are counts, not rules: daily move, stocks it moves with (holding both is close to one bet), results-day moves vs the index (latest last), ex-date drop, and the 1-in-5 stop for a long/short (ordinary swings went that far within 21 trading days in only 1 hold in 5). owner_notes are the owner's. risk_pct_of_fund (a typical day's move, as % of the fund), stop_in_daily_moves (how far today's price is from the stop-loss level, in typical daily moves: under 2 is often reached by ordinary swings; 0 or less, at or through it) and suggested_stop_pct are advice, not limits.
+
+If the context has a playbook, it holds lessons from grading all your earlier ideas against what prices did afterwards: trades made, trades the owner declined or your limits blocked, ideas you passed on, and your exits. Results are split into the market's part (beta: how much the stocks move with the index), fees and the stock-specific edge that's left, counted in separate bets. The confidence is computed for you; treat Moderate as a tilt, not a rule, and Low as a hint. A status says whether a lesson held on ideas after it was learned, or that it's an opinion no data could check. owner_declines counts the trades the owner declined by the reason they gave, and how many would have lost money a week later: the owner's preferences and record, not a rule. Weigh each lesson by its evidence, and never let one override the hard limits. Finish by calling submit_decision.`;
 
 // The kinds of reasoning behind a trade idea, so results can be graded by kind (learning.js).
 export const IDEA_TYPES = ['news', 'earnings', 'momentum', 'value', 'technical', 'analyst_pick', 'risk_reduction', 'other'];
@@ -584,22 +591,33 @@ export const FUND_TOOL = {
 };
 
 // The market data every fund in that market sees (identical for them in one run, so it can be
-// cached): news, the home page's picks, price statistics with analysts' views (`company`), and the
-// results due in the next 10 trading days (`calendar`, calendar.js resultsCalendar).
-export function marketContext({ currency, quotes, picks, news, company = null, calendar = null, now = new Date() }) {
+// cached): news, the home page's picks, price statistics with analysts' views (`company`), the
+// results due in the next 10 trading days (`calendar`, calendar.js resultsCalendar), today's regime
+// (memory-long.js regimeNow, from the index and prices.json's `macro` VIX; about 40 tokens), the stock
+// cards (`cards`: [{ symbol, lines }], dossier.js stockCards, chosen once per market per run by what's
+// true for the whole market; 2-3 lines each) and the owner's notes on the market's stocks (`notes`:
+// { symbol: text }, dossier.js notesForPrompt: the same for every fund).
+export function marketContext({ currency, quotes, picks, news, company = null, calendar = null, macro = null, cards = null, notes = null, now = new Date() }) {
   const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === currency);
+  const regime = regimeForPrompt(regimeNow(quotes, macro, currency === 'SGD' ? 'SGX' : 'US'));
   return {
+    ...(regime ? { market_regime_now: regime } : {}),
     analyst_picks: picks?.picks?.filter((p) => quotes[p.symbol]?.currency === currency)
       .map((p) => ({ symbol: p.symbol, stance: p.stance, conviction: p.conviction, thesis: p.thesis, as_of: picks.createdAt })) ?? [],
     news: newsForPrompt(news, symbols, now),
     ...(calendar ? { upcoming_results: upcomingResults(calendar, quotes, symbols, now) } : {}),
+    ...(cards?.length ? { stock_cards: Object.fromEntries(cards.map((c) => [c.symbol, c.lines])) } : {}),
+    ...(notes ? { owner_notes: notes } : {}),
     stocks: stockList(quotes, symbols, false, company, now),
   };
 }
 
 // The fund's own part: mandate, money, positions, recent decisions and (if learning) its playbook.
-export function fundContext({ fund, quotes, picks, news, playbook = null, company = null, calendar = null, now = new Date() }) {
-  return { ...ownContext({ fund, quotes, playbook, calendar, now }), ...marketContext({ currency: fund.currency, quotes, picks, news, company, calendar, now }) };
+export function fundContext({ fund, quotes, picks, news, playbook = null, company = null, calendar = null, macro = null, cards = null, notes = null, dossiers = null, now = new Date() }) {
+  return {
+    ...ownContext({ fund, quotes, playbook, calendar, dossiers, now }),
+    ...marketContext({ currency: fund.currency, quotes, picks, news, company, calendar, macro, cards, notes: notesForPrompt(notes, quotes, fund.currency), now }),
+  };
 }
 
 // A held position whose results are due within RESULTS_SOON_DAYS trading days, with its share of the fund.
@@ -624,12 +642,16 @@ function thesisNow(fund, p, quotes, now) {
   };
 }
 
-function ownContext({ fund, quotes, playbook, calendar = null, now }) {
+// `dossiers` ({ symbol: card }, dossier.js) add each position's risk numbers (dossier.js riskForPrompt):
+// how far today's price is from its stop-loss level in typical daily moves, a typical day's move in it
+// as a % of the fund, and the 1-in-5 stop (an index fund, with no card, measured from its prices).
+function ownContext({ fund, quotes, playbook, calendar = null, dossiers = null, now }) {
   const ccy = fund.currency;
   const market = ccy === 'SGD' ? 'SGX' : 'US';
   const { accounts, positions } = summarize(fund.portfolio, quotes);
   const a = accounts[ccy];
   const style = STYLES[fund.style] ?? STYLES[DEFAULT_STYLE];
+  const risk = dossiers ? new Map(positionRisk(positions, a.equity, dossiers, fund.protections, { quotes, now }).rows.map((r) => [r.symbol, riskForPrompt(r)])) : new Map();
   return {
     now: now.toISOString(),
     ...(playbook ? { playbook } : {}),
@@ -647,6 +669,7 @@ function ownContext({ fund, quotes, playbook, calendar = null, now }) {
     positions: positions.map((p) => ({
       symbol: p.symbol, shares: p.qty, side: p.short ? 'short' : 'long', avg_price: round2(p.avgCost), price: p.price,
       value: round2(p.marketValue), unrealized_pl_pct: pct(p.unrealizedPct), protection: fund.protections[p.symbol] ?? null,
+      ...(risk.get(p.symbol) ?? {}),
       ...(calendar ? resultsSoon(p, a.equity, calendar, quotes, now) : {}),
       ...thesisNow(fund, p, quotes, now),
     })),
@@ -662,19 +685,24 @@ function ownContext({ fund, quotes, playbook, calendar = null, now }) {
 // without one, a digest for the fund's market is gathered first with the cheap model.
 // `cacheShared`: several funds in this market decide now on the same model, so the market data (the
 // bulk of the prompt) is marked for caching and the others read it at a tenth of the price. It must be
-// byte-for-byte the same for them, so everything in it depends only on the market and `now`.
-export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, playbook = null, company = null, calendar = null, cacheShared = false, now = new Date() }) {
+// byte-for-byte the same for them, so everything in it depends only on the market and `now`: the stock
+// cards (`cards`, or a function of the news giving them, which the job remembers per market) and the
+// owner's notes on stocks (`notes`, the collection's c.stockNotes) are the same for every fund in the
+// market. `dossiers` ({ symbol: card }) add each position's risk numbers to the fund's own part.
+export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, playbook = null, company = null, calendar = null, macro = null, cards = null, notes = null, dossiers = null, cacheShared = false, now = new Date() }) {
   const fresh = !news;
   if (fresh) {
     const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === fund.currency);
     news = await gatherNews({ client, Anthropic, model: newsModel, quotes, symbols, now, maxSearches: 3 });
   }
-  const shared = { type: 'text', text: `Market data as JSON: news, analyst picks, results due and price statistics for the ${fund.currency} market.\n\n${JSON.stringify(marketContext({ currency: fund.currency, quotes, picks, news, company, calendar, now }))}` };
+  const stockCards = typeof cards === 'function' ? cards(news) : cards;
+  const market = marketContext({ currency: fund.currency, quotes, picks, news, company, calendar, macro, cards: stockCards, notes: notesForPrompt(notes, quotes, fund.currency), now });
+  const shared = { type: 'text', text: `Market data as JSON: news, analyst picks, results due and price statistics for the ${fund.currency} market.\n\n${JSON.stringify(market)}` };
   if (cacheShared) shared.cache_control = { type: 'ephemeral' };
   const res = await askClaude({
     client, Anthropic, model,
     system: FUND_SYSTEM,
-    content: [shared, { type: 'text', text: `Decision time. The fund's state as JSON:\n\n${JSON.stringify(ownContext({ fund, quotes, playbook, calendar, now }))}` }],
+    content: [shared, { type: 'text', text: `Decision time. The fund's state as JSON:\n\n${JSON.stringify(ownContext({ fund, quotes, playbook, calendar, dossiers, now }))}` }],
     tool: FUND_TOOL,
     maxSearches: 0,
   });
@@ -728,7 +756,30 @@ export async function backfillNews({ client, Anthropic, model = TIERS.simple, sy
   return { events, usage: res.usage, model: res.model };
 }
 
-const REVIEW_SYSTEM = `You coach the AI manager of a paper-trading fund. You get statistics that grade all of its earlier ideas against what prices did afterwards (trades it made, trades its owner declined, orders its limits blocked, ideas it passed on, and its exits and stop-losses), plus the most telling examples with the manager's own reasons, and lessons already derived from the numbers. Write up to 6 short, specific, practical lessons the manager should apply to future decisions, each citing its evidence from the data (numbers of cases and results). Judge by the stock-specific edge (what's left after the market's part, beta, and fees), not the result against the index, and only draw a lesson from 8 or more separate bets; say nothing rather than guess. Don't repeat lessons already derived unless you sharpen them. Finish by calling submit_lessons.`;
+const REVIEW_SYSTEM = `You coach the AI manager of a paper-trading fund. All of its earlier ideas have been graded against what prices did a week later: trades it made, trades its owner declined, proposals that expired, orders its limits blocked, ideas it passed on, and its exits, stop-losses and take-profits. You get cells computed by code: for each group of ideas (its filter), the ideas, the separate bets (the same stock and side within a week count once), the stock-specific edge (what's left a week later after the market's part, beta, and fees, in % a week, pulled towards zero when bets are few), its standard error, and whether it's significant. You also get the most telling examples with the manager's own reasons, and the lesson book: every lesson so far with its filter, claim and status.
+
+Write up to 6 short, specific, practical lessons the manager should apply to future decisions. Give each a filter saying which ideas it is about ('any' where it doesn't matter; a symbol exactly as in the data) and a claim: 'better' if those ideas did better than the market explains (for ideas it didn't act on, a gain it missed; for exits, stop-losses and take-profits, the price kept going the position's way), 'worse' if they did worse. Code checks every lesson on the ideas its filter picks out, replaces your evidence with the computed numbers, and drops one with fewer than 8 separate bets or that the data doesn't back, so build lessons on the cells and say nothing rather than guess. A lesson whose filter is all 'any' can't be checked: it's shown as an opinion and expires after 4 weeks. Don't propose again a lesson the book shows as dropped, removed, expired or that didn't hold on new data. Proposing one of your lessons in force again with the same filter and claim keeps it, and you may sharpen its wording. Don't propose a lesson with the same filter and claim as a rule-made lesson or one of the owner's: it's already in force, so yours wouldn't be added.
+
+Also write owner_summary: three short, plain sentences for the fund's owner, who isn't an expert: what the graded ideas showed, and what the coming weeks should tell. Don't say which lessons you wrote or kept: code checks them after you, and the owner's report says which it kept. Use counts and trends from the cells, not verdicts; no advice to buy or sell, and no questions. Finish by calling submit_lessons.`;
+
+// Which ideas a lesson is about (learning.js FILTER_KEYS): every field is required and takes 'any', so
+// strict tool use holds; the symbol is free text, checked by code (a symbol no graded idea has matches
+// nothing, and the lesson is dropped).
+const FILTER_DESCRIPTIONS = {
+  outcome: 'traded: trades it made; declined: the owner declined; expired: proposals nobody approved in time; blocked: its limits refused; passed: ideas it passed on; exit, stop-loss, take-profit: its exits.',
+  symbol: "'any', or one stock's symbol exactly as in the data, e.g. D05.SI.",
+  horizon: 'The horizon the manager gave the idea: a week, a month or a quarter.',
+  catalyst_type: 'The catalyst the manager named for the idea.',
+};
+const FILTER_SCHEMA = {
+  type: 'object',
+  additionalProperties: false,
+  required: FILTER_KEYS,
+  description: "The graded ideas the lesson is about; 'any' where it doesn't matter. All 'any' makes it an opinion that no data can check.",
+  properties: Object.fromEntries(FILTER_KEYS.map((k) => [k, {
+    type: 'string', ...(FILTER_VALUES[k] ? { enum: FILTER_VALUES[k] } : {}), ...(FILTER_DESCRIPTIONS[k] ? { description: FILTER_DESCRIPTIONS[k] } : {}),
+  }])),
+};
 
 export const REVIEW_TOOL = {
   name: 'submit_lessons',
@@ -736,30 +787,38 @@ export const REVIEW_TOOL = {
   input_schema: {
     type: 'object',
     additionalProperties: false,
-    required: ['lessons'],
+    required: ['lessons', 'owner_summary'],
     properties: {
       lessons: {
         type: 'array',
         items: {
           type: 'object',
           additionalProperties: false,
-          required: ['text', 'evidence'],
+          required: ['text', 'evidence', 'filter', 'claim'],
           properties: {
             text: { type: 'string', description: 'One or two sentences addressed to the manager.' },
-            evidence: { type: 'string', description: 'The numbers behind it.' },
+            evidence: { type: 'string', description: 'The numbers behind it, from the cells (code replaces them with its own check).' },
+            filter: FILTER_SCHEMA,
+            claim: { type: 'string', enum: CLAIMS, description: 'better: those ideas did better than the market explains; worse: they did worse.' },
           },
         },
       },
+      owner_summary: { type: 'string', description: 'Three plain sentences for the fund\'s owner: what the graded ideas showed and what the coming weeks should tell, not which lessons you wrote (code checks them after you). Counts and trends, no verdicts, no advice to trade, no questions.' },
     },
   },
 };
 
-// The weekly review: a few written lessons on top of the rule-made ones (learning.js).
-export async function reviewPlaybook({ client, Anthropic, model = TIERS.simple, fund, stats, examples, lessons }) {
+// The weekly review: a few written lessons on top of the rule-made ones, each with the filter and
+// claim code checks it by before it's kept (learning.js applyReview), and three sentences for the
+// owner (`summary`, owner_summary), which the week's report shows (report.js); no extra call, so only
+// in weeks the review runs anyway. `cells`: the graded ideas by group (learning.js reviewCells);
+// `examples`: learning.js reviewExamples; `lessons`: the lesson book with statuses (learning.js
+// reviewLessonBook), so it doesn't propose again what failed.
+export async function reviewPlaybook({ client, Anthropic, model = TIERS.simple, fund, cells = [], examples = [], lessons = [] }) {
   const style = STYLES[fund.style] ?? STYLES[DEFAULT_STYLE];
   const res = await askClaude({
     client, Anthropic, model, system: REVIEW_SYSTEM, tool: REVIEW_TOOL, maxSearches: 0,
-    content: `The fund: "${fund.name ?? 'AI fund'}", ${style.label} style${fund.focus ? `, focus: ${fund.focus}` : ''}, trading ${fund.currency === 'SGD' ? 'SGX' : 'US'} stocks.\n\n${JSON.stringify({ stats, examples, lessons_already_derived: lessons.map((l) => l.text) })}`,
+    content: `The fund: "${fund.name ?? 'AI fund'}", ${style.label} style${fund.focus ? `, focus: ${fund.focus}` : ''}, trading ${fund.currency === 'SGD' ? 'SGX' : 'US'} stocks.\n\n${JSON.stringify({ cells, examples, lesson_book: lessons })}`,
   });
-  return { lessons: res.input.lessons ?? [], usage: res.usage, model: res.model };
+  return { lessons: res.input.lessons ?? [], summary: String(res.input.owner_summary ?? '').trim(), usage: res.usage, model: res.model };
 }

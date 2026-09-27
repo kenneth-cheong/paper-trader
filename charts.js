@@ -94,9 +94,9 @@ const overlaps = (a, b, gap = 0) => a.left < b.right + gap && b.left < a.right +
 
 // ---------- tooltip ----------
 
-// Shows the shared #tooltip next to the pointer (or the focused mark). `lines`: [{ value, label, key? }]
-// where `key` is a CSS colour for a short line key. Values lead; labels follow; a line without a
-// value is a muted heading. Above the point when there's room, else below.
+// Shows the shared #tooltip next to the pointer (or the focused mark). `lines`: [{ value, label, key?, dot? }]
+// where `key` is a CSS colour for a short line key (a dot with `dot`). Values lead; labels follow; a
+// line without a value is a muted heading. Above the point when there's room, else below.
 export function showTip(tip, lines, x, y) {
   tip.replaceChildren();
   for (const l of lines.filter(Boolean)) {
@@ -104,7 +104,7 @@ export function showTip(tip, lines, x, y) {
     row.className = 'tip-row';
     if (l.key) {
       const k = document.createElement('span');
-      k.className = 'tip-key';
+      k.className = l.dot ? 'tip-key tip-dot' : 'tip-key';
       k.style.background = l.key;
       row.append(k);
     }
@@ -336,11 +336,12 @@ export function hbars(el, rows, { signColors = false, markerLabel = '', ref = nu
 // ---------- likely ranges ----------
 
 // rows: [{ label, sub?, value, lo, hi, display, tip: [{ value, label }] }]: each row's likely range as a
-// thin bar from lo to hi (a pale version of --series-1), with a dot at the estimate. The estimate's
-// value is written past the range's end: to the right from zero up, to the left below zero. Zero is
-// the baseline. Labels sit left of the ranges, or on their own line above each range when they would
-// take more than 40% of the width (phones), as in hbars.
-export function rangeBars(el, rows, { tickFmt = (v, d) => axisNum(v, d), ariaLabel = 'Likely ranges' } = {}) {
+// thin bar from lo to hi (a pale version of --series-1), with a dot at the estimate (or whatever
+// `value` is: `dotLabel` names it in the legend). The value is written past the range's end: to the
+// right from zero up, to the left below zero. Zero is the baseline. Labels sit left of the ranges, or
+// on their own line above each range when they would take more than 40% of the width (phones), as in
+// hbars.
+export function rangeBars(el, rows, { tickFmt = (v, d) => axisNum(v, d), ariaLabel = 'Likely ranges', dotLabel = 'Best estimate' } = {}) {
   if (!rows.length) { el.innerHTML = ''; return; }
   const W = Math.max(240, el.clientWidth || 600);
   const B = 22, T = 8;
@@ -350,7 +351,8 @@ export function rangeBars(el, rows, { tickFmt = (v, d) => axisNum(v, d), ariaLab
   const stacked = sideW > W * 0.4 || W - sideW - 2 * valW < W * 0.4;
   const labelW = stacked ? 0 : sideW;
   const rowH = stacked ? 44 : rows.some((r) => r.sub) ? 38 : 30;
-  let lo = Math.min(0, ...rows.map((r) => r.lo)), hi = Math.max(0, ...rows.map((r) => r.hi));
+  // (a row's value can sit outside its range: the ten-year memory plots the held-out years' plain average)
+  let lo = Math.min(0, ...rows.map((r) => Math.min(r.lo, r.value))), hi = Math.max(0, ...rows.map((r) => Math.max(r.hi, r.value)));
   if (lo === hi) hi = lo + 1;
   const x0p = labelW + valW, x1p = Math.max(W - valW, x0p + 40);
   const x = (v) => x0p + ((v - lo) / (hi - lo)) * (x1p - x0p);
@@ -394,7 +396,7 @@ export function rangeBars(el, rows, { tickFmt = (v, d) => axisNum(v, d), ariaLab
   }).join('');
   el.innerHTML = `<svg class="chart ranges" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="list" aria-label="${escText(ariaLabel)}">
     ${tickSvg.join('')}${body}
-  </svg><ul class="legend-list"><li><span class="swatch swatch-range"></span><span>Likely range</span></li><li><span class="swatch swatch-dot"></span><span>Best estimate</span></li></ul>`;
+  </svg><ul class="legend-list"><li><span class="swatch swatch-range"></span><span>Likely range</span></li><li><span class="swatch swatch-dot"></span><span>${escText(dotLabel)}</span></li></ul>`;
   wireTips(el.querySelector('svg'), tips);
 }
 
@@ -527,10 +529,14 @@ export function columns(el, groups, series, { ref = null, refLabel = '', fmt = (
 // `ref` (per point, or the `ref` option for a constant) a dashed reference such as the money put in,
 // labelled `refLabel` (left out if it's constant and the value never leaves it). `step`: the value holds until the next
 // point (e.g. realized profit), drawn on a `time` scale. `endLabel`: dot and value at the end.
+// `markers`: dated events on the line, [{ i (the point), shape ('dot', 'diamond', 'up' drawn under the
+// line, 'down' over it), color (a CSS colour), value? and label (its words) }]: each is named in the tooltip of its
+// point and in the point's spoken text, and `markerKeys` ([{ shape, color, label }]) explains them in
+// the legend under the chart.
 // Hover, tap or drag to read it; it takes keyboard focus, and the arrow keys step through the points.
 export function lineChart(el, points, {
   ref = null, refLabel = '', fmt = (v) => String(v), height = 180, compareLabel = '', mainLabel = 'Value',
-  time = false, step = false, endLabel = false, title = 'Line chart', axisFmt = null,
+  time = false, step = false, endLabel = false, title = 'Line chart', axisFmt = null, markers = [], markerKeys = [],
 } = {}) {
   if (points.length < 2) { el.innerHTML = '<p class="muted small">Not enough data for a chart yet.</p>'; return; }
   const n = points.length;
@@ -653,9 +659,17 @@ export function lineChart(el, points, {
   const firstRefV = refs.find((v) => v != null);
   const refSpot = refPath && refLabel ? clearSpot(refLabel, [[W - R, y(lastRef) - 5, 'end'], [W - R, y(lastRef) + 14, 'end'], [L + 4, y(firstRefV) - 5, 'start'], [L + 4, y(firstRefV) + 14, 'start']]) : null;
   const refInLegend = Boolean(refPath && refLabel && !refSpot);
+  // Markers on the line, by point; a buy under the line, a sell over it, others on it.
+  const marksAt = new Map();
+  for (const m of markers) if (m.i >= 0 && m.i < n) (marksAt.get(m.i) ?? marksAt.set(m.i, []).get(m.i)).push(m);
+  const markSvg = markers.filter((m) => m.i >= 0 && m.i < n).map((m) => {
+    const x = px[m.i], yy = Math.min(H - B - 5, Math.max(T + 5, y(points[m.i].value) + (m.shape === 'up' ? 9 : m.shape === 'down' ? -9 : 0)));
+    const d = { diamond: `M${f1(x)},${f1(yy - 5.5)}L${f1(x + 5.5)},${f1(yy)}L${f1(x)},${f1(yy + 5.5)}L${f1(x - 5.5)},${f1(yy)}Z`, up: `M${f1(x)},${f1(yy - 5)}L${f1(x + 5)},${f1(yy + 4)}L${f1(x - 5)},${f1(yy + 4)}Z`, down: `M${f1(x)},${f1(yy + 5)}L${f1(x + 5)},${f1(yy - 4)}L${f1(x - 5)},${f1(yy - 4)}Z` }[m.shape];
+    return d ? `<path class="mark" d="${d}" style="fill:${escText(m.color)}"/>` : `<circle class="mark" cx="${f1(x)}" cy="${f1(yy)}" r="4.5" style="fill:${escText(m.color)}"/>`;
+  }).join('');
   const pointText = (i) => {
     const p = points[i];
-    return [`${p.label}: ${fmt(p.value)}`, hasCompare && p.compare != null ? `${compareLabel} ${fmt(p.compare)}` : '', refVaries && refs[i] != null ? `${refLabel} ${fmt(refs[i])}` : ''].filter(Boolean).join(', ');
+    return [`${p.label}: ${fmt(p.value)}`, hasCompare && p.compare != null ? `${compareLabel} ${fmt(p.compare)}` : '', refVaries && refs[i] != null ? `${refLabel} ${fmt(refs[i])}` : '', ...(marksAt.get(i) ?? []).map((m) => `${m.value ? `${m.value} ` : ''}${m.label}`)].filter(Boolean).join(', ');
   };
   const summary = `${title}: ${fmt(points[0].value)} (${points[0].label}) to ${fmt(last.value)} (${last.label}). Use the arrow keys to read each point.`;
   el.innerHTML = `
@@ -666,12 +680,13 @@ export function lineChart(el, points, {
       ${firstSvg}${xLabels.join('')}${lastSvg}
       ${path2 ? `<path class="line2" d="${path2}"/>` : ''}
       <path class="line" d="${path}"/>
+      ${markSvg}
       ${refSpot ? `<text class="axis ref-label" x="${refSpot[0]}" y="${refSpot[1]}" text-anchor="${refSpot[2]}">${escText(refLabel)}</text>` : ''}
       ${endSvg}
       <line class="cross" y1="${T}" y2="${H - B}" visibility="hidden"/>
       <circle class="dot" r="4" visibility="hidden"/>
       <rect class="hit" x="${L}" y="0" width="${plotW}" height="${H}"/>
-    </svg>${path2 || refInLegend ? `<ul class="legend-list"><li><span class="line-key"></span><span>${escText(mainLabel)}</span></li>${path2 ? `<li><span class="line-key compare"></span><span>${escText(compareLabel)}</span></li>` : ''}${refInLegend ? `<li><span class="line-key ref"></span><span>${escText(refLabel)}</span></li>` : ''}</ul>` : ''}`;
+    </svg>${path2 || refInLegend || markerKeys.length ? `<ul class="legend-list"><li><span class="line-key"></span><span>${escText(mainLabel)}</span></li>${path2 ? `<li><span class="line-key compare"></span><span>${escText(compareLabel)}</span></li>` : ''}${refInLegend ? `<li><span class="line-key ref"></span><span>${escText(refLabel)}</span></li>` : ''}${markerKeys.map((k) => `<li><span class="marker-key ${escText(k.shape)}" style="--c:${escText(k.color)}"></span><span>${escText(k.label)}</span></li>`).join('')}</ul>` : ''}`;
 
   const svg = el.querySelector('svg'), cross = svg.querySelector('.cross'), dot = svg.querySelector('.dot');
   const hit = svg.querySelector('.hit'), tip = document.getElementById('tooltip');
@@ -702,6 +717,7 @@ export function lineChart(el, points, {
       { value: fmt(p.value), label: many ? mainLabel : p.label, key: many ? 'var(--series-1)' : null },
       hasCompare && p.compare != null ? { value: fmt(p.compare), label: compareLabel, key: 'var(--series-compare)' } : null,
       refVaries && refs[i] != null ? { value: fmt(refs[i]), label: refLabel } : null,
+      ...(marksAt.get(i) ?? []).map((m) => ({ value: m.value ?? null, label: m.label, key: m.color, dot: true })),
     ], cx, cy);
   };
   const hide = () => {
@@ -729,6 +745,31 @@ export function lineChart(el, points, {
     e.preventDefault();
     show(Math.max(0, Math.min(n - 1, to)));
   });
+}
+
+// ---------- trend in a sentence ----------
+
+// A small trend line (no axis; it sits in a line of text that gives its numbers, with a table twin in
+// the app): one number week by week, e.g. a lesson's edge. Zero is always in range and marked, so a
+// small change isn't blown up to fill the height. Hover or tap a week for its numbers; the chart is
+// named for screen readers by `label`. points: [{ label, value, display, sub? }].
+export function sparkTrend(el, points, { label = 'Trend' } = {}) {
+  const n = points.length;
+  if (n < 2) { el.innerHTML = ''; return; }
+  const W = 88, H = 24, P = 3.5;
+  const lo = Math.min(0, ...points.map((p) => p.value)), hi = Math.max(0, ...points.map((p) => p.value));
+  const span = hi - lo || 1;
+  const x = (i) => P + (i / (n - 1)) * (W - 2 * P);
+  const y = (v) => P + (1 - (v - lo) / span) * (H - 2 * P);
+  const f1 = (v) => v.toFixed(1);
+  const step = (W - 2 * P) / (n - 1);
+  const summary = `${label}: from ${points[0].display} (${points[0].label}) to ${points.at(-1).display} (${points.at(-1).label}), over ${n} weeks.`;
+  el.innerHTML = `<svg class="chart spark-trend" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${escText(summary)}">
+    <line class="baseline" x1="${P}" x2="${W - P}" y1="${f1(y(0))}" y2="${f1(y(0))}"/>
+    <path class="line" d="${points.map((p, i) => `${i ? 'L' : 'M'}${f1(x(i))},${f1(y(p.value))}`).join('')}"/>
+    ${points.map((p, i) => `<g data-tip="${i}"><rect class="hit" x="${f1(Math.max(0, x(i) - step / 2))}" y="0" width="${f1(Math.min(step, W))}" height="${H}"/><circle class="${i === n - 1 ? 'end-dot' : 'pt'}" cx="${f1(x(i))}" cy="${f1(y(p.value))}" r="${i === n - 1 ? 3 : 1.6}"/></g>`).join('')}
+  </svg>`;
+  wireTips(el.querySelector('svg'), points.map((p) => [{ label: p.label }, { value: p.display, label: p.sub ?? '' }]));
 }
 
 // ---------- table view ----------

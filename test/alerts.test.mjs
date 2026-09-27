@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { collectAlerts, collectAllAlerts, dailySummary, formatMessage } from '../alerts.js';
+import { collectAlerts, collectAllAlerts, collectMessages, unmarkSent, dailySummary, formatMessage, MESSAGE_MAX } from '../alerts.js';
 import { loadFunds, addFund } from '../funds.js';
 import { newFund, executeDecision, pauseFund } from '../fund.js';
 
@@ -14,12 +14,17 @@ test('the first run only remembers what is there; later runs send each new thing
   assert.deepEqual(collectAlerts(f), []); // seeded
   assert.deepEqual(collectAlerts(f), []);
   pauseFund(f, 'Lost more than 5% today.', at('2026-01-07T16:00:00Z'));
-  f.events.push({ time: '2026-01-07T16:05:00Z', symbol: 'A', action: 'sell', shares: 10, price: 94, why: 'stop-loss at -5%' });
+  f.events.push({ time: '2026-01-07T16:05:00Z', symbol: 'A', action: 'sell', shares: 10, price: 94, why: 'stop-loss at -5%', track: { openedAt: '2026-01-07T15:00:00Z', worst: -0.0612, best: 0.021 } });
   const texts = collectAlerts(f);
   assert.equal(texts.length, 2);
-  assert.match(texts[0], /🔻 SELL 10 A at 94.00 USD \(stop-loss at -5%\)/);
+  assert.match(texts[0], /🔻 SELL 10 A at 94.00 USD \(stop-loss at -5%\)\. While held: at worst −6.12%, at best \+2.10%\./);
   assert.match(texts[1], /Trading paused/);
   assert.deepEqual(collectAlerts(f), []);
+  // a position opened before tracking began was followed only from then: it says so, not "while held"
+  f.events.push({ time: '2026-01-08T16:05:00Z', symbol: 'B', action: 'sell', shares: 5, price: 200, why: 'stop-loss at -8%', track: { openedAt: '2026-01-06T15:00:00Z', late: true, worst: -0.081, best: 0.004 } });
+  const [late] = collectAlerts(f);
+  assert.match(late, /\(stop-loss at -8%\)\. Since tracking began \(6 Jan\): at worst −8\.10%, at best \+0\.40%\./);
+  assert.doesNotMatch(late, /While held/);
 });
 
 test('approvals, Tiger refusals, stop orders and disagreements with Tiger are announced', () => {
@@ -87,4 +92,42 @@ test("a request from the app that didn't work is said once, with its fund's name
   assert.deepEqual(collectAllAlerts(c), [`<b>Steady</b> · ${said}`]);
   c.lastCommand = { ...failed, time: '2026-01-07T18:00:00.000Z', fund: 'all' };
   assert.deepEqual(collectAllAlerts(c), [said]); // no one fund named
+});
+
+test('each fund\'s weekly report goes as a message of its own with a link to its page, once; proposals link to their approval', () => {
+  const c = loadFunds(null);
+  const now = at('2026-01-07T14:00:00Z');
+  const f = addFund(c, { name: 'Steady', style: 'balanced', budget: 10000, currency: 'USD', settings: { broker: 'tiger' }, now });
+  addFund(c, { name: 'Other', style: 'balanced', budget: 10000, currency: 'USD', now });
+  const report = (week, extra = {}) => ({ week, to: '2026-01-09', at: '2026-01-09T21:30:00.000Z', fund: { pct: 0.008 }, index: { symbol: 'SPY', pct: 0.003 }, graded: 7, short: false,
+    best: { symbol: 'AAPL', action: 'buy', outcome: 'traded', vsIndex: 0.029, reason: 'results & guidance beat', wrongIf: 'iPhone demand <falls>' }, worst: null,
+    lessons: [], moreLessons: 0, review: null, summary: null, calls: [], comingUp: [], control: [], cost: null, ...extra });
+  f.reports = [report('2026-W01')];
+  const app = 'https://x.github.io/p/';
+  assert.deepEqual(collectMessages(c, { appUrl: app }), { alerts: [], reports: [] }); // the first run only remembers
+  f.reports.push(report('2026-W02'));
+  executeDecision(f, [{ symbol: 'A', action: 'buy', shares: 10, reason: 'Strong earnings' }], { A: q(100) }, at('2026-01-07T15:00:00Z'));
+  const { alerts, reports } = collectMessages(c, { appUrl: app });
+  assert.equal(alerts.length, 1);
+  assert.match(alerts[0], new RegExp(`Strong earnings <a href="https://x\\.github\\.io/p/#fund/${f.id}/approve">Approve or decline</a>$`));
+  assert.equal(reports.length, 1);
+  const [r] = reports;
+  assert.deepEqual([r.fundId, r.key], [f.id, 'report:2026-W02']);
+  assert.match(r.text, /^📘 <b>What we learned · Steady<\/b>\nWeek to 9 Jan: fund \+0\.8%, SPY \+0\.3%\.\n• 7 ideas graded this week\. Its only trade: bought AAPL \("results &amp; guidance beat"\), \+2\.9% against SPY a week later, after fees \(it said: wrong if iPhone demand &lt;falls&gt;\)\./);
+  assert.ok(r.text.endsWith(`\n\n<a href="${app}#fund/${f.id}">Open it on the page</a>`));
+  assert.doesNotMatch(r.text + alerts[0], /What it learned this week/); // the review's own alert is gone
+  assert.deepEqual(collectMessages(c, { appUrl: app }).reports, []); // sent once
+  // a report whose message failed goes out again next run
+  unmarkSent(c, r);
+  assert.equal(collectMessages(c, { appUrl: app }).reports.length, 1);
+});
+
+test('a message cut to Telegram\'s length never splits an HTML tag or entity and closes what it left open', () => {
+  const long = `<b>${'x'.repeat(3795)} &amp; more</b>`;
+  const out = formatMessage([long], 'https://x.github.io/p/', { hash: 'fund/f1', label: 'Open it' });
+  const body = out.split('\n\n<a')[0];
+  assert.ok(body.length <= MESSAGE_MAX + 5);
+  assert.match(body, /x…<\/b>$/); // the half entity is dropped, the bold closed
+  assert.ok(out.endsWith('<a href="https://x.github.io/p/#fund/f1">Open it</a>'));
+  assert.equal(formatMessage(['<i>short</i>'], ''), '<i>short</i>');
 });

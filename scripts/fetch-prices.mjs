@@ -10,6 +10,10 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 const ROOT = new URL('..', import.meta.url);
 const UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36';
 const FX_SYMBOL = 'SGD=X'; // Yahoo's USD -> SGD rate
+// Market-wide gauges, kept under prices.json's `macro` and never in `quotes` (which the app, the AI's
+// stock list, the market memory and the news backfill all treat as the watchlist): the VIX, for the
+// "Regime today" line (memory-long.js regimeNow).
+const MACRO = ['^VIX'];
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -121,6 +125,15 @@ export function toQuote(daily, intraday) {
 
 const round = (n) => Math.round(n * 10000) / 10000;
 
+// A macro series for prices.json's `macro`: its latest value and a year of daily closes [[t, close]].
+export function toMacro(daily) {
+  const d = bars(daily);
+  const price = daily?.meta?.regularMarketPrice ?? d.at(-1)?.[1];
+  if (!(price > 0) || !d.length) throw new Error('no value');
+  const time = daily.meta?.regularMarketTime;
+  return { price: round(price), time: time ? new Date(time * 1000).toISOString() : null, daily: d };
+}
+
 async function loadPrevious(url) {
   if (!url) return null;
   try {
@@ -162,11 +175,24 @@ async function main() {
     console.warn(`! ${FX_SYMBOL}: ${err.message}`);
   }
 
+  const macro = {};
+  for (const symbol of MACRO) {
+    try {
+      macro[symbol] = toMacro(await fetchChart(symbol, '1y', '1d'));
+    } catch (err) {
+      console.warn(`! ${symbol}: ${err.message}`);
+      // the last value, marked stale, until it's a week old (memory-long.js regimeNow uses it only while
+      // it's within a few days of the index's price)
+      const old = previous?.macro?.[symbol];
+      if (old && Date.now() - Date.parse(old.time ?? '') < 7 * 86400000) macro[symbol] = { ...old, stale: true };
+    }
+  }
+
   if (Object.keys(quotes).length === 0) {
     console.log(`Wrote nothing: 0/${symbols.length} quotes.`);
     process.exit(1);
   }
-  const out = { updatedAt: new Date().toISOString(), fx: { USDSGD: usdsgd }, quotes };
+  const out = { updatedAt: new Date().toISOString(), fx: { USDSGD: usdsgd }, quotes, ...(Object.keys(macro).length ? { macro } : {}) };
   await mkdir(new URL('data/', ROOT), { recursive: true });
   await writeFile(new URL('data/prices.json', ROOT), JSON.stringify(out));
   console.log(`Wrote ${Object.keys(quotes).length}/${symbols.length} quotes (${failures} failed), USDSGD=${usdsgd}`);

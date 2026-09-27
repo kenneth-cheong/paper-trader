@@ -4,4 +4,5 @@ data/picks.json
 data/ai-fund.json
 state/
 raw/
+raw-long/
 __pycache__/

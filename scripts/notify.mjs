@@ -1,6 +1,7 @@
 // Sends the AI fund's alerts to Telegram (see alerts.js). Runs after the fund's steps, before the
 // funds are saved, because it records what it has sent in each fund (fund.notified) and in the
-// collection (c.notified).
+// collection (c.notified). The alerts go as one message; each fund's weekly report (report.js) as a
+// message of its own, with a link to its page.
 // Usage: node scripts/notify.mjs <ai-fund.json>     send new alerts
 //        node scripts/notify.mjs --setup            find your chat and send a test message
 // Environment: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID (both GitHub secrets), APP_URL (the site's address).
@@ -8,7 +9,7 @@
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { collectAllAlerts, formatMessage } from '../alerts.js';
+import { collectMessages, formatMessage, unmarkSent } from '../alerts.js';
 import { resultsCalendar } from '../calendar.js';
 import { loadFunds } from '../funds.js';
 
@@ -56,12 +57,17 @@ if (!token || !chatId) {
   console.log('Telegram alerts are off (add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID to turn them on).');
   process.exit(0);
 }
-const texts = collectAllAlerts(c, { prices, calendar });
+const { alerts, reports } = collectMessages(c, { prices, calendar, appUrl });
 try {
-  if (texts.length) await send(chatId, formatMessage(texts, appUrl));
-  await writeFile(file, JSON.stringify(c));
-  console.log(`Telegram: ${texts.length} alert(s) sent.`);
+  if (alerts.length) await send(chatId, formatMessage(alerts, appUrl));
 } catch (err) {
-  // Not saved as sent, so they go out next run.
+  // Not saved as sent, so they go out next run (the reports with them).
   console.warn(`! Telegram alerts not sent (will retry next run): ${err.message}`);
+  process.exit(0);
 }
+let failed = 0;
+for (const r of reports) {
+  try { await send(chatId, r.text); } catch { failed++; unmarkSent(c, r); } // tried again next run
+}
+await writeFile(file, JSON.stringify(c));
+console.log(`Telegram: ${alerts.length} alert(s) and ${reports.length - failed} weekly report(s) sent.${failed ? ` ${failed} report(s) failed and will be tried again next run.` : ''}`);

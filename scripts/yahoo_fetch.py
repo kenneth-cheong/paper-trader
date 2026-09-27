@@ -6,10 +6,15 @@ fetches through curl_cffi impersonating Chrome, with the session cookie and crum
 
 Usage: python scripts/yahoo_fetch.py <out_dir>
        python scripts/yahoo_fetch.py summary <out_dir>
+       python scripts/yahoo_fetch.py long <out_dir>
 
-The second form downloads each stock's quoteSummary instead (results dates, earnings surprises,
-analysts' ratings and targets), once a day; scripts/company-data.mjs turns it into
-state/company-data.json. Index funds are skipped, since they have no results or analysts.
+The first form also fetches the VIX (a year of daily closes), which fetch-prices.mjs keeps apart from
+the watchlist, under prices.json's `macro`. The second downloads each stock's quoteSummary instead
+(results dates, earnings surprises, analysts' ratings and targets), once a day;
+scripts/company-data.mjs turns it into state/company-data.json. Index funds are skipped, since they
+have no results or analysts. The third downloads ten years of daily prices with dividends and splits
+for every symbol plus the VIX, once a week; scripts/build-history.mjs turns them into
+state/memory-long.json, and the raw files are never saved.
 """
 
 import json
@@ -18,15 +23,15 @@ import sys
 import time
 import urllib.parse
 
-from curl_cffi import requests
-
 FX_SYMBOL = "SGD=X"
+VIX = "^VIX"  # the market's fear gauge: a macro series, never a watchlist quote
 REQUESTS = [("1y", "1d"), ("5d", "15m")]
+LONG = ("10y", "1d")
 SUMMARY_MODULES = "calendarEvents,earningsHistory,upgradeDowngradeHistory,recommendationTrend,financialData"
 
 
 def raw_name(symbol, range_, interval):
-    # Must match rawPath() in fetch-prices.mjs.
+    # Must match rawPath() in fetch-prices.mjs and build-history.mjs.
     return f"{urllib.parse.quote(symbol, safe='')}_{range_}_{interval}.json"
 
 
@@ -48,6 +53,8 @@ def get_crumb(session):
 
 def yahoo_session():
     """A Chrome-like session with Yahoo's cookie, and the crumb that goes with it ("" if none)."""
+    from curl_cffi import requests  # only here, so the tests can run without it
+
     session = requests.Session(impersonate="chrome")
     for url in ("https://fc.yahoo.com/", "https://finance.yahoo.com/"):
         try:
@@ -95,37 +102,36 @@ def summary(out):
     print(f"Yahoo summaries: {ok} fetched, {failed} failed (crumb {'yes' if crumb else 'no'}).")
 
 
-def main():
-    if sys.argv[1] == "summary":
-        summary(pathlib.Path(sys.argv[2]))
-        return
-    out = pathlib.Path(sys.argv[1])
-    out.mkdir(parents=True, exist_ok=True)
-    symbols = [s["symbol"] for s in json.loads(pathlib.Path("symbols.json").read_text())]
-    session, crumb = yahoo_session()
+def fetch_chart(session, crumb, symbol, range_, interval, tries=3):
+    """One chart request, retried with a growing pause: (body, None), or (None, error). Daily bars of a
+    stock or fund come with its dividends and splits (see actions.js); the FX rate and the VIX have none."""
+    params = {"range": range_, "interval": interval}
+    if interval == "1d" and symbol not in (FX_SYMBOL, VIX):
+        params["events"] = "div,splits"
+    if crumb:
+        params["crumb"] = crumb
+    error = ""
+    for attempt in range(tries):
+        try:
+            res = session.get(
+                f"https://query2.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol, safe='')}",
+                params=params, timeout=30,
+            )
+            if res.status_code == 200:
+                return res.text, None
+            error = f"HTTP {res.status_code} {res.text[:120]}"
+        except Exception as err:  # noqa: BLE001
+            error = str(err)
+        time.sleep(2 ** attempt)
+    return None, error
 
+
+def download(out, jobs, session, crumb, pause):
+    """Runs the chart requests in `jobs` ([(symbol, range, interval)]), writing each answer to `out`
+    (a failure as {"error": ...}, so the builder keeps the last good copy). Returns (ok, failed)."""
     ok = failed = 0
-    jobs = [(s, r, i) for s in symbols for r, i in REQUESTS] + [(FX_SYMBOL, "5d", "1d")]
     for symbol, range_, interval in jobs:
-        params = {"range": range_, "interval": interval}
-        if interval == "1d" and symbol != FX_SYMBOL:
-            params["events"] = "div,splits"  # dividends and stock splits (see actions.js)
-        if crumb:
-            params["crumb"] = crumb
-        body = None
-        for attempt in range(3):
-            try:
-                res = session.get(
-                    f"https://query2.finance.yahoo.com/v8/finance/chart/{urllib.parse.quote(symbol, safe='')}",
-                    params=params, timeout=20,
-                )
-                if res.status_code == 200:
-                    body = res.text
-                    break
-                error = f"HTTP {res.status_code} {res.text[:120]}"
-            except Exception as err:  # noqa: BLE001
-                error = str(err)
-            time.sleep(2 ** attempt)
+        body, error = fetch_chart(session, crumb, symbol, range_, interval)
         if body is None:
             failed += 1
             print(f"! {symbol} {range_}/{interval}: {error}")
@@ -133,7 +139,34 @@ def main():
         else:
             ok += 1
         (out / raw_name(symbol, range_, interval)).write_text(body)
-        time.sleep(0.3)  # be gentle with the endpoint
+        time.sleep(pause)  # be gentle with the endpoint
+    return ok, failed
+
+
+def long_history(out, session=None, crumb=None):
+    """Ten years of daily prices, dividends and splits for every symbol in symbols.json plus the VIX,
+    once a week (scripts/build-history.mjs), 0.4 s apart: about 21 requests of some 280 KB each."""
+    out.mkdir(parents=True, exist_ok=True)
+    symbols = [s["symbol"] for s in json.loads(pathlib.Path("symbols.json").read_text())]
+    if session is None:
+        session, crumb = yahoo_session()
+    ok, failed = download(out, [(s, *LONG) for s in symbols + [VIX]], session, crumb, 0.4)
+    print(f"Yahoo, ten years: {ok} fetched, {failed} failed (crumb {'yes' if crumb else 'no'}).")
+
+
+def main():
+    if sys.argv[1] == "summary":
+        summary(pathlib.Path(sys.argv[2]))
+        return
+    if sys.argv[1] == "long":
+        long_history(pathlib.Path(sys.argv[2]))
+        return
+    out = pathlib.Path(sys.argv[1])
+    out.mkdir(parents=True, exist_ok=True)
+    symbols = [s["symbol"] for s in json.loads(pathlib.Path("symbols.json").read_text())]
+    session, crumb = yahoo_session()
+    jobs = [(s, r, i) for s in symbols for r, i in REQUESTS] + [(FX_SYMBOL, "5d", "1d"), (VIX, "1y", "1d")]
+    ok, failed = download(out, jobs, session, crumb, 0.3)
     print(f"Yahoo: {ok} fetched, {failed} failed (crumb {'yes' if crumb else 'no'}).")
 
 

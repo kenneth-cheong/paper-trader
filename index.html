@@ -83,6 +83,7 @@
           </div>
         </div>
         <p class="muted small" id="market-status"></p>
+        <p class="small regime-line" id="market-regime" hidden></p>
         <div class="table-wrap"><table id="markets"></table></div>
       </section>
     </div>
@@ -276,6 +277,12 @@
         <button type="submit" class="primary" formnovalidate>Done</button>
       </div>
     </form>
+  </dialog>
+
+  <dialog id="stock-dialog" class="stock-dialog" aria-labelledby="stock-title">
+    <button type="button" class="ghost small-btn dialog-x" id="stock-x" aria-label="Close">✕</button>
+    <div id="stock-body"></div>
+    <div class="dialog-actions"><button type="button" class="ghost" id="stock-close">Close</button></div>
   </dialog>
 
   <dialog id="invites-dialog">

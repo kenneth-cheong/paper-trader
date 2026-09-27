@@ -83,7 +83,12 @@ const VOLUME_SPIKE = 1.8; // a news day trades at least this multiple of the med
 const VOLUME_DAYS = 20; // ...of the previous 20 sessions
 const VOLUME_SEARCH = 3; // sessions either side to look for the real date
 const dayMs = 86400000;
-const toneOf = (x) => (x >= IN_LINE ? 'positive' : x <= -IN_LINE ? 'negative' : 'mixed');
+export const toneOf = (x) => (x >= IN_LINE ? 'positive' : x <= -IN_LINE ? 'negative' : 'mixed');
+
+// The quarter a results release on `date` reports: the last quarter in Yahoo's earnings history
+// (company-data.json `eps`) that ended within 120 days before it, or undefined.
+export const resultsQuarter = (company, symbol, date) =>
+  (company?.symbols?.[symbol]?.eps ?? []).filter((e) => e.quarter < date && Date.parse(date) - Date.parse(e.quarter) <= 120 * dayMs).at(-1);
 
 // The first session on or after `day`: its total return minus the index's, or null.
 function firstDayExcess(q, index, day) {
@@ -108,9 +113,8 @@ export function eventsFromFilings(filings, company, quotes) {
     const q = quotes[symbol];
     if (!q) continue;
     const index = indexBars(quotes, q.market);
-    const eps = company?.symbols?.[symbol]?.eps ?? [];
     for (const f of list) {
-      const quarter = eps.filter((e) => e.quarter < f.date && Date.parse(f.date) - Date.parse(e.quarter) <= 120 * dayMs).at(-1);
+      const quarter = resultsQuarter(company, symbol, f.date);
       const surprise = quarter?.surprise ?? null;
       const reaction = surprise == null ? firstDayExcess(q, index, f.effectiveDate) : null;
       out.push({

@@ -1,5 +1,6 @@
 // How an AI fund learns from what happened after its ideas. Pure functions (no AI): the scheduled job
-// grades ideas every run, and a cheap weekly review (ai.js reviewPlaybook) only adds wording on top.
+// grades ideas every run, and a cheap weekly review (ai.js reviewPlaybook) adds lessons on top, which
+// code checks against the same grades before keeping them.
 //
 // Every idea is graded, not just executed trades:
 //   traded    orders that filled or went to Tiger
@@ -25,10 +26,16 @@
 // (stats.js). Lessons come from those grades by fixed rules, each with its evidence, and only when the
 // evidence engine (stats.js estimate) is confident enough: 8+ separate bets (the same stock and side
 // within a week is one bet), a 97-in-100 chance and an edge of 0.3% a week. A lesson stays until that
-// chance falls below 3 in 4 (pb.lessonRecord remembers which are on), so lessons don't flicker.
+// chance falls below 3 in 4 (the lesson book remembers which are on), so lessons don't flicker.
 // Patterns on their way are "watching", shown only to the owner. They form the fund's playbook, which
 // the AI sees at every decision. The owner can hide a lesson or add their own. Nothing here changes
 // the fund's hard limits.
+//
+// Every lesson can be checked (the lesson book, pb.lessonBook): each says which ideas it's about (a
+// filter) and whether they did better or worse than the market explains (a claim), and is tracked on
+// the ideas that came after it was learned: did it hold on new data, and did the AI's behaviour
+// change? The weekly review's lessons come with a filter and a claim too, and code checks them on the
+// graded ideas before they're kept, replacing the review's numbers with its own.
 //
 // Every order and considered idea also carries the AI's thesis (thesis.js): the move it expects, over
 // 5, 21 or 63 trading days, the catalyst and what would prove it wrong. Ideas are graded a quarter (63
@@ -39,12 +46,19 @@
 // weeks the bets started in (calibrationNoiseCheck runs them on honest made-up funds). Where the
 // expected moves hardly vary, it says they're formulaic instead of judging them. At most 3 of these
 // lessons reach the AI.
+//
+// A trade the owner declines keeps the reason they chose (fund.js DECLINE_REASONS), in the idea log
+// too, so their own calls are graded like the fund's: how the trades declined for each reason would
+// have done (learningStats declinedByReason, the page's "Your calls"). The AI sees a reason once it
+// has DECLINE_MIN_CASES cases.
 
 import { priceAt, priceAtWithTime, sessionLength, BENCHMARKS } from './benchmark.js';
 import { dividendReturn } from './actions.js';
 import { planFor } from './fees.js';
+import { DECLINE_REASONS } from './fund.js';
 import { marketForCurrency } from './markets.js';
-import { thesisOf, lessonsAppliedOf, catalystPassed, moveWords, CATALYST_TYPES, HORIZON_DAYS, HORIZON_LABELS, STALE_DAYS } from './thesis.js';
+import { thesisOf, lessonsAppliedOf, catalystPassed, moveWords, CATALYST_TYPES, CATALYST_LABELS, HORIZON_DAYS, HORIZON_LABELS, STALE_DAYS } from './thesis.js';
+import { matchesRegime } from './memory-long.js';
 import {
   betaAt, peerBaseline, peerLabel, roundTripFee, separateBets, estimate, difference, lessonStatus, confidenceOf, betsNeeded,
   weekdaysBetween, weeklyMean, isoWeek, seeded, gauss, quantile, GATE, BANKS,
@@ -116,6 +130,8 @@ export function collectIdeas(fund) {
       else if (o.status === 'awaiting approval') outcome = OUTCOME_OF_PROPOSAL[proposals[o.proposalId]?.status] ?? 'pending';
       else outcome = 'blocked';
       if (outcome === 'pending') return;
+      // the reason the owner chose when declining it (fund.js rejectProposals), if any
+      const why = outcome === 'declined' ? proposals[o.proposalId]?.declineWhy : null;
       ideas.push({
         id: `${d.time}#${i}`, t, symbol: o.symbol, action: o.action,
         // an entry's bet, or for an exit the direction of the position being closed
@@ -127,6 +143,7 @@ export function collectIdeas(fund) {
         fee: !exit && o.fee > 0 && o.shares > 0 && o.price > 0 ? o.fee / (o.shares * o.price) : null,
         shares: o.shares > 0 ? o.shares : null,
         thesis: exit ? null : o.thesis ?? null, lessons: o.lessonsApplied?.length ?? 0,
+        ...(why && Object.hasOwn(DECLINE_REASONS, why) ? { declineWhy: why } : {}),
       });
     });
     (d.considered ?? []).forEach((c, i) => ideas.push({
@@ -152,15 +169,17 @@ export function collectIdeas(fund) {
 // Each row: [t, symbol, direction, class, type, conviction, repeats, week move, week index, month move,
 // month index, month dividends, fee, beta, weekly stock-specific volatility, week peers' move, trade
 // value, price, quarter move, quarter index, expected move, horizon days, catalyst, catalyst age in
-// trading days, catalyst came within the horizon (1/0), lessons applied], moves as fractions, the fee a
-// round trip. The code lists are append-only: stored rows refer to their positions, and new columns
-// only ever go on the end (older rows simply lack them; trailing empty columns are left off). A row is
-// frozen at the month, so its quarter columns are filled in later (completeQuarters).
+// trading days, catalyst came within the horizon (1/0), lessons applied, the owner's reason for
+// declining it], moves as fractions, the fee a round trip. The code lists are append-only: stored rows
+// refer to their positions, and new columns only ever go on the end (older rows simply lack them;
+// trailing empty columns are left off). A row is frozen at the month, so its quarter columns are
+// filled in later (completeQuarters).
 export const CLASS_CODES = ['entry:traded', 'entry:declined', 'entry:expired', 'entry:blocked', 'entry:passed', 'exit:exit', 'exit:stop-loss', 'exit:take-profit', 'exit:declined', 'exit:expired', 'exit:blocked'];
 export const TYPE_CODES = ['other', 'news', 'earnings', 'momentum', 'value', 'technical', 'analyst_pick', 'risk_reduction'];
 export const CONVICTION_CODES = [null, 'low', 'medium', 'high'];
 export const CATALYST_CODES = CATALYST_TYPES; // append-only too
-const COL = { price: 17, qMove: 18, qIdx: 19, expected: 20, horizon: 21, catalyst: 22, age: 23, passed: 24, lessons: 25 };
+export const DECLINE_CODES = [null, 'risky', 'timing', 'stock', 'other']; // fund.js DECLINE_REASONS, append-only
+const COL = { price: 17, qMove: 18, qIdx: 19, expected: 20, horizon: 21, catalyst: 22, age: 23, passed: 24, lessons: 25, why: 26 };
 const ACTIONS = { entry: { 1: 'buy', '-1': 'short' }, exit: { 1: 'sell', '-1': 'cover' } };
 const r5 = (x) => (x == null || !Number.isFinite(x) ? null : Math.round(x * 1e5) / 1e5);
 
@@ -175,7 +194,8 @@ export function ideaRow(g) {
     g.value > 0 ? Math.round(g.value) : null,
     g.price > 0 ? Number(g.price.toPrecision(7)) : null, r5(g.quarter?.move), r5(g.quarter?.index),
     ...(th ? [r5(th.expected == null ? null : th.expected / 100), th.horizon ?? null, Math.max(0, CATALYST_CODES.indexOf(th.catalyst)), th.age ?? null,
-      g.catalystPassed == null ? null : Number(g.catalystPassed), g.lessons || null] : []),
+      g.catalystPassed == null ? null : Number(g.catalystPassed), g.lessons || null] : [null, null, null, null, null, null]),
+    DECLINE_CODES.indexOf(g.declineWhy ?? null) > 0 ? DECLINE_CODES.indexOf(g.declineWhy) : null,
   ];
   while (row.length > COL.price && row.at(-1) == null) row.pop();
   return row;
@@ -185,7 +205,7 @@ export function ideaRow(g) {
 export function frozenIdeas(log) {
   return (Array.isArray(log) ? log : []).flatMap((r) => {
     const [t, symbol, direction, cls, type, conv, repeats, wMove, wIdx, mMove, mIdx, divs, fee, beta, idio, wPeer, value,
-      price, qMove, qIdx, expected, horizon, catalyst, age, passed, lessons] = r;
+      price, qMove, qIdx, expected, horizon, catalyst, age, passed, lessons, why] = r;
     const [kind, outcome] = (CLASS_CODES[cls] ?? '').split(':');
     if (!outcome || wMove == null) return [];
     const thesis = horizon != null || expected != null ? {
@@ -197,7 +217,8 @@ export function frozenIdeas(log) {
       ideaType: TYPE_CODES[type] ?? 'other', conviction: CONVICTION_CODES[conv] ?? null, repeats: repeats ?? 1, reason: '', price: price ?? null, fee,
       beta: beta ?? null, idio: idio ?? null, value: value ?? null,
       week: { move: wMove, index: wIdx, peer: wPeer ?? null }, month: mMove == null ? null : { move: mMove, index: mIdx, divs },
-      quarter: qMove == null ? null : { move: qMove, index: qIdx ?? null }, thesis, catalystPassed: passed == null ? null : passed === 1, lessons: lessons ?? 0, frozen: true,
+      quarter: qMove == null ? null : { move: qMove, index: qIdx ?? null }, thesis, catalystPassed: passed == null ? null : passed === 1, lessons: lessons ?? 0,
+      ...(DECLINE_CODES[why] ? { declineWhy: DECLINE_CODES[why] } : {}), frozen: true,
     }];
   });
 }
@@ -383,6 +404,8 @@ export function learningStats(graded) {
   const traded = entries.filter((g) => g.outcome === 'traded');
   const bySymbol = {};
   for (const g of traded) (bySymbol[`${g.symbol}|${g.direction}`] ??= []).push(g);
+  const declined = {};
+  for (const g of graded) if (g.outcome === 'declined') (declined[g.declineWhy ?? 'none'] ??= []).push(g);
   return {
     graded: graded.length,
     byOutcome: by('outcome', graded),
@@ -390,7 +413,63 @@ export function learningStats(graded) {
     tradedByConviction: by('conviction', traded),
     tradedByDirection: by('direction', traded),
     tradedBySymbol: Object.fromEntries(Object.entries(bySymbol).map(([k, v]) => [k, { ev: evidenceFor(v) }]).filter(([, v]) => v.ev?.peers)),
+    declinedByReason: Object.fromEntries(Object.entries(declined).map(([why, list]) => [why, declineCalls(list)])),
   };
+}
+
+// The owner's calls on a group of trades they declined: { ideas, bets (separate bets), week, month },
+// each horizon { n, right, vsIndex } or null: how many of them had a grade by then, how many would have
+// lost money by then after fees (the owner was right to decline them), and their average result
+// against the index after fees. For a sale or cover they declined, the trade's result is the position's
+// the other way round: they were right when the stock kept going the position's way (exits pay no
+// extra fees).
+export function declineCalls(list) {
+  const made = (g, h) => {
+    const x = g[h];
+    if (!x) return null;
+    const exit = g.kind === 'exit', fee = exit ? 0 : g.fee ?? 0;
+    return { made: exit ? -x.move : x.move - fee, vsIndex: x.index == null ? null : exit ? -(x.move - x.index) : x.move - fee - x.index };
+  };
+  const at = (h) => {
+    const xs = list.map((g) => made(g, h)).filter(Boolean);
+    if (!xs.length) return null;
+    const vs = xs.filter((x) => x.vsIndex != null);
+    return { n: xs.length, right: xs.filter((x) => x.made <= 0).length, vsIndex: vs.length ? r5(mean(vs.map((x) => x.vsIndex))) : null };
+  };
+  return { ideas: list.length, bets: separateBets(list.map((g) => ({ symbol: g.symbol, direction: g.direction, t: g.t }))).length, week: at('week'), month: at('month') };
+}
+
+// What the AI sees of the owner's calls: each reason (not "no reason") with DECLINE_MIN_CASES declined
+// trades or more, and how they'd have done a week later after fees. Empty before then.
+export const DECLINE_MIN_CASES = 5;
+export function declinesForPrompt(stats) {
+  return Object.entries(stats?.declinedByReason ?? {})
+    .filter(([why, c]) => Object.hasOwn(DECLINE_REASONS, why) && c.ideas >= DECLINE_MIN_CASES && c.week)
+    .sort((a, b) => b[1].ideas - a[1].ideas || a[0].localeCompare(b[0]))
+    .map(([why, c]) => ({
+      reason: DECLINE_REASONS[why], declined: c.ideas, lost_money_a_week_later: c.week.right,
+      ...(c.week.vsIndex == null ? {} : { vs_index_pct_a_week_later: Math.round(c.week.vsIndex * 1000) / 10 }),
+    }));
+}
+
+// Each stock's record in the fund's graded ideas, for its stock card (dossier.js): { symbol: { ideas
+// (every idea on it, trades or not), traded, and for its trades bets (separate bets), edge, lo, hi, p
+// (the stock-specific edge a week later with its likely range and the chance of its sign, as the
+// lessons measure it) and right (the share that made money in their direction a week later) } }. Kept
+// with the fund (pb.stocks), so it's private when the fund is.
+export function stockRecords(graded) {
+  const by = new Map();
+  for (const g of graded ?? []) if (g.kind === 'entry' && g.week) (by.get(g.symbol) ?? by.set(g.symbol, []).get(g.symbol)).push(g);
+  const out = {};
+  for (const [symbol, list] of [...by].sort(([a], [b]) => a.localeCompare(b))) {
+    const traded = list.filter((g) => g.outcome === 'traded');
+    const e = traded.length ? evidenceFor(traded)?.edge : null;
+    out[symbol] = {
+      ideas: list.length, traded: traded.length,
+      ...(e ? { bets: e.bets, edge: e.edge, lo: e.lo, hi: e.hi, p: e.p, right: Math.round((traded.filter((g) => g.week.move > 0).length / traded.length) * 100) / 100 } : {}),
+    };
+  }
+  return out;
 }
 
 // ---------- lessons ----------
@@ -811,14 +890,18 @@ export function calibrationNoiseCheck({ sims = 200, seed = 1, weeks = 26 } = {})
 // checks: the page prints it next to NOISE_CHECK.
 export const CAL_NOISE_CHECK = { sims: 200, any: 0.105, moreThanOne: 0, meanLessons: 0.11 };
 
+// Every graded idea of the funds trading in `currency`, pooled: `gradedBy` holds this run's graded
+// ideas by fund id; a fund without them (stopped) counts with its frozen idea log. Ideas repeated
+// across funds count once.
+export const marketIdeas = (funds, gradedBy, currency) => poolIdeas(funds.filter((f) => f.currency === currency).map((f) => gradedBy[f.id] ?? frozenIdeas(f.ideaLog)));
+
 // Calibration pooled across every fund in each market (the same AI, so the same habits), by market:
-// { US: { funds, ...calibration }, SGX: ... }. `gradedBy`: this run's graded ideas by fund id; a fund
-// without them (stopped) counts with its frozen idea log. Ideas repeated across funds count once.
+// { US: { funds, ...calibration }, SGX: ... } (see marketIdeas).
 export function poolCalibration(funds, gradedBy = {}) {
   const out = {};
   for (const ccy of [...new Set(funds.map((f) => f.currency))]) {
     const mine = funds.filter((f) => f.currency === ccy);
-    const c = calibration(poolIdeas(mine.map((f) => gradedBy[f.id] ?? frozenIdeas(f.ideaLog))), { scope: `the ${mine.length} ${ccy} funds` });
+    const c = calibration(marketIdeas(mine, gradedBy, ccy), { scope: `the ${mine.length} ${ccy} funds` });
     if (c) out[marketForCurrency(ccy)] = { funds: mine.length, ...c };
   }
   return out;
@@ -839,49 +922,391 @@ export function calibrationLessons(own, pooled = null) {
   return out.slice(0, CALIBRATION.maxLessons);
 }
 
-// ---------- the playbook ----------
+// ---------- lessons you can check: the lesson book ----------
 
-export const emptyPlaybook = () => ({
-  updatedAt: null, graded: 0, stats: null, lessons: [], review: [], reviewedAt: null, reviewGraded: 0, own: [], hidden: [], recent: [],
-  watching: [], lessonRecord: {}, edgeFrom: null, calibration: null, calibrationLessons: [],
+// Every lesson in the playbook has one record in pb.lessonBook, by id (the rule-made lessons' on/off
+// state above is kept there too): which ideas it's about (its filter: outcome, kind of idea, side,
+// stock, conviction, horizon and catalyst, each 'any' where it doesn't matter), what it says about them
+// (its claim: they did better, or worse, than the market explains, i.e. the stock-specific edge a week
+// later), when it was learned (bornAt), the evidence then (inSample) and on the ideas since (since).
+// Once BOOK.newBets separate bets have come since, it "held on new data" if they give a 9-in-10 chance
+// that its claim is right (stats.js estimate, pulled towards zero) and "didn't hold" if they give that
+// chance to the other side. Nothing is removed for not holding, and nothing fades with time: the owner
+// decides. The behaviour check needs no citations: the share of the fund's ideas that match a lesson's
+// filter before and after it was learned, with counts; how often decisions cited it (lessons_applied)
+// is shown alongside, for information.
+//
+// The weekly review's lessons come with a filter and a claim (ai.js REVIEW_TOOL). Code checks each on
+// the graded ideas its filter picks out, replaces the review's evidence with the computed numbers, and
+// drops one with fewer than GATE.bets separate bets or that the data doesn't back (under a 3-in-4 chance
+// that its claim is right, the level at which a rule-made lesson is withdrawn). Its id is a hash of the
+// filter and claim, so it keeps its identity week to week and one the owner removed stays removed. A
+// lesson about all ideas (every field 'any') can't be checked: it's an "opinion, not checked", keeps an
+// id from its wording (as every review lesson did before filters) and expires after BOOK.opinionDays
+// days unless the owner keeps it.
+
+export const FILTER_KEYS = ['outcome', 'idea_type', 'direction', 'symbol', 'conviction', 'horizon', 'catalyst_type'];
+// Each field's values ('symbol' takes any watchlist symbol), 'any' first.
+export const FILTER_VALUES = {
+  outcome: ['any', ...Object.keys(OUTCOME_LABELS)],
+  idea_type: ['any', ...Object.keys(IDEA_LABELS)],
+  direction: ['any', 'long', 'short'],
+  conviction: ['any', 'low', 'medium', 'high'],
+  horizon: ['any', 'week', 'month', 'quarter'],
+  catalyst_type: ['any', ...CATALYST_TYPES],
+};
+export const CLAIMS = ['better', 'worse'];
+// newBets, p: when a lesson has held on new data (or not); keep: the chance a review lesson's claim needs
+// to be kept; opinionDays: an unchecked opinion's life; reviewMax: the review's lessons in force;
+// reviewListed: review lessons listed in all (the owner's removed ones too, to restore); max: records
+// kept, of them at most `dropped` proposals the check dropped.
+export const BOOK = { newBets: GATE.bets, p: 0.9, keep: GATE.keep, opinionDays: 28, reviewMax: 6, reviewListed: 12, max: 40, dropped: 10 };
+export const TRACK_LABELS = { held: 'held on new data', 'didnt-hold': 'didn\'t hold on new data', unclear: 'not clear yet', 'too-early': 'too early to tell' };
+// Why the check dropped a proposed lesson, in words that read for one lesson or several.
+export const DROP_WORDS = {
+  'no-match': 'no graded idea matched', 'too-few': `fewer than ${GATE.bets} separate bets`,
+  contradicted: 'the data said the opposite', unsupported: 'too little support in the data',
+};
+// Whether the weekly review may move to AI_REVIEW_MODEL: the graded ideas its market needs first.
+export const REVIEW_MODEL_MIN = 150;
+
+const HORIZON_OF = { week: 5, month: 21, quarter: 63 };
+const EXIT_OUTCOMES = ['exit', 'stop-loss', 'take-profit'];
+const FILTER_NOUNS = {
+  traded: 'Trades', declined: 'Declined trades', expired: 'Expired proposals', blocked: 'Blocked orders', passed: 'Ideas passed on',
+  exit: 'Exits', 'stop-loss': 'Stop-losses', 'take-profit': 'Take-profits',
+};
+const DAY_MS = 86400000;
+const shortText = (s) => String(s ?? '').slice(0, 160);
+const sample = (e) => ({ bets: e.bets, edge: r5(e.edge), range: [r5(e.lo), r5(e.hi)] });
+
+// A filter as stored: only the fields that aren't 'any' (a value it doesn't know counts as 'any'), a
+// symbol in capitals. {} is a lesson about all ideas.
+export function cleanFilter(raw) {
+  const out = {};
+  for (const k of FILTER_KEYS) {
+    const v = raw?.[k] == null ? '' : String(raw[k]).trim();
+    if (!v || v.toLowerCase() === 'any') continue;
+    if (k === 'symbol') out[k] = v.toUpperCase();
+    else if (FILTER_VALUES[k].includes(v)) out[k] = v;
+  }
+  return out;
+}
+export const isOpinion = (filter) => !Object.keys(cleanFilter(filter)).length;
+// A review lesson is checked, or an opinion (so is one from before filters).
+export const lessonKind = (l) => l.kind ?? (isOpinion(l.filter) ? 'opinion' : 'checked');
+
+// Whether a graded idea (or any idea from collectIdeas) is one a filter (as stored, see cleanFilter)
+// picks out.
+const set = (v) => v != null && v !== '' && v !== 'any';
+export function matchesFilter(g, f = {}) {
+  return (!set(f.outcome) || g.outcome === f.outcome)
+    && (!set(f.idea_type) || g.ideaType === f.idea_type)
+    && (!set(f.direction) || g.direction === (f.direction === 'short' ? -1 : 1))
+    && (!set(f.symbol) || g.symbol === f.symbol)
+    && (!set(f.conviction) || g.conviction === f.conviction)
+    && (!set(f.horizon) || g.thesis?.horizon === HORIZON_OF[f.horizon])
+    && (!set(f.catalyst_type) || g.thesis?.catalyst === f.catalyst_type);
+}
+
+// A filter in words: "Trades (news, short, NVDA)", or "Ideas" for all of them.
+export function filterWords(filter) {
+  const f = cleanFilter(filter);
+  const parts = [
+    f.idea_type && (IDEA_LABELS[f.idea_type] ?? f.idea_type), f.direction, f.symbol, f.conviction && `${f.conviction} conviction`,
+    f.horizon && `given ${HORIZON_LABELS[HORIZON_OF[f.horizon]]}`,
+    f.catalyst_type && (f.catalyst_type === 'none' ? 'no catalyst' : `${CATALYST_LABELS[f.catalyst_type] ?? f.catalyst_type} catalyst`),
+  ].filter(Boolean);
+  const noun = FILTER_NOUNS[f.outcome] ?? 'Ideas';
+  return parts.length ? `${noun} (${parts.join(', ')})` : noun;
+}
+
+const fnv = (s) => { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) h = Math.imul(h ^ s.charCodeAt(i), 0x01000193) >>> 0; return h.toString(36); };
+// A review lesson about all ideas (an opinion, like every review lesson before filters) keeps an id
+// from its wording (lower case, letters and digits only), so the same words next week keep the id.
+export const reviewLessonId = (text) => `review:${fnv(String(text).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim())}`;
+// A checkable review lesson's id: a hash of its filter and claim, whatever the wording.
+export function filterLessonId(filter, claim) {
+  const f = cleanFilter(filter);
+  return `review:${fnv(`${FILTER_KEYS.map((k) => `${k}=${f[k] ?? 'any'}`).join('&')}|${claim}`)}`;
+}
+
+// The evidence for a claim ('better' or 'worse') about the graded ideas a filter picks out (those after
+// unix time `after` and up to `before`, when given), a week later (evidenceFor): { ev, est (the estimate
+// of `measure`: 'edge', the stock-specific edge, 'index' or 'peers'), p (the chance it's on the claim's
+// side) }, or null when none is graded.
+export function claimEvidence(graded, filter, claim, { measure = 'edge', after = -Infinity, before = Infinity } = {}) {
+  const f = cleanFilter(filter);
+  const ev = evidenceFor(graded.filter((g) => g.t > after && g.t <= before && matchesFilter(g, f)));
+  const est = ev?.[measure];
+  if (!est) return null;
+  const side = claim === 'worse' ? -1 : 1;
+  return { ev, est, p: est.sign === side ? est.p : Math.round((1 - est.p) * 1000) / 1000 };
+}
+
+// How sure a checked claim is: High (99%+), Moderate (from GATE.p), else Low.
+export const claimConfidence = (p) => (p >= 0.99 ? 'High' : p >= GATE.p ? 'Moderate' : 'Low');
+
+// Why the check drops a proposed lesson (claimEvidence's `c`), or null to keep it.
+export function dropReason(c) {
+  if (!c) return 'no-match';
+  if (c.est.bets < GATE.bets) return 'too-few';
+  if (c.p < 0.5) return 'contradicted';
+  return c.p < BOOK.keep ? 'unsupported' : null;
+}
+
+// A checked lesson's numbers, as the AI and the page see them (like a rule-made lesson's).
+const checkedNumbers = (c, filter) => ({
+  evidence: evidenceText(c.ev, filterWords(filter)), confidence: claimConfidence(c.p), p: c.p, measure: 'edge', edge: c.est.edge, lo: c.est.lo, hi: c.est.hi, bets: c.est.bets,
 });
 
-// The record of each rule-made lesson's state, shared by every run: { id: { on, since, p, gated } }
-// for the lessons on and the patterns being watched (`gated`: passed the full gate at some point). A
-// playbook from before the evidence engine has none, so its lessons count as on, ungated (and the
-// switch starts the transition period).
+// How a lesson has done on the ideas since it was learned: 'too-early' (under BOOK.newBets separate
+// bets), 'held' (a BOOK.p chance its claim is right on them), 'didnt-hold' (that chance the other way)
+// or 'unclear'.
+export function trackStatus(since) {
+  if (!since || since.bets < BOOK.newBets) return 'too-early';
+  if (since.p >= BOOK.p) return 'held';
+  return 1 - since.p >= BOOK.p ? 'didnt-hold' : 'unclear';
+}
+
+// The ideas each rule-made lesson is about, so it's tracked like the others (the high-minus-low
+// conviction and beta-driven lessons compare other things, so they aren't).
+const RULE_FILTERS = {
+  'shorts-weak': [{ outcome: 'traded', direction: 'short' }, 'worse'], 'passed-better': [{ outcome: 'passed' }, 'better'],
+  'passed-right': [{ outcome: 'passed' }, 'worse'], 'blocked-better': [{ outcome: 'blocked' }, 'better'],
+  'declined-right': [{ outcome: 'declined' }, 'worse'], 'declined-good': [{ outcome: 'declined' }, 'better'],
+  'exit-early': [{ outcome: 'exit' }, 'better'], 'stops-tight': [{ outcome: 'stop-loss' }, 'better'], 'takes-early': [{ outcome: 'take-profit' }, 'better'],
+};
+export function ruleFilter(id) {
+  if (RULE_FILTERS[id]) return { filter: { ...RULE_FILTERS[id][0] }, claim: RULE_FILTERS[id][1] };
+  const type = /^type-(weak|strong):(.+)$/.exec(id);
+  if (type) return { filter: { outcome: 'traded', idea_type: type[2] }, claim: type[1] === 'weak' ? 'worse' : 'better' };
+  const peer = /^peer-weak:(.+)\|(-?1)$/.exec(id);
+  if (peer) return { filter: { outcome: 'traded', symbol: peer[1], direction: peer[2] === '-1' ? 'short' : 'long' }, claim: 'worse', measure: 'peers' };
+  return null;
+}
+
+// For a rule-made lesson measured by the edge, or an owner's lesson with a filter: the id a weekly
+// review lesson about the same ideas with the same claim would have (filterLessonId), so the review
+// can't add a second copy of it; null for the others (a peer lesson measures against its peers).
+export function sameIdeasId(l) {
+  if (l?.source === 'owner') return !isOpinion(l.filter) && CLAIMS.includes(l.claim) ? filterLessonId(l.filter, l.claim) : null;
+  const r = ruleFilter(l?.id);
+  return r && !r.measure ? filterLessonId(r.filter, r.claim) : null;
+}
+
+// The behaviour check: the share of the fund's ideas (collectIdeas, graded or not) that a lesson's
+// filter picks out, before and after it was learned: { before: [matching, of], after: [...] }. Of which
+// ideas: those with the filter's outcome (all of them without one); for a filter on the outcome alone,
+// every idea of that kind (entries, or exits for exits, stop-losses and take-profits).
+export function behaviourCheck(ideas, filter, bornAt) {
+  const f = cleanFilter(filter), t0 = Date.parse(bornAt) / 1000;
+  const kind = Object.keys(f).length === 1 && f.outcome ? (EXIT_OUTCOMES.includes(f.outcome) ? 'exit' : 'entry') : null;
+  const base = ideas.filter((i) => (kind ? i.kind === kind : !f.outcome || i.outcome === f.outcome));
+  const count = (xs) => [xs.filter((i) => matchesFilter(i, f)).length, xs.length];
+  return { before: count(base.filter((i) => i.t < t0)), after: count(base.filter((i) => i.t >= t0)) };
+}
+// What the behaviour check counts among, in words: "its trades", "its ideas", "its exits".
+export function behaviourBase(filter) {
+  const f = cleanFilter(filter);
+  if (Object.keys(f).length === 1 && f.outcome) return EXIT_OUTCOMES.includes(f.outcome) ? 'its exits' : 'its ideas';
+  return f.outcome ? `its ${FILTER_NOUNS[f.outcome].toLowerCase()}` : 'its ideas';
+}
+
+// How many times decisions cited each lesson (lessons_applied, on orders and ideas passed on), by id.
+export function citations(decisions) {
+  const n = {};
+  for (const d of decisions ?? []) for (const x of [...(d.orders ?? []), ...(d.considered ?? [])]) for (const id of x.lessonsApplied ?? []) n[id] = (n[id] ?? 0) + 1;
+  return n;
+}
+
+// The playbook's track record: of the lessons with a filter the book holds (the latest BOOK.max), how
+// many held on new data, didn't, aren't clear yet or are too early to tell (a review lesson that gave way
+// to the rule-made lesson on the same ideas, `sameAs`, counts once, as that one); the opinions the
+// review wrote; and the proposals the check dropped, with how many for each reason (DROP_WORDS).
+export function trackRecord(book) {
+  const out = { lessons: 0, held: 0, 'didnt-hold': 0, unclear: 0, 'too-early': 0, opinions: 0, dropped: 0, droppedFor: {} };
+  for (const e of Object.values(book ?? {})) {
+    if (e.dropped) { out.dropped++; out.droppedFor[e.dropped] = (out.droppedFor[e.dropped] ?? 0) + 1; } else if (e.sameAs) continue;
+    else if (e.filter && e.status) { out.lessons++; out[e.status]++; } else if (e.source === 'weekly review') out.opinions++;
+  }
+  return out;
+}
+
+// How often pure noise gets a verdict on new data: on made-up funds with no skill (noiseFund), a few
+// fixed kinds of idea (ideas passed on, exits, trades, and trades by kind), each "learned" half-way
+// with a random claim and checked on the ideas after: { sims, held, didntHold }, shares of lessons.
+// test/lesson-book.test.mjs re-runs it (HOLD_NOISE), and the page prints it.
+const NOISE_FILTERS = [{ outcome: 'passed' }, { outcome: 'exit' }, { outcome: 'traded' }, ...['news', 'momentum', 'value', 'earnings'].map((t) => ({ outcome: 'traded', idea_type: t }))];
+export function holdNoiseCheck({ sims = 200, seed = 1, weeks = 26, born = 13 } = {}) {
+  const count = { held: 0, 'didnt-hold': 0 };
+  for (let k = 0; k < sims; k++) {
+    const rand = seeded(seed + k * 7919);
+    const ideas = noiseFund(rand, weeks);
+    for (const f of NOISE_FILTERS) {
+      const c = claimEvidence(ideas, f, rand() < 0.5 ? 'better' : 'worse', { after: NOISE_START + born * 7 * DAY_S });
+      const status = trackStatus(c ? { bets: c.est.bets, p: c.p } : null);
+      if (status in count) count[status]++;
+    }
+  }
+  const share = (n) => Math.round((n / (sims * NOISE_FILTERS.length)) * 1000) / 1000;
+  return { sims, held: share(count.held), didntHold: share(count['didnt-hold']) };
+}
+export const HOLD_NOISE = { sims: 200, held: 0.019, didntHold: 0.027 };
+
+// The rule-made lessons' records (the hysteresis: which lessons are on), and the ids on and gated.
+const ruleRecords = (pb) => Object.entries(pb.lessonBook ?? {}).filter(([, r]) => r.on !== undefined);
 function lessonsOn(pb) {
-  if (pb.lessonRecord && Object.keys(pb.lessonRecord).length) return Object.entries(pb.lessonRecord).filter(([, r]) => r.on).map(([id]) => id);
+  const records = ruleRecords(pb);
+  // a playbook from before the evidence engine has none, so its lessons count as on, ungated (and the
+  // switch starts the transition period)
+  if (records.length) return records.filter(([, r]) => r.on).map(([id]) => id);
   return (pb.lessons ?? []).map((l) => l.id);
 }
-const lessonsGated = (pb) => Object.entries(pb.lessonRecord ?? {}).filter(([, r]) => r.on && r.gated).map(([id]) => id);
+const lessonsGated = (pb) => ruleRecords(pb).filter(([, r]) => r.on && r.gated).map(([id]) => id);
 
-// Re-grades everything and refreshes the rule-made lessons and the calibration. Keeps the review, the
-// owner's lessons and hidden ids. `recent`: the latest graded ideas, for the fund page. `calendar`:
-// calendar.js resultsCalendar, for checking results catalysts; `pooled`: the market's pooled
+// Refreshes the lesson book from the lessons in the playbook now (see above): the rule-made lessons'
+// on/off state (a lesson that goes off loses its `gated`, so it must pass the full gate again), a
+// record for each lesson when it's first seen, the evidence since each lesson with a filter was
+// learned and its status, and for the lessons in the playbook the behaviour check and citations.
+// Records of lessons that have gone stay while they're tracked (and the review's dropped proposals and
+// expired opinions, so it doesn't propose them again); beyond BOOK.max the oldest go. Sets
+// pb.trackRecord. `ideas`: collectIdeas; `graded`: the same ideas graded.
+function updateBook(pb, { graded, ideas, decisions, now }) {
+  const book = pb.lessonBook ?? {};
+  const iso = now.toISOString();
+  const live = new Set();
+  const record = (id, fields, bornAt = iso) => {
+    const e = (book[id] ??= {});
+    e.bornAt ??= bornAt;
+    for (const k of ['dropped', 'droppedAt', 'ended', 'sameAs']) delete e[k];
+    live.add(id);
+    return Object.assign(e, fields);
+  };
+  const before = (e) => claimEvidence(graded, e.filter, e.claim, { measure: e.measure ?? 'edge', before: Date.parse(e.bornAt) / 1000 });
+  for (const l of pb.lessons ?? []) {
+    const e = record(l.id, { source: 'results', on: true, ...ruleFilter(l.id) });
+    if (l.gated) e.gated = true;
+    if (e.filter && !e.inSample && l.bets) e.inSample = sample(l);
+  }
+  for (const [id, e] of Object.entries(book)) if (e.on && !live.has(id)) { e.on = false; delete e.gated; }
+  for (const l of pb.calibrationLessons ?? []) record(l.id, { source: 'calibration' });
+  for (const l of pb.review ?? []) {
+    const checked = lessonKind(l) === 'checked' && !isOpinion(l.filter);
+    const e = record(l.id, { source: 'weekly review', text: shortText(l.text), ...(checked ? { filter: cleanFilter(l.filter), claim: l.claim } : {}) }, l.bornAt ?? iso);
+    if (checked && !e.inSample) { const c = before(e); if (c) e.inSample = sample(c.est); }
+  }
+  for (const l of pb.own ?? []) {
+    const tracked = !isOpinion(l.filter);
+    const e = record(l.id, { source: 'owner', text: shortText(l.text), ...(tracked ? { filter: cleanFilter(l.filter), claim: l.claim } : {}) }, l.addedAt ?? iso);
+    if (tracked && !e.inSample) { const c = before(e); e.inSample = c ? sample(c.est) : { bets: 0 }; }
+  }
+  const cited = citations(decisions);
+  for (const [id, e] of Object.entries(book)) {
+    const on = live.has(id);
+    if (e.filter && e.bornAt && !e.dropped) {
+      const c = claimEvidence(graded, e.filter, e.claim, { measure: e.measure ?? 'edge', after: Date.parse(e.bornAt) / 1000 });
+      e.since = c ? { bets: c.est.bets, edge: c.est.edge, p: c.p } : { bets: 0 };
+      e.status = trackStatus(e.since);
+    }
+    if (on && e.filter) e.behaviour = behaviourCheck(ideas, e.filter, e.bornAt); else delete e.behaviour;
+    const times = (cited[id] ?? 0) + (e.was ? cited[e.was] ?? 0 : 0);
+    if (on && times) e.cited = times; else delete e.cited;
+    if (on) continue;
+    if (!e.dropped && !e.ended && e.source === 'owner') e.ended = 'removed';
+    // nothing left to track (Stage 1 forgot a lesson once it went off)
+    if (!e.filter && !e.dropped && e.ended !== 'expired') delete book[id];
+  }
+  capBook(book, live);
+  pb.lessonBook = book;
+  pb.trackRecord = trackRecord(book);
+}
+
+// Keeps the lesson book compact: the latest BOOK.dropped of the review's dropped proposals, then at
+// most BOOK.max records in all, the oldest of the lessons that have gone (not in `live`) first.
+function capBook(book, live) {
+  const gone = Object.entries(book).filter(([id]) => !live.has(id));
+  const dropped = gone.filter(([, e]) => e.dropped).sort((a, b) => b[1].droppedAt.localeCompare(a[1].droppedAt));
+  for (const [id] of dropped.slice(BOOK.dropped)) delete book[id];
+  const over = Object.keys(book).length - BOOK.max;
+  if (over <= 0) return;
+  const oldest = gone.filter(([id]) => book[id]).sort((a, b) => (a[1].bornAt ?? a[1].droppedAt ?? '').localeCompare(b[1].bornAt ?? b[1].droppedAt ?? ''));
+  for (const [id] of oldest.slice(0, over)) delete book[id];
+}
+
+// The review's lessons each run: a checked one's numbers from every graded idea its filter picks out
+// (it's never dropped for them: the lesson book tracks how it does since); an opinion expires
+// BOOK.opinionDays after the review wrote it, unless the owner keeps it.
+function refreshReview(pb, graded, now) {
+  const kept = new Set(pb.kept ?? []);
+  pb.review = (pb.review ?? []).filter((l) => {
+    if (lessonKind(l) === 'checked') {
+      const c = claimEvidence(graded, l.filter, l.claim);
+      if (c) Object.assign(l, checkedNumbers(c, l.filter));
+      return true;
+    }
+    if (kept.has(l.id) || !(now - Date.parse(l.bornAt) >= BOOK.opinionDays * DAY_MS)) return true;
+    (pb.lessonBook[l.id] ??= { source: 'weekly review', bornAt: l.bornAt, text: shortText(l.text) }).ended = 'expired';
+    return false;
+  });
+  pb.kept = (pb.kept ?? []).filter((id) => pb.review.some((l) => l.id === id));
+}
+
+// A review lesson about the same ideas with the same claim as a rule-made lesson in force (sameIdeasId,
+// one the owner hasn't removed) gives way to it, so the same finding isn't in force twice: it leaves the
+// review's lessons, its record ends as 'gave-way' with `sameAs` (the rule-made lesson's id), and if the
+// owner had removed it, the rule-made one is removed too.
+function sameIdeas(pb) {
+  const hidden = new Set(pb.hidden ?? []);
+  const rules = new Map((pb.lessons ?? []).filter((l) => !hidden.has(l.id)).map((l) => [sameIdeasId(l), l.id]).filter(([k]) => k));
+  if (!rules.size) return;
+  pb.review = (pb.review ?? []).filter((l) => {
+    const rule = lessonKind(l) === 'checked' ? rules.get(l.id) : null;
+    if (!rule) return true;
+    const e = (pb.lessonBook[l.id] ??= { source: 'weekly review', bornAt: l.bornAt, text: shortText(l.text) });
+    Object.assign(e, { ended: 'gave-way', sameAs: rule });
+    if (hidden.has(l.id)) hidden.add(rule);
+    return false;
+  });
+  pb.hidden = [...hidden];
+}
+
+// ---------- the playbook ----------
+
+// lessonHistory: each lesson's evidence week by week, for the weekly report (report.js); ownerSummary:
+// { at, text }, the latest weekly review's summary for the owner.
+export const emptyPlaybook = () => ({
+  updatedAt: null, graded: 0, stats: null, lessons: [], review: [], reviewedAt: null, reviewGraded: 0, own: [], hidden: [], kept: [], recent: [],
+  watching: [], lessonBook: {}, trackRecord: null, edgeFrom: null, calibration: null, calibrationLessons: [], stocks: {}, lessonHistory: {}, ownerSummary: null,
+});
+
+// Re-grades everything and refreshes the rule-made lessons, the calibration and the lesson book. Keeps
+// the review, the owner's lessons and hidden ids. `recent`: the latest graded ideas, for the fund page.
+// `calendar`: calendar.js resultsCalendar, for checking results catalysts; `pooled`: the market's pooled
 // calibration (poolCalibration, from the last run), for the calibration lessons.
 export function updatePlaybook(fund, quotes, now = new Date(), { calendar = null, pooled = null } = {}) {
-  const pb = migratePlaybook({ ...emptyPlaybook(), ...(fund.playbook ?? {}) });
+  const pb = migratePlaybook({ ...emptyPlaybook(), ...(fund.playbook ?? {}) }, now);
   completeQuarters(fund, quotes, fund.currency, now, { calendar });
-  const graded = chargeFees(gradeIdeas(collectIdeas(fund), quotes, fund.currency, now, { calendar }), fund, quotes);
+  const ideas = collectIdeas(fund);
+  const graded = chargeFees(gradeIdeas(ideas, quotes, fund.currency, now, { calendar }), fund, quotes);
   freezeIdeas(fund, graded);
   pb.calibration = calibration(graded);
   pb.calibrationLessons = calibrationLessons(pb.calibration, pooled);
   pb.stats = learningStats(graded);
+  pb.stocks = stockRecords(graded);
   pb.graded = graded.length;
   // Merging repeats can lower the count; don't let that hold the weekly review back for weeks.
   if ((pb.reviewGraded ?? 0) > pb.graded) pb.reviewGraded = pb.graded;
   const was = lessonsOn(pb);
   // Lessons shown before the switch to the stock-specific edge keep the old measure for a while.
-  if (!pb.edgeFrom) pb.edgeFrom = was.length && !Object.keys(pb.lessonRecord ?? {}).length ? now.toISOString() : '';
-  const transition = Boolean(pb.edgeFrom) && now - Date.parse(pb.edgeFrom) < TRANSITION_DAYS * 86400000;
+  if (!pb.edgeFrom) pb.edgeFrom = was.length && !ruleRecords(pb).length ? now.toISOString() : '';
+  const transition = Boolean(pb.edgeFrom) && now - Date.parse(pb.edgeFrom) < TRANSITION_DAYS * DAY_MS;
   const { lessons, watching } = evaluateLessons(pb.stats, { was, transition, gated: lessonsGated(pb) });
-  const record = {};
-  for (const l of lessons) record[l.id] = { on: true, since: pb.lessonRecord?.[l.id]?.on ? pb.lessonRecord[l.id].since : now.toISOString(), p: l.p, ...(l.gated ? { gated: true } : {}) };
-  for (const w of watching) record[w.id] = { on: false, since: pb.lessonRecord?.[w.id]?.on === false ? pb.lessonRecord[w.id].since : now.toISOString(), p: w.p };
-  pb.lessonRecord = record;
   pb.lessons = lessons;
   pb.watching = watching.slice(0, 10);
+  sameIdeas(pb);
+  refreshReview(pb, graded, now);
+  updateBook(pb, { graded, ideas, decisions: fund.decisions, now });
   pb.recent = graded.slice(-40).reverse().map((g) => ({
     time: new Date(g.t * 1000).toISOString(), symbol: g.symbol, action: g.action, outcome: g.outcome, ideaType: g.ideaType, reason: g.reason,
     repeats: g.repeats ?? 1, week: g.week, month: g.month, quarter: g.quarter ?? null,
@@ -892,16 +1317,19 @@ export function updatePlaybook(fund, quotes, now = new Date(), { calendar = null
   return { pb, graded };
 }
 
-// The lessons in force: the owner's first, then the review's, calibration's and the rule-made ones,
-// minus hidden ones.
+// The lessons in force: the owner's first, then the review's checked ones, calibration's and the
+// rule-made ones, then the review's opinions (not checked), minus hidden ones.
 export function activeLessons(pb) {
   if (!pb) return [];
   const hidden = new Set(pb.hidden ?? []);
-  return [...(pb.own ?? []), ...(pb.review ?? []), ...(pb.calibrationLessons ?? []), ...(pb.lessons ?? [])].filter((l) => !hidden.has(l.id) && String(l.text ?? '').trim() && l.text !== 'undefined').slice(0, 12);
+  const review = pb.review ?? [];
+  const opinion = (l) => lessonKind(l) === 'opinion';
+  return [...(pb.own ?? []), ...review.filter((l) => !opinion(l)), ...(pb.calibrationLessons ?? []), ...(pb.lessons ?? []), ...review.filter(opinion)]
+    .filter((l) => !hidden.has(l.id) && String(l.text ?? '').trim() && l.text !== 'undefined').slice(0, 12);
 }
 
-// A rule-made lesson's numbers for the AI (percent a week), named for what they measure, or nothing
-// for the owner's and the review's.
+// A lesson's numbers for the AI (percent a week), named for what they measure, or nothing for the
+// owner's lessons and the review's opinions.
 const pct1 = (x) => Math.round(x * 1000) / 10;
 const MEASURE_KEYS = { edge: 'edge_pct_per_week', index: 'vs_index_pct_per_week', peers: 'vs_peers_pct_per_week', diff: 'high_minus_low_conviction_pct_per_week' };
 function lessonNumbers(l) {
@@ -912,18 +1340,39 @@ function lessonNumbers(l) {
   };
 }
 
+// A lesson's status for the AI: an opinion no data could check, or how it has done since it was
+// learned once that's clear. Not for the owner's own lessons: the owner decides about those.
+function lessonStatusForAI(l, book) {
+  if (l.source === 'owner') return {};
+  if (l.source === 'weekly review' && lessonKind(l) === 'opinion') return { status: 'opinion, not checked' };
+  const status = book?.[l.id]?.status;
+  return status === 'held' || status === 'didnt-hold' ? { status: TRACK_LABELS[status] } : {};
+}
+
 // What the AI sees in its decision context, or null when there's nothing to say. Each lesson has its
-// id, which the AI cites in an order's lessons_applied.
-export function playbookForPrompt(pb, { picksRecord = null, marketLessons = [] } = {}) {
+// id, which the AI cites in an order's lessons_applied. `marketLessons`: the market memory's (the
+// ten-year and the past year's, memory-long.js promptMarketLessons), at most 6, those whose evidence
+// covers days like today's `regime` (memory-long.js regimeNow) first; the regime only orders them.
+// The owner's calls on the trades they declined come as owner_declines, only reasons with
+// DECLINE_MIN_CASES cases (declinesForPrompt).
+export function playbookForPrompt(pb, { picksRecord = null, marketLessons = [], regime = null } = {}) {
   const lessons = activeLessons(pb);
   const hidden = new Set(pb?.hidden ?? []);
-  const market = marketLessons.filter((l) => !hidden.has(l.id)).slice(0, 6);
-  if (!lessons.length && !picksRecord && !market.length) return null;
+  const shown = marketLessons.filter((l) => !hidden.has(l.id));
+  const market = (regime ? [...shown.filter((l) => matchesRegime(l, regime)), ...shown.filter((l) => !matchesRegime(l, regime))] : shown).slice(0, 6);
+  const declines = declinesForPrompt(pb?.stats);
+  if (!lessons.length && !picksRecord && !market.length && !declines.length) return null;
   return {
     graded_ideas: pb?.graded ?? 0,
-    lessons: lessons.map((l) => ({ id: l.id, lesson: l.text, ...lessonNumbers(l), evidence: l.evidence ?? null, from: l.source })),
+    // a review lesson's evidence is its numbers (a checked one's) or unchecked words (an opinion's), so
+    // its text isn't sent
+    lessons: lessons.map((l) => ({
+      id: l.id, lesson: l.text, ...lessonNumbers(l), ...lessonStatusForAI(l, pb?.lessonBook),
+      ...(l.source === 'weekly review' ? {} : { evidence: l.evidence ?? null }), from: l.source,
+    })),
     ...(market.length ? { market_memory: market.map((l) => ({ id: l.id, lesson: l.text, ...lessonNumbers(l), evidence: l.evidence })) } : {}),
     ...(picksRecord ? { home_page_picks_record: picksRecord } : {}),
+    ...(declines.length ? { owner_declines: declines } : {}),
   };
 }
 
@@ -943,19 +1392,31 @@ export function rememberCited(fund, ids, playbook) {
   if (entries.length) fund.citedLessons = Object.fromEntries(entries.slice(-CITED_MAX));
 }
 
-// The owner's edits: { add: text } or { remove: lessonId } (hides a rule/review lesson, deletes an own one).
+// The owner's edits: { add: text } with optionally { filter, claim } (the ideas it's about, chosen on
+// the page, so it's tracked like the others), { remove: lessonId } (hides a rule, review or market
+// lesson; deletes an own one), { restore: lessonId }, or { keep: lessonId } (an opinion from the weekly
+// review, which then doesn't expire).
 export function editPlaybook(fund, edit, now = new Date()) {
-  const pb = { ...emptyPlaybook(), ...(fund.playbook ?? {}) };
+  const pb = migratePlaybook({ ...emptyPlaybook(), ...(fund.playbook ?? {}) }, now);
   if (edit.add) {
     const text = String(edit.add).trim().slice(0, 300);
     if (!text) throw new Error('Write the lesson first.');
-    pb.own = [...pb.own, { id: `own:${now.getTime().toString(36)}`, text, evidence: 'Added by the owner', source: 'owner', addedAt: now.toISOString() }].slice(-10);
+    const filter = cleanFilter(edit.filter);
+    const tracked = Object.keys(filter).length > 0;
+    if (tracked && !CLAIMS.includes(edit.claim)) throw new Error('Say whether those ideas did better or worse than the market explains.');
+    let id = `own:${now.getTime().toString(36)}`;
+    for (let n = 2; pb.own.some((l) => l.id === id); n++) id = `own:${now.getTime().toString(36)}-${n}`;
+    pb.own = [...pb.own, { id, text, evidence: 'Added by the owner', source: 'owner', addedAt: now.toISOString(), ...(tracked ? { filter, claim: edit.claim } : {}) }].slice(-10);
   }
   if (edit.remove) {
     if (pb.own.some((l) => l.id === edit.remove)) pb.own = pb.own.filter((l) => l.id !== edit.remove);
     else pb.hidden = [...new Set([...pb.hidden, edit.remove])];
   }
   if (edit.restore) pb.hidden = pb.hidden.filter((id) => id !== edit.restore);
+  if (edit.keep) {
+    if (!pb.review.some((l) => l.id === edit.keep)) throw new Error('That lesson has gone: it expired, or made room for newer ones.');
+    pb.kept = [...new Set([...pb.kept, edit.keep])];
+  }
   fund.playbook = pb;
 }
 
@@ -964,66 +1425,222 @@ export function reviewDue(fund, now = new Date()) {
   const pb = fund.playbook;
   if (fund.settings?.learning === false || !pb) return false;
   if (pb.graded - (pb.reviewGraded ?? 0) < REVIEW_MIN_NEW) return false;
-  return !pb.reviewedAt || now - new Date(pb.reviewedAt) >= REVIEW_EVERY_DAYS * 86400000;
+  return !pb.reviewedAt || now - new Date(pb.reviewedAt) >= REVIEW_EVERY_DAYS * DAY_MS;
 }
 
-// The statistics for the weekly review, compact: each group's week and month summary, and its evidence
-// as separate bets, vs the index, from beta, fees and the stock-specific edge with its likely range and
-// chance (percent a week). Leaves out the per-stock groups, to keep the review cheap.
-export function statsForReview(stats) {
-  const p1 = (x) => (x == null ? null : Math.round(x * 1000) / 10);
-  const ev = (e) => (e?.edge ? { separate_bets: e.bets, vs_index: p1(e.vsIndex), from_beta: p1(e.fromBeta), fees: p1(e.fees), edge: p1(e.edge.edge), likely: [p1(e.edge.lo), p1(e.edge.hi)], chance: e.edge.p } : null);
-  const table = (t) => Object.fromEntries(Object.entries(t ?? {}).map(([k, v]) => [k, { week: v.week, month: v.month, evidence_pct_per_week: ev(v.ev) }]));
-  return {
-    graded: stats?.graded ?? 0, byOutcome: table(stats?.byOutcome), tradedByType: table(stats?.tradedByType),
-    tradedByConviction: table(stats?.tradedByConviction), tradedByDirection: table(stats?.tradedByDirection),
+// ---------- the weekly review's input and its lessons ----------
+
+// The weekly review's model: the cheap one (`cheap`), unless the owner opted into another (`optIn`,
+// the AI_REVIEW_MODEL variable) and the fund's market has REVIEW_MODEL_MIN graded ideas (`graded`,
+// marketIdeas: each counted once across its funds). Before that, sample size, not the model, limits
+// what a review can find.
+export const reviewModel = ({ optIn = '', cheap, graded = 0 }) => (optIn && graded >= REVIEW_MODEL_MIN ? optIn : cheap);
+
+// The cells the weekly review reads, computed by code: for each group of graded ideas (its filter, as
+// the review writes one), the ideas, separate bets, the stock-specific edge a week later with its
+// standard error (percent a week, the estimate pulled towards zero) and whether it passes the gate a
+// rule-made lesson needs (significant). Groups: every outcome, and for trades and ideas passed on each
+// kind of idea, side, conviction, horizon, catalyst and stock; groups with fewer than `minBets`
+// separate bets are left out, to keep the review cheap.
+export function reviewCells(graded, { minBets = 3 } = {}) {
+  const p2 = (x) => Math.round(x * 10000) / 100;
+  const cells = [];
+  const add = (filter, list) => {
+    const e = evidenceFor(list)?.edge;
+    if (!e || e.bets < minBets) return;
+    cells.push({ filter, ideas: list.length, separate_bets: e.bets, edge_pct_per_week: p2(e.edge), se_pct: p2(e.sd), significant: lessonStatus(e, e.sign) === 'lesson' });
   };
+  const split = (list, of) => {
+    const m = new Map();
+    for (const g of list) { const v = of(g); if (v != null) (m.get(v) ?? m.set(v, []).get(v)).push(g); }
+    return m;
+  };
+  for (const [outcome, list] of split(graded, (g) => g.outcome)) add({ outcome }, list);
+  const by = {
+    idea_type: (g) => g.ideaType, direction: (g) => (g.direction < 0 ? 'short' : 'long'), conviction: (g) => g.conviction,
+    horizon: (g) => HORIZON_KEY[g.thesis?.horizon], catalyst_type: (g) => g.thesis?.catalyst, symbol: (g) => g.symbol,
+  };
+  for (const outcome of ['traded', 'passed']) {
+    const base = graded.filter((g) => g.outcome === outcome);
+    for (const [key, of] of Object.entries(by)) for (const [v, list] of split(base, of)) add({ outcome, [key]: v }, list);
+  }
+  return cells;
 }
 
-// The most telling graded ideas for the review: the biggest wins and misses against the index.
+// The most telling graded ideas for the review: the biggest wins and misses against the index, with
+// the fields its filters use.
 export function reviewExamples(graded, n = 16) {
   return [...graded]
     .sort((a, b) => Math.abs((b.week.move - (b.week.index ?? 0))) - Math.abs((a.week.move - (a.week.index ?? 0))))
     .slice(0, n)
     .map((g) => ({
-      symbol: g.symbol, action: g.action, outcome: OUTCOME_LABELS[g.outcome] ?? g.outcome, idea_type: g.ideaType, reason: g.reason,
-      week_move: pct(g.week.move), week_vs_index: g.week.index == null ? null : pct(g.week.move - g.week.index),
+      symbol: g.symbol, action: g.action, outcome: g.outcome, idea_type: g.ideaType, ...(g.conviction ? { conviction: g.conviction } : {}),
+      ...(g.thesis?.horizon ? { horizon: HORIZON_KEY[g.thesis.horizon] } : {}), ...(g.thesis?.catalyst ? { catalyst_type: g.thesis.catalyst } : {}),
+      reason: g.reason, week_move: pct(g.week.move), week_vs_index: g.week.index == null ? null : pct(g.week.move - g.week.index),
     }));
 }
 
-// A review lesson's id comes from its wording (lower case, letters and digits only), so the same lesson
-// written again next week keeps its id, and stays hidden if the owner removed it.
-export function reviewLessonId(text) {
-  const norm = String(text).toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-  let h = 0x811c9dc5; // FNV-1a
-  for (let i = 0; i < norm.length; i++) h = Math.imul(h ^ norm.charCodeAt(i), 0x01000193) >>> 0;
-  return `review:${h.toString(36)}`;
+// A lesson book record's status in words, for the weekly review.
+function bookWords(id, e, { hidden, kept, live }) {
+  const track = e.filter && e.status ? TRACK_LABELS[e.status] : null;
+  if (e.dropped) return `dropped when proposed: ${DROP_WORDS[e.dropped]}`;
+  if (hidden.has(id)) return `removed by the owner${track ? `; since it was learned: ${track}` : ''}`;
+  if (!live.has(id)) {
+    const how = e.sameAs ? `replaced by ${e.sameAs}, a lesson on the same ideas and claim`
+      : { expired: 'an opinion that expired', 'gave-way': 'made room for newer lessons', removed: 'deleted by the owner' }[e.ended] ?? (e.source === 'results' ? 'withdrawn: its evidence faded' : 'gone');
+    return `${how}${track ? `; since it was learned: ${track}` : ''}`;
+  }
+  if (track) return `in force; since it was learned: ${track}`;
+  if (e.source === 'weekly review') return kept.has(id) ? 'in force: an opinion the owner kept' : 'in force: an opinion, not checked';
+  return 'in force';
 }
 
-// Older playbooks gave review lessons dated ids (review:<date>:<n>): switch the current ones to
-// wording ids, carrying over any the owner hid.
-export function migratePlaybook(pb) {
+// The lesson book as the weekly review reads it: every lesson so far with its filter, claim and status
+// (in force or not, held or not on new data, dropped when proposed, removed, expired), so it doesn't
+// propose again what failed. The lessons in the playbook first, then the rest, at most `max`.
+export function reviewLessonBook(pb, max = 30) {
+  const hidden = new Set(pb?.hidden ?? []), kept = new Set(pb?.kept ?? []);
+  const book = pb?.lessonBook ?? {};
+  const lessons = [...(pb?.own ?? []), ...(pb?.review ?? []), ...(pb?.calibrationLessons ?? []), ...(pb?.lessons ?? [])];
+  const live = new Set(lessons.map((l) => l.id));
+  const text = new Map(lessons.map((l) => [l.id, l.text]));
+  const source = new Map(lessons.map((l) => [l.id, l.source]));
+  return [...new Set([...live, ...Object.keys(book)])].slice(0, max).map((id) => {
+    const e = book[id] ?? {};
+    const filter = e.filter ?? (live.has(id) ? cleanFilter(lessons.find((l) => l.id === id).filter) : {});
+    return {
+      id, lesson: String(text.get(id) ?? e.text ?? id).slice(0, 200), from: e.source ?? source.get(id),
+      ...(Object.keys(filter).length ? { filter, claim: e.claim ?? lessons.find((l) => l.id === id)?.claim } : {}), status: bookWords(id, e, { hidden, kept, live }),
+    };
+  });
+}
+
+// Brings an older playbook up to date: review lessons with dated ids (review:<date>:<n>) switch to
+// wording ids, carrying over any the owner hid; review lessons from before filters become opinions
+// from the review that wrote them; and Stage 1's lesson records (pb.lessonRecord: the rule-made
+// lessons' on/off state) move into the lesson book.
+export function migratePlaybook(pb, now = new Date()) {
   const renamed = new Map();
   // A review lesson that came back without its text (saved as 'undefined') is dropped.
   pb.review = (pb.review ?? []).filter((l) => String(l.text ?? '').trim() && l.text !== 'undefined').map((l) => {
-    if (!/^review:\d{4}-\d{2}-\d{2}:\d+$/.test(l.id ?? '')) return l;
-    const id = reviewLessonId(l.text);
-    renamed.set(l.id, id);
-    return { ...l, id };
+    let x = l;
+    if (/^review:\d{4}-\d{2}-\d{2}:\d+$/.test(l.id ?? '')) {
+      x = { ...l, id: reviewLessonId(l.text) };
+      renamed.set(l.id, x.id);
+    }
+    if (!x.kind) {
+      const bornAt = x.bornAt ?? pb.reviewedAt ?? now.toISOString();
+      x = { ...x, kind: lessonKind(x), bornAt, seenAt: x.seenAt ?? bornAt };
+    }
+    return x;
   });
   if (renamed.size) pb.hidden = [...new Set((pb.hidden ?? []).map((id) => renamed.get(id) ?? id))];
+  pb.lessonBook ??= {};
+  for (const [id, r] of Object.entries(pb.lessonRecord ?? {})) {
+    const { gated, ...e } = pb.lessonBook[id] ?? {};
+    if (r?.on) pb.lessonBook[id] = { ...e, source: 'results', on: true, ...(r.gated ? { gated: true } : {}), bornAt: e.bornAt ?? r.since ?? now.toISOString() };
+    else if (pb.lessonBook[id]?.on) pb.lessonBook[id] = { ...e, on: false };
+  }
+  delete pb.lessonRecord;
+  pb.hidden ??= [];
+  pb.kept ??= [];
   return pb;
 }
 
-export function applyReview(fund, lessons, gradedCount, now = new Date()) {
-  const pb = migratePlaybook({ ...emptyPlaybook(), ...(fund.playbook ?? {}) });
-  const seen = new Set();
-  pb.review = (lessons ?? []).filter((l) => String(l?.text ?? '').trim()).slice(0, 6)
-    .map((l) => ({ id: reviewLessonId(l.text), text: String(l.text).slice(0, 300), evidence: String(l.evidence ?? '').slice(0, 300), source: 'weekly review' }))
-    .filter((l) => !seen.has(l.id) && seen.add(l.id));
-  pb.reviewedAt = now.toISOString();
-  pb.reviewGraded = gradedCount;
+// The weekly review's lessons ({ text, evidence, filter, claim }, as ai.js reviewPlaybook returns them),
+// checked on `graded` (this run's graded ideas, from updatePlaybook) and added to the review's lessons
+// in force (see the lesson book above). One in force proposed again keeps its id and record, in the
+// review's newer words. Beyond BOOK.reviewMax in force, the ones proposed longest ago make room, but
+// never one the owner kept, one just proposed, or one that didn't hold on new data (that waits for the
+// owner). `summary`: the review's three sentences for the owner (ai.js owner_summary), kept as
+// pb.ownerSummary for the weekly report (report.js). Returns how many were { added, again, dropped }.
+export const SUMMARY_MAX = 600;
+export function applyReview(fund, lessons, graded = [], now = new Date(), { summary = '' } = {}) {
+  const pb = migratePlaybook({ ...emptyPlaybook(), ...(fund.playbook ?? {}) }, now);
+  const iso = now.toISOString();
+  const words = String(summary ?? '').replace(/\s+/g, ' ').trim().slice(0, SUMMARY_MAX);
+  if (words) pb.ownerSummary = { at: iso, text: words };
+  const book = pb.lessonBook;
+  const hidden = new Set(pb.hidden), kept = new Set(pb.kept);
+  const proposed = new Set();
+  const out = { added: 0, again: 0, dropped: 0 };
+  // the rule-made and owner's lessons in the playbook, by the id of a review lesson on the same ideas
+  const others = new Map([...(pb.lessons ?? []), ...(pb.own ?? [])].map((l) => [sameIdeasId(l), l.id]).filter(([k]) => k));
+  for (const raw of (lessons ?? []).filter((l) => String(l?.text ?? '').trim() && l.text !== 'undefined').slice(0, 6)) {
+    const text = String(raw.text).trim().slice(0, 300);
+    const filter = cleanFilter(raw.filter);
+    const opinion = isOpinion(filter);
+    const claim = raw.claim === 'worse' ? 'worse' : 'better';
+    const wordsId = reviewLessonId(text);
+    const id = opinion ? wordsId : filterLessonId(filter, claim);
+    if (proposed.has(id)) continue;
+    proposed.add(id);
+    // an earlier lesson in the same words (review lessons' ids came from their wording before filters)
+    // passes on what the owner chose for it
+    if (id !== wordsId && hidden.has(wordsId)) hidden.add(id);
+    if (id !== wordsId && kept.has(wordsId)) kept.add(id);
+    // the same ideas and claim as a rule-made lesson or one of the owner's: that lesson is already in
+    // the playbook, so it's written again, not added (nor counted when the owner removed that one); an
+    // opinion in the same words (from before filters) gives way to it too
+    const same = opinion ? null : others.get(id);
+    if (same) {
+      if (pb.review.some((l) => l.id === wordsId)) {
+        pb.review = pb.review.filter((l) => l.id !== wordsId);
+        Object.assign((book[wordsId] ??= { source: 'weekly review', text: shortText(text), bornAt: iso }), { ended: 'gave-way', sameAs: same });
+      }
+      if (!hidden.has(same)) {
+        out.again++;
+        if (book[same]) book[same].seenAt = iso; // the review wrote it again (report.js counts it)
+      }
+      continue;
+    }
+    const again = pb.review.find((l) => l.id === id);
+    if (again) {
+      Object.assign(again, { text, seenAt: iso }, opinion ? { evidence: String(raw.evidence ?? '').trim().slice(0, 300) } : {});
+      out.again++;
+      continue;
+    }
+    if (opinion) {
+      if (book[id]?.ended === 'expired') continue; // an opinion that expired stays expired
+      pb.review.push({ id, text, evidence: String(raw.evidence ?? '').trim().slice(0, 300), source: 'weekly review', kind: 'opinion', bornAt: iso, seenAt: iso });
+      book[id] = { source: 'weekly review', text: shortText(text), bornAt: iso };
+      out.added++;
+      continue;
+    }
+    const c = claimEvidence(graded, filter, claim);
+    const why = dropReason(c);
+    if (why) {
+      book[id] = { source: 'weekly review', text: shortText(text), filter, claim, dropped: why, droppedAt: iso };
+      out.dropped++;
+      continue;
+    }
+    // the same words as an opinion (or a lesson from before filters): now checked, under the new id,
+    // with the decisions that cited the old one
+    const was = pb.review.some((l) => l.id === wordsId) ? { was: wordsId } : {};
+    pb.review = pb.review.filter((l) => l.id !== wordsId);
+    pb.review.push({ id, text, source: 'weekly review', kind: 'checked', filter, claim, bornAt: iso, seenAt: iso, ...checkedNumbers(c, filter) });
+    book[id] = { source: 'weekly review', text: shortText(text), filter, claim, bornAt: iso, inSample: sample(c.est), since: { bets: 0 }, status: 'too-early', ...was };
+    out.added++;
+  }
+  // make room: the lessons in force beyond BOOK.reviewMax (opinions first), then the owner's removed
+  // ones (still listed, to restore) beyond BOOK.reviewListed, the ones proposed longest ago first
+  const oldest = (a, b) => (a.seenAt ?? a.bornAt ?? '').localeCompare(b.seenAt ?? b.bornAt ?? '');
+  const opinionsFirst = (a, b) => Number(lessonKind(b) === 'opinion') - Number(lessonKind(a) === 'opinion') || oldest(a, b);
+  const inForce = pb.review.filter((l) => !hidden.has(l.id));
+  const stays = (l) => proposed.has(l.id) || kept.has(l.id) || book[l.id]?.status === 'didnt-hold';
+  const room = new Set(inForce.filter((l) => !stays(l)).sort(opinionsFirst).slice(0, Math.max(0, inForce.length - BOOK.reviewMax)).map((l) => l.id));
+  for (const id of room) if (book[id]) book[id].ended = 'gave-way';
+  const listed = pb.review.filter((l) => !room.has(l.id));
+  const unlisted = new Set(listed.filter((l) => hidden.has(l.id)).sort(oldest).slice(0, Math.max(0, listed.length - BOOK.reviewListed)).map((l) => l.id));
+  pb.review = listed.filter((l) => !unlisted.has(l.id));
+  pb.hidden = [...hidden];
+  pb.kept = [...kept].filter((id) => pb.review.some((l) => l.id === id));
+  capBook(book, new Set([...pb.own, ...pb.review, ...(pb.calibrationLessons ?? []), ...(pb.lessons ?? [])].map((l) => l.id)));
+  pb.trackRecord = trackRecord(book);
+  pb.reviewedAt = iso;
+  pb.reviewGraded = graded.length;
   fund.playbook = pb;
+  return out;
 }
 
 // ---------- skipping quiet decisions ----------

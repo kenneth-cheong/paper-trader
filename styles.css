@@ -154,6 +154,11 @@ td .name { display: block; font-size: 12px; color: var(--muted); max-width: 220p
 .chip.buy { background: var(--up-bg); color: var(--up); }
 .chip.sell { background: var(--down-bg); color: var(--down); }
 .chip.results { background: var(--warn-bg); color: var(--warn-text); white-space: nowrap; }
+/* the ten-year memory: a pattern that held on the held-out years, and today's regime (descriptive) */
+.chip.held { background: var(--up-bg); color: var(--up); }
+.chip.regime-chip { margin-left: 0; white-space: normal; max-width: 100%; }
+.regime-line { margin: 4px 0 10px; }
+.regime-line .chip { margin-right: 6px; }
 .spark { width: 90px; height: 26px; display: block; }
 .spark polyline { fill: none; stroke-width: 1.5; }
 
@@ -318,6 +323,18 @@ body.locked { overflow: hidden; }
 .lessons li { font-size: 14px; }
 .lesson-form { margin: 8px 0; }
 .lesson-form input { flex: 1; min-width: 0; }
+/* the owner's lesson: which of its ideas it's about (optional), so it's tracked like the others */
+.lesson-filter { margin-top: 6px; }
+.lesson-filter summary { cursor: pointer; color: var(--accent); font-size: 13px; }
+.lesson-filter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px 10px; margin: 8px 0 4px; }
+.lesson-filter-grid select { margin-top: 4px; }
+.lesson-filter-grid .claim { grid-column: span 2; }
+.lesson-actions { display: inline-block; white-space: nowrap; }
+.lesson-filter p { margin: 4px 0 0; }
+/* each lesson's record: learned when, and how it has done since */
+.lessons .since { display: inline-block; margin-top: 2px; }
+.chip.warn { background: var(--warn-bg); color: var(--warn-text); }
+.track-record { margin: 8px 0; }
 .decision-skip { margin: 6px 0; }
 /* an AI thesis: under a fund position's name, an order or a proposal */
 .thesis { display: block; color: var(--muted); white-space: normal; max-width: 360px; margin-top: 2px; }
@@ -334,6 +351,7 @@ body.locked { overflow: hidden; }
 }
 /* a chart's Table whose headers may wrap, so it fits without scrolling sideways on a desktop */
 .chart-table.wrap-head th { white-space: normal; vertical-align: bottom; }
+.chart-table.long-table td:first-child { white-space: nowrap; } /* the ten-year studies: each row's name on one line; the table scrolls */
 
 /* ---------- charts ---------- */
 .chart text { font-size: 12px; font-family: inherit; }
@@ -380,3 +398,82 @@ body.locked { overflow: hidden; }
 .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 12px 20px; }
 .chart-grid > * { min-width: 0; }
 .chart-grid { align-items: start; }
+
+/* ---------- stock notes: each stock's own history and risk (dossier.js) ---------- */
+/* a stock's symbol opens its notes */
+.stock-link { font: inherit; font-weight: 650; background: none; border: 0; padding: 0; border-radius: 3px; color: inherit; cursor: pointer; text-decoration: underline dotted; text-decoration-color: var(--muted); text-underline-offset: 3px; white-space: nowrap; }
+.stock-link:hover { background: none; color: var(--accent); }
+.stock-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.pick-actions { margin-top: 0; justify-content: flex-end; flex-wrap: nowrap; flex: none; }
+.stock-dialog { width: min(760px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow-y: auto; }
+.stock-dialog h3 { margin-bottom: 2px; padding-right: 40px; }
+/* a close button that stays in reach while the notes scroll */
+.dialog-x { position: sticky; top: 0; float: right; z-index: 1; margin: -6px -6px 0 0; background: var(--surface); }
+.stock-dialog h4 { margin: 14px 0 4px; }
+.stock-sub { margin: 0 0 8px; }
+.stock-sub .chip.results { margin-left: 6px; }
+.stock-position { margin: 6px 0 4px; padding: 8px 10px; background: var(--surface-2); border-radius: 8px; }
+.stock-facts { display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; margin: 12px 0; font-size: 14px; }
+.stock-facts dt { color: var(--muted); font-size: 13px; padding-top: 1px; }
+.stock-facts dd { margin: 0; }
+.stock-results-note { margin: 12px 0 4px; }
+.stock-records { padding-left: 18px; margin: 4px 0; }
+.stock-records li { margin: 4px 0; }
+.stock-note textarea { margin-top: 4px; }
+.stock-honest { margin-top: 12px; }
+textarea { font: inherit; width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); color: var(--text); resize: vertical; }
+/* the owner's note under a fund's position in the stock */
+.owner-note { display: block; white-space: normal; max-width: 360px; margin-top: 2px; }
+.stock-note .owner-note { max-width: none; margin: 4px 0; }
+/* the fund's stops and risk */
+.risk-head { margin-top: 16px; }
+.risk-uneven { margin: 6px 0 8px; }
+.risk-notes { padding-left: 18px; margin: 6px 0; }
+.risk-notes li { margin: 3px 0; }
+/* markers on a line chart: results days, ex-dates and trades */
+.chart .mark { stroke: var(--halo); stroke-width: 1.5; }
+.legend-list .marker-key { width: 10px; height: 10px; flex: none; margin-top: 4px; background: var(--c); }
+.legend-list .marker-key.dot { border-radius: 50%; }
+.legend-list .marker-key.diamond { transform: rotate(45deg) scale(.8); border-radius: 1px; }
+.legend-list .marker-key.up { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.legend-list .marker-key.down { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+#tooltip .tip-key.tip-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.chart-table.stock-table td:nth-child(2) { white-space: normal; text-align: left; min-width: 160px; }
+@media (max-width: 560px) {
+  .stock-results th, .stock-results td { padding: 8px 5px; }
+  .stock-facts { grid-template-columns: 1fr; gap: 0; }
+  .stock-facts dd { margin-bottom: 8px; }
+  .owner-note { max-width: 190px; }
+  .stock-dialog { padding: 16px 14px; }
+}
+
+/* ---------- the weekly report ("This week", report.js) and your calls ---------- */
+.weekly { border-left: 3px solid var(--accent); }
+.weekly .panel-head h2 { margin: 0; }
+.weekly-fund { font-weight: 400; font-size: 15px; }
+.week-pick { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+.week-pick select { width: auto; padding: 4px 8px; }
+.report-head { margin: 4px 0 6px; }
+.report-lines { margin: 6px 0; padding-left: 18px; display: grid; gap: 6px; font-size: 14px; }
+.report-lines .report-summary { color: var(--muted); }
+/* a lesson's trend line, on its own line under its numbers */
+.spark-box { display: inline-block; width: 88px; height: 24px; vertical-align: middle; margin: 2px 0 0; }
+.chart.spark-trend .line { stroke-width: 2; }
+.chart.spark-trend .pt { fill: var(--series-1); }
+.chart.spark-trend .baseline { stroke-dasharray: 2 2; }
+.chart-card.table-only { margin: 4px 0; }
+.trend-note { margin: 4px 0 0; }
+/* Reject asks why: the four reasons under the trade */
+.decline-why { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 2px 0 4px; }
+.reason-btn { font-size: 13px; padding: 4px 12px; border-radius: 99px; background: var(--surface-2); min-height: 32px; }
+.reason-btn:hover { border-color: var(--accent); }
+.calls-head { margin-top: 18px; }
+.calls td:first-child { white-space: normal; }
+.calls td:first-child .chip { white-space: nowrap; } /* "the AI sees it" on one line, not a word a line */
+.calls th { white-space: normal; vertical-align: bottom; }
+@media (max-width: 560px) {
+  .calls th, .calls td { padding: 8px 5px; }
+  .calls td .small { white-space: normal; } /* "4 separate bets" wraps rather than widen the table */
+  .week-pick { width: 100%; }
+  .week-pick select { flex: 1; }
+}

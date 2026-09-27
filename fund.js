@@ -16,12 +16,19 @@
 // Every order keeps the AI's thesis (thesis.js) for grading later; what code checks about it (a stale
 // catalyst, an expected move under the fees) is noted on the order and never blocks it.
 // With Tiger and approval 'manual', the AI's trades wait as proposals until an admin approves them;
-// a proposal expires after PROPOSAL_MINUTES or if the price moves more than PROPOSAL_MAX_DRIFT.
+// a proposal expires after PROPOSAL_MINUTES or if the price moves more than PROPOSAL_MAX_DRIFT. One the
+// owner declines keeps the reason they chose (DECLINE_REASONS), which is graded like the idea itself.
 //
 // With Tiger, stop-losses are also held by Tiger itself as standing (GTC) stop orders ("guards", see
 // syncGuards), so they trigger at once even if the scheduled job runs late or not at all. Shorts
 // always get one at the 40% forced-cover level. While a guard is live at Tiger, this code doesn't
 // run its own stop-loss check for that stock (take-profits are still checked here).
+//
+// Every open position is followed from the moment it opens (fund.tracks): the worst and the best move
+// it has had as its stops see it, so each exit carries how far the trade went against the fund and
+// for it before it closed (MAE and MFE). Every change the AI makes to a stop-loss or take-profit is
+// logged with the stock's typical daily move at the time (fund.protectionLog), for the page's stops
+// and risk. Both are records only: neither changes a limit or a stop.
 
 import { newPortfolio, applyTrade, summarize } from './portfolio.js';
 import { pricePoints } from './rules.js';
@@ -54,6 +61,8 @@ export function newFund({ budget, currency, decisionsPerDay = 2, settings = {}, 
     settings: { ...DEFAULT_SETTINGS },
     portfolio: newPortfolio({ [currency]: budget }),
     protections: {}, // symbol -> { stop_loss_pct, take_profit_pct }
+    tracks: {}, // symbol -> { openedAt, from, entry, worst, best }: each open position's worst and best move (see trackFill)
+    protectionLog: [], // each change to a stop-loss or take-profit, with the stock's daily move then (setProtections)
     cursor: Math.floor(now.getTime() / 1000), // last price point checked for protections
     lastDecisionAt: null,
     stoppedAt: null,
@@ -240,9 +249,12 @@ export function applyOrders(fund, orders, quotes, now = new Date(), { send = fal
         throw new Error(`Over the per-order limit of ${s.maxOrderPct}% of the budget (${cap.toFixed(2)} ${fund.currency}).`);
       }
       if (!broker) {
+        const before = fund.portfolio.positions[o.symbol];
         fund.portfolio = applyTrade(fund.portfolio, { symbol: o.symbol, side, qty, price: q.price, currency: fund.currency, market: q.market, time });
         ledger = fund.portfolio;
         Object.assign(res, { status: 'filled', shares: qty, price: q.price, fee: fund.portfolio.trades.at(-1).fee });
+        const track = trackFill(fund, o.symbol, before, q.price, time, priceTime(q) ?? time);
+        if (track) res.track = track;
       } else {
         const limit = limitPrice(side, q.price, q.market);
         ledger = applyTrade(ledger, { symbol: o.symbol, side, qty, price: side === 'buy' ? limit : q.price, currency: fund.currency, market: q.market, time });
@@ -317,10 +329,21 @@ export function approveProposals(fund, ids, quotes, prices, now = new Date(), { 
   return out;
 }
 
-export function rejectProposals(fund, ids, now = new Date()) {
+// Why the owner declined a trade: the Reject button's four choices. The reason is kept on the proposal
+// (p.declineWhy) and graded with the idea (learning.js), so the owner's own calls get a record too.
+export const DECLINE_REASONS = { risky: 'too risky', timing: 'bad timing', stock: 'don\'t like the stock', other: 'other' };
+
+// Declines the proposals waiting in `ids`, with the owner's reason `why` (a DECLINE_REASONS key; none,
+// or one it doesn't know, declines them without a reason). Returns the proposals declined.
+export function rejectProposals(fund, ids, now = new Date(), why = null) {
+  const reason = Object.hasOwn(DECLINE_REASONS, why ?? '') ? why : null;
+  const out = [];
   for (const p of fund.proposals ?? []) {
-    if (ids.includes(p.id) && p.status === 'awaiting') Object.assign(p, { status: 'rejected', decidedAt: now.toISOString() });
+    if (!ids.includes(p.id) || p.status !== 'awaiting') continue;
+    Object.assign(p, { status: 'rejected', decidedAt: now.toISOString(), ...(reason ? { declineWhy: reason } : {}) });
+    out.push(p);
   }
+  return out;
 }
 
 // Records Tiger fills in the fund's ledger at Tiger's actual prices and fees, once an order is finished
@@ -333,6 +356,7 @@ export function applyBrokerFills(fund, now = new Date()) {
     const fresh = (o.filledQty ?? 0) - (o.appliedQty ?? 0);
     if (fresh <= 0 || !(o.avgFillPrice > 0) || !['filled', 'cancelled'].includes(o.status)) continue;
     try {
+      const before = fund.portfolio.positions[o.symbol];
       fund.portfolio = applyTrade(fund.portfolio, {
         symbol: o.symbol, side: o.side, qty: fresh, price: o.avgFillPrice, currency: fund.currency,
         market: o.market ?? marketForCurrency(fund.currency), fee: o.fee ?? undefined, time: o.filledAt ?? now.toISOString(),
@@ -340,8 +364,12 @@ export function applyBrokerFills(fund, now = new Date()) {
       o.appliedQty = o.filledQty;
       const fee = fund.portfolio.trades.at(-1).fee;
       if (!fund.portfolio.positions[o.symbol]) delete fund.protections?.[o.symbol];
+      const track = trackFill(fund, o.symbol, before, o.avgFillPrice, o.filledAt ?? now.toISOString(), o.createdAt ?? o.filledAt ?? now.toISOString());
       const what = isGuard(o) ? `stop-loss order held by Tiger triggered at ${o.stopPrice}` : `Tiger fill (${o.source})`;
-      const e = { time: now.toISOString(), symbol: o.symbol, action: o.action, shares: fresh, price: o.avgFillPrice, fee, why: `${what}; fees ${fee.toFixed(2)}${o.fee == null ? ' (estimated)' : ''}` };
+      const e = {
+        time: now.toISOString(), symbol: o.symbol, action: o.action, shares: fresh, price: o.avgFillPrice, fee,
+        why: `${what}; fees ${fee.toFixed(2)}${o.fee == null ? ' (estimated)' : ''}`, ...(track ? { track } : {}),
+      };
       fund.events.push(e);
       fills.push(e);
     } catch (err) {
@@ -381,18 +409,85 @@ export function checkDailyLoss(fund, quotes, now = new Date()) {
 // ---------- protections ----------
 
 // Keeps levels for stocks the fund holds or, with Tiger, is about to hold (an open order or a proposal).
-export function setProtections(fund, protections = []) {
+// Each change is logged in fund.protectionLog (the newest PROTECTION_LOG_MAX) with the stock's typical
+// daily move in % when it was set (`dailyMoves`: { symbol: % }, dossier.js), so the page can show how
+// tight its stops have been against ordinary swings; a change to the take-profit alone is marked
+// `stopKept`, so it isn't counted as a new stop.
+export const PROTECTION_LOG_MAX = 200;
+export function setProtections(fund, protections = [], { now = new Date(), dailyMoves = {} } = {}) {
   const pending = new Set([
     ...(fund.brokerOrders ?? []).filter((o) => OPEN_BROKER.includes(o.status)).map((o) => o.symbol),
     ...(fund.proposals ?? []).filter((p) => p.status === 'awaiting').map((p) => p.symbol),
   ]);
-  for (const p of protections) {
+  for (const p of protections ?? []) {
     if (!fund.portfolio.positions[p.symbol] && !pending.has(p.symbol)) continue;
     const stop = Math.max(0, Number(p.stop_loss_pct) || 0);
     const take = Math.max(0, Number(p.take_profit_pct) || 0);
+    const was = fund.protections[p.symbol] ?? {};
     if (stop || take) fund.protections[p.symbol] = { stop_loss_pct: stop, take_profit_pct: take };
     else delete fund.protections[p.symbol];
+    if ((was.stop_loss_pct ?? 0) === stop && (was.take_profit_pct ?? 0) === take) continue;
+    const log = (fund.protectionLog ??= []);
+    log.push({
+      symbol: p.symbol, stop_loss_pct: stop, take_profit_pct: take, setAt: now.toISOString(), dailyMovePct: dailyMoves?.[p.symbol] ?? null,
+      ...((was.stop_loss_pct ?? 0) === stop ? { stopKept: true } : {}),
+    });
+    if (log.length > PROTECTION_LOG_MAX) log.splice(0, log.length - PROTECTION_LOG_MAX);
   }
+}
+
+// ---------- how far each position went against and for the fund ----------
+
+// fund.tracks[symbol] = { openedAt, from, entry, worst, best }: since the position opened (openedAt; for
+// one opened before tracking began, when it was first seen, with `late`), its worst and its best move as
+// its stops see them: the price against its average cost (`entry`), in its direction, + is profit, as
+// fractions. Every price point checkProtections replays and every fill updates it; it's exact, and the
+// same move the stop-loss and take-profit are checked against. Only prices after `from` belong to the
+// position, so neither its track nor its stops ever see one from before it existed: in the simulator
+// that's the time of the price it filled at; with Tiger, when its order was made (the fill's own time is
+// only known when the next sync notices it, after that run's prices were fetched). When the position
+// closes, the track is copied onto the exit (the protection event, the AI's sell or cover, the Tiger
+// fill) as `track` { openedAt, worst, best } and dropped.
+const moveOf = (pos, price) => ((price - pos.avgCost) / pos.avgCost) * Math.sign(pos.qty);
+const r4 = (x) => Math.round(x * 1e4) / 1e4;
+function seeTrack(fund, symbol, pos, price, time) {
+  if (!pos?.qty || !(pos.avgCost > 0) || !(price > 0)) return;
+  const m = moveOf(pos, price);
+  const tracks = (fund.tracks ??= {});
+  const tr = (tracks[symbol] ??= { openedAt: time ?? null, late: true, entry: null, worst: m, best: m });
+  tr.entry = Number(pos.avgCost.toPrecision(7));
+  tr.worst = r4(Math.min(tr.worst ?? m, m));
+  tr.best = r4(Math.max(tr.best ?? m, m));
+}
+function endTrack(fund, symbol, pos, price) {
+  if (!fund.tracks?.[symbol]) return null;
+  seeTrack(fund, symbol, pos, price);
+  const { openedAt, late, worst, best } = fund.tracks[symbol];
+  delete fund.tracks[symbol];
+  return { openedAt, ...(late ? { late } : {}), worst, best };
+}
+// After a fill in `symbol` (`before`: the position before it, or undefined): a new position starts its
+// track at the fill, taking prices after `from` (see above); one closed (or turned to the other side)
+// returns its track for the exit.
+function trackFill(fund, symbol, before, price, time, from = time) {
+  const after = fund.portfolio.positions[symbol];
+  let done = null;
+  if (before?.qty && (!after || Math.sign(after.qty) !== Math.sign(before.qty))) done = endTrack(fund, symbol, before, price);
+  if (after && (!before?.qty || Math.sign(after.qty) !== Math.sign(before.qty))) (fund.tracks ??= {})[symbol] = { openedAt: time, from: from ?? time, entry: null, worst: null, best: null };
+  if (after) seeTrack(fund, symbol, after, price, time);
+  return done;
+}
+// The time of a quote's latest price (what the simulator fills at), as ISO, or null.
+function priceTime(q) {
+  const t = pricePoints(q).at(-1)?.[0];
+  return t ? new Date(t * 1000).toISOString() : null;
+}
+// The unix time after which a held position's prices count (its track's `from`), or -Infinity when that
+// isn't known (a position from before tracking began).
+function pricesFrom(fund, symbol) {
+  const tr = fund.tracks?.[symbol];
+  const t = tr && !tr.late ? Date.parse(tr.from ?? tr.openedAt ?? '') : NaN;
+  return Number.isFinite(t) ? t / 1000 : -Infinity;
 }
 
 const hasOpenClose = (fund, symbol) => (fund.brokerOrders ?? []).some((o) => o.symbol === symbol && isOpen(o) && !isGuard(o) && (o.action === 'sell' || o.action === 'cover'));
@@ -402,16 +497,24 @@ export const guardAtTiger = (fund, symbol) => (fund.brokerOrders ?? []).find((o)
 // Replays price points since the last check and closes positions that hit a stop-loss, a take-profit
 // or (for shorts) the 40% forced-cover limit. In the simulator they close at that price; with Tiger a
 // closing limit order is sent straight away (no approval needed, since it reduces risk).
+// Each price point also updates the position's track (its worst and best move so far, see seeTrack),
+// and a position the protections close carries its track on its event. A position's prices count only
+// after its track's `from`: a quote holds about 5 days of 15-minute prices, and a fund's cursor may be
+// older than its newest position.
 export function checkProtections(fund, quotes, now = new Date()) {
   const broker = usesBroker(fund);
+  // a track left from a position that has gone (none should be) is dropped
+  for (const symbol of Object.keys(fund.tracks ?? {})) if (!fund.portfolio.positions[symbol]) delete fund.tracks[symbol];
   const points = [];
   for (const symbol of Object.keys(fund.portfolio.positions)) {
-    for (const [t, price] of pricePoints(quotes[symbol])) if (t > fund.cursor) points.push({ t, symbol, price });
+    const from = pricesFrom(fund, symbol);
+    for (const [t, price] of pricePoints(quotes[symbol])) if (t > fund.cursor && t > from) points.push({ t, symbol, price });
   }
   points.sort((a, b) => a.t - b.t);
   const events = [];
   for (const { t, symbol, price } of points) {
     const pos = fund.portfolio.positions[symbol];
+    if (pos) seeTrack(fund, symbol, pos, price, new Date(t * 1000).toISOString());
     if (!pos || (broker && hasOpenClose(fund, symbol))) continue;
     const move = (price - pos.avgCost) / pos.avgCost * Math.sign(pos.qty); // + is profit
     const prot = fund.protections[symbol] ?? {};
@@ -424,18 +527,24 @@ export function checkProtections(fund, quotes, now = new Date()) {
     const time = new Date(t * 1000).toISOString();
     const side = pos.qty > 0 ? 'sell' : 'buy';
     const action = pos.qty > 0 ? 'sell' : 'cover';
+    let track = null;
     if (broker) {
       const limit = limitPrice(side, price, quotes[symbol]?.market);
       queueBrokerOrder(fund, { symbol, action, side, shares: Math.abs(pos.qty), refPrice: price, limitPrice: limit, market: quotes[symbol]?.market, reason: why }, 'protection', now);
     } else {
       fund.portfolio = applyTrade(fund.portfolio, { symbol, side, qty: Math.abs(pos.qty), price, currency: fund.currency, market: quotes[symbol]?.market, time });
+      track = endTrack(fund, symbol, pos, price); // with Tiger, the fill that closes it carries the track
     }
     delete fund.protections[symbol];
-    const e = { time, symbol, action, shares: Math.abs(pos.qty), price, why: broker ? `${why}; closing order sent to Tiger` : why };
+    const e = { time, symbol, action, shares: Math.abs(pos.qty), price, why: broker ? `${why}; closing order sent to Tiger` : why, ...(track ? { track } : {}) };
     fund.events.push(e);
     events.push(e);
   }
   if (points.length) fund.cursor = points.at(-1).t;
+  // holding nothing: up to the newest price in its market, so the cursor never goes stale
+  else if (!Object.keys(fund.portfolio.positions).length) {
+    for (const q of Object.values(quotes ?? {})) if (q?.currency === fund.currency) fund.cursor = Math.max(fund.cursor, pricePoints(q).at(-1)?.[0] ?? 0);
+  }
   return events;
 }
 

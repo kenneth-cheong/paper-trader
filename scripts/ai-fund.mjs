@@ -6,23 +6,49 @@
 //   FUND_CURRENCY           USD (US stocks) or SGD (SGX stocks), with FUND_START_AMOUNT
 //   FUND_DECISIONS_PER_DAY  1, 2 or 4, with FUND_START_AMOUNT
 //   FUND_STOP=true          close every position of a fund and stop it (FUND_COMMAND's fund, or the only one running)
-//   FUND_COMMAND            JSON from the app. `fund` names the fund (an id; "all" for pause/resume). With
+//   FUND_COMMAND            JSON from the app (in Actions, the workflow's fund_command input, read from the
+//                           event file on the runner rather than the step's environment, which the public
+//                           log prints: it can hold the owner's notes and reasons). `fund` names the fund
+//                           (an id; "all" for pause/resume). With
 //                           FUND_START_AMOUNT: { name, style, focus, settings } for the new fund. Otherwise one of
-//                           { settings, name, style, focus }, { approve: [ids] }, { reject: [ids] }, { pause: true },
-//                           { resume: true } or { remove: true } (a stopped fund).
+//                           { settings, name, style, focus }, { approve: [ids] }, { reject: [ids], why? } (why: the
+//                           owner's reason, a fund.js DECLINE_REASONS key), { pause: true }, { resume: true },
+//                           { remove: true } (a stopped fund), { playbook: { add, filter, claim } | { remove } |
+//                           { restore } | { keep } } (the owner's lessons, learning.js editPlaybook) or, with fund
+//                           "all", { stockNote: { symbol, text } } (the owner's note on a stock, shared by every
+//                           fund, dossier.js setStockNote; empty text clears it). The app sends the last two, and a
+//                           reject with a reason, as 'settings', which reach here whole.
 //   ANTHROPIC_API_KEY, AI_MODEL (decisions, default Sonnet; a fund can choose its own), AI_NEWS_MODEL (news, default Haiku)
+//   AI_REVIEW_MODEL         opt-in: the weekly review's model once the fund's market has 150 graded ideas (else the news model)
 //   AI_MONTHLY_CAP_USD      skip AI decisions once the month's scheduled AI spend reaches this (ai-spend.json)
 //   FUND_PRIVATE=true       print nothing about the funds' trades (the Actions log is public)
 // Learning (learning.js, memory.js): every run re-grades each fund's ideas against what prices did next
 // and refreshes its playbook (graded ideas are kept in a compact log, fund.ideaLog, so trimming old
 // decisions below doesn't lose them); about weekly, a cheap Haiku review adds written lessons when there's enough
-// new evidence. The market memory (price moves after past news and after big moves) is rebuilt each run,
-// with SEC filings and Yahoo's rating changes taking over from the AI's recollection where they exist.
+// new evidence; code checks each lesson it writes on the fund's graded ideas before keeping it, and the
+// lesson book tracks every lesson on the ideas after it (learning.js). The market memory (price moves
+// after past news and after big moves) is rebuilt each run,
+// with SEC filings and Yahoo's rating changes taking over from the AI's recollection where they exist,
+// and joined by the ten-year memory (memory-long.js, state/memory-long.json, rebuilt weekly by
+// scripts/build-history.mjs), whose lessons were checked on held-out years; lessons whose evidence
+// covers days like today's regime (the index against its 200-day average, and the VIX) come first.
 // Every decision sees the results due in the next 10 trading days and analysts' views (calendar.js,
 // analysts.js; state/results-dates.json and state/company-data.json, fetched earlier in the job).
 // Every order and idea carries the AI's thesis (thesis.js); after all funds have run, the theses are
 // graded for calibration pooled across each market's funds (c.calibration), which the next run's
 // lessons use.
+// The weekly report (report.js, "What we learned"): after the last session of each fund's market in
+// a week, each fund's week is written up from its graded ideas, its lessons' evidence week by week
+// (pb.lessonHistory), the owner's calls on the trades they declined, the stock cards' dates and the
+// spend ledger, and kept with the fund (fund.reports); scripts/notify.mjs sends it to Telegram. The
+// weekly review's summary for the owner goes in it when the review ran that week.
+// Stock cards (dossier.js): each stock's own history and risk, built here every run from the prices,
+// the ten-year memory, the results calendar and the picks' record. Each market's funds see the same
+// cards (at most 6, chosen once per market per run from what any of its funds holds, the home page's
+// picks and the news) in their shared market data, with the owner's notes on stocks (c.stockNotes),
+// and each position's risk numbers in their own part. Stop-loss changes are logged with the stock's
+// daily move then (fund.js setProtections), and every position's worst and best move is followed
+// (fund.js fund.tracks); the owner's notes are never printed.
 // To save AI cost, a decision is skipped when nothing has changed since the last one, and funds in the
 // same market deciding together on the same model share a cached copy of the market data.
 // Every run, for every fund: records Tiger fills (scripts/tiger_broker.py sync runs just before), applies
@@ -30,21 +56,28 @@
 // and, when a decision is due, lets Claude decide. Decisions only happen while the fund's market is
 // actually trading. With Tiger, orders are queued here and sent by scripts/tiger_broker.py send.
 
+import { readFileSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { decideFund, reviewPlaybook, TIERS } from '../ai.js';
 import {
   decisionDue, executeDecision, setProtections, checkProtections, recordValue, stopFund,
-  approveProposals, rejectProposals, expireProposals, applyBrokerFills, pauseFund, resumeFund, checkDailyLoss, syncGuards,
+  approveProposals, rejectProposals, expireProposals, applyBrokerFills, pauseFund, resumeFund, checkDailyLoss, syncGuards, DECLINE_REASONS,
 } from '../fund.js';
 import { loadFunds, addFund, updateFund, removeFund, targetFund, otherTigerHoldings, activeFunds } from '../funds.js';
 import { applyCorporateActions, describeAction } from '../actions.js';
 import { addSpend, capReached, monthSpend } from '../spend.js';
-import { updatePlaybook, playbookForPrompt, editPlaybook, reviewDue, reviewExamples, statsForReview, applyReview, activeLessons, quietReason, decisionSnapshot, trimDecisions, poolCalibration, rememberCited } from '../learning.js';
+import {
+  updatePlaybook, playbookForPrompt, editPlaybook, reviewDue, reviewExamples, reviewCells, reviewLessonBook, applyReview, reviewModel, marketIdeas,
+  quietReason, decisionSnapshot, trimDecisions, poolCalibration, rememberCited, cleanFilter, REVIEW_MODEL_MIN,
+} from '../learning.js';
 import { checkedThesis, lessonsAppliedOf } from '../thesis.js';
+import { reportWeek, fileReport, comparableFunds } from '../report.js';
 import { buildMemory, marketEvents } from '../memory.js';
+import { promptMarketLessons, regimeNow } from '../memory-long.js';
 import { resultsCalendar } from '../calendar.js';
 import { scorePicks, summarizeScores } from '../scorecard.js';
+import { buildDossiers, stockCards, heldByMarket, setStockNote } from '../dossier.js';
 import { MARKETS, marketForCurrency, isOpen } from '../markets.js';
 
 const [file, picksFile] = process.argv.slice(2);
@@ -59,8 +92,15 @@ const now = new Date();
 const c = loadFunds(await readJson(file));
 const prices = await readJson('data/prices.json');
 const quotes = prices?.quotes ?? {};
+// The app's command: FUND_COMMAND when it's set (a local run, the tests), else the workflow's
+// fund_command input from the event file on the runner (GITHUB_EVENT_PATH). Its text is never printed.
+function commandText() {
+  if (env.FUND_COMMAND != null) return env.FUND_COMMAND;
+  try { return String(JSON.parse(readFileSync(env.GITHUB_EVENT_PATH, 'utf8')).inputs?.fund_command ?? ''); } catch { return ''; }
+}
 let command = {};
-try { command = env.FUND_COMMAND ? JSON.parse(env.FUND_COMMAND) : {}; } catch { console.warn(`! Ignoring FUND_COMMAND that isn't JSON: ${env.FUND_COMMAND}`); }
+try { const text = commandText().trim(); command = text ? JSON.parse(text) : {}; } catch { console.warn('! Ignoring the app\'s command: it isn\'t JSON.'); }
+if (!command || typeof command !== 'object' || Array.isArray(command)) command = {};
 
 // The result of the app's request, which the app watches for.
 const note = (action, message, ok = true, fund = null) => {
@@ -68,6 +108,11 @@ const note = (action, message, ok = true, fund = null) => {
   console.log(`${ok ? '' : '! '}${action}: ${message}`);
 };
 const where = (f) => (f.settings.broker === 'tiger' ? `through Tiger (${f.settings.approval === 'manual' ? 'you approve each trade' : 'automatic'})` : 'in the simulator');
+// What the owner did to a fund's lessons, in the words the app shows when it's done (never the lesson itself).
+const lessonNote = (p, f) => (p.add ? `Added your lesson to "${f.name}"${Object.keys(cleanFilter(p.filter)).length ? '; the ideas it\'s about are tracked from now on' : ''}.`
+  : p.keep ? `Kept the lesson in "${f.name}": it won't expire.`
+    : p.restore ? `Restored the lesson in "${f.name}".`
+      : p.remove ? `Removed the lesson from "${f.name}".` : `Updated the lessons of "${f.name}".`);
 
 // ---------- commands ----------
 
@@ -92,14 +137,21 @@ try {
       note('stop', `"${f.name}" is stopped; its positions are being closed.`, true, f);
     }
   }
-  // Approvals and rejections name proposals, which belong to exactly one fund.
+  // Approvals and rejections name proposals, which belong to exactly one fund. A rejection may carry
+  // the owner's reason (`why`), which is kept for grading but never printed or put in the message.
   for (const verb of ['approve', 'reject']) {
     const ids = command[verb];
     if (!ids?.length) continue;
     for (const f of c.funds) {
       const mine = ids.filter((id) => (f.proposals ?? []).some((p) => p.id === id));
       if (!mine.length) continue;
-      if (verb === 'reject') { rejectProposals(f, mine, now); note('reject', `Rejected ${mine.length} proposal(s).`, true, f); continue; }
+      if (verb === 'reject') {
+        const done = rejectProposals(f, mine, now, command.why).length;
+        const why = Object.hasOwn(DECLINE_REASONS, command.why ?? '');
+        if (!done) note('reject', 'That trade was no longer waiting for you: it had expired or been decided already.', false, f);
+        else note('reject', why ? `Declined ${done === 1 ? 'the trade' : `${done} trades`} in "${f.name}", with your reason: it counts in your calls.` : `Rejected ${done} proposal(s).`, true, f);
+        continue;
+      }
       const out = approveProposals(f, mine, quotes, prices, now, { others: otherTigerHoldings(c, f.id) });
       const sent = out.filter((p) => p.status === 'approved').length;
       note('approve', `${sent} of ${mine.length} approved trade(s) sent to Tiger.${out.filter((p) => p.status !== 'approved').map((p) => ` ${p.symbol}: ${p.message}`).join('')}`, sent === mine.length, f);
@@ -119,7 +171,13 @@ try {
   if (command.playbook) {
     const f = targetFund(c, command.fund);
     editPlaybook(f, command.playbook, now);
-    note('settings', command.playbook.add ? `Added your lesson to "${f.name}".` : `Updated the lessons of "${f.name}".`, true, f);
+    note('lessons', lessonNote(command.playbook, f), true, f);
+  }
+  // The owner's note on a stock, shared by every fund (its words are never printed: the log is public)
+  if (command.stockNote) {
+    const { symbol, text } = command.stockNote;
+    c.stockNotes = setStockNote(c.stockNotes, symbol, text, quotes, now);
+    note('notes', c.stockNotes[String(symbol).trim()] ? `Saved your note on ${symbol}: the AI sees it from the next decision.` : `Cleared your note on ${symbol}.`);
   }
   if (command.remove) {
     const f = targetFund(c, command.fund);
@@ -127,7 +185,8 @@ try {
     note('remove', `Removed "${f.name}".`, true, f);
   }
 } catch (err) {
-  note(Object.keys(command).find((k) => k !== 'fund') ?? (env.FUND_STOP === 'true' ? 'stop' : 'command'), err.message, false);
+  const what = Object.keys(command).find((k) => k !== 'fund');
+  note({ playbook: 'lessons', stockNote: 'notes' }[what] ?? what ?? (env.FUND_STOP === 'true' ? 'stop' : 'command'), err.message, false);
 }
 
 // ---------- what every fund learns from ----------
@@ -139,12 +198,26 @@ const filings = await readJson(join(dirname(file), 'results-dates.json'));
 const newsEvents = marketEvents((await readJson(join(dirname(file), 'news-events.json'))) ?? [], quotes, { filings, company });
 const calendar = resultsCalendar({ company, filings, quotes, events: newsEvents, now });
 if (Object.keys(quotes).length) c.marketMemory = Object.fromEntries(Object.keys(MARKETS).map((m) => [m, buildMemory(newsEvents, quotes, m, now, c.marketMemory?.[m])]));
+const longMemory = await readJson(join(dirname(file), 'memory-long.json'));
+if (longMemory?.updatedAt && now - Date.parse(longMemory.updatedAt) > 30 * 86400000) console.warn(`! The ten-year memory is from ${longMemory.updatedAt.slice(0, 10)}: its weekly update keeps failing.`);
+const regimes = Object.fromEntries(Object.keys(MARKETS).map((m) => [m, regimeNow(quotes, prices?.macro, m)]));
 const picksHistory = await readJson(join(dirname(file), 'picks-history.json'));
-const picksSum = picksHistory && summarizeScores(scorePicks(picksHistory, quotes, now)).week;
+const picksScores = picksHistory ? scorePicks(picksHistory, quotes, now) : [];
+const picksSum = picksHistory && summarizeScores(picksScores).week;
 const picksRecord = picksSum?.n >= 5 ? `The home page's AI picks, a week after being made: ${picksSum.n} scored, ${Math.round(picksSum.right * 100)}% right${picksSum.beat == null ? '' : `, ${Math.round(picksSum.beat * 100)}% beat the index`}.` : null;
 const picks = await readJson(picksFile);
 const cachedNews = await readJson(newsFile);
 const marks = { picksAt: picks?.createdAt ?? null, newsAt: cachedNews?.createdAt ?? null };
+
+// Every stock's card (dossier.js), in memory: the same as state/dossiers.json, but with this run's prices.
+const dossiers = Object.keys(quotes).length ? buildDossiers({ quotes, long: longMemory, calendar, picksScores, now }).stocks : {};
+const dailyMoves = Object.fromEntries(Object.entries(dossiers).map(([s, d]) => [s, d.daily_move_pct]));
+// The cards each market's funds see, chosen once per market per run: from what its funds hold before any
+// of them trades this run, the home page's picks and the news the first of them reads (every fund in a
+// market reads the same digest), so the cached market data is the same for all of them.
+const heldNow = heldByMarket(c.funds, quotes);
+const cardsBy = {};
+const cardsFor = (market) => (news) => (cardsBy[market] ??= stockCards(market, { dossiers, quotes, held: heldNow[market] ?? {}, picks, news, now }));
 
 // Funds that will ask Claude this run, by market and model: two or more share a cached copy of the market data.
 const modelOf = (f) => f.settings.model || env.AI_MODEL || TIERS.advanced;
@@ -200,9 +273,10 @@ for (const fund of c.funds) {
           const news = newsFor[fund.currency] ?? (cachedNews && now - Date.parse(cachedNews.createdAt) < NEWS_MAX_AGE_MS ? cachedNews : undefined);
           const market = marketForCurrency(fund.currency);
           const playbook = fund.settings.learning === false ? null
-            : playbookForPrompt(fund.playbook, { picksRecord, marketLessons: c.marketMemory?.[market]?.lessons ?? [] });
+            : playbookForPrompt(fund.playbook, { picksRecord, marketLessons: promptMarketLessons(c.marketMemory?.[market], longMemory, market, { hidden: fund.playbook?.hidden }), regime: regimes[market] });
           const d = await decideFund({
-            client: new Anthropic(), Anthropic, fund, quotes, picks, news, now, playbook, company, calendar,
+            client: new Anthropic(), Anthropic, fund, quotes, picks, news, now, playbook, company, calendar, macro: prices?.macro ?? null,
+            cards: cardsFor(market), notes: c.stockNotes ?? null, dossiers,
             model: modelOf(fund), newsModel: env.AI_NEWS_MODEL || TIERS.simple,
             cacheShared: (deciding[`${fund.currency}|${modelOf(fund)}`] ?? 0) >= 2,
           });
@@ -214,7 +288,7 @@ for (const fund of c.funds) {
             symbol: x.symbol, stance: x.stance, idea_type: x.idea_type, why_not: x.why_not,
             thesis: checkedThesis(x, x.symbol, { calendar, quotes, now }), ...(lessonsAppliedOf(x).length ? { lessonsApplied: lessonsAppliedOf(x) } : {}),
           }));
-          setProtections(fund, d.protections);
+          setProtections(fund, d.protections, { now, dailyMoves });
           fund.decisions.push({
             time: now.toISOString(), outlook: d.outlook, orders, considered, protections: d.protections,
             source_urls: d.source_urls, model: d.model, newsModel: d.newsModel, usage: d.usage, learned: Boolean(playbook),
@@ -256,6 +330,10 @@ for (const fund of c.funds) {
 if (Object.keys(quotes).length) c.calibration = poolCalibration(c.funds, gradedBy);
 
 // ---------- the weekly review (cheap model, only with enough new evidence, after the market closes) ----------
+// It reads cells computed from the graded ideas and the lesson book with each lesson's status, and each
+// lesson it writes is checked on the fund's graded ideas before it's kept (learning.js applyReview).
+// AI_REVIEW_MODEL, if set, takes over from the cheap model once the fund's market has REVIEW_MODEL_MIN
+// graded ideas across its funds: before that, sample size, not the model, limits what it can find.
 
 for (const fund of c.funds) {
   if (fund.stoppedAt || !reviewDue(fund, now) || isOpen(marketForCurrency(fund.currency), now) || !env.ANTHROPIC_API_KEY) continue;
@@ -263,13 +341,26 @@ for (const fund of c.funds) {
   try {
     const { default: Anthropic } = await import('@anthropic-ai/sdk');
     const { pb, graded } = updatePlaybook(fund, quotes, now, { calendar, pooled: c.calibration?.[marketForCurrency(fund.currency)] });
-    const r = await reviewPlaybook({ client: new Anthropic(), Anthropic, model: env.AI_NEWS_MODEL || TIERS.simple, fund, stats: statsForReview(pb.stats), examples: reviewExamples(graded), lessons: activeLessons(pb) });
-    applyReview(fund, r.lessons, pb.graded, now);
+    const inMarket = marketIdeas(c.funds, gradedBy, fund.currency).length;
+    const model = reviewModel({ optIn: env.AI_REVIEW_MODEL, cheap: env.AI_NEWS_MODEL || TIERS.simple, graded: inMarket });
+    if (env.AI_REVIEW_MODEL && model !== env.AI_REVIEW_MODEL) console.log(`[${fund.name}] Weekly review on the cheap model: AI_REVIEW_MODEL takes over once the market has ${REVIEW_MODEL_MIN} graded ideas (${inMarket} so far).`);
+    const r = await reviewPlaybook({ client: new Anthropic(), Anthropic, model, fund, cells: reviewCells(graded), examples: reviewExamples(graded), lessons: reviewLessonBook(pb) });
+    const out = applyReview(fund, r.lessons, graded, now, { summary: r.summary });
     await writeFile(spendFile, JSON.stringify(addSpend(await spent(), 'learning', r.usage?.costUsd, now)));
-    console.log(`[${fund.name}] Weekly review: ${r.lessons.length} lesson(s), about US$${r.usage?.costUsd}.`);
+    console.log(`[${fund.name}] Weekly review: ${r.lessons.length} lesson(s) written, ${out.added} new and ${out.again} again kept, ${out.dropped} dropped by the check on its graded ideas, about US$${r.usage?.costUsd}.`);
   } catch (err) {
     console.warn(`! [${fund.name}] Weekly review failed (tries again next run): ${err.message}`);
   }
+}
+
+// ---------- the weekly report (no AI; after the review, so it has the review's summary) ----------
+// On the first run after the last session of each fund's market in a week (report.js reportWeek).
+
+for (const fund of c.funds) {
+  const week = reportWeek(fund, now, prices);
+  if (!week || !gradedBy[fund.id] || !Object.keys(quotes).length) continue;
+  const r = fileReport(fund, { week, graded: gradedBy[fund.id], controlFunds: comparableFunds(c.funds, fund), dossiers, quotes, spend: await spent(), cap: env.AI_MONTHLY_CAP_USD, now });
+  console.log(`[${fund.name}] Weekly report for ${r.week}${r.short ? ': one line, too few ideas graded this week' : ''}.`);
 }
 
 if (!c.funds.length) console.log('No AI fund. Start one from the app or the Actions tab.');

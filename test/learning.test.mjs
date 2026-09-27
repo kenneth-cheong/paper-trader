@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {
   collectIdeas, gradeIdeas, learningStats, statLessons, updatePlaybook, activeLessons, playbookForPrompt, editPlaybook, reviewDue, applyReview, quietReason, decisionSnapshot, QUIET,
   poolIdeas, frozenIdeas, freezeIdeas, trimDecisions, reviewLessonId, CLASS_CODES, TYPE_CODES, IDEA_LOG_MAX, ideaRow as ideaRowOf,
-  evaluateLessons, chargeFees, noiseCheck, noiseFund, statsForReview, NOISE_CHECK,
+  evaluateLessons, chargeFees, noiseCheck, noiseFund, reviewCells, NOISE_CHECK,
   calibration, calibrationLessons, poolCalibration, CATALYST_CODES, calibrationNoiseCheck, CAL_NOISE_CHECK, rememberCited, CITED_MAX,
 } from '../learning.js';
 import { seeded, gauss } from '../stats.js';
@@ -136,7 +136,7 @@ test('a lesson stays on until its chance falls below 3 in 4, and one seen before
   assert.ok(f.playbook.edgeFrom);
   const l = f.playbook.lessons.find((x) => x.id === 'type-weak:news');
   assert.match(l.evidence, /Kept for now/);
-  assert.equal(f.playbook.lessonRecord['type-weak:news'].on, true);
+  assert.equal(f.playbook.lessonBook['type-weak:news'].on, true);
   updatePlaybook(f, quotes, new Date(now.getTime() + 40 * DAY * 1000)); // after the transition: the edge alone decides
   assert.ok(!f.playbook.lessons.some((x) => x.id === 'type-weak:news'));
   // an inherited lesson still on at the end of the transition, never gated: from then on it needs the full gate
@@ -145,12 +145,15 @@ test('a lesson stays on until its chance falls below 3 in 4, and one seen before
   g.ideaLog = graded.map((x) => ideaRowOf(x));
   updatePlaybook(g, {}, new Date(now.getTime() + 40 * DAY * 1000));
   assert.ok(!g.playbook.lessons.some((x) => x.id === 'passed-better'));
-  // the same record, gated: kept (Fading)
+  // the same record, gated: kept (Fading). Stage 1 kept these records in pb.lessonRecord; they move
+  // into the lesson book
   g.playbook.lessonRecord = { 'passed-better': { on: true, since: iso(0), p: 0.98, gated: true } };
   updatePlaybook(g, {}, new Date(now.getTime() + 40 * DAY * 1000));
   const still = g.playbook.lessons.find((x) => x.id === 'passed-better');
   assert.equal(still?.confidence, 'Fading');
-  assert.equal(g.playbook.lessonRecord['passed-better'].gated, true);
+  assert.equal(g.playbook.lessonRecord, undefined);
+  assert.equal(g.playbook.lessonBook['passed-better'].gated, true);
+  assert.equal(g.playbook.lessonBook['passed-better'].bornAt, iso(0)); // learned when it first came on
 });
 
 test('pure noise rarely makes a lesson: the Monte Carlo check behind the gate', () => {
@@ -183,8 +186,9 @@ test('the weekly review runs only with 5+ new graded ideas and a week since the 
   assert.equal(reviewDue(f, now), false);
   f.playbook.graded = 6;
   assert.equal(reviewDue(f, now), true);
-  applyReview(f, [{ text: 'Cut losers faster.', evidence: '6 cases' }], 6, now);
+  applyReview(f, [{ text: 'Cut losers faster.', evidence: '6 cases' }], Array(6).fill({}), now);
   assert.equal(f.playbook.review[0].source, 'weekly review');
+  assert.equal(f.playbook.reviewGraded, 6);
   f.playbook.graded = 20;
   assert.equal(reviewDue(f, new Date(now.getTime() + 2 * DAY * 1000)), false);
   assert.equal(reviewDue(f, new Date(now.getTime() + 7 * DAY * 1000)), true);
@@ -380,10 +384,20 @@ test('review lessons keep an id from their wording, so a removed one stays remov
   updatePlaybook(f, {}, now);
   assert.deepEqual(f.playbook.hidden, [reviewLessonId('Cut losers faster.'), 'US:big-up']);
   assert.deepEqual(activeLessons(f.playbook).map((l) => l.text), ['Size up winners.']);
-  applyReview(f, [{ text: 'Cut  losers faster!', evidence: '6 cases' }, { text: 'Hold cash before results.' }], 6, new Date(now.getTime() + 7 * DAY * 1000));
+  applyReview(f, [{ text: 'Cut  losers faster!', evidence: '6 cases' }, { text: 'Hold cash before results.' }], Array(6).fill({}), new Date(now.getTime() + 7 * DAY * 1000));
   assert.equal(f.playbook.review[0].id, reviewLessonId('Cut losers faster.'));
-  assert.deepEqual(activeLessons(f.playbook).map((l) => l.text), ['Hold cash before results.']);
+  // lessons without a filter are opinions: they stay in force for 4 weeks (the removed one stays removed)
+  assert.deepEqual(activeLessons(f.playbook).map((l) => l.text), ['Size up winners.', 'Hold cash before results.']);
+  assert.ok(f.playbook.review.every((l) => l.kind === 'opinion'));
   assert.notEqual(reviewLessonId('Cut losers faster.'), reviewLessonId('Cut winners faster.'));
+  // 4 weeks after it was written an opinion expires, unless the owner keeps it
+  const later = new Date(now.getTime() + 29 * DAY * 1000);
+  updatePlaybook(f, {}, later);
+  assert.deepEqual(activeLessons(f.playbook).map((l) => l.text), ['Hold cash before results.']);
+  editPlaybook(f, { keep: reviewLessonId('Hold cash before results.') }, later);
+  updatePlaybook(f, {}, new Date(now.getTime() + 60 * DAY * 1000));
+  assert.deepEqual(activeLessons(f.playbook).map((l) => l.text), ['Hold cash before results.']);
+  assert.throws(() => editPlaybook(f, { keep: reviewLessonId('Size up winners.') }), /has gone/);
 });
 
 // ---------- beta, peers and fees on real grades ----------
@@ -416,8 +430,9 @@ test('the AI sees each rule-made lesson\'s confidence, edge per week, likely ran
   const p = playbookForPrompt(pb);
   assert.deepEqual(p.lessons[0], { id: 'own:1', lesson: 'Mine.', evidence: null, from: 'owner' }); // the id, for lessons_applied
   assert.deepEqual(p.lessons[1], { id: 'passed-better', lesson: 'Act more.', confidence: 'Moderate', edge_pct_per_week: 0.8, likely_range: [0.4, 1.2], separate_bets: 119, evidence: 'e', from: 'results' });
-  const r = statsForReview(learningStats(noiseFund(seeded(2), 10)));
-  assert.ok(r.byOutcome.passed.evidence_pct_per_week.separate_bets > 0 && !('tradedBySymbol' in r));
+  const cells = reviewCells(noiseFund(seeded(2), 10));
+  const passed = cells.find((c) => JSON.stringify(c.filter) === '{"outcome":"passed"}');
+  assert.ok(passed.separate_bets > 0 && passed.ideas >= passed.separate_bets && typeof passed.se_pct === 'number' && typeof passed.significant === 'boolean');
 });
 
 test('the wording of cited lessons is kept, so a decision still names a lesson that has since gone', () => {

@@ -60,6 +60,7 @@ jobs:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       AI_MODEL: ${{ vars.AI_MODEL }}           # decisions; default claude-sonnet-5
       AI_NEWS_MODEL: ${{ vars.AI_NEWS_MODEL }} # news gathering; default claude-haiku-4-5
+      AI_REVIEW_MODEL: ${{ vars.AI_REVIEW_MODEL }} # opt-in: the weekly review, once its market has 150 graded ideas (README)
       AI_MONTHLY_CAP_USD: ${{ vars.AI_MONTHLY_CAP_USD || '30' }} # scheduled AI stops for the month at this spend; 0 = no cap
       # Tiger Brokers, for an AI fund that trades through Tiger (see README → Tiger Brokers)
       TIGEROPEN_TIGER_ID: ${{ secrets.TIGEROPEN_TIGER_ID }}
@@ -127,6 +128,25 @@ jobs:
             python scripts/yahoo_fetch.py summary raw-summary
             node scripts/company-data.mjs build raw-summary state/company-data.json
           fi
+      # Ten years of the watchlist's own prices for the market memory (memory-long.js), once a week:
+      # when state/memory-long.json is 7 or more days old, or missing. The raw download (about 6 MB) stays
+      # on this runner; only the compact results (under 50 KB) go to ai-state. If Yahoo fails, last
+      # week's results are kept and it tries again 6 hours later.
+      - name: 'Learning: ten years of prices (weekly)'
+        continue-on-error: true
+        run: |
+          if node scripts/build-history.mjs due state/memory-long.json; then
+            pip install --quiet curl_cffi
+            python scripts/yahoo_fetch.py long raw-long
+            node scripts/build-history.mjs build raw-long state/memory-long.json
+          fi
+      # The stock cards' public part (dossier.js, state/dossiers.json): each stock's own history and risk
+      # from this run's prices, the ten-year memory, the results calendar and the picks' record. Rebuilt
+      # with the weekly step above, and refreshed here once a day; the page reads it. Prices and news
+      # only: each fund's own record on a stock stays with the fund.
+      - name: 'Stock cards (daily)'
+        continue-on-error: true
+        run: node scripts/build-history.mjs dossiers state/dossiers.json
       # A failure in an AI step must not stop prices from updating.
       - name: AI picks
         continue-on-error: true
@@ -148,6 +168,9 @@ jobs:
         run: |
           if [ -n "$TIGEROPEN_TIGER_ID" ]; then pip install --quiet tigeropen; fi
           python scripts/tiger_broker.py sync state/ai-fund.json
+      # The app's command (the fund_command input) is read by the script from the event file on the
+      # runner: an env value would be printed in this public log, and it can hold the owner's notes on
+      # stocks and reasons for declining trades.
       - name: AI fund
         if: steps.fundstore.outputs.ok == 'true'
         continue-on-error: true
@@ -157,7 +180,6 @@ jobs:
           FUND_CURRENCY: ${{ inputs.fund_currency }}
           FUND_DECISIONS_PER_DAY: ${{ inputs.fund_decisions_per_day }}
           FUND_STOP: ${{ inputs.fund_stop }}
-          FUND_COMMAND: ${{ inputs.fund_command }}
         run: node scripts/ai-fund.mjs state/ai-fund.json state/picks.json
       - name: 'Tiger: send orders'
         if: steps.fundstore.outputs.ok == 'true'
@@ -197,6 +219,8 @@ jobs:
           cp state/picks-history.json _site/data/ 2>/dev/null || true
           cp state/company-data.json _site/data/ 2>/dev/null || true   # results dates and analysts, for the page
           cp state/results-dates.json _site/data/ 2>/dev/null || true
+          cp state/memory-long.json _site/data/ 2>/dev/null || true   # the ten-year memory, for the page
+          cp state/dossiers.json _site/data/ 2>/dev/null || true      # the stock cards, for the page
           node -e "const fs=require('fs');let l={months:{}};try{l=JSON.parse(fs.readFileSync('state/ai-spend.json','utf8'))}catch{}l.cap=Number(process.env.AI_MONTHLY_CAP_USD)||null;fs.writeFileSync('_site/data/ai-spend.json',JSON.stringify(l))"
           # The public copy of the AI fund, unless it's kept private (then only admins see it, from Supabase)
           if [ "${{ steps.fundstore.outputs.private }}" != "true" ]; then
