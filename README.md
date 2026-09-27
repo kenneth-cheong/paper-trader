@@ -214,7 +214,7 @@ From the next run, the fund is stored in Supabase instead (readable only by admi
 
 ### Telegram alerts
 
-Get a Telegram message when trades are waiting for your approval (with the deadline), orders fill, stop-losses or take-profits trigger, Tiger refuses an order, the fund pauses, an AI decision fails, the monthly AI cap is reached, the fund and your Tiger account disagree, or a dividend or split lands, plus a short summary after each trading day's close (value, the day's change, the index and the AI cost), a heads-up the evening before a stock a fund holds reports its results (confirmed dates only), and a line when the catalyst a held position was opened for has passed, with what the AI expected, how it's doing so far and what would prove it wrong.
+Get a Telegram message when trades are waiting for your approval (with the deadline), orders fill, stop-losses or take-profits trigger, Tiger refuses an order, the fund pauses, an AI decision fails, the monthly AI cap is reached, the fund and your Tiger account disagree, a request you sent from the app doesn't work, or a dividend or split lands, plus a short summary after each trading day's close (value, the day's change, the index and the AI cost), a heads-up the evening before a stock a fund holds reports its results (confirmed dates only), and a line when the catalyst a held position was opened for has passed, with what the AI expected, how it's doing so far and what would prove it wrong.
 
 1. In Telegram, message **@BotFather**, send `/newbot`, and pick a name. It replies with a **token**.
 2. Add it as a GitHub repository secret named **`TELEGRAM_BOT_TOKEN`**.

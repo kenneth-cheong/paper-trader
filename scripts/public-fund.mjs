@@ -18,6 +18,7 @@ let c;
 try { c = loadFunds(JSON.parse(await readFile(src, 'utf8'))); } catch { process.exit(0); }
 
 c.brokerCheck = reconcileAll(c);
+delete c.notified;
 for (const fund of c.funds) {
   if (fund.broker) fund.broker = { time: fund.broker.time, accountType: fund.broker.accountType, error: fund.broker.error, check: reconcile(fund) };
   for (const o of fund.brokerOrders ?? []) delete o.tigerOrderId;

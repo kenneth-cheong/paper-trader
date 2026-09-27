@@ -1,5 +1,6 @@
 // Sends the AI fund's alerts to Telegram (see alerts.js). Runs after the fund's steps, before the
-// funds are saved, because it records what it has sent in each fund (fund.notified).
+// funds are saved, because it records what it has sent in each fund (fund.notified) and in the
+// collection (c.notified).
 // Usage: node scripts/notify.mjs <ai-fund.json>     send new alerts
 //        node scripts/notify.mjs --setup            find your chat and send a test message
 // Environment: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID (both GitHub secrets), APP_URL (the site's address).

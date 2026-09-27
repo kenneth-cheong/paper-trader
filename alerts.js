@@ -1,19 +1,20 @@
 // Telegram alerts for the AI fund (sent by scripts/notify.mjs after every scheduled run). Pure
 // functions: collectAlerts() finds what happened since the last alert and remembers it in
-// fund.notified, so nothing is sent twice; the first run only takes note of what's already there.
+// fund.notified (the collection's own alerts in c.notified), so nothing is sent twice; the first run
+// only takes note of what's already there.
 //
 // Alerts: trades waiting for approval (with their deadline), fills (Tiger's or the simulator's),
 // stop-losses / take-profits, Tiger refusing an order, a fund pausing or stopping, a failed AI
-// decision, the AI's monthly cost cap, Tiger not connected, the funds and Tiger disagreeing, splits
-// and dividends, a short summary after each trading day's close, and a heads-up the evening before a
-// stock the fund holds reports its results (only for dates the company has confirmed, not Yahoo's
-// estimates, which for SGX stocks are often a guess from last year), and a line when the catalyst a
-// held position was opened for has passed, with how the thesis is doing.
+// decision, the AI's monthly cost cap, Tiger not connected, the funds and Tiger disagreeing, a request
+// from the app that didn't work, splits and dividends, a short summary after each trading day's close,
+// and a heads-up the evening before a stock the fund holds reports its results (only for dates the
+// company has confirmed, not Yahoo's estimates, which for SGX stocks are often a guess from last year),
+// and a line when the catalyst a held position was opened for has passed, with how the thesis is doing.
 
 import { summarize } from './portfolio.js';
 import { MARKETS, marketForCurrency, isOpen, marketDate, localClock, tradingDaysBetween } from './markets.js';
 import { nextResults } from './calendar.js';
-import { reconcileAll } from './funds.js';
+import { reconcileAll, findFund } from './funds.js';
 import { benchmarkFor } from './benchmark.js';
 import { planFor } from './fees.js';
 import { fundAiCost } from './spend.js';
@@ -55,7 +56,6 @@ function candidates(fund, { prices = null, calendar = null, now = new Date() } =
   if (fund.stoppedAt) out[`stop:${fund.stoppedAt}`] = '⏹️ <b>The AI fund was stopped</b> and its positions are being closed.';
   if (fund.lastError) out[`err:${fund.lastError.time}`] = `⚠️ An AI decision failed (it retries next run): ${esc(fund.lastError.message)}`;
   if (fund.aiCapped) out[`cap:${fund.aiCapped.time}`] = `💸 ${esc(fund.aiCapped.message)}`;
-  if (fund.lastCommand && !fund.lastCommand.ok) out[`cmd:${fund.lastCommand.time}`] = `⚠️ Your "${esc(fund.lastCommand.action)}" request didn't work: ${esc(fund.lastCommand.message)}`;
   if (fund.settings?.broker === 'tiger' && fund.broker?.error) out[`berr:${fund.broker.error}`] = `⚠️ <b>Tiger</b>: ${esc(fund.broker.error)}`;
   const summary = dailySummary(fund, prices, now);
   if (summary) out[summary.key] = summary.text;
@@ -145,22 +145,37 @@ export function dailySummary(fund, prices, now = new Date()) {
   return { key: `sum:${today}`, text: lines.filter(Boolean).join('\n') };
 }
 
-// Returns the texts to send now (oldest first) and updates fund.notified. On the very first call
-// nothing is sent: everything already there is only remembered.
-export function collectAlerts(fund, options = {}) {
-  const all = candidates(fund, options);
-  const first = !fund.notified;
-  const seen = new Set(fund.notified?.keys ?? []);
+// Of `all` ({ key: text }), the texts not sent before, remembering their keys in holder.notified (a
+// fund, or the collection). On the very first call nothing is sent: everything already there is only
+// remembered.
+function unsent(holder, all) {
+  const first = !holder.notified;
+  const seen = new Set(holder.notified?.keys ?? []);
   const fresh = Object.entries(all).filter(([k]) => !seen.has(k));
-  fund.notified = { keys: [...seen, ...fresh.map(([k]) => k)].slice(-MAX_KEYS) };
+  holder.notified = { keys: [...seen, ...fresh.map(([k]) => k)].slice(-MAX_KEYS) };
   return first ? [] : fresh.map(([, text]) => text);
 }
 
-// Every fund's alerts (each labelled with its name when there are several) and a check of Tiger
-// against all the Tiger funds together. `c` is a collection (funds.js).
+// Returns the texts to send now (oldest first) and updates fund.notified.
+export function collectAlerts(fund, options = {}) {
+  return unsent(fund, candidates(fund, options));
+}
+
+// The owner's last request from the app, if it didn't work. scripts/ai-fund.mjs keeps it on the
+// collection (c.lastCommand), with the id of the fund it was for, if any.
+function failedCommand(c) {
+  const cmd = c.lastCommand;
+  if (!cmd || cmd.ok) return {};
+  const f = c.funds.length > 1 ? findFund(c, cmd.fund) : null;
+  return { [`cmd:${cmd.time}`]: `${f ? `<b>${esc(f.name)}</b> · ` : ''}⚠️ Your "${esc(cmd.action)}" request didn't work: ${esc(cmd.message)}` };
+}
+
+// A request from the app that didn't work (first: it answers what the owner just did), every fund's
+// alerts (each labelled with its name when there are several) and a check of Tiger against all the
+// Tiger funds together. `c` is a collection (funds.js).
 export function collectAllAlerts(c, options = {}) {
   const many = c.funds.length > 1;
-  const texts = [];
+  const texts = unsent(c, failedCommand(c));
   for (const f of c.funds) {
     for (const t of collectAlerts(f, options)) texts.push(many ? `<b>${esc(f.name)}</b> · ${t}` : t);
   }

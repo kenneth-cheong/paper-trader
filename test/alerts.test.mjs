@@ -68,3 +68,23 @@ test('with several funds, alerts carry the fund name and Tiger is checked agains
   assert.match(texts[1], /doesn't hold what the funds think<\/b>: X funds 15, Tiger 12/);
   assert.deepEqual(collectAllAlerts(c), []); // said once
 });
+
+test("a request from the app that didn't work is said once, with its fund's name when there are several", () => {
+  const c = loadFunds(null);
+  const now = at('2026-01-07T14:00:00Z');
+  const a = addFund(c, { name: 'Steady', budget: 5000, currency: 'USD', now });
+  c.lastCommand = { time: '2026-01-06T15:00:00.000Z', action: 'pause', message: 'No fund is running.', ok: false, fund: null };
+  assert.deepEqual(collectAllAlerts(c), []); // seeded: a request from before alerts began isn't announced late
+  const failed = { time: '2026-01-07T15:00:00.000Z', action: 'lessons', message: 'That lesson has gone...', ok: false, fund: a.id };
+  const said = `⚠️ Your "lessons" request didn't work: That lesson has gone...`;
+  c.lastCommand = failed;
+  assert.deepEqual(collectAllAlerts(c), [said]);
+  assert.deepEqual(collectAllAlerts(c), []); // said once
+  c.lastCommand = { ...failed, time: '2026-01-07T16:00:00.000Z', message: 'Updated the lessons of "Steady".', ok: true };
+  assert.deepEqual(collectAllAlerts(c), []);
+  addFund(c, { name: 'Rocket', budget: 5000, currency: 'USD', now });
+  c.lastCommand = { ...failed, time: '2026-01-07T17:00:00.000Z' };
+  assert.deepEqual(collectAllAlerts(c), [`<b>Steady</b> · ${said}`]);
+  c.lastCommand = { ...failed, time: '2026-01-07T18:00:00.000Z', fund: 'all' };
+  assert.deepEqual(collectAllAlerts(c), [said]); // no one fund named
+});
