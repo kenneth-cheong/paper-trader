@@ -110,6 +110,23 @@ jobs:
             git init --quiet -b ai-state state
             git -C state remote add origin "$url"
           fi
+      # The results calendar and analysts' views (calendar.js, analysts.js). Both are optional: when a
+      # source fails, the last copy on ai-state is used, and without any the dates are simply unknown.
+      - name: 'Results dates from SEC filings'
+        continue-on-error: true
+        env:
+          # "Your Name you@example.com" (README → Results calendar and analysts). Set only for this step,
+          # and a secret of the same name works too, if you'd rather the address stayed out of the log.
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT || vars.SEC_USER_AGENT }}
+        run: node scripts/fetch-filings.mjs state/results-dates.json
+      - name: 'Company data from Yahoo (once a day)'
+        continue-on-error: true
+        run: |
+          if node scripts/company-data.mjs due state/company-data.json; then
+            pip install --quiet curl_cffi
+            python scripts/yahoo_fetch.py summary raw-summary
+            node scripts/company-data.mjs build raw-summary state/company-data.json
+          fi
       # A failure in an AI step must not stop prices from updating.
       - name: AI picks
         continue-on-error: true
@@ -178,6 +195,8 @@ jobs:
           cp data/prices.json _site/data/ 2>/dev/null || echo "::warning::No prices this run; the site shows sample prices."
           cp state/picks.json _site/data/ 2>/dev/null || true
           cp state/picks-history.json _site/data/ 2>/dev/null || true
+          cp state/company-data.json _site/data/ 2>/dev/null || true   # results dates and analysts, for the page
+          cp state/results-dates.json _site/data/ 2>/dev/null || true
           node -e "const fs=require('fs');let l={months:{}};try{l=JSON.parse(fs.readFileSync('state/ai-spend.json','utf8'))}catch{}l.cap=Number(process.env.AI_MONTHLY_CAP_USD)||null;fs.writeFileSync('_site/data/ai-spend.json',JSON.stringify(l))"
           # The public copy of the AI fund, unless it's kept private (then only admins see it, from Supabase)
           if [ "${{ steps.fundstore.outputs.private }}" != "true" ]; then

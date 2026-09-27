@@ -13,6 +13,12 @@ import { summarize, buyingPower, SHORT_MARGIN } from './portfolio.js';
 import { describeFees, planFor } from './fees.js';
 import { STYLES, DEFAULT_STYLE } from './funds.js';
 import { EVENT_TYPES, TONES } from './memory.js';
+import { tradingDaysBetween } from './markets.js';
+import { analystsForPrompt } from './analysts.js';
+import { upcomingResults, nextResults } from './calendar.js';
+import { betaAt } from './stats.js';
+import { CATALYST_TYPES, HORIZON_DAYS, positionThesis, thesisProgress } from './thesis.js';
+import { BENCHMARKS } from './benchmark.js';
 
 const SDK_URL = 'https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.128.0/+esm';
 
@@ -130,7 +136,10 @@ const knownUrls = (urls, sources) => {
 
 // ---------- price statistics ----------
 
-export function stockStats(q) {
+// A stock's price statistics. With its index's quote (`iq`), also beta_1y: how much it has moved with
+// the index over the year (stats.js betaAt: 1 moves with it, 0.5 half as much), or null with less than
+// about six months of closes.
+export function stockStats(q, iq = null) {
   const closes = (q.daily ?? []).map(([, c]) => c);
   if (closes.length < 2) return null;
   const last = q.price ?? closes.at(-1);
@@ -157,23 +166,35 @@ export function stockStats(q) {
     vs_ma50_pct: ma50 ? pct(last / ma50 - 1) : null,
     vs_ma200_pct: ma200 ? pct(last / ma200 - 1) : null,
     history_days: closes.length,
+    ...(iq ? { beta_1y: betaOf(q, iq) } : {}),
   };
+}
+
+function betaOf(q, iq) {
+  const b = betaAt(q, Infinity, iq);
+  return b.fallback ? null : Math.round(b.beta * 100) / 100;
 }
 
 // Weekly closes (every 5th trading day), newest last, to show Claude the shape of the year.
 const weekly = (q) => (q.daily ?? []).filter((_, i, a) => (a.length - 1 - i) % 5 === 0).map(([t, c]) => [new Date(t * 1000).toISOString().slice(0, 10), c]);
 
-const stockList = (quotes, symbols, withWeekly) => symbols.filter((s) => quotes[s]).map((s) => ({
-  symbol: s, name: quotes[s].name, market: quotes[s].market, currency: quotes[s].currency,
-  stats: stockStats(quotes[s]),
-  ...(withWeekly ? { weekly_closes: weekly(quotes[s]) } : {}),
-}));
+// Each stock with its price statistics and, where Yahoo has any (company-data.json, see analysts.js),
+// what analysts say about it.
+const stockList = (quotes, symbols, withWeekly, company = null, now = new Date()) => symbols.filter((s) => quotes[s]).map((s) => {
+  const analysts = company ? analystsForPrompt(s, company, quotes, now) : null;
+  return {
+    symbol: s, name: quotes[s].name, market: quotes[s].market, currency: quotes[s].currency,
+    stats: stockStats(quotes[s], quotes[BENCHMARKS[quotes[s].currency]?.symbol]),
+    ...(analysts ? { analysts } : {}),
+    ...(withWeekly ? { weekly_closes: weekly(quotes[s]) } : {}),
+  };
+});
 
-const NEWS = 'A research assistant has just searched the web; the latest relevant news is in `news` (a market summary plus dated items with links). You have no other news source, so base your views on it and the price data, say when the news is thin, and cite the source_url of the items you rely on.';
+const NEWS = 'A research assistant has just searched the web; the latest relevant news is in `news` (a market summary plus dated items with links). You have no other news source, so base your views on it and the price data, say when the news is thin, and cite the source_url of the items you rely on. Each item has age_days; items in news.background are more than 10 trading days old, so they are context, not a fresh catalyst: never present them as just announced.';
 
 // ---------- 0. news digest (simple tier) ----------
 
-export const NEWS_SYSTEM = `You are a markets research assistant. Search the web for the latest news that could move the listed Singapore (SGX) and US stocks: company news and results, sector trends, macro data, central banks, commodities, geopolitics and overall market mood. Prefer reports from the last few days, check dates, and don't speculate or give trading advice: just report what happened, briefly and accurately. Finish by calling submit_news.`;
+export const NEWS_SYSTEM = `You are a markets research assistant. Search the web for the latest news that could move the listed Singapore (SGX) and US stocks: company news and results, sector trends, macro data, central banks, commodities, geopolitics and overall market mood. Prefer reports from the last few days, check dates, and don't speculate or give trading advice: just report what happened, briefly and accurately. Date each item by when the news first came out, not when a page about it was updated; an older story is only background, so don't present it as new. Finish by calling submit_news.`;
 
 export const NEWS_TOOL = {
   name: 'submit_news',
@@ -221,12 +242,24 @@ export async function gatherNews({ client, Anthropic, model = TIERS.simple, quot
   return { market_summary: res.input.market_summary ?? '', items, sources: res.sources, model: res.model, usage: res.usage, createdAt: now.toISOString() };
 }
 
-// The part of a digest a decision model sees: no raw search results, just the summary and items.
-const newsForPrompt = (news, symbols) => news && {
-  gathered_at: news.createdAt,
-  market_summary: news.market_summary,
-  items: news.items.filter((i) => !symbols || !i.symbols.length || i.symbols.some((x) => symbols.includes(x))),
-};
+// The part of a digest a decision model sees: no raw search results, just the summary and items, each
+// with its age in days. Items more than NEWS_FRESH_DAYS trading days old move to `background`: the
+// digest sometimes brings back months-old results, which must not read as fresh news.
+export const NEWS_FRESH_DAYS = 10;
+export function newsForPrompt(news, symbols, now = new Date()) {
+  if (!news) return news;
+  const today = now.toISOString().slice(0, 10);
+  const items = [], background = [];
+  for (const i of news.items ?? []) {
+    const syms = i.symbols ?? [];
+    if (symbols && syms.length && !syms.some((x) => symbols.includes(x))) continue;
+    const date = String(i.date ?? '').slice(0, 10);
+    const dated = /^\d{4}-\d{2}-\d{2}$/.test(date) && date <= today;
+    const item = { ...i, age_days: dated ? Math.round((Date.parse(today) - Date.parse(date)) / 86400000) : null };
+    (dated && tradingDaysBetween(date, today) > NEWS_FRESH_DAYS ? background : items).push(item);
+  }
+  return { gathered_at: news.createdAt, market_summary: news.market_summary, items, ...(background.length ? { background } : {}) };
+}
 const newsUrls = (news) => (news?.items ?? []).map((i) => ({ url: i.source_url })).filter((x) => x.url);
 
 // ---------- 1. strategist ----------
@@ -371,7 +404,7 @@ export async function analyze({ client, Anthropic, model = TIERS.advanced, newsM
   const res = await askClaude({
     client, Anthropic, model,
     system: STRATEGIST_SYSTEM,
-    content: `Here is my simulator data as JSON. Analyse it and propose strategies.\n\n${JSON.stringify({ ...context, news: newsForPrompt(news, symbols) })}`,
+    content: `Here is my simulator data as JSON. Analyse it and propose strategies.\n\n${JSON.stringify({ ...context, news: newsForPrompt(news, symbols, new Date(context.now)) })}`,
     tool: STRATEGIES_TOOL,
     maxSearches: 0,
   });
@@ -429,13 +462,16 @@ export function parsePicks(json, quotes, sources = []) {
 }
 
 // Pass a fresh `news` digest to reuse it; otherwise one is gathered first with the cheap model.
-export async function recommend({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, prices, news, now = new Date() }) {
+// `company` (company-data.json) and `calendar` (calendar.js resultsCalendar) add analysts' views and
+// the results due soon, when the scheduled job has them.
+export async function recommend({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, prices, news, company = null, calendar = null, now = new Date() }) {
   const quotes = prices.quotes ?? {};
   const fresh = !news;
   news ??= await gatherNews({ client, Anthropic, model: newsModel, quotes, now });
   const context = {
     now: now.toISOString(), prices_as_of: prices.updatedAt, sample_data: !!prices.sample,
-    news: newsForPrompt(news), watchlist: stockList(quotes, Object.keys(quotes), false),
+    news: newsForPrompt(news, null, now), watchlist: stockList(quotes, Object.keys(quotes), false, company, now),
+    ...(calendar ? { upcoming_results: upcomingResults(calendar, quotes, Object.keys(quotes), now) } : {}),
   };
   const res = await askClaude({
     client, Anthropic, model,
@@ -463,10 +499,28 @@ Hard limits, enforced by the simulator (orders that break them are rejected):
 
 ${NEWS} Use the price statistics, your positions and your earlier decisions (you are called again at the next decision time; stop-loss and take-profit levels you set are checked every 15 minutes in between). Doing nothing is a valid decision when nothing is compelling. Keep reasons short and specific.
 
-If the context has a playbook, it holds lessons from grading all your earlier ideas against what prices did afterwards: trades made, trades the owner declined or your limits blocked, ideas you passed on, and your exits. Weigh each lesson by its evidence (a handful of cases is weak), and never let one override the hard limits. Finish by calling submit_decision.`;
+Give every order and considered idea a short thesis. expected_move_pct is your honest central estimate of the price move in the idea's direction over horizon_days (5, 21 or 63 trading days), before fees (+6 for a buy expected to rise 6%, or a short expected to fall 6%); for a sell or cover use 0. catalyst_type and catalyst_date say what should move it and when ('' without a date; an item from news.background is an old catalyst), and wrong_if what would prove it wrong. The stop-loss and take-profit levels you set in protections are the thesis's exit levels. These are graded later against what happened, so give real estimates, not a habit. lessons_applied lists the ids of up to 3 playbook lessons that shaped the idea (empty if none).
+
+upcoming_results lists the stocks reporting results in the next 10 trading days, with how far their results days have typically moved against the index: a position held into results can jump or fall that much overnight, so size it for that move (positions flagged results_soon are already exposed) and don't count on the reaction going your way.
+
+If the context has a playbook, it holds lessons from grading all your earlier ideas against what prices did afterwards: trades made, trades the owner declined or your limits blocked, ideas you passed on, and your exits. Results are split into the market's part (beta: how much the stocks move with the index), fees and the stock-specific edge that's left, counted in separate bets. The confidence is computed for you; treat Moderate as a tilt, not a rule. Weigh each lesson by its evidence, and never let one override the hard limits. Finish by calling submit_decision.`;
 
 // The kinds of reasoning behind a trade idea, so results can be graded by kind (learning.js).
 export const IDEA_TYPES = ['news', 'earnings', 'momentum', 'value', 'technical', 'analyst_pick', 'risk_reduction', 'other'];
+
+// The thesis on every order and considered idea (thesis.js), graded for calibration (learning.js).
+// Every field is required, with sentinels for "none" (0, '', 'none', []), so strict tool use holds, and
+// the lessons are plain strings, so the tool's JSON is the same for every fund and the cached market
+// data still hits.
+const THESIS_FIELDS = {
+  expected_move_pct: { type: 'number', description: 'The move you expect in the idea\'s direction over horizon_days, in %, before fees (6 = +6% your way). 0 for a sell or cover.' },
+  horizon_days: { type: 'integer', enum: HORIZON_DAYS, description: 'Trading days you expect it to take: 5 (a week), 21 (a month) or 63 (a quarter).' },
+  catalyst_type: { type: 'string', enum: CATALYST_TYPES, description: 'What should move the price.' },
+  catalyst_date: { type: 'string', description: 'The catalyst\'s date, YYYY-MM-DD (when the news came out, or when the results are due), or \'\' if none.' },
+  wrong_if: { type: 'string', description: 'What would prove the idea wrong, in a few words. \'\' for a sell or cover.' },
+  lessons_applied: { type: 'array', items: { type: 'string' }, description: 'The ids of up to 3 playbook lessons that shaped this idea. Empty if none.' },
+};
+const THESIS_KEYS = Object.keys(THESIS_FIELDS);
 
 export const FUND_TOOL = {
   name: 'submit_decision',
@@ -482,7 +536,7 @@ export const FUND_TOOL = {
         items: {
           type: 'object',
           additionalProperties: false,
-          required: ['symbol', 'action', 'shares', 'reason', 'idea_type', 'conviction'],
+          required: ['symbol', 'action', 'shares', 'reason', 'idea_type', 'conviction', ...THESIS_KEYS],
           properties: {
             symbol: { type: 'string' },
             action: { type: 'string', enum: ['buy', 'sell', 'short', 'cover'], description: 'buy/sell for long positions; short opens or adds to a short; cover buys a short back.' },
@@ -490,6 +544,7 @@ export const FUND_TOOL = {
             reason: { type: 'string' },
             idea_type: { type: 'string', enum: IDEA_TYPES, description: 'The main kind of reasoning behind this order.' },
             conviction: { type: 'string', enum: ['low', 'medium', 'high'] },
+            ...THESIS_FIELDS,
           },
         },
       },
@@ -499,12 +554,13 @@ export const FUND_TOOL = {
         items: {
           type: 'object',
           additionalProperties: false,
-          required: ['symbol', 'stance', 'idea_type', 'why_not'],
+          required: ['symbol', 'stance', 'idea_type', 'why_not', ...THESIS_KEYS],
           properties: {
             symbol: { type: 'string' },
             stance: { type: 'string', enum: ['long', 'short'] },
             idea_type: { type: 'string', enum: IDEA_TYPES },
             why_not: { type: 'string', description: 'A few words.' },
+            ...THESIS_FIELDS,
           },
         },
       },
@@ -527,23 +583,48 @@ export const FUND_TOOL = {
   },
 };
 
-// The market data every fund in that market sees (identical for them, so it can be cached).
-export function marketContext({ currency, quotes, picks, news }) {
+// The market data every fund in that market sees (identical for them in one run, so it can be
+// cached): news, the home page's picks, price statistics with analysts' views (`company`), and the
+// results due in the next 10 trading days (`calendar`, calendar.js resultsCalendar).
+export function marketContext({ currency, quotes, picks, news, company = null, calendar = null, now = new Date() }) {
   const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === currency);
   return {
     analyst_picks: picks?.picks?.filter((p) => quotes[p.symbol]?.currency === currency)
       .map((p) => ({ symbol: p.symbol, stance: p.stance, conviction: p.conviction, thesis: p.thesis, as_of: picks.createdAt })) ?? [],
-    news: newsForPrompt(news, symbols),
-    stocks: stockList(quotes, symbols, false),
+    news: newsForPrompt(news, symbols, now),
+    ...(calendar ? { upcoming_results: upcomingResults(calendar, quotes, symbols, now) } : {}),
+    stocks: stockList(quotes, symbols, false, company, now),
   };
 }
 
 // The fund's own part: mandate, money, positions, recent decisions and (if learning) its playbook.
-export function fundContext({ fund, quotes, picks, news, playbook = null, now = new Date() }) {
-  return { ...ownContext({ fund, quotes, playbook, now }), ...marketContext({ currency: fund.currency, quotes, picks, news }) };
+export function fundContext({ fund, quotes, picks, news, playbook = null, company = null, calendar = null, now = new Date() }) {
+  return { ...ownContext({ fund, quotes, playbook, calendar, now }), ...marketContext({ currency: fund.currency, quotes, picks, news, company, calendar, now }) };
 }
 
-function ownContext({ fund, quotes, playbook, now }) {
+// A held position whose results are due within RESULTS_SOON_DAYS trading days, with its share of the fund.
+const RESULTS_SOON_DAYS = 3;
+function resultsSoon(p, equity, calendar, quotes, now) {
+  const n = nextResults(calendar, p.symbol, quotes, now);
+  if (!n || n.daysAway < 0 || n.daysAway > RESULTS_SOON_DAYS) return {};
+  return { results_soon: { date: n.date, days_away: n.daysAway, source: n.source, share_of_fund_pct: equity > 0 ? pct(Math.abs(p.marketValue) / equity) : null } };
+}
+
+// A held position's thesis, from the order that opened it (thesis.js), with how it's going: about 30
+// tokens, and nothing for a position opened without one.
+function thesisNow(fund, p, quotes, now) {
+  const th = positionThesis(fund, p.symbol, p.short ? 'short' : 'long');
+  if (!th) return {};
+  const { daysLeft, soFar } = thesisProgress(th, { price: p.price, short: p.short, quote: quotes[p.symbol], now });
+  return {
+    thesis: {
+      catalyst_type: th.catalyst, catalyst_date: th.catalystDate || null, days_left: daysLeft,
+      expected_move_pct: th.expected, realised_so_far_pct: soFar == null ? null : pct(soFar),
+    },
+  };
+}
+
+function ownContext({ fund, quotes, playbook, calendar = null, now }) {
   const ccy = fund.currency;
   const market = ccy === 'SGD' ? 'SGX' : 'US';
   const { accounts, positions } = summarize(fund.portfolio, quotes);
@@ -566,6 +647,8 @@ function ownContext({ fund, quotes, playbook, now }) {
     positions: positions.map((p) => ({
       symbol: p.symbol, shares: p.qty, side: p.short ? 'short' : 'long', avg_price: round2(p.avgCost), price: p.price,
       value: round2(p.marketValue), unrealized_pl_pct: pct(p.unrealizedPct), protection: fund.protections[p.symbol] ?? null,
+      ...(calendar ? resultsSoon(p, a.equity, calendar, quotes, now) : {}),
+      ...thesisNow(fund, p, quotes, now),
     })),
     recent_decisions: fund.decisions.filter((d) => !d.skipped).slice(-5).map((d) => ({
       time: d.time, outlook: d.outlook,
@@ -578,19 +661,20 @@ function ownContext({ fund, quotes, playbook, now }) {
 // `news` should be a recent digest (the scheduled job shares one between picks and the fund);
 // without one, a digest for the fund's market is gathered first with the cheap model.
 // `cacheShared`: several funds in this market decide now on the same model, so the market data (the
-// bulk of the prompt) is marked for caching and the others read it at a tenth of the price.
-export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, playbook = null, cacheShared = false, now = new Date() }) {
+// bulk of the prompt) is marked for caching and the others read it at a tenth of the price. It must be
+// byte-for-byte the same for them, so everything in it depends only on the market and `now`.
+export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, playbook = null, company = null, calendar = null, cacheShared = false, now = new Date() }) {
   const fresh = !news;
   if (fresh) {
     const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === fund.currency);
     news = await gatherNews({ client, Anthropic, model: newsModel, quotes, symbols, now, maxSearches: 3 });
   }
-  const shared = { type: 'text', text: `Market data as JSON: news, analyst picks and price statistics for the ${fund.currency} market.\n\n${JSON.stringify(marketContext({ currency: fund.currency, quotes, picks, news }))}` };
+  const shared = { type: 'text', text: `Market data as JSON: news, analyst picks, results due and price statistics for the ${fund.currency} market.\n\n${JSON.stringify(marketContext({ currency: fund.currency, quotes, picks, news, company, calendar, now }))}` };
   if (cacheShared) shared.cache_control = { type: 'ephemeral' };
   const res = await askClaude({
     client, Anthropic, model,
     system: FUND_SYSTEM,
-    content: [shared, { type: 'text', text: `Decision time. The fund's state as JSON:\n\n${JSON.stringify(ownContext({ fund, quotes, playbook, now }))}` }],
+    content: [shared, { type: 'text', text: `Decision time. The fund's state as JSON:\n\n${JSON.stringify(ownContext({ fund, quotes, playbook, calendar, now }))}` }],
     tool: FUND_TOOL,
     maxSearches: 0,
   });
@@ -644,7 +728,7 @@ export async function backfillNews({ client, Anthropic, model = TIERS.simple, sy
   return { events, usage: res.usage, model: res.model };
 }
 
-const REVIEW_SYSTEM = `You coach the AI manager of a paper-trading fund. You get statistics that grade all of its earlier ideas against what prices did afterwards (trades it made, trades its owner declined, orders its limits blocked, ideas it passed on, and its exits and stop-losses), plus the most telling examples with the manager's own reasons, and lessons already derived from the numbers. Write up to 6 short, specific, practical lessons the manager should apply to future decisions, each citing its evidence from the data (numbers of cases and results). Only draw a lesson from 5 or more cases; say nothing rather than guess. Don't repeat lessons already derived unless you sharpen them. Finish by calling submit_lessons.`;
+const REVIEW_SYSTEM = `You coach the AI manager of a paper-trading fund. You get statistics that grade all of its earlier ideas against what prices did afterwards (trades it made, trades its owner declined, orders its limits blocked, ideas it passed on, and its exits and stop-losses), plus the most telling examples with the manager's own reasons, and lessons already derived from the numbers. Write up to 6 short, specific, practical lessons the manager should apply to future decisions, each citing its evidence from the data (numbers of cases and results). Judge by the stock-specific edge (what's left after the market's part, beta, and fees), not the result against the index, and only draw a lesson from 8 or more separate bets; say nothing rather than guess. Don't repeat lessons already derived unless you sharpen them. Finish by calling submit_lessons.`;
 
 export const REVIEW_TOOL = {
   name: 'submit_lessons',

@@ -153,6 +153,7 @@ td .name { display: block; font-size: 12px; color: var(--muted); max-width: 220p
 .chip { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--surface-2); color: var(--muted); margin-left: 6px; vertical-align: 1px; }
 .chip.buy { background: var(--up-bg); color: var(--up); }
 .chip.sell { background: var(--down-bg); color: var(--down); }
+.chip.results { background: var(--warn-bg); color: var(--warn-text); white-space: nowrap; }
 .spark { width: 90px; height: 26px; display: block; }
 .spark polyline { fill: none; stroke-width: 1.5; }
 
@@ -302,6 +303,9 @@ body.locked { overflow: hidden; }
   #trades td.when { white-space: nowrap; }
   td .name { max-width: 120px; white-space: nowrap; }
   #markets .chip { display: none; }
+  #markets .chip.results { display: inline-block; }
+  /* the results chip may wrap onto its own line rather than widen the table */
+  .chip.results { white-space: normal; display: inline-block; max-width: 100%; margin-left: 0; }
 }
 
 .leaderboard tbody tr { cursor: pointer; }
@@ -315,6 +319,21 @@ body.locked { overflow: hidden; }
 .lesson-form { margin: 8px 0; }
 .lesson-form input { flex: 1; min-width: 0; }
 .decision-skip { margin: 6px 0; }
+/* an AI thesis: under a fund position's name, an order or a proposal */
+.thesis { display: block; color: var(--muted); white-space: normal; max-width: 360px; margin-top: 2px; }
+.orders .thesis { max-width: none; }
+.chip.lesson-chip { margin: 2px 0 0 6px; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
+.orders .chip.lesson-chip { margin: 2px 6px 0 0; }
+.cal-head { margin-top: 18px; }
+.calibration td:first-child { white-space: normal; }
+.calibration th { white-space: normal; vertical-align: bottom; }
+@media (max-width: 560px) {
+  .thesis { max-width: 190px; }
+  .calibration th, .calibration td { padding: 8px 5px; }
+  .calibration td:first-child { max-width: 90px; } /* so Expected and Realised fit next to it */
+}
+/* a chart's Table whose headers may wrap, so it fits without scrolling sideways on a desktop */
+.chart-table.wrap-head th { white-space: normal; vertical-align: bottom; }
 
 /* ---------- charts ---------- */
 .chart text { font-size: 12px; font-family: inherit; }
@@ -336,6 +355,11 @@ body.locked { overflow: hidden; }
 .chart [data-tip].hot .hit { fill: var(--surface-2); opacity: .6; }
 .chart [data-tip]:focus-visible .hit, .chart [data-tip].hot:focus-visible .hit { fill: none; stroke: var(--accent); stroke-width: 2; opacity: 1; }
 .chart .seg { stroke: none; }
+.chart .range { fill: var(--series-1); opacity: .8; } /* about 3:1 on the background in both themes */
+.chart .est { fill: var(--series-1); stroke: var(--halo); stroke-width: 2; }
+.chart [data-tip].hot .range { opacity: .9; }
+.legend-list .swatch-range { width: 16px; height: 6px; border-radius: 3px; background: var(--series-1); opacity: .8; margin-top: 6px; }
+.legend-list .swatch-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--series-1); }
 .legend-list { list-style: none; display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 0; margin: 6px 0 0; font-size: 13px; }
 .legend-list li { display: inline-flex; align-items: flex-start; gap: 6px; }
 .legend-list .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; flex: none; margin-top: 4px; }

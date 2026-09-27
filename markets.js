@@ -9,7 +9,7 @@ export const MARKETS = {
 
 export const marketForCurrency = (ccy) => Object.keys(MARKETS).find((m) => MARKETS[m].currency === ccy);
 
-function localClock(market, now) {
+export function localClock(market, now = new Date()) {
   const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
     timeZone: MARKETS[market].tz, weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
   }).formatToParts(now).map((p) => [p.type, p.value]));
@@ -25,6 +25,41 @@ export function isOpen(market, now = new Date()) {
 export function minutesSinceOpen(market, now = new Date()) {
   if (!isOpen(market, now)) return null;
   return localClock(market, now).mins - MARKETS[market].sessions[0][0];
+}
+
+// The first trading day whose prices can react to news released on local `date` (YYYY-MM-DD, in the
+// market's own time zone) at local minute `mins`: that day if it came out on a weekday before the
+// close, otherwise the next weekday. Public holidays aren't known here; a day without a session
+// simply maps to the next day that has prices.
+export function sessionDateAfter(market, date, mins = 0) {
+  const close = MARKETS[market].sessions.at(-1)[1];
+  let d = Date.parse(`${date}T00:00:00Z`);
+  const weekend = (x) => [0, 6].includes(new Date(x).getUTCDay());
+  if (mins >= close || weekend(d)) do d += 86400000; while (weekend(d));
+  return new Date(d).toISOString().slice(0, 10);
+}
+
+// The same for news released at an actual moment (a Date, or an ISO time with its offset), e.g. US
+// results out at 16:05 New York time count from the next day's session.
+export function sessionDateFor(market, when) {
+  const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
+    timeZone: MARKETS[market].tz, year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23',
+  }).formatToParts(new Date(when)).map((p) => [p.type, p.value]));
+  return sessionDateAfter(market, `${parts.year}-${parts.month}-${parts.day}`, Number(parts.hour) * 60 + Number(parts.minute));
+}
+
+// The market's own calendar date (YYYY-MM-DD) at `now`.
+export const marketDate = (market, now = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZone: MARKETS[market].tz }).format(now);
+
+// Trading days (weekdays) after date `a` up to and including date `b` (YYYY-MM-DD): 0 for the same
+// day, 1 for the next weekday, negative when `b` is earlier. Public holidays aren't known.
+export function tradingDaysBetween(a, b) {
+  const [from, to, sign] = a <= b ? [a, b, 1] : [b, a, -1];
+  let n = 0;
+  for (let d = Date.parse(`${from}T00:00:00Z`) + 86400000; d <= Date.parse(`${to}T00:00:00Z`); d += 86400000) {
+    if (![0, 6].includes(new Date(d).getUTCDay())) n++;
+  }
+  return sign * n;
 }
 
 export const sessionMinutes = (market) => MARKETS[market].sessions.reduce((s, [a, b]) => s + b - a, 0);

@@ -13,6 +13,8 @@
 //     budget and profit are after fees;
 //   - a paused fund makes no new trades (stop-losses and take-profits still close positions), and its
 //     open Tiger orders are cancelled.
+// Every order keeps the AI's thesis (thesis.js) for grading later; what code checks about it (a stale
+// catalyst, an expected move under the fees) is noted on the order and never blocks it.
 // With Tiger and approval 'manual', the AI's trades wait as proposals until an admin approves them;
 // a proposal expires after PROPOSAL_MINUTES or if the price moves more than PROPOSAL_MAX_DRIFT.
 //
@@ -24,6 +26,9 @@
 import { newPortfolio, applyTrade, summarize } from './portfolio.js';
 import { pricePoints } from './rules.js';
 import { MARKETS, marketForCurrency, minutesSinceOpen, sessionMinutes, tradingStatus } from './markets.js';
+import { planFor } from './fees.js';
+import { roundTripFee } from './stats.js';
+import { checkedThesis, lessonsAppliedOf, beatsFees } from './thesis.js';
 
 export const SHORT_MAX_LOSS = 0.4;
 export const LIMIT_BAND = 0.01; // Tiger limit orders: at most 1% worse than the latest price
@@ -199,7 +204,12 @@ const opens = (action) => action === 'buy' || action === 'short';
 // `others`: other Tiger funds' holdings in the same account (funds.js otherTigerHoldings), so this
 // fund never opens a position on the other side of theirs.
 // Returns one result per order: status 'filled', 'awaiting approval', 'sent to Tiger' or 'rejected'.
-export function applyOrders(fund, orders, quotes, now = new Date(), { send = false, others = {} } = {}) {
+// Each carries the AI's thesis for an opening order (thesis.js: expected move, horizon, catalyst, what
+// would prove it wrong), or thesis null (a sell or cover, or an order from before theses). Two checks
+// are only logged on it, never blocking the order: `stale`, the catalyst is over 10 trading days old
+// (results dated from `calendar`, calendar.js resultsCalendar), and `beatsFees` false, the expected
+// move doesn't cover the round trip's fees at this size.
+export function applyOrders(fund, orders, quotes, now = new Date(), { send = false, others = {}, calendar = null } = {}) {
   const time = now.toISOString();
   const broker = usesBroker(fund);
   const s = settingsOf(fund);
@@ -208,7 +218,11 @@ export function applyOrders(fund, orders, quotes, now = new Date(), { send = fal
   let ledger = broker ? committedLedger(fund) : fund.portfolio;
   const results = [];
   for (const o of sorted) {
-    const res = { symbol: o.symbol, action: o.action, shares: o.shares, reason: o.reason ?? '', ideaType: o.idea_type ?? o.ideaType ?? null, conviction: o.conviction ?? null };
+    const res = {
+      symbol: o.symbol, action: o.action, shares: o.shares, reason: o.reason ?? '', ideaType: o.idea_type ?? o.ideaType ?? null, conviction: o.conviction ?? null,
+      thesis: opens(o.action) ? checkedThesis(o, o.symbol, { calendar, quotes, now }) : null,
+      ...(lessonsAppliedOf(o).length ? { lessonsApplied: lessonsAppliedOf(o) } : {}),
+    };
     try {
       const q = quotes[o.symbol];
       if (!q || q.currency !== fund.currency) throw new Error(`${o.symbol} is not tradable in this ${fund.currency} fund.`);
@@ -220,6 +234,7 @@ export function applyOrders(fund, orders, quotes, now = new Date(), { send = fal
         throw new Error(`Another fund in the same Tiger account is ${theirs > 0 ? 'long' : 'short'} ${o.symbol}; one account can't be long and short the same stock.`);
       }
       const { side, qty } = resolveOrder(o, ledger.positions[o.symbol]?.qty ?? 0);
+      if (res.thesis) res.thesis.beatsFees = beatsFees(res.thesis.expected, roundTripFee(planFor(s.feePlan), q.market, o.action === 'short' ? -1 : 1, qty, q.price));
       const cap = fund.budget * s.maxOrderPct / 100;
       if (opens(o.action) && qty * q.price > cap) {
         throw new Error(`Over the per-order limit of ${s.maxOrderPct}% of the budget (${cap.toFixed(2)} ${fund.currency}).`);
@@ -255,14 +270,15 @@ function queueBrokerOrder(fund, r, source, now) {
 }
 
 // The AI's decision: fills in the simulator, or turns into proposals / queued Tiger orders.
-export function executeDecision(fund, orders, quotes, now = new Date(), { others = {} } = {}) {
-  const results = applyOrders(fund, orders, quotes, now, { others });
+export function executeDecision(fund, orders, quotes, now = new Date(), { others = {}, calendar = null } = {}) {
+  const results = applyOrders(fund, orders, quotes, now, { others, calendar });
   for (const r of results) {
     if (r.status === 'sent to Tiger') r.brokerOrderId = queueBrokerOrder(fund, r, 'decision', now).id;
     if (r.status === 'awaiting approval') {
       const p = {
         id: newId('p'), createdAt: now.toISOString(), expiresAt: new Date(now.getTime() + PROPOSAL_MINUTES * 60000).toISOString(),
-        symbol: r.symbol, action: r.action, shares: r.shares, refPrice: r.refPrice, limitPrice: r.limitPrice, reason: r.reason, ideaType: r.ideaType, conviction: r.conviction, status: 'awaiting',
+        symbol: r.symbol, action: r.action, shares: r.shares, refPrice: r.refPrice, limitPrice: r.limitPrice, reason: r.reason, ideaType: r.ideaType, conviction: r.conviction,
+        thesis: r.thesis, ...(r.lessonsApplied ? { lessonsApplied: r.lessonsApplied } : {}), status: 'awaiting',
       };
       (fund.proposals ??= []).push(p);
       r.proposalId = p.id;

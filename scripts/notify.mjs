@@ -6,7 +6,9 @@
 // Alerts can contain your trades, so nothing about them is printed to the (public) Actions log.
 
 import { readFile, writeFile } from 'node:fs/promises';
+import { dirname, join } from 'node:path';
 import { collectAllAlerts, formatMessage } from '../alerts.js';
+import { resultsCalendar } from '../calendar.js';
 import { loadFunds } from '../funds.js';
 
 const { TELEGRAM_BOT_TOKEN: token, TELEGRAM_CHAT_ID: chatId, APP_URL: appUrl } = process.env;
@@ -43,12 +45,17 @@ let c;
 try { c = loadFunds(JSON.parse(await readFile(file, 'utf8'))); } catch { process.exit(0); }
 let prices = null;
 try { prices = JSON.parse(await readFile('data/prices.json', 'utf8')); } catch { /* summary needs prices; alerts don't */ }
+// The results calendar, for the heads-up the evening before a held stock reports (calendar.js)
+const readJson = async (path) => { try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; } };
+const company = await readJson(join(dirname(file), 'company-data.json'));
+const filings = await readJson(join(dirname(file), 'results-dates.json'));
+const calendar = prices ? resultsCalendar({ company, filings, quotes: prices.quotes ?? {} }) : null;
 
 if (!token || !chatId) {
   console.log('Telegram alerts are off (add TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID to turn them on).');
   process.exit(0);
 }
-const texts = collectAllAlerts(c, { prices });
+const texts = collectAllAlerts(c, { prices, calendar });
 try {
   if (texts.length) await send(chatId, formatMessage(texts, appUrl));
   await writeFile(file, JSON.stringify(c));

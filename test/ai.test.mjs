@@ -3,9 +3,10 @@ import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import {
   askClaude, gatherNews, analyze, recommend, decideFund, buildContext, fundContext, stockStats, parseStrategies, parsePicks,
-  BACKFILL_TOOL, REVIEW_TOOL, backfillNews,
+  BACKFILL_TOOL, REVIEW_TOOL, backfillNews, newsForPrompt, FUND_SYSTEM, PICKS_SYSTEM, NEWS_SYSTEM,
   AIError, STRATEGIES_TOOL, PICKS_TOOL, FUND_TOOL, NEWS_TOOL,
 } from '../ai.js';
+import { resultsCalendar } from '../calendar.js';
 import { newPortfolio, applyTrade } from '../portfolio.js';
 import { newFund } from '../fund.js';
 
@@ -60,6 +61,11 @@ test('stockStats summarises a year of closes', () => {
   assert.equal(s.history_days, 252);
   for (const k of ['return_1y_pct', 'volatility_annual_pct', 'max_drawdown_1y_pct', 'vs_ma200_pct', 'day_change_pct']) assert.equal(typeof s[k], 'number', k);
   assert.ok(s.max_drawdown_1y_pct >= 0);
+  assert.equal(s.beta_1y, undefined); // without the index
+  const b = stockStats(prices.quotes.AAPL, prices.quotes.SPY).beta_1y;
+  assert.ok(typeof b === 'number' && b >= 0 && b <= 3);
+  assert.equal(stockStats(prices.quotes.SPY, prices.quotes.SPY).beta_1y, 1);
+  assert.match(FUND_SYSTEM, /confidence is computed for you; treat Moderate as a tilt, not a rule/);
 });
 
 test('askClaude defaults to Haiku with basic web search, no thinking, and prices tokens and searches', async () => {
@@ -157,7 +163,8 @@ test('gatherNews uses Haiku with web search and drops unseen links and unknown s
 
 test('analyze gathers news with Haiku, then decides with Sonnet from the digest only', async () => {
   const client = fakeClient(newsMsg(), decisionMsg(STRATEGIES_TOOL.name, strategies));
-  const context = buildContext({ prices, portfolio: newPortfolio(), focus: 'NVDA' });
+  // a fixed clock: the news fixtures are dated, and items over 10 trading days old become background
+  const context = buildContext({ prices, portfolio: newPortfolio(), focus: 'NVDA', now: new Date('2026-09-26T00:00:00Z') });
   const out = await analyze({ client, context, quotes: prices.quotes });
   assert.equal(client.calls[0].model, 'claude-haiku-4-5');
   const decide = client.calls[1];
@@ -276,4 +283,55 @@ test('the news backfill keeps only dated events in the period with a source it r
   const r = await backfillNews({ client, symbol: 'D05.SI', name: 'DBS Group', from: '2025-10-01', to: '2026-09-01' });
   assert.deepEqual(r.events.map((e) => [e.symbol, e.headline, e.from]), [['D05.SI', 'DBS profit beats', 'backfill']]);
   assert.equal(client.calls[0].model, 'claude-haiku-4-5');
+});
+
+test('news older than 10 trading days is background, and every item says how old it is', () => {
+  const news = { createdAt: 'x', market_summary: 'm', items: [
+    { symbols: ['O39.SI'], date: '2026-08-07', headline: 'OCBC results' },
+    { symbols: ['D05.SI'], date: '2026-09-25', headline: 'DBS deal' },
+    { symbols: [], date: '2026-09-10', headline: 'Fed' }, // 11 trading days before 26 Sep
+    { symbols: ['AAPL'], date: 'unknown', headline: 'Undated' },
+  ] };
+  const out = newsForPrompt(news, ['O39.SI', 'D05.SI', 'AAPL'], new Date('2026-09-26T02:00:00Z'));
+  assert.deepEqual(out.items.map((i) => [i.headline, i.age_days]), [['DBS deal', 1], ['Undated', null]]);
+  assert.deepEqual(out.background.map((i) => [i.headline, i.age_days]), [['OCBC results', 50], ['Fed', 16]]);
+  assert.equal(newsForPrompt({ ...news, items: news.items.slice(1, 2) }, null, new Date('2026-09-26T02:00:00Z')).background, undefined);
+  assert.equal(newsForPrompt(null), null);
+  assert.match(FUND_SYSTEM, /news\.background/);
+  assert.match(PICKS_SYSTEM, /news\.background/);
+  assert.match(NEWS_SYSTEM, /only background/);
+});
+
+test('results due soon and analysts reach the AI, the shared market data stays identical across funds', async () => {
+  const now = new Date('2026-01-02T21:30:00Z'); // a Friday evening; the sample prices end that day
+  const company = { symbols: {
+    AAPL: { next: { date: '2026-01-06', estimate: false }, past: [], ratings: { strongBuy: 6, buy: 19, hold: 13, sell: 3, strongSell: 3 }, target: { mean: 352.29, n: 44 }, changes: [] },
+    NVDA: { next: { date: '2026-01-08', estimate: true }, past: [] },
+    'D05.SI': { next: { date: '2026-01-05', estimate: false }, past: [] },
+  } };
+  const calendar = resultsCalendar({ company, quotes: prices.quotes, now });
+  const holder = newFund({ budget: 10000, currency: 'USD', settings: { maxOrderPct: 100 }, now: new Date('2026-01-02T15:00:00Z') });
+  holder.portfolio.positions.AAPL = { qty: 10, avgCost: 300, currency: 'USD' };
+  const other = newFund({ budget: 50000, currency: 'USD', style: 'aggressive', now: new Date('2026-01-02T15:00:00Z') });
+  const news = { market_summary: 'm', items: [], model: 'claude-haiku-4-5', createdAt: 'x' };
+  const answer = () => decisionMsg(FUND_TOOL.name, { outlook: 'o', orders: [], considered: [], protections: [], source_urls: [] });
+  const client = fakeClient(answer(), answer());
+  for (const fund of [holder, other]) await decideFund({ client, fund, quotes: prices.quotes, news, company, calendar, cacheShared: true, now });
+  const [a, b] = client.calls.map((c) => c.messages[0].content);
+  assert.equal(a[0].text, b[0].text); // one cached copy for both funds
+  assert.equal(client.calls[0].system, client.calls[1].system);
+  const market = JSON.parse(a[0].text.split('\n\n')[1]);
+  assert.deepEqual(market.upcoming_results.map((u) => [u.symbol, u.days_away, u.source]), [['AAPL', 2, 'yahoo'], ['NVDA', 4, 'estimated']]);
+  const aaplStats = market.stocks.find((s) => s.symbol === 'AAPL');
+  assert.deepEqual(aaplStats.analysts, { n: 44, buy_hold_sell: [25, 13, 6], consensus_target: 352.29, implied_upside_pct: 10, rating_changes_10d: [] });
+  assert.equal(market.stocks.find((s) => s.symbol === 'MSFT').analysts, undefined); // no data, nothing sent
+  const own = JSON.parse(a[1].text.split('\n\n')[1]);
+  const pos = own.positions.find((p) => p.symbol === 'AAPL');
+  assert.equal(pos.results_soon.days_away, 2);
+  assert.equal(pos.results_soon.share_of_fund_pct, 24.3); // 10 x 320.26 of 13,202.60
+  assert.match(FUND_SYSTEM, /upcoming_results/);
+  // without the files the context is as before
+  const plain = fundContext({ fund: holder, quotes: prices.quotes, news, now });
+  assert.equal(plain.upcoming_results, undefined);
+  assert.equal(plain.positions[0].results_soon, undefined);
 });

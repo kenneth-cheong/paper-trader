@@ -5,25 +5,31 @@
 // Alerts: trades waiting for approval (with their deadline), fills (Tiger's or the simulator's),
 // stop-losses / take-profits, Tiger refusing an order, a fund pausing or stopping, a failed AI
 // decision, the AI's monthly cost cap, Tiger not connected, the funds and Tiger disagreeing, splits
-// and dividends, and a short summary after each trading day's close.
+// and dividends, a short summary after each trading day's close, and a heads-up the evening before a
+// stock the fund holds reports its results (only for dates the company has confirmed, not Yahoo's
+// estimates, which for SGX stocks are often a guess from last year), and a line when the catalyst a
+// held position was opened for has passed, with how the thesis is doing.
 
 import { summarize } from './portfolio.js';
-import { MARKETS, marketForCurrency, isOpen } from './markets.js';
+import { MARKETS, marketForCurrency, isOpen, marketDate, localClock, tradingDaysBetween } from './markets.js';
+import { nextResults } from './calendar.js';
 import { reconcileAll } from './funds.js';
 import { benchmarkFor } from './benchmark.js';
 import { planFor } from './fees.js';
 import { fundAiCost } from './spend.js';
+import { positionThesis, thesisProgress, moveWords, CATALYST_LABELS, HORIZON_LABELS } from './thesis.js';
 
 const MAX_KEYS = 1500;
 const esc = (s) => String(s ?? '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c]);
 const num = (n, d = 2) => Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
 const signed = (n, d = 2) => `${n >= 0 ? '+' : '−'}${num(Math.abs(n), d)}`;
 const pctText = (x) => `${x >= 0 ? '+' : '−'}${Math.abs(x * 100).toFixed(2)}%`;
+const abs2 = (x) => `${Math.abs(x * 100).toFixed(2)}%`;
 const sgTime = (iso) => new Date(iso).toLocaleTimeString('en-SG', { timeZone: 'Asia/Singapore', hour: '2-digit', minute: '2-digit', hour12: false });
 const localDate = (market, d) => new Intl.DateTimeFormat('en-CA', { timeZone: MARKETS[market].tz }).format(d);
 
 // Every alert key for the fund as it is now: { key: text }.
-function candidates(fund, { prices = null, now = new Date() } = {}) {
+function candidates(fund, { prices = null, calendar = null, now = new Date() } = {}) {
   const out = {};
   const ccy = fund.currency;
   for (const p of fund.proposals ?? []) {
@@ -53,6 +59,67 @@ function candidates(fund, { prices = null, now = new Date() } = {}) {
   if (fund.settings?.broker === 'tiger' && fund.broker?.error) out[`berr:${fund.broker.error}`] = `⚠️ <b>Tiger</b>: ${esc(fund.broker.error)}`;
   const summary = dailySummary(fund, prices, now);
   if (summary) out[summary.key] = summary.text;
+  for (const h of resultsHeadsUp(fund, calendar, prices, now)) out[h.key] = h.text;
+  for (const h of catalystsPassed(fund, prices, now)) out[h.key] = h.text;
+  return out;
+}
+
+const weekday = (date) => new Date(`${date}T12:00:00Z`).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+// "tomorrow" only for the next calendar day; a Monday seen from a Friday evening is "on Mon 5 Oct".
+const nextDay = (today, date) => Date.parse(date) - Date.parse(today) === 86400000;
+
+// After the market's close, for each stock the fund holds whose results come before the next
+// session: confirmed dates only (a filing already out, or a date the company confirmed on Yahoo).
+// `calendar` is calendar.js resultsCalendar.
+export function resultsHeadsUp(fund, calendar, prices, now = new Date()) {
+  const market = marketForCurrency(fund.currency);
+  const quotes = prices?.quotes ?? {};
+  if (!calendar || fund.stoppedAt || isOpen(market, now)) return [];
+  const today = marketDate(market, now);
+  const { weekend, mins } = localClock(market, now);
+  if (weekend || mins < MARKETS[market].sessions.at(-1)[1]) return [];
+  const { positions, accounts } = summarize(fund.portfolio, quotes);
+  const equity = accounts[fund.currency]?.equity ?? 0;
+  const out = [];
+  for (const p of positions) {
+    const n = nextResults(calendar, p.symbol, quotes, now);
+    if (!n || n.source === 'estimated' || n.daysAway !== 1) continue;
+    // A confirmed date is the day of the release; a filing is already out (today, after the close).
+    if (n.source === 'filing' && n.date !== today) continue;
+    const typical = calendar[p.symbol]?.typicalMove;
+    const share = equity > 0 ? Math.abs(p.marketValue) / equity : null;
+    out.push({
+      key: `results:${p.symbol}:${n.date}`,
+      text: `📅 <b>${esc(p.symbol)} ${n.source === 'filing'
+        ? `reported results after today's close</b> (${esc(n.time.slice(11))} New York time); it first trades on them ${nextDay(today, n.effectiveDate) ? 'tomorrow' : `on ${weekday(n.effectiveDate)}`}`
+        : nextDay(today, n.date) ? `reports results tomorrow</b> (${weekday(n.date)})` : `reports results on ${weekday(n.date)}</b>, the next trading day`}. The fund is ${p.short ? 'short' : 'long'} ${Math.abs(p.qty).toLocaleString('en-US')} shares${share == null ? '' : `, ${Math.round(share * 100)}% of its value`}.${typical ? ` Its results days have moved it ±${(typical.avg * 100).toFixed(1)}% against the index on average (${typical.n} results).` : ''}`,
+    });
+  }
+  return out;
+}
+
+// For each position the fund holds whose thesis had a catalyst still to come when it was opened, once
+// that date has passed (within the last 3 trading days, so an old one isn't announced late): what it
+// expected, how it's doing so far and what would prove it wrong.
+export const CATALYST_ALERT_DAYS = 3;
+export function catalystsPassed(fund, prices, now = new Date()) {
+  const market = marketForCurrency(fund.currency);
+  const quotes = prices?.quotes ?? {};
+  if (!prices || fund.stoppedAt) return [];
+  const today = marketDate(market, now);
+  const out = [];
+  for (const p of summarize(fund.portfolio, quotes).positions) {
+    const th = positionThesis(fund, p.symbol, p.short ? 'short' : 'long');
+    const date = th?.catalystDate;
+    if (!date || date < marketDate(market, new Date(th.time))) continue; // no date, or already past when opened
+    const since = tradingDaysBetween(date, today);
+    if (since < 1 || since > CATALYST_ALERT_DAYS) continue;
+    const { soFar } = thesisProgress(th, { price: p.price, short: p.short, quote: quotes[p.symbol], now });
+    out.push({
+      key: `catalyst:${p.symbol}:${date}`,
+      text: `📌 <b>${esc(p.symbol)}</b>: the catalyst the fund ${p.short ? 'shorted' : 'bought'} it for (${esc(CATALYST_LABELS[th.catalyst] ?? th.catalyst)}, ${weekday(date)}) has passed. It expected ${th.expected == null ? '?' : moveWords(th.expected / 100, p.short, abs2)} in ${HORIZON_LABELS[th.horizon] ?? '?'}${soFar == null ? '' : `; so far ${moveWords(soFar, p.short, abs2)}`}.${th.wrongIf ? ` Wrong if: ${esc(th.wrongIf)}` : ''}`,
+    });
+  }
   return out;
 }
 

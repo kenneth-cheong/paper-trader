@@ -333,6 +333,71 @@ export function hbars(el, rows, { signColors = false, markerLabel = '', ref = nu
   wireTips(el.querySelector('svg'), tips);
 }
 
+// ---------- likely ranges ----------
+
+// rows: [{ label, sub?, value, lo, hi, display, tip: [{ value, label }] }]: each row's likely range as a
+// thin bar from lo to hi (a pale version of --series-1), with a dot at the estimate. The estimate's
+// value is written past the range's end: to the right from zero up, to the left below zero. Zero is
+// the baseline. Labels sit left of the ranges, or on their own line above each range when they would
+// take more than 40% of the width (phones), as in hbars.
+export function rangeBars(el, rows, { tickFmt = (v, d) => axisNum(v, d), ariaLabel = 'Likely ranges' } = {}) {
+  if (!rows.length) { el.innerHTML = ''; return; }
+  const W = Math.max(240, el.clientWidth || 600);
+  const B = 22, T = 8;
+  const catW = Math.max(...rows.map((r) => Math.max(textWidth(r.label, 12), r.sub ? textWidth(r.sub, 11) : 0)));
+  const valW = Math.max(...rows.map((r) => textWidth(r.display, 12, 600))) + 12;
+  const sideW = Math.max(40, catW + 12);
+  const stacked = sideW > W * 0.4 || W - sideW - 2 * valW < W * 0.4;
+  const labelW = stacked ? 0 : sideW;
+  const rowH = stacked ? 44 : rows.some((r) => r.sub) ? 38 : 30;
+  let lo = Math.min(0, ...rows.map((r) => r.lo)), hi = Math.max(0, ...rows.map((r) => r.hi));
+  if (lo === hi) hi = lo + 1;
+  const x0p = labelW + valW, x1p = Math.max(W - valW, x0p + 40);
+  const x = (v) => x0p + ((v - lo) / (hi - lo)) * (x1p - x0p);
+  const H = T + rows.length * rowH + B;
+
+  // Round ticks, labelled while they don't collide (zero is always drawn as the baseline).
+  const count = Math.max(2, Math.min(5, Math.floor((x1p - x0p) / 64)));
+  const { decimals } = niceStep(lo, hi, count);
+  let right = -Infinity;
+  const ticks = niceTicks(lo, hi, count).filter((v) => v >= lo - 1e-9 && v <= hi + 1e-9);
+  if (!ticks.includes(0)) ticks.push(0);
+  const tickSvg = ticks.sort((a, b) => a - b).map((t) => {
+    const lab = axisLabel(x(t), H - 6, tickFmt(t, decimals), W);
+    const show = lab.left >= right + 6;
+    if (show) right = lab.right;
+    return `<line class="${t === 0 ? 'baseline' : 'grid'}" x1="${x(t)}" x2="${x(t)}" y1="${T - 4}" y2="${H - B + 2}"/>${show ? lab.svg : ''}`;
+  });
+
+  const tips = [];
+  const body = rows.map((r, i) => {
+    const top = T + i * rowH;
+    const y = stacked ? top + 30 : top + rowH / 2;
+    const a = x(r.lo), b = Math.max(x(r.hi), a + 2), c = x(r.value);
+    const neg = r.value < 0;
+    tips.push(r.tip);
+    let label;
+    if (stacked) {
+      const lab = fitText(r.label, r.sub ? Math.max(W * 0.55, W - 12 - textWidth(r.sub, 11)) : W - 6);
+      const room = W - 6 - textWidth(lab, 12) - 6;
+      const sub = r.sub && room >= 30 ? fitText(r.sub, room, 11) : '';
+      label = `<text class="cat" x="2" y="${top + 13}">${escText(lab)}${sub ? `<tspan class="cat-sub" dx="6">${escText(sub)}</tspan>` : ''}</text>`;
+    } else label = `<text class="cat" x="${labelW - 8}" y="${y + (r.sub ? -3 : 4)}" text-anchor="end">${escText(r.label)}</text>
+        ${r.sub ? `<text class="cat-sub" x="${labelW - 8}" y="${y + 11}" text-anchor="end">${escText(r.sub)}</text>` : ''}`;
+    return `<g class="bar-row" data-tip="${i}" tabindex="0" role="listitem" aria-label="${escText(`${r.label}${r.sub ? ` (${r.sub})` : ''}: ${r.display}, likely ${tickFmt(r.lo, 1)} to ${tickFmt(r.hi, 1)}`)}">
+      <rect class="hit" x="1" y="${top + 1}" width="${W - 2}" height="${rowH - 2}" rx="4"/>
+      ${label}
+      <rect class="range" x="${a}" y="${y - 3}" width="${b - a}" height="6" rx="3"/>
+      <circle class="est" cx="${c}" cy="${y}" r="5"/>
+      <text class="val" x="${neg ? a - 8 : b + 8}" y="${y + 4}" text-anchor="${neg ? 'end' : 'start'}">${escText(r.display)}</text>
+    </g>`;
+  }).join('');
+  el.innerHTML = `<svg class="chart ranges" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="list" aria-label="${escText(ariaLabel)}">
+    ${tickSvg.join('')}${body}
+  </svg><ul class="legend-list"><li><span class="swatch swatch-range"></span><span>Likely range</span></li><li><span class="swatch swatch-dot"></span><span>Best estimate</span></li></ul>`;
+  wireTips(el.querySelector('svg'), tips);
+}
+
 // ---------- one 100% stacked bar (part-to-whole) ----------
 
 // segments: [{ label, value, color, display }] (positive values). The legend lists every segment
@@ -670,9 +735,9 @@ export function lineChart(el, points, {
 
 // A "Table" switch under a chart that shows the same numbers as a table (for screen readers,
 // exact values, and anyone who'd rather read than hover). `head`: column titles; `rows`: arrays of text.
-export function tableToggle(head, rows, numericFrom = 1) {
+export function tableToggle(head, rows, numericFrom = 1, { className = '' } = {}) {
   if (!rows.length) return '';
-  return `<details class="chart-table"><summary>Table</summary><div class="table-wrap" tabindex="0"><table>
+  return `<details class="chart-table${className ? ` ${escText(className)}` : ''}"><summary>Table</summary><div class="table-wrap" tabindex="0"><table>
     <thead><tr>${head.map((h, i) => `<th class="${i >= numericFrom ? 'num' : ''}">${escText(h)}</th>`).join('')}</tr></thead>
     <tbody>${rows.map((r) => `<tr>${r.map((c, i) => `<td class="${i >= numericFrom ? 'num' : ''}">${escText(c)}</td>`).join('')}</tr>`).join('')}</tbody>
   </table></div></details>`;

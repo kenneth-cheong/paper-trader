@@ -11,7 +11,8 @@ import { dirname, join } from 'node:path';
 import { recommend, TIERS } from '../ai.js';
 import { addSpend, capReached, monthSpend } from '../spend.js';
 import { recordPicks } from '../scorecard.js';
-import { mergeEvents, eventsFromDigest } from '../memory.js';
+import { mergeEvents, eventsFromDigest, marketEvents } from '../memory.js';
+import { resultsCalendar } from '../calendar.js';
 
 const file = process.argv[2];
 const readJson = async (path) => { try { return JSON.parse(await readFile(path, 'utf8')); } catch { return null; } };
@@ -36,8 +37,12 @@ if (process.env.FORCE_PICKS !== 'true' && ageH < maxAgeH && previous?.picks?.len
   const prices = await readJson('data/prices.json');
   try {
     const { default: Anthropic } = await import('@anthropic-ai/sdk');
+    // Analysts' views and the results due soon, when the job fetched them (see calendar.js, analysts.js)
+    const company = await readJson(join(dirname(file), 'company-data.json'));
+    const filings = await readJson(join(dirname(file), 'results-dates.json'));
+    const events = marketEvents((await readJson(join(dirname(file), 'news-events.json'))) ?? [], prices.quotes, { filings, company });
     const { news, ...picks } = await recommend({
-      client: new Anthropic(), Anthropic, prices,
+      client: new Anthropic(), Anthropic, prices, company, calendar: resultsCalendar({ company, filings, quotes: prices.quotes, events }),
       model: process.env.AI_MODEL || TIERS.advanced, newsModel: process.env.AI_NEWS_MODEL || TIERS.simple,
     });
     await writeFile(file, JSON.stringify(picks, null, 1));

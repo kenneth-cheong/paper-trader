@@ -22,4 +22,4 @@ jobs:
         with:
           node-version: 22
       - run: curl -sf "https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY#*/}/data/prices.json" -o prices.json
-      - run: node scripts/memory-report.mjs state/news-events.json prices.json
+      - run: node scripts/memory-report.mjs state/news-events.json prices.json state/results-dates.json state/company-data.json

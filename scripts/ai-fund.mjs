@@ -14,8 +14,15 @@
 //   AI_MONTHLY_CAP_USD      skip AI decisions once the month's scheduled AI spend reaches this (ai-spend.json)
 //   FUND_PRIVATE=true       print nothing about the funds' trades (the Actions log is public)
 // Learning (learning.js, memory.js): every run re-grades each fund's ideas against what prices did next
-// and refreshes its playbook; about weekly, a cheap Haiku review adds written lessons when there's enough
-// new evidence. The market memory (price moves after past news and after big moves) is rebuilt each run.
+// and refreshes its playbook (graded ideas are kept in a compact log, fund.ideaLog, so trimming old
+// decisions below doesn't lose them); about weekly, a cheap Haiku review adds written lessons when there's enough
+// new evidence. The market memory (price moves after past news and after big moves) is rebuilt each run,
+// with SEC filings and Yahoo's rating changes taking over from the AI's recollection where they exist.
+// Every decision sees the results due in the next 10 trading days and analysts' views (calendar.js,
+// analysts.js; state/results-dates.json and state/company-data.json, fetched earlier in the job).
+// Every order and idea carries the AI's thesis (thesis.js); after all funds have run, the theses are
+// graded for calibration pooled across each market's funds (c.calibration), which the next run's
+// lessons use.
 // To save AI cost, a decision is skipped when nothing has changed since the last one, and funds in the
 // same market deciding together on the same model share a cached copy of the market data.
 // Every run, for every fund: records Tiger fills (scripts/tiger_broker.py sync runs just before), applies
@@ -33,8 +40,10 @@ import {
 import { loadFunds, addFund, updateFund, removeFund, targetFund, otherTigerHoldings, activeFunds } from '../funds.js';
 import { applyCorporateActions, describeAction } from '../actions.js';
 import { addSpend, capReached, monthSpend } from '../spend.js';
-import { updatePlaybook, playbookForPrompt, editPlaybook, reviewDue, reviewExamples, applyReview, activeLessons, quietReason, decisionSnapshot } from '../learning.js';
-import { buildMemory } from '../memory.js';
+import { updatePlaybook, playbookForPrompt, editPlaybook, reviewDue, reviewExamples, statsForReview, applyReview, activeLessons, quietReason, decisionSnapshot, trimDecisions, poolCalibration, rememberCited } from '../learning.js';
+import { checkedThesis, lessonsAppliedOf } from '../thesis.js';
+import { buildMemory, marketEvents } from '../memory.js';
+import { resultsCalendar } from '../calendar.js';
 import { scorePicks, summarizeScores } from '../scorecard.js';
 import { MARKETS, marketForCurrency, isOpen } from '../markets.js';
 
@@ -125,8 +134,11 @@ try {
 
 const spent = async () => readJson(spendFile);
 const newsFor = {}; // a digest gathered this run for one market, reused by that market's other funds
-const newsEvents = (await readJson(join(dirname(file), 'news-events.json'))) ?? [];
-if (Object.keys(quotes).length) c.marketMemory = Object.fromEntries(Object.keys(MARKETS).map((m) => [m, buildMemory(newsEvents, quotes, m, now)]));
+const company = await readJson(join(dirname(file), 'company-data.json'));
+const filings = await readJson(join(dirname(file), 'results-dates.json'));
+const newsEvents = marketEvents((await readJson(join(dirname(file), 'news-events.json'))) ?? [], quotes, { filings, company });
+const calendar = resultsCalendar({ company, filings, quotes, events: newsEvents, now });
+if (Object.keys(quotes).length) c.marketMemory = Object.fromEntries(Object.keys(MARKETS).map((m) => [m, buildMemory(newsEvents, quotes, m, now, c.marketMemory?.[m])]));
 const picksHistory = await readJson(join(dirname(file), 'picks-history.json'));
 const picksSum = picksHistory && summarizeScores(scorePicks(picksHistory, quotes, now)).week;
 const picksRecord = picksSum?.n >= 5 ? `The home page's AI picks, a week after being made: ${picksSum.n} scored, ${Math.round(picksSum.right * 100)}% right${picksSum.beat == null ? '' : `, ${Math.round(picksSum.beat * 100)}% beat the index`}.` : null;
@@ -143,6 +155,7 @@ for (const f of c.funds) {
 
 // ---------- every fund ----------
 
+const gradedBy = {}; // this run's graded ideas by fund, for the pooled calibration
 for (const fund of c.funds) {
   const log = (text) => console.log(`[${fund.name}] ${text}`);
 
@@ -162,12 +175,14 @@ for (const fund of c.funds) {
     for (const e of checkProtections(fund, quotes, now)) log(`Protection: ${e.action} ${e.shares} ${e.symbol} at ${e.price} (${e.why})`);
     if (Object.keys(quotes).length && checkDailyLoss(fund, quotes, now)) log(`! Daily loss limit hit: ${fund.paused.reason}`);
 
-    updatePlaybook(fund, quotes, now); // re-grade its ideas (free)
+    // re-grade its ideas (free)
+    gradedBy[fund.id] = updatePlaybook(fund, quotes, now, { calendar, pooled: c.calibration?.[marketForCurrency(fund.currency)] }).graded;
     const quiet = decisionDue(fund, now, prices) && quietReason(fund, quotes, marks);
     if (quiet) {
       fund.decisions.push({ time: now.toISOString(), outlook: quiet, orders: [], skipped: true });
       fund.lastDecisionAt = now.toISOString();
       fund.skipStreak = (fund.skipStreak ?? 0) + 1;
+      fund.decisions = trimDecisions(fund.decisions);
       log(quiet);
     } else if (decisionDue(fund, now, prices)) {
       if (!Object.keys(quotes).length) {
@@ -187,24 +202,33 @@ for (const fund of c.funds) {
           const playbook = fund.settings.learning === false ? null
             : playbookForPrompt(fund.playbook, { picksRecord, marketLessons: c.marketMemory?.[market]?.lessons ?? [] });
           const d = await decideFund({
-            client: new Anthropic(), Anthropic, fund, quotes, picks, news, now, playbook,
+            client: new Anthropic(), Anthropic, fund, quotes, picks, news, now, playbook, company, calendar,
             model: modelOf(fund), newsModel: env.AI_NEWS_MODEL || TIERS.simple,
             cacheShared: (deciding[`${fund.currency}|${modelOf(fund)}`] ?? 0) >= 2,
           });
           if (d.news) newsFor[fund.currency] = d.news;
           await writeFile(spendFile, JSON.stringify(addSpend(await spent(), 'fund', d.usage?.costUsd, now)));
-          const orders = executeDecision(fund, d.orders ?? [], quotes, now, { others: otherTigerHoldings(c, fund.id) });
+          const orders = executeDecision(fund, d.orders ?? [], quotes, now, { others: otherTigerHoldings(c, fund.id), calendar });
+          // ideas it passed on keep their thesis, checked like an order's (a stale catalyst)
+          const considered = (d.considered ?? []).slice(0, 3).map((x) => ({
+            symbol: x.symbol, stance: x.stance, idea_type: x.idea_type, why_not: x.why_not,
+            thesis: checkedThesis(x, x.symbol, { calendar, quotes, now }), ...(lessonsAppliedOf(x).length ? { lessonsApplied: lessonsAppliedOf(x) } : {}),
+          }));
           setProtections(fund, d.protections);
           fund.decisions.push({
-            time: now.toISOString(), outlook: d.outlook, orders, considered: (d.considered ?? []).slice(0, 3), protections: d.protections,
+            time: now.toISOString(), outlook: d.outlook, orders, considered, protections: d.protections,
             source_urls: d.source_urls, model: d.model, newsModel: d.newsModel, usage: d.usage, learned: Boolean(playbook),
             snapshot: decisionSnapshot(fund, quotes, marks),
           });
+          // the wording of the lessons it cited, for the page once they've gone
+          rememberCited(fund, [...orders, ...considered].flatMap((x) => x.lessonsApplied ?? []), playbook);
           fund.skipStreak = 0;
-          fund.decisions = fund.decisions.slice(-500);
+          fund.decisions = trimDecisions(fund.decisions);
           fund.lastDecisionAt = now.toISOString();
           fund.lastError = null;
-          for (const o of orders) log(`Order: ${o.action} ${o.shares} ${o.symbol} -> ${o.status}${o.message ? ` (${o.message})` : ''}`);
+          // the thesis checks are only logged; neither blocks an order
+          const flags = (o) => `${o.thesis?.stale ? ' [catalyst over 10 trading days old]' : ''}${o.thesis?.beatsFees === false ? ' [expected move under the round-trip fee]' : ''}`;
+          for (const o of orders) log(`Order: ${o.action} ${o.shares} ${o.symbol} -> ${o.status}${o.message ? ` (${o.message})` : ''}${flags(o)}`);
         } catch (err) {
           fund.lastError = { time: now.toISOString(), message: err.message };
           console.warn(`! [${fund.name}] AI decision failed (will retry next run): ${err.message}`);
@@ -218,12 +242,18 @@ for (const fund of c.funds) {
     log(x.change === 'place' ? `Tiger stop order: ${x.symbol} ${x.qty} shares at ${x.stopPrice}` : `Tiger stop order for ${x.symbol}: cancelling the old one`);
   }
 
-  fund.proposals = (fund.proposals ?? []).slice(-200);
+  // Keep the last 200 proposals, and every one from the last 60 days: an idea's outcome (declined,
+  // expired) is read from its proposal until the idea is graded a month later and frozen.
+  const proposals = fund.proposals ?? [];
+  fund.proposals = proposals.filter((p, i) => i >= proposals.length - 200 || p.status === 'awaiting' || now - Date.parse(p.createdAt) < 60 * 86400000);
   // Keep the last 500 Tiger orders, and always every open one (a stop order can stand for months).
   const orders = fund.brokerOrders ?? [];
   fund.brokerOrders = orders.filter((o, i) => i >= orders.length - 500 || ['queued', 'sent', 'partial'].includes(o.status));
   log(`Value: ${recordValue(fund, quotes, now)} ${fund.currency} (budget ${fund.budget}).`);
 }
+
+// Each market's theses graded for calibration across all its funds; the next run's lessons use it.
+if (Object.keys(quotes).length) c.calibration = poolCalibration(c.funds, gradedBy);
 
 // ---------- the weekly review (cheap model, only with enough new evidence, after the market closes) ----------
 
@@ -232,8 +262,8 @@ for (const fund of c.funds) {
   if (capReached(await spent(), env.AI_MONTHLY_CAP_USD, now)) break;
   try {
     const { default: Anthropic } = await import('@anthropic-ai/sdk');
-    const { pb, graded } = updatePlaybook(fund, quotes, now);
-    const r = await reviewPlaybook({ client: new Anthropic(), Anthropic, model: env.AI_NEWS_MODEL || TIERS.simple, fund, stats: pb.stats, examples: reviewExamples(graded), lessons: activeLessons(pb) });
+    const { pb, graded } = updatePlaybook(fund, quotes, now, { calendar, pooled: c.calibration?.[marketForCurrency(fund.currency)] });
+    const r = await reviewPlaybook({ client: new Anthropic(), Anthropic, model: env.AI_NEWS_MODEL || TIERS.simple, fund, stats: statsForReview(pb.stats), examples: reviewExamples(graded), lessons: activeLessons(pb) });
     applyReview(fund, r.lessons, pb.graded, now);
     await writeFile(spendFile, JSON.stringify(addSpend(await spent(), 'learning', r.usage?.costUsd, now)));
     console.log(`[${fund.name}] Weekly review: ${r.lessons.length} lesson(s), about US$${r.usage?.costUsd}.`);

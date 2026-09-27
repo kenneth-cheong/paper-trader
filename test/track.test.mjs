@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { priceAt, benchmarkFor, benchmarkSeries } from '../benchmark.js';
+import { priceAt, priceAtWithTime, benchmarkFor, benchmarkSeries } from '../benchmark.js';
 import { recordPicks, scorePicks, summarizeScores } from '../scorecard.js';
 import { addSpend, monthSpend, capReached, fundAiCost } from '../spend.js';
 import { planFor } from '../fees.js';
@@ -19,6 +19,10 @@ test('priceAt uses a daily close only once that session is over', () => {
   assert.equal(priceAt(q, T0 + DAY + 8 * 3600), 101);
   const withIntraday = { ...q, intraday: [[T0 + 2 * DAY, 101.5], [T0 + 2 * DAY + 900, 101.7]] };
   assert.equal(priceAt(withIntraday, T0 + 2 * DAY + 1000), 101.7);
+  // with the time the price was set: the close of its session, or the time asked for a 15-minute price
+  assert.deepEqual(priceAtWithTime(q, T0 + DAY + 3600), [100, T0 + 6.5 * 3600]); // mid-session: the close before
+  assert.deepEqual(priceAtWithTime(withIntraday, T0 + 2 * DAY + 1000), [101.7, T0 + 2 * DAY + 1000]);
+  assert.deepEqual(priceAtWithTime(q, T0 - 60), [null, null]);
 });
 
 test('the index comparison buys the same amount on the same day, after the buying fee', () => {
@@ -77,4 +81,27 @@ test('AI spend adds up by month and task, and the cap stops at the limit', () =>
   assert.equal(capReached(l, '1', now), false);
   assert.equal(capReached(l, '0', now), false); // 0 = no cap
   assert.equal(fundAiCost({ decisions: [{ usage: { costUsd: 0.1 } }, {}, { usage: { costUsd: 0.25 } }] }), 0.35);
+});
+
+test('picks are scored on total return (dividends count), and picks from before the price history are left out', () => {
+  const T = new Date((T0 + 8 * 3600) * 1000).toISOString();
+  const sgx = (closes, dividends) => ({ market: 'SGX', currency: 'SGD', price: closes.at(-1), daily: daily(closes), intraday: [], events: { dividends } });
+  const quotes = {
+    D05: sgx(Array.from({ length: 25 }, (_, i) => (i < 3 ? 100 : 98)), [[T0 + 3 * DAY, 2]]), // drops by its S$2 dividend
+    'ES3.SI': sgx(Array.from({ length: 25 }, () => 4), []),
+  };
+  const h = [
+    { createdAt: T, picks: [{ symbol: 'D05', stance: 'long', price: 100 }, { symbol: 'D05', stance: 'short', price: 100 }] },
+    { createdAt: '2025-01-02T02:00:00Z', picks: [{ symbol: 'D05', stance: 'long', price: 90 }] }, // before the history
+  ];
+  const scores = scorePicks(h, quotes, new Date((T0 + 30 * DAY) * 1000)).filter((x) => x.horizon === 'week');
+  assert.equal(scores.length, 2);
+  for (const x of scores) assert.ok(Math.abs(x.ret) < 1e-9);
+  assert.equal(scores[0].indexBet, 0);
+  // a pick made during the index's ex-dividend session: the index starts at the close before, with its dividend
+  const during = new Date((T0 + 3 * DAY + 2 * 3600) * 1000).toISOString();
+  const withIndexDiv = { ...quotes, Z74: sgx(Array.from({ length: 25 }, () => 3), []), 'ES3.SI': sgx(Array.from({ length: 25 }, (_, i) => (i < 3 ? 4 : 3.92)), [[T0 + 3 * DAY, 0.08]]) };
+  const [z] = scorePicks([{ createdAt: during, picks: [{ symbol: 'Z74', stance: 'long', price: 3 }] }], withIndexDiv, new Date((T0 + 30 * DAY) * 1000));
+  assert.ok(Math.abs(z.indexRet) < 1e-9);
+  assert.ok(Math.abs(z.indexBet) < 1e-9);
 });

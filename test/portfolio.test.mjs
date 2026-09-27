@@ -86,6 +86,20 @@ test('toQuote reads price, previous close and bars from Yahoo chart results', ()
   assert.throws(() => toQuote({ meta: {}, timestamp: [], indicators: { quote: [{ close: [] }] } }), /no price/);
 });
 
+test('daily bars keep the day\'s volume as a third value, which [t, close] readers ignore', () => {
+  const daily = {
+    meta: { currency: 'SGD', regularMarketPrice: 41.4 },
+    timestamp: [1, 2, 3],
+    indicators: { quote: [{ close: [40, 41, 41.4], volume: [2870900, null, 0] }] },
+  };
+  const intraday = { meta: daily.meta, timestamp: [10], indicators: { quote: [{ close: [41.4], volume: [500] }] } };
+  const q = toQuote(daily, intraday);
+  assert.deepEqual(q.daily, [[1, 40, 2870900], [2, 41], [3, 41.4]]); // no volume, no third value
+  assert.deepEqual(q.intraday, [[10, 41.4]]); // 15-minute bars stay [t, close]
+  assert.deepEqual(q.daily.map(([, c]) => c), [40, 41, 41.4]);
+  assert.equal(q.prevClose, 41);
+});
+
 test('selling more than you hold opens a short that profits when the price falls', () => {
   let p = newPortfolio({ USD: 10000 });
   p = sell(p, 'TSLA', 10, 200);

@@ -73,12 +73,19 @@ async function fetchChart(symbol, range, interval) {
   throw lastErr;
 }
 
-// [[unixSeconds, close], ...] with gaps (null closes) dropped.
-export function bars(result) {
+// [[unixSeconds, close], ...] with gaps (null closes) dropped. With `withVolume`, each bar that has a
+// volume is [unixSeconds, close, volume]: every reader that takes [t, c] from a bar still works, and
+// the market memory checks news dates against unusual volume (memory.js).
+export function bars(result, withVolume = false) {
   const ts = result?.timestamp ?? [];
-  const closes = result?.indicators?.quote?.[0]?.close ?? [];
+  const quote = result?.indicators?.quote?.[0] ?? {};
+  const closes = quote.close ?? [];
+  const volumes = withVolume ? quote.volume ?? [] : [];
   const out = [];
-  ts.forEach((t, i) => { if (closes[i] != null) out.push([t, round(closes[i])]); });
+  ts.forEach((t, i) => {
+    if (closes[i] == null) return;
+    out.push(volumes[i] > 0 ? [t, round(closes[i]), Math.round(volumes[i])] : [t, round(closes[i])]);
+  });
   return out;
 }
 
@@ -92,11 +99,11 @@ export function events(result) {
   return dividends.length || splits.length ? { dividends: dividends.sort(byDate), splits: splits.sort(byDate) } : undefined;
 }
 
-// daily: ~1 year of daily bars (for charts, moving averages, backtests and the AI);
+// daily: ~1 year of daily bars [t, close, volume] (for charts, moving averages, backtests and the AI);
 // intraday: ~5 days of 15-minute bars (so auto-trading rules can catch up on missed moves).
 export function toQuote(daily, intraday) {
   const meta = intraday?.meta ?? daily.meta;
-  const d = bars(daily);
+  const d = bars(daily, true);
   const price = meta.regularMarketPrice ?? d.at(-1)?.[1];
   if (!(price > 0)) throw new Error('no price');
   // Yahoo's daily bars include the current session, so the bar before the last is the previous close.
@@ -130,19 +137,20 @@ async function main() {
   const quotes = {};
   let failures = 0;
 
-  for (const { symbol, name, market } of symbols) {
+  for (const { symbol, name, market, etf } of symbols) {
+    const kind = etf ? { etf: true } : {}; // index funds aren't compared as a stock's peers (stats.js)
     try {
       const daily = await fetchChart(symbol, '1y', '1d');
       const intraday = await fetchChart(symbol, '5d', '15m').catch((err) => {
         console.warn(`! ${symbol} intraday: ${err.message}`);
         return null;
       });
-      quotes[symbol] = { name, market, ...toQuote(daily, intraday) };
+      quotes[symbol] = { name, market, ...kind, ...toQuote(daily, intraday) };
     } catch (err) {
       failures++;
       console.warn(`! ${symbol}: ${err.message}`);
       const old = previous?.quotes?.[symbol];
-      if (old) quotes[symbol] = { ...old, name, market, stale: true };
+      if (old) quotes[symbol] = { ...old, name, market, ...kind, stale: true };
     }
     if (!process.env.YAHOO_RAW_DIR) await sleep(250); // be gentle with the endpoint
   }

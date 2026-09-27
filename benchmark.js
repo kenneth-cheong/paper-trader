@@ -13,17 +13,23 @@ export const sessionLength = (quote) => SESSION_S[quote?.market] ?? 7 * 3600;
 
 // The last known price of `quote` at unix time `t` (15-minute bars where there are some, else daily
 // closes), or null if `t` is before its price history.
-export function priceAt(quote, t) {
+export const priceAt = (quote, t) => priceAtWithTime(quote, t)[0];
+
+// The same price with the time it was set: `t` itself for a 15-minute price, else the close of the
+// session it comes from. A total return has to count dividends from that time: an idea made during
+// an ex-dividend session but priced at the day before's close (cum dividend) earns that dividend.
+// [null, null] before the price history.
+export function priceAtWithTime(quote, t) {
   const intraday = quote?.intraday ?? [];
   if (intraday.length && t >= intraday[0][0]) {
     let p = null;
     for (const [bt, v] of intraday) { if (bt <= t) p = v; else break; }
-    return p;
+    return [p, p == null ? null : t];
   }
-  let p = null;
+  let p = null, at = null;
   const after = sessionLength(quote);
-  for (const [bt, v] of quote?.daily ?? []) { if (bt + after <= t) p = v; else break; }
-  return p;
+  for (const [bt, v] of quote?.daily ?? []) { if (bt + after <= t) { p = v; at = bt + after; } else break; }
+  return [p, at];
 }
 
 // { symbol, label, since, partial, startPrice, shares, value, net, pct } for `amount` put into the

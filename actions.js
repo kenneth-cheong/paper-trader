@@ -14,6 +14,23 @@
 export const WITHHOLDING = { US: 0.3, SGX: 0 };
 const money = (n) => Math.round(n * 10000) / 10000;
 
+// The dividends a share of `q` paid (before tax) with an ex-date after unix time t0 and up to t1.
+// Holding from t0 to t1 earns them; a purchase made on the ex-date itself doesn't.
+export function divsBetween(q, t0, t1) {
+  let sum = 0;
+  for (const [t, perShare] of q?.events?.dividends ?? []) if (t > t0 && t <= t1 && perShare > 0) sum += perShare;
+  return sum;
+}
+
+// Those dividends as a share of `price`, for a bet in `direction`: a long (+1) receives them after
+// withholding tax, a short (-1) pays them in full. Adding this to the price move gives the total
+// return, so an idea isn't marked down (or a short marked up) just because the stock went ex-dividend.
+export function dividendReturn(q, t0, t1, direction, price) {
+  const d = divsBetween(q, t0, t1);
+  if (!d || !(price > 0)) return 0;
+  return direction > 0 ? d * (1 - (WITHHOLDING[q.market] ?? 0)) / price : -d / price;
+}
+
 // Shares of `symbol` held just before unix time `t`, replaying trades and the splits already applied.
 export function holdingAt(portfolio, symbol, t) {
   const steps = [

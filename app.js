@@ -3,14 +3,18 @@ import { applyCorporateActions, describeAction } from './actions.js';
 import { BENCHMARKS, benchmarkFor, benchmarkSeries } from './benchmark.js';
 import { scorePicks, summarizeScores } from './scorecard.js';
 import { addSpend, monthSpend, fundAiCost } from './spend.js';
-import { hbars, stackBar, columns, lineChart, tableToggle, focusQuietly, tipOpenFor, SERIES, OTHER, CASH, TRACK } from './charts.js';
+import { hbars, stackBar, columns, lineChart, rangeBars, tableToggle, focusQuietly, tipOpenFor, SERIES, OTHER, CASH, TRACK } from './charts.js';
 import { valueHistory, indexHistory, realizedHistory } from './history.js';
 import { MIN_CASES as MEMORY_MIN_CASES } from './memory.js';
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest, fillPendingOrders } from './rules.js';
 import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
-import { MARKETS, marketForCurrency, tradingStatus, STATUS_LABELS } from './markets.js';
+import { MARKETS, marketForCurrency, marketDate, tradingStatus, STATUS_LABELS } from './markets.js';
+import { resultsCalendar, nextResults } from './calendar.js';
+import { recentRatingChanges, describeChange } from './analysts.js';
 import { loadFunds, reconcileAll, STYLES, DEFAULT_STYLE, MAX_ACTIVE_FUNDS } from './funds.js';
-import { activeLessons, OUTCOME_LABELS, IDEA_LABELS, MIN_CASES, REVIEW_MIN_NEW } from './learning.js';
+import { activeLessons, OUTCOME_LABELS, IDEA_LABELS, REVIEW_MIN_NEW, NOISE_CHECK, CAL_NOISE_CHECK, CALIBRATION } from './learning.js';
+import { positionThesis, thesisProgress, moveWords, CATALYST_LABELS, HORIZON_LABELS, STALE_DAYS } from './thesis.js';
+import { GATE, confidenceOf, fundBeta, FUND_BETA_DAYS } from './stats.js';
 import { calcFee, planFor, fxSpreadFor, FEE_PLANS } from './fees.js';
 import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus, loadPrivateFund } from './auth.js';
 import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
@@ -29,6 +33,8 @@ const state = {
   sitePicks: null,
   picksHistory: null, // every scheduled set of picks, for the track record
   spend: null, // the scheduled AI jobs' spend ledger, with its monthly cap
+  company: null, // results dates and analysts' views from Yahoo (analysts.js), once a day
+  filings: null, // US results releases from SEC filings (calendar.js)
   browserSpend: readStore(KEYS.spend), // what this browser spent with your own key
   localPicks: readStore(KEYS.picks),
   strategist: readStore(KEYS.strategist),
@@ -199,9 +205,12 @@ async function loadPrices() {
 async function loadSideData() {
   // A private fund (admins, from Supabase) wins over the public copy.
   const fundSource = async () => (authEnabled && state.user?.isAdmin && (await loadPrivateFund().catch(() => null))) || fetchJson('data/ai-fund.json');
-  const [picks, fund, history, spend] = await Promise.allSettled([
+  const [picks, fund, history, spend, company, filings] = await Promise.allSettled([
     fetchJson('data/picks.json'), fundSource(), fetchJson('data/picks-history.json'), fetchJson('data/ai-spend.json'),
+    fetchJson('data/company-data.json'), fetchJson('data/results-dates.json'),
   ]);
+  state.company = company.status === 'fulfilled' ? company.value : null;
+  state.filings = filings.status === 'fulfilled' ? filings.value : null;
   state.sitePicks = picks.status === 'fulfilled' ? picks.value : null;
   state.picksHistory = history.status === 'fulfilled' ? history.value : null;
   state.spend = spend.status === 'fulfilled' ? spend.value : null;
@@ -210,6 +219,26 @@ async function loadSideData() {
 }
 
 const quote = (symbol) => state.prices.quotes?.[symbol];
+
+// The results calendar (calendar.js), rebuilt when the prices or the company data change.
+let calendarCache = { key: null, value: null };
+function calendar() {
+  const key = `${state.prices.updatedAt}|${state.company?.fetchedAt}|${state.filings?.checkedAt}|${new Date().toISOString().slice(0, 13)}`;
+  if (calendarCache.key !== key) calendarCache = { key, value: resultsCalendar({ company: state.company, filings: state.filings, quotes: state.prices.quotes ?? {} }) };
+  return calendarCache.value;
+}
+const SOURCE_LABELS = { filing: 'from its SEC filing', yahoo: 'confirmed, from Yahoo Finance', estimated: 'an estimate from Yahoo Finance; the company hasn\'t confirmed it yet' };
+// "results in 3 days" when a stock reports within two weeks; "(estimate)" when the date isn't confirmed.
+function resultsChip(symbol) {
+  if (state.sample) return '';
+  const n = nextResults(calendar(), symbol, state.prices.quotes, new Date());
+  if (!n || n.daysAway < 0 || n.daysAway > 10) return '';
+  // calendar days from the stock's market's own date (not the UTC one: Singapore's day starts 8 hours earlier)
+  const today = marketDate(state.prices.quotes[symbol]?.market ?? 'US', new Date());
+  const days = Math.round((Date.parse(n.source === 'filing' ? n.effectiveDate : n.date) - Date.parse(today)) / 86400000);
+  const when = n.source === 'filing' ? 'results out' : days <= 0 ? 'results today' : days === 1 ? 'results tomorrow' : `results in ${days} days`;
+  return `<span class="chip results" title="Results ${esc(fmtDate(`${n.date}T12:00:00Z`))}: ${esc(SOURCE_LABELS[n.source])}">${when}${n.source === 'estimated' ? ' (estimate)' : ''}</span>`;
+}
 const myPlan = () => planFor(state.portfolio.feePlan, state.portfolio.customFees);
 const feeOf = (q, side, qty) => (q && qty > 0 ? calcFee(myPlan(), q.market, side, qty, q.price) : { total: 0, parts: [] });
 // Backtests use the same fees as your own trades.
@@ -588,7 +617,7 @@ async function refreshPicks() {
   $('picks-error').textContent = '';
   try {
     const { client, Anthropic } = await loadClient(state.ai.key);
-    state.localPicks = await recommend({ client, Anthropic, model: state.ai.model, prices: state.prices });
+    state.localPicks = await recommend({ client, Anthropic, model: state.ai.model, prices: state.prices, ...(state.sample ? {} : { company: state.company, calendar: calendar() }) });
     writeStore(KEYS.picks, state.localPicks);
     trackBrowserSpend('picks', state.localPicks.usage?.costUsd);
     render();
@@ -679,7 +708,7 @@ function renderHoldings(positions, accounts = {}) {
     <tbody>${positions.map((p) => {
       const q = quote(p.symbol);
       return `<tr>
-        <td><strong>${esc(p.symbol)}</strong>${p.short ? '<span class="chip sell">short</span>' : ''}<span class="name">${esc(q?.name ?? '')}</span></td>
+        <td><strong>${esc(p.symbol)}</strong>${p.short ? '<span class="chip sell">short</span>' : ''}${resultsChip(p.symbol)}<span class="name">${esc(q?.name ?? '')}</span></td>
         <td class="num">${p.qty.toLocaleString()}</td>
         <td class="num hide-sm">${price(p.avgCost)}</td>
         <td class="num">${p.unpriced ? '<span title="No current price; valued at cost">–</span>' : price(p.price)}</td>
@@ -712,7 +741,7 @@ function renderMarkets() {
       const chg = q.prevClose ? (q.price - q.prevClose) / q.prevClose : null;
       const held = state.portfolio.positions[symbol]?.qty;
       return `<tr>
-        <td><strong>${esc(symbol)}</strong><span class="chip">${esc(q.market)}</span><span class="name">${esc(q.name)}</span></td>
+        <td><strong>${esc(symbol)}</strong><span class="chip">${esc(q.market)}</span>${resultsChip(symbol)}<span class="name">${esc(q.name)}</span></td>
         <td class="num">${price(q.price)} <span class="muted small hide-sm">${esc(q.currency)}</span>${q.stale ? '<br><span class="small muted" title="Last fetch failed">stale</span>' : ''}</td>
         <td class="num ${tone(chg)}">${chg == null ? '–' : pct(chg)}</td>
         <td class="hide-sm">${sparkline((q.daily ?? []).slice(-22).map(([, c]) => c))}</td>
@@ -1450,7 +1479,7 @@ function renderProposals(f) {
     <ul class="orders">${waiting.map((p) => `<li>
       <span class="chip ${p.action === 'buy' || p.action === 'cover' ? 'buy' : 'sell'}">${esc(p.action)}</span>
       ${Number(p.shares).toLocaleString()} <strong>${esc(p.symbol)}</strong> · limit ${price(p.limitPrice)} ${esc(f.currency)} (≈ ${money(p.shares * p.limitPrice, f.currency)})
-      <span class="muted small">${esc(p.reason)} · expires ${fmtDateTime(p.expiresAt)}</span>
+      <span class="muted small">${esc(p.reason)} · expires ${fmtDateTime(p.expiresAt)}</span>${p.thesis ? `<br><span class="thesis small">${esc(thesisWords(p.thesis, { short: p.action === 'short' }))}</span>` : ''}
       ${admin && authEnabled ? `<span class="row"><button class="small-btn primary" data-proposal="approve" data-ids="${esc(p.id)}" ${busy}>Approve</button>
         <button class="small-btn ghost" data-proposal="reject" data-ids="${esc(p.id)}" ${busy}>Reject</button></span>` : ''}
     </li>`).join('')}</ul>
@@ -1483,49 +1512,163 @@ function renderBrokerOrders(f) {
 
 // ----- AI fund: what it has learned -----
 
-const LESSON_SOURCE = { results: 'from its results', 'weekly review': 'weekly review', owner: 'added by you', 'market memory': 'market memory' };
+// What a lesson's number per week measures (learning.js evaluateLessons `measure`).
+const measureLabel = (l) => ({ index: 'Against the index', peers: `Against ${l.vs ?? 'its peers'}`, diff: 'High minus low conviction' }[l.measure] ?? 'Edge');
+const LESSON_SOURCE = { results: 'from its results', 'weekly review': 'weekly review', owner: 'added by you', 'market memory': 'market memory', calibration: 'calibration' };
 const moveCell = (h) => (h ? `<span class="${tone(h.move)}">${pct(h.move)}</span>${h.index != null ? ` <span class="muted small">(${pct(h.move - h.index)} vs index)</span>` : ''}` : '<span class="muted small">not yet</span>');
 const rate = (x) => (x == null ? '–' : `${Math.round(x * 100)}%`);
-// What "the price went the idea's way" means for each kind of outcome.
-const hitPhrase = (outcome) => (outcome === 'traded' ? 'went its way' : ['exit', 'stop-loss', 'take-profit'].includes(outcome) ? 'kept going after' : 'would have gone its way');
+
+// A group's confidence on the page: its level once it passes the gate, else why it isn't a lesson yet.
+const groupConfidence = (ev) => (ev.bets < GATE.bets ? `needs ${GATE.bets} bets` : ev.edge.p >= GATE.p && Math.abs(ev.edge.edge) >= GATE.edge ? confidenceOf(ev.edge.p) : 'not clear yet');
+const chance = (p) => `${Math.round(p * 100)}% chance`;
+
+// The evidence behind each kind of idea a week later: the stock-specific edge with its likely range,
+// and in the table what it's made of (vs the index, from beta, fees) and the money made per trade.
+function edgeChart(pb, ccy) {
+  const groups = [
+    ...Object.entries(pb?.stats?.byOutcome ?? {}).map(([k, v]) => ({ label: OUTCOME_LABELS[k] ?? k, ev: v.ev })),
+    ...Object.entries(pb?.stats?.tradedByType ?? {}).map(([k, v]) => ({ label: `Traded: ${IDEA_LABELS[k] ?? k}`, ev: v.ev })),
+  ].filter((g) => g.ev?.edge);
+  if (!groups.length) return '';
+  const range = (e) => `${pct(e.lo)} to ${pct(e.hi)}`;
+  const leftOver = (ev) => ev.vsIndex - ev.fromBeta + ev.fees; // before it's pulled towards 0
+  return chartSlot((el) => rangeBars(el, groups.map(({ label, ev }) => ({
+    label, sub: `${plural(ev.bets, 'separate bet')} · ${groupConfidence(ev)}`,
+    value: ev.edge.edge * 100, lo: ev.edge.lo * 100, hi: ev.edge.hi * 100, display: pct(ev.edge.edge),
+    tip: [
+      { value: pct(ev.edge.edge), label: 'stock-specific edge a week' }, { value: range(ev.edge), label: 'likely range' },
+      { value: pct(ev.vsIndex), label: 'vs the index' }, { value: pct(ev.fromBeta), label: 'of that from beta' },
+      ...(ev.fees ? [{ value: pct(ev.fees), label: 'fees' }] : []),
+      { value: pct(leftOver(ev)), label: 'left over, before it\'s pulled towards 0' },
+      { value: String(ev.bets), label: `separate bets (of ${plural(ev.ideas, 'idea')})` }, { value: chance(ev.edge.p), label: 'that the edge has this sign' },
+      ...(ev.money != null ? [{ value: money(ev.money, ccy, { sign: true }), label: 'made per trade after fees' }] : []),
+    ],
+  })), { tickFmt: pctTick, ariaLabel: 'Stock-specific edge by kind of idea' }), {
+    title: 'Its edge, a week later',
+    caption: `What each kind of idea made a week later beyond what the market explains, per week, with its likely range (an 8-in-10 chance it's inside). Against the index = from beta (how much the stocks move with the market) + this stock-specific edge, minus fees. The edge is an estimate pulled towards zero when there are few bets, so it can be smaller than what's left over (in the Table). Ideas on the same stock and side within a week count as one separate bet. For ideas it didn't act on, right of 0 means it missed a gain; for exits and stop-losses, that the price kept going the position's way.`,
+    key: 'fund-edge',
+    table: tableToggle(['Ideas', 'Separate bets', 'vs index', 'From beta', 'Fees', 'Left over', 'Stock-specific edge (likely range)', 'Confidence', 'Per trade after fees'],
+      groups.map(({ label, ev }) => [label, `${ev.bets} of ${ev.ideas}`, pct(ev.vsIndex), pct(ev.fromBeta), ev.fees ? pct(ev.fees) : '–', pct(leftOver(ev)), `${pct(ev.edge.edge)} (${range(ev.edge)})`, groupConfidence(ev), ev.money == null ? '–' : money(ev.money, ccy, { sign: true })]), 1, { className: 'wrap-head' }),
+  });
+}
+
+// ----- AI fund: theses and calibration -----
+
+const shortDate = (date) => new Date(`${date}T12:00:00Z`).toLocaleDateString(undefined, { day: 'numeric', month: 'short', timeZone: 'UTC' });
+
+// "expects +6% in a month · results 23 Oct · wrong if NIM guidance is cut": an order's or position's
+// thesis in words (thesis.js), plus what the code flagged. A short's moves read as the price's own:
+// "expects a 6% fall in a month · so far a 1% rise".
+function thesisWords(th, { soFar = null, short = false } = {}) {
+  if (!th) return '';
+  const parts = [
+    th.expected != null && th.horizon ? `expects ${moveWords(th.expected / 100, short)} in ${HORIZON_LABELS[th.horizon]}` : '',
+    th.catalyst && th.catalyst !== 'none' ? `${CATALYST_LABELS[th.catalyst] ?? th.catalyst}${th.catalystDate ? ` ${shortDate(th.catalystDate)}` : ''}${th.stale ? ` (over ${STALE_DAYS} trading days old)` : ''}` : '',
+    soFar != null ? `so far ${moveWords(soFar, short)}` : '',
+    th.wrongIf ? `wrong if ${th.wrongIf}` : '',
+    th.beatsFees === false ? 'expected move under the round-trip fee' : '',
+  ].filter(Boolean);
+  return parts.join(' · ');
+}
+
+// The thesis line under a fund position: what it expects, the catalyst, how it's doing, what would prove it wrong.
+function positionThesisLine(f, p, quotes) {
+  const th = positionThesis(f, p.symbol, p.short ? 'short' : 'long');
+  if (!th) return '';
+  const { daysLeft, soFar } = thesisProgress(th, { price: p.price, short: p.short, quote: quotes[p.symbol] });
+  const left = daysLeft == null ? '' : daysLeft >= 0 ? ` · ${plural(daysLeft, 'trading day')} left` : ' · past its horizon';
+  return `<span class="thesis small">${esc(thesisWords(th, { soFar, short: p.short }))}${left}</span>`;
+}
+
+// Every lesson the fund could have cited, by id: its own, the review's, calibration's, the rule-made
+// ones and the market memory's, and the wording of lessons it cited that have since gone
+// (fund.citedLessons, learning.js rememberCited).
+function lessonsById(f, c) {
+  const pb = f.playbook ?? {};
+  const memory = c.marketMemory?.[marketForCurrency(f.currency)]?.lessons ?? [];
+  return new Map([...Object.entries(f.citedLessons ?? {}), ...[...(pb.own ?? []), ...(pb.review ?? []), ...(pb.calibrationLessons ?? []), ...(pb.lessons ?? []), ...memory].map((l) => [l.id, l.text])]);
+}
+
+// The lessons an order or idea says it applied, as chips (the text on hover). An unknown entry that
+// looks like a lesson id (no spaces) is a lesson no longer known: "an earlier lesson", its id on hover;
+// anything else is text the AI quoted, shown as written.
+const looksLikeId = (x) => !/\s/.test(x) && /[:-]/.test(x);
+function citedChips(ids, known) {
+  if (!ids?.length) return '';
+  return ids.map((id) => {
+    const text = known.get(id) ?? (looksLikeId(id) ? null : id);
+    if (text == null) return `<span class="chip lesson-chip" title="${esc(id)}">applied: an earlier lesson</span>`;
+    return `<span class="chip lesson-chip" title="${esc(text)}">applied: ${esc(text.length > 44 ? `${text.slice(0, 43)}…` : text)}</span>`;
+  }).join('');
+}
+
+// Expected against realised, by conviction, horizon and catalyst: each thesis at its own horizon, in
+// separate bets, and the result against the index at 5, 21 and 63 trading days (horizon fit).
+function calibrationTable(pb, pooled) {
+  const cal = pb?.calibration;
+  if (!cal?.all) return '';
+  const rows = [];
+  const row = (label, g) => { if (g) rows.push([label, g]); };
+  row('All its orders', cal.all);
+  for (const k of ['high', 'medium', 'low']) row(`Conviction: ${k}`, cal.byConviction?.[k]);
+  for (const h of [5, 21, 63]) row(`Horizon: ${HORIZON_LABELS[h]}`, cal.byHorizon?.[h]);
+  row('Catalyst: results', cal.byCatalyst?.results);
+  row('Catalyst: anything else', cal.byCatalyst?.other);
+  row(`Catalyst over ${STALE_DAYS} trading days old`, cal.stale);
+  if (pooled?.funds >= 2) row(`${pooled.funds === 2 ? 'Both' : `All ${pooled.funds}`} funds in this market`, pooled.all);
+  const pctT = (x) => `${x > 0 ? '+' : x < 0 ? '−' : ''}${Math.abs(x * 100).toFixed(1)}%`;
+  const at = (g, k) => (g.at?.[k] == null ? '–' : pctT(g.at[k]));
+  const notes = [
+    cal.formulaic ? `Its expected moves are formulaic (they vary by only ${cal.sdExpected.toFixed(1)} points), so they can't be judged.` : '',
+    cal.catalystChecked?.ideas ? `Where code could check (results and dividends), the catalyst came within the idea's horizon in ${cal.catalystChecked.passed} of ${cal.catalystChecked.ideas}.` : '',
+    cal.fees?.ideas ? `In ${cal.fees.notCovered} of ${cal.fees.ideas} orders the expected move didn't cover the round-trip fee.` : '',
+  ].filter(Boolean).join(' ');
+  return `<h3 class="col-head cal-head">Calibration: what it expected against what happened</h3>
+    <p class="small muted">Each order's thesis (the move it expected, in its direction, before fees) against the move at its own horizon, dividends included, in separate bets. The last three columns are the result against the index after 5, 21 and 63 trading days: if a later one is better, ideas are paying later than the AI thought. A lesson needs ${CALIBRATION.minBets} separate bets (${CALIBRATION.groupBets} for comparing kinds of ideas). ${esc(notes)}</p>
+    <div class="table-wrap"><table class="calibration">
+      <thead><tr><th>Ideas</th><th class="num"><span class="hide-sm">Separate bets</span><span class="show-sm">Bets</span></th><th class="num"><span class="hide-sm">Expected</span><span class="show-sm">Exp.</span></th><th class="num"><span class="hide-sm">Realised</span><span class="show-sm">Got</span></th><th class="num hide-sm">vs index</th><th class="num hide-sm">At 5 days</th><th class="num hide-sm">At 21</th><th class="num hide-sm">At 63</th></tr></thead>
+      <tbody>${rows.map(([label, g]) => `<tr><td>${esc(label)}</td><td class="num">${g.bets}</td><td class="num">${pctT(g.expected)}</td>
+        <td class="num ${tone(g.realised)}">${pctT(g.realised)}</td><td class="num hide-sm ${g.vsIndex == null ? '' : tone(g.vsIndex)}">${g.vsIndex == null ? '–' : pctT(g.vsIndex)}</td>
+        <td class="num hide-sm">${at(g, 'week')}</td><td class="num hide-sm">${at(g, 'month')}</td><td class="num hide-sm">${at(g, 'quarter')}</td></tr>`).join('')}</tbody>
+    </table></div>`;
+}
 
 function renderLearning(f, c) {
   const pb = f.playbook;
   const on = f.settings?.learning !== false;
   const admin = authEnabled && state.user?.isAdmin;
+  const owner = state.user?.isAdmin || !authEnabled;
   const market = marketForCurrency(f.currency);
   const memory = c.marketMemory?.[market];
   const hidden = new Set(pb?.hidden ?? []);
   const lessons = activeLessons(pb);
   const marketLessons = (memory?.lessons ?? []).filter((l) => !hidden.has(l.id));
-  const lessonItem = (l) => `<li><strong>${esc(l.text)}</strong><span class="chip">${esc(LESSON_SOURCE[l.source] ?? l.source)}</span>
+  const lessonItem = (l) => `<li><strong>${esc(l.text)}</strong><span class="chip">${esc(LESSON_SOURCE[l.source] ?? l.source)}</span>${l.confidence ? `<span class="chip">${esc(l.confidence)} confidence</span>` : ''}
+    ${l.confidence ? `<br><span class="small">${esc(measureLabel(l))} ${pct(l.edge)} a week, likely ${pct(l.lo)} to ${pct(l.hi)}, from ${plural(l.bets, 'separate bet')}${l.stockEdge != null ? `; stock-specific edge ${pct(l.stockEdge)}` : ''}.</span>` : ''}
     ${l.evidence ? `<br><span class="muted small">${esc(l.evidence)}</span>` : ''}
     ${admin ? ` <button type="button" class="ghost small-btn" data-lesson-remove="${esc(l.id)}">Remove</button>` : ''}</li>`;
-  const outcomes = Object.entries(pb?.stats?.byOutcome ?? {}).filter(([, v]) => v.week);
-  const known = new Map([...(pb?.lessons ?? []), ...(pb?.review ?? []), ...(memory?.lessons ?? [])].map((l) => [l.id, l.text]));
+  const watching = owner ? (pb?.watching ?? []).filter((w) => !hidden.has(w.id)) : [];
+  const known = lessonsById(f, c); // every lesson that can be removed, calibration's included
   const hiddenList = [...hidden].filter((id) => known.has(id));
+  const noise = `Checked on pure noise: of ${NOISE_CHECK.sims} made-up funds with no skill at all, ${Math.round(NOISE_CHECK.any * 100)}% showed a false lesson at some point in half a year, and ${Math.round(NOISE_CHECK.moreThanOne * 100)}% more than one. The calibration rules, on ${CAL_NOISE_CHECK.sims} made-up funds whose expected moves were honest: ${Math.round(CAL_NOISE_CHECK.any * 100)}% showed a false calibration lesson, ${Math.round(CAL_NOISE_CHECK.moreThanOne * 100)}% more than one.`;
   return `<section class="panel">
     <div class="panel-head"><h2>What it has learned</h2><span class="chip">${on ? 'learning on' : 'learning off (for comparison)'}</span></div>
     <p class="small muted">Every idea is graded against what prices did afterwards: trades it made, trades you declined or its limits blocked, ideas it passed on, and its exits and stop-losses.
+      Dividends count, fees count, and the part of a result that just reflects how much the stocks move with the market (their beta) is taken out, leaving the stock-specific edge.
       ${on ? 'These lessons are shown to the AI at every decision.' : 'This fund doesn\'t use them, so it shows whether learning helps.'}
-      ${pb ? `${pb.graded} idea${pb.graded === 1 ? '' : 's'} graded so far${pb.reviewedAt ? `; last weekly review ${fmtDate(pb.reviewedAt)}` : ''}. Lessons need at least ${MIN_CASES} cases; the weekly review needs ${REVIEW_MIN_NEW} newly graded ideas.` : ''}</p>
-    ${lessons.length ? `<ul class="lessons">${lessons.map(lessonItem).join('')}</ul>` : `<p class="muted">No lessons yet: ideas are graded once a week of trading has passed, and a lesson needs ${MIN_CASES} similar cases.</p>`}
+      ${pb ? `${plural(pb.graded, 'idea')} graded so far${pb.reviewedAt ? `; last weekly review ${fmtDate(pb.reviewedAt)}` : ''}.` : ''}
+      A lesson needs at least ${GATE.bets} separate bets (the same stock and side within a week counts once), an edge of ${(GATE.edge * 100).toFixed(1)}% a week or more, and a ${Math.round(GATE.p * 100)}% chance that the edge is on that side of zero (above or below); it stays until that chance falls below ${Math.round(GATE.keep * 100)}%. The weekly review needs ${REVIEW_MIN_NEW} newly graded ideas. ${noise}</p>
+    ${lessons.length ? `<ul class="lessons">${lessons.map(lessonItem).join('')}</ul>` : `<p class="muted">No lessons yet: ideas are graded once a week of trading has passed, and a lesson needs ${GATE.bets} separate bets with a clear edge. Expect this to take months.</p>`}
+    ${watching.length ? `<details class="fund-new"><summary>Watching (${watching.length})</summary><ul class="lessons">${watching.map((w) => `<li>${esc(w.text)}
+      <br><span class="muted small">${chance(w.p)} so far, edge ${pct(w.edge)} a week, ${plural(w.bets, 'separate bet')}${w.more ? `: about ${plural(w.more, 'more bet')} needed` : ''}.</span></li>`).join('')}</ul>
+      <p class="muted small">Patterns on their way to becoming lessons, shown only to you. The AI doesn't see them.</p></details>` : ''}
     ${admin ? `<form id="lesson-form" class="row lesson-form" data-fund="${esc(f.id)}"><input id="lesson-text" maxlength="300" placeholder="Add your own lesson, e.g. Avoid airlines before their results"><button type="submit" class="ghost small-btn">Add</button></form>` : ''}
     ${hiddenList.length && admin ? `<p class="small muted">Removed lessons: ${hiddenList.map((id) => `<button type="button" class="ghost small-btn" data-lesson-restore="${esc(id)}" title="${esc(known.get(id))}">Restore: ${esc(known.get(id).slice(0, 50))}${known.get(id).length > 50 ? '…' : ''}</button>`).join(' ')}</p>` : ''}
-    ${outcomes.length ? chartSlot((el) => hbars(el, outcomes.map(([k, v]) => {
-        const x = v.week.avgExcess ?? v.week.avgMove;
-        return {
-          label: OUTCOME_LABELS[k] ?? k, sub: `${plural(v.week.n, 'case')} · ${rate(v.week.hitRate)} ${hitPhrase(k)}`, value: x * 100, display: pct(x),
-          tip: [{ value: pct(x), label: v.week.avgExcess != null ? 'vs the index, a week later' : 'a week later' }, { value: pct(v.week.avgMove), label: 'price move in its direction' }, { value: rate(v.week.hitRate), label: `${hitPhrase(k)}, of ${v.week.n}` }],
-        };
-      }), { tickFmt: pctTick, ariaLabel: 'How its ideas did' }), {
-        title: 'Its ideas, a week later',
-        caption: 'The average move a week later in each idea\'s direction, against the index. Right of 0 is good for trades it made; for ideas it didn\'t act on, it means it missed a gain; for exits and stop-losses, that the price kept going the position\'s way, so the exit was early.',
-        table: tableToggle(['Ideas', 'Cases', 'Went its way', 'Average', 'vs index'], outcomes.map(([k, v]) => [OUTCOME_LABELS[k] ?? k, String(v.week.n), rate(v.week.hitRate), pct(v.week.avgMove), v.week.avgExcess == null ? '–' : pct(v.week.avgExcess)])),
-      }) : ''}
+    ${edgeChart(pb, f.currency)}
+    ${calibrationTable(pb, c.calibration?.[market])}
     ${pb?.recent?.length ? `<details class="fund-new"><summary>Latest graded ideas</summary><ul class="orders">${pb.recent.slice(0, 15).map((g) => `<li>${fmtDate(g.time)}:
-      <span class="chip ${g.action === 'buy' || g.action === 'cover' ? 'buy' : 'sell'}">${esc(g.action)}</span> ${esc(g.symbol)} <span class="muted small">(${esc(OUTCOME_LABELS[g.outcome] ?? g.outcome)}, ${esc(IDEA_LABELS[g.ideaType] ?? g.ideaType)})</span>
-      · a week later ${moveCell(g.week)} · a month later ${moveCell(g.month)}${g.reason ? `<br><span class="muted small">${esc(g.reason)}</span>` : ''}</li>`).join('')}</ul></details>` : ''}
+      <span class="chip ${g.action === 'buy' || g.action === 'cover' ? 'buy' : 'sell'}">${esc(g.action)}</span> ${esc(g.symbol)} <span class="muted small">(${esc(OUTCOME_LABELS[g.outcome] ?? g.outcome)}, ${esc(IDEA_LABELS[g.ideaType] ?? g.ideaType)}${g.repeats > 1 ? `, came up ${g.repeats} times that week` : ''})</span>
+      · a week later ${moveCell(g.week)} · a month later ${moveCell(g.month)}${g.quarter ? ` · a quarter later ${moveCell(g.quarter)}` : ''}${g.thesis?.expected != null && g.thesis.horizon ? ` <span class="muted small">(expected ${moveWords(g.thesis.expected / 100, g.action === 'short')} in ${HORIZON_LABELS[g.thesis.horizon]})</span>` : ''}${g.reason ? `<br><span class="muted small">${esc(g.reason)}</span>` : ''}</li>`).join('')}</ul></details>` : ''}
   </section>
   <section class="panel">
     <div class="panel-head"><h2>${esc(MARKETS[market].label)} market memory</h2></div>
@@ -1547,10 +1690,22 @@ function renderLearning(f, c) {
       }) : '';
     })() : ''}
     ${memory?.recent?.length ? `<details class="fund-new"><summary>Latest news measured</summary><ul class="orders">${memory.recent.slice(0, 15).map((e) => `<li>${esc(e.date)} <strong>${esc(e.symbol)}</strong> ${esc(e.headline)}
-      <span class="muted small">(${esc(e.tone)} ${esc(e.type)})</span> · on the day ${e.day ? `<span class="${tone(e.day.move)}">${pct(e.day.move)}</span>` : '–'} · next week ${moveCell(e.week)}</li>`).join('')}</ul>
-      <p class="muted small">Moves are shown in the direction of the news: + means the price went the way the news pointed.</p></details>` : ''}
+      <span class="muted small">(${esc(e.tone)} ${esc(e.type)}${e.from === 'filing' ? ', SEC filing' : e.from === 'yahoo' ? ', Yahoo Finance' : ''})</span> · on the day ${e.day ? `<span class="${tone(e.day.move)}">${pct(e.day.move)}</span>` : '–'} · next week ${moveCell(e.week)}</li>`).join('')}</ul>
+      <p class="muted small">Moves are shown in the direction of the news: + means the price went the way the news pointed. US results come from the companies' SEC filings when those are set up.</p></details>` : ''}
+    ${renderRatingChanges(market)}
     ${!memory?.events ? `<p class="small">To fill this in from the past year's news (one-off, about US$1–2), run ${repoActionsUrl() ? `<a href="${repoActionsUrl()}" target="_blank" rel="noopener">Actions → Update prices, AI picks and AI fund</a>` : 'Actions → Update prices, AI picks and AI fund'} → Run workflow with <em>Learning: look up the past year of news</em> ticked. New news is added every day by itself.</p>` : ''}
   </section>`;
+}
+
+// Brokers' real upgrades and downgrades in the market over the last 30 days, with how the stock has
+// moved since: dated facts, with no ranking of the brokers.
+function renderRatingChanges(market) {
+  if (!state.company) return '';
+  const list = recentRatingChanges(state.company, state.prices.quotes, market, new Date(), 30).slice(0, 12);
+  return `<details class="fund-new"><summary>Broker rating changes</summary>
+    ${list.length ? `<ul class="orders">${list.map((c) => `<li>${esc(fmtDate(c.t * 1000))} <strong>${esc(c.symbol)}</strong> <span class="chip">${c.dir > 0 ? 'upgrade' : 'downgrade'}</span>${esc(describeChange(c))}
+      · since then ${c.move == null ? '–' : `<span class="${tone(c.move)}">${pct(c.move)}</span>`}${c.move != null && c.index != null ? ` <span class="muted small">(${pct(c.move - c.index)} vs index)</span>` : ''}</li>`).join('')}</ul>` : `<p class="muted small">None in the last 30 days${market === 'SGX' ? ' (Yahoo Finance has little analyst data for SGX stocks)' : ''}.</p>`}
+    <p class="muted small">Upgrades and downgrades from Yahoo Finance over the last 30 days; ratings kept or only a new price target aren't listed. The move is since the last close before the change.</p></details>`;
 }
 
 // What the scheduled AI cost, month by month and by job, against the monthly cap.
@@ -1604,7 +1759,7 @@ function renderLeaderboard(c, selected) {
     const bench = benchmarkFor({ currency: f.currency, amount: f.budget, since: f.startedAt, quotes, plan: planFor(f.settings?.feePlan ?? 'tiger') });
     const costUsd = fundAiCost(f);
     const cost = f.currency === 'USD' ? costUsd : fx ? costUsd * fx : 0;
-    return { f, a, bench, afterCost: (a.net - cost) / f.budget };
+    return { f, a, bench, afterCost: (a.net - cost) / f.budget, beta: fundBeta(f.history, quotes[BENCHMARKS[f.currency]?.symbol]) };
   }).sort((x, y) => Number(Boolean(x.f.stoppedAt)) - Number(Boolean(y.f.stoppedAt)) || y.afterCost - x.afterCost);
   const status = (f) => (f.stoppedAt ? 'stopped' : f.paused ? 'paused' : 'running');
   const bars = rows.map(({ f, a, bench, afterCost }) => ({
@@ -1621,18 +1776,20 @@ function renderLeaderboard(c, selected) {
     ${chartSlot((el) => hbars(el, bars, { signColors: true, markerLabel: 'Its index, same money and time', tickFmt: pctTick, ariaLabel: 'Fund returns' }),
       { caption: `Each bar is a fund's return since it started.${rows.some((r) => r.bench) ? ` The short upright tick is what the same money made in its index (${esc(BENCHMARKS.USD.label)} for USD funds, ${esc(BENCHMARKS.SGD.label)} for SGD) over the same time.` : ''}`, key: 'leaderboard' })}
     <div class="table-wrap"><table class="leaderboard">
-      <thead><tr><th>Fund</th><th class="num">Value</th><th class="num">Return</th><th class="num">vs index</th><th class="num hide-sm">After AI cost</th><th class="hide-sm">Status</th></tr></thead>
-      <tbody>${rows.map(({ f, a, bench, afterCost }) => `<tr data-fund-select="${esc(f.id)}" class="${f.id === selected?.id ? 'selected' : ''}" tabindex="0">
+      <thead><tr><th>Fund</th><th class="num">Value</th><th class="num">Return</th><th class="num">vs index</th><th class="num hide-sm">Beta</th><th class="num hide-sm">After AI cost</th><th class="hide-sm">Status</th></tr></thead>
+      <tbody>${rows.map(({ f, a, bench, afterCost, beta }) => `<tr data-fund-select="${esc(f.id)}" class="${f.id === selected?.id ? 'selected' : ''}" tabindex="0">
         <td><strong>${esc(f.name)}</strong><span class="chip">${esc(STYLES[f.style]?.label ?? f.style)}</span>
           <span class="name">${esc(f.currency)} · ${f.settings?.broker === 'tiger' ? 'Tiger' : 'simulator'}${f.settings?.model ? ` · ${esc(modelName(f.settings.model))}` : ''}${f.settings?.learning === false ? ' · not learning' : ''}${f.focus ? ` · ${esc(f.focus)}` : ''}</span></td>
         <td class="num">${money(a.equity, f.currency)}</td>
         <td class="num ${tone(a.netPct)}">${pct(a.netPct)}</td>
         <td class="num ${bench ? tone(a.netPct - bench.pct) : ''}">${bench ? `${a.netPct - bench.pct >= 0 ? '+' : '−'}${Math.abs((a.netPct - bench.pct) * 100).toFixed(2)} pts` : '–'}</td>
+        <td class="num hide-sm" title="${beta ? `From ${beta.days} trading days` : `Shown after ${FUND_BETA_DAYS} trading days`}">${beta ? beta.beta.toFixed(2) : '–'}</td>
         <td class="num hide-sm ${tone(afterCost)}">${pct(afterCost)}</td>
         <td class="hide-sm small">${status(f)}</td>
       </tr>`).join('')}</tbody>
     </table></div>
     <p class="muted small">${c.funds.length > 1 ? 'Tap a fund to see it below. ' : ''}"vs index" is the fund's return minus what the same money made in ${esc(BENCHMARKS.USD.label)} or ${esc(BENCHMARKS.SGD.label)} since it started, after fees.
+      Beta is how much the fund's value has moved with its index day to day (1: in step with it; 0.5: half as much, as with half in cash; below 0: against it, as when net short), shown after ${FUND_BETA_DAYS} trading days. A fund with a beta above 1 should beat a rising index without any skill, so judge "vs index" with it in mind.
       ${c.archived?.length ? `Removed earlier: ${c.archived.slice(-5).map((x) => `${esc(x.name)} ${pct((x.finalValue ?? x.budget) / x.budget - 1)}`).join(', ')}.` : ''}</p>
   </section>`;
 }
@@ -1692,6 +1849,7 @@ function renderFund() {
   const aiCostUsd = fundAiCost(f);
   const aiCost = f.currency === 'USD' ? aiCostUsd : fx ? aiCostUsd * fx : null; // in the fund's currency
   const cap = state.spend?.cap, month = monthSpend(state.spend);
+  const known = lessonsById(f, c);
   el.innerHTML = `
     ${renderLeaderboard(c, f)}
     ${check && !check.ok ? `<div class="notice warn fund-alert"><span><strong>Your Tiger account doesn't hold what the funds think:</strong> ${check.mismatches.map((m) => `${esc(m.symbol)}: funds ${m.fund}, Tiger ${m.tiger}`).join('; ')}. Check the Tiger app before trading further.</span></div>` : ''}
@@ -1739,7 +1897,7 @@ function renderFund() {
         <tbody>${positions.map((p) => {
           const pr = f.protections?.[p.symbol];
           const prot = pr ? [pr.stop_loss_pct ? `stop −${pr.stop_loss_pct}%` : '', pr.take_profit_pct ? `take +${pr.take_profit_pct}%` : ''].filter(Boolean).join(', ') : '–';
-          return `<tr><td><strong>${esc(p.symbol)}</strong>${p.short ? '<span class="chip sell">short</span>' : ''}<span class="name">${esc(quotes[p.symbol]?.name ?? '')}</span></td>
+          return `<tr><td><strong>${esc(p.symbol)}</strong>${p.short ? '<span class="chip sell">short</span>' : ''}${resultsChip(p.symbol)}<span class="name">${esc(quotes[p.symbol]?.name ?? '')}</span>${positionThesisLine(f, p, quotes)}</td>
           <td class="num">${p.qty.toLocaleString()}</td><td class="num hide-sm">${price(p.avgCost)}</td><td class="num hide-sm">${price(p.price)}</td>
           <td class="num ${tone(p.unrealized)}">${money(p.unrealized, p.currency, { sign: true })}<br><span class="small">${pct(p.unrealizedPct)}</span></td>
           <td class="hide-sm small">${esc(prot)}</td></tr>`;
@@ -1757,8 +1915,8 @@ function renderFund() {
           ${o.status === 'filled' ? `at ${price(o.price)}${o.fee ? ` <span class="muted small">+ ${money(o.fee, f.currency)} fees</span>` : ''}`
             : o.status === 'rejected' ? `<span class="down">rejected: ${esc(o.message)}</span>`
             : `<span class="muted">${esc(o.status)}${o.limitPrice ? `, limit ${price(o.limitPrice)}` : ''}</span>`}
-          <span class="muted small">${esc(o.reason)}</span></li>`).join('')}</ul>` : '<p class="muted small">No trades this round.</p>'}
-        ${d.considered?.length ? `<p class="small muted">Also considered: ${d.considered.map((c) => `${esc(c.stance)} ${esc(c.symbol)} (${esc(c.why_not)})`).join('; ')}.</p>` : ''}
+          <span class="muted small">${esc(o.reason)}</span>${o.thesis ? `<br><span class="thesis small">${esc(thesisWords(o.thesis, { short: o.action === 'short' }))}</span>` : ''}${citedChips(o.lessonsApplied, known)}</li>`).join('')}</ul>` : '<p class="muted small">No trades this round.</p>'}
+        ${d.considered?.length ? `<p class="small muted">Also considered: ${d.considered.map((c, i, a) => `${esc(c.stance)} ${esc(c.symbol)} (${esc(c.why_not)})${i < a.length - 1 ? ';' : '.'}${citedChips(c.lessonsApplied, known)}`).join(' ')}</p>` : ''}
         ${sources(d.source_urls)}
       </article>`).join('') || '<p class="muted">No decisions yet. The first one happens 15 minutes after the market opens.</p>'}
     </section>

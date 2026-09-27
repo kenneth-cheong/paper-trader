@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { tradingStatus, isOpen } from '../markets.js';
+import { tradingStatus, isOpen, sessionDateFor, sessionDateAfter } from '../markets.js';
 
 // Wednesday 7 January 2026. SGX trades 01:00-04:00 and 05:00-09:00 UTC; US 14:30-21:00 UTC (winter).
 const at = (hhmm, day = '07') => new Date(`2026-01-${day}T${hhmm}:00Z`);
@@ -33,4 +33,13 @@ test("open only when today's prices are arriving", () => {
   const p = prices('US', at('15:40'), at('15:45'));
   p.quotes.A.stale = true;
   assert.equal(tradingStatus('US', p, at('15:50')), 'waiting');
+});
+
+test('news after the close, or at a weekend, counts from the next session', () => {
+  assert.equal(sessionDateFor('US', '2026-03-12T19:30:00Z'), '2026-03-12'); // 15:30 New York: same day
+  assert.equal(sessionDateFor('US', '2026-03-12T20:05:00Z'), '2026-03-13'); // 16:05 New York: next day
+  assert.equal(sessionDateFor('US', '2026-03-13T21:00:00Z'), '2026-03-16'); // Friday evening: Monday
+  assert.equal(sessionDateFor('US', '2026-03-12T11:00:00Z'), '2026-03-12'); // before the open
+  assert.equal(sessionDateFor('SGX', '2026-03-12T10:00:00Z'), '2026-03-13'); // 18:00 Singapore
+  assert.equal(sessionDateAfter('US', '2026-03-14', 9 * 60), '2026-03-16'); // a Saturday
 });

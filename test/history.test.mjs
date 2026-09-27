@@ -120,3 +120,28 @@ test('money converted out takes the index down by the same share of the account 
   const i2 = indexHistory(p2, quotes, 'USD', b, valueHistory(p2, quotes, 'USD'));
   assert.equal(i2.values.at(-1), 0);
 });
+
+test('daily bars carrying volume ([t, close, volume]) give the same results everywhere prices are read', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const { stockStats } = await import('../ai.js');
+  const { backtest, newRule } = await import('../rules.js');
+  const { buildMemory } = await import('../memory.js');
+  const { scorePicks } = await import('../scorecard.js');
+  const { gradeIdeas } = await import('../learning.js');
+  const sample = JSON.parse(await readFile(new URL('../data/sample-prices.json', import.meta.url), 'utf8')).quotes;
+  const withVolume = Object.fromEntries(Object.entries(sample).map(([s, q]) => [s, { ...q, daily: q.daily.map(([t, c], i) => [t, c, 1e6 + i]) }]));
+  const now = new Date('2026-01-02T22:00:00Z');
+  const t0 = sample.AAPL.daily[100][0] + 7 * 3600;
+  let p = { ...newPortfolio({ USD: 10000 }), createdAt: new Date(sample.AAPL.daily[90][0] * 1000).toISOString(), feePlan: 'none' };
+  p = applyTrade(p, { symbol: 'AAPL', side: 'buy', qty: 10, price: sample.AAPL.daily[100][1], currency: 'USD', market: 'US', fee: 0, time: new Date(t0 * 1000).toISOString() });
+  const rules = [newRule({ symbol: 'AAPL', when: { type: 'above_ma', value: 20 }, action: { side: 'buy', unit: 'pct_cash', amount: 50 }, repeat: 'repeat' }),
+    newRule({ symbol: 'AAPL', when: { type: 'below_ma', value: 20 }, action: { side: 'sell', unit: 'all', amount: 0 }, repeat: 'repeat' })];
+  const picks = [{ createdAt: new Date(t0 * 1000).toISOString(), picks: [{ symbol: 'AAPL', stance: 'long', priceAtPick: sample.AAPL.daily[100][1] }] }];
+  const idea = [{ id: 'i', t: t0, symbol: 'AAPL', direction: 1, kind: 'entry', outcome: 'traded', ideaType: 'news', price: sample.AAPL.daily[100][1] }];
+  const run = (quotes) => JSON.stringify([
+    stockStats(quotes.AAPL), backtest(rules, quotes.AAPL, { feePlan: 'none' }), valueHistory(p, quotes, 'USD').slice(0, -1), // the last point is the time now
+    benchmarkFor({ currency: 'USD', amount: 10000, since: '2025-06-01T00:00:00Z', quotes }),
+    buildMemory([], quotes, 'US', now), scorePicks(picks, quotes, now), gradeIdeas(idea, quotes, 'USD', now),
+  ]);
+  assert.equal(run(withVolume), run(sample));
+});
