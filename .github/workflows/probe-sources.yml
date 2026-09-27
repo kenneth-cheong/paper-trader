@@ -1,5 +1,5 @@
-# One-off, read-only: prints what Yahoo's analyst and results data and SEC EDGAR return, so the
-# learning features parse the real shapes. Run it from Actions → Probe data sources → Run workflow.
+# One-off, read-only: prints what the free data sources the learning features use actually return
+# (long price histories, the VIX, article feeds), so the code parses the real shapes. Run it from Actions → Probe data sources → Run workflow.
 name: Probe data sources
 on: workflow_dispatch
 permissions:
@@ -14,5 +14,3 @@ jobs:
           python-version: '3.12'
       - run: pip install curl_cffi
       - run: python scripts/probe_sources.py
-        env:
-          SEC_USER_AGENT: ${{ vars.SEC_USER_AGENT }}
