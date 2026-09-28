@@ -73,6 +73,8 @@ test('askDeepSeek: one reminder when it answers without the tool; errors say why
     await assert.rejects(askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(status) }), (e) => why.test(e.message) && e.usage === undefined);
   }
   await assert.rejects(askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(new TypeError('fetch failed')) }), /Could not reach DeepSeek/);
+  // an empty body after a billed first answer: refused, still carrying what the first cost
+  await assert.rejects(askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(noCall, null) }), (e) => /could not be read/.test(e.message) && e.usage.costUsd > 0);
   await assert.rejects(askDeepSeek({ apiKey: '', system: 's', content: 'c', tool, fetchImpl: fakeFetch() }), /DEEPSEEK_API_KEY isn't set/);
 });
 
@@ -109,4 +111,62 @@ test('a fund on DeepSeek decides through it, with news from Claude; the model is
   assert.match(sent, /Decision time\. The fund's state as JSON/);
   // no key: a clear error before anything is sent
   await assert.rejects(decideFund({ client, fund, quotes: prices.quotes, news, model: 'deepseek-flash', deepseek: { apiKey: '' } }), /DEEPSEEK_API_KEY isn't set/);
+});
+
+// ---------- the opt-in news digest from the feeds ----------
+
+import { gatherNews, digestFrom, NEWS_TOOL, FEED_DIGEST } from '../ai.js';
+import { digestQuality } from '../articles.js';
+
+const headlines = (n, now) => Array.from({ length: n }, (_, i) => ({
+  id: `a${i}`, symbols: [i % 2 ? 'AAPL' : 'D05.SI'], source: i % 2 ? 'finance.yahoo.com' : 'businesstimes.com.sg', feed: 'x',
+  pubDate: new Date(now.getTime() - (i + 1) * 3600000).toISOString(), headline: `Headline ${i}`, url: `https://example.com/${i}`,
+}));
+const claudeDigest = () => {
+  const calls = [];
+  return { calls, beta: { messages: { stream: (req) => { calls.push(req); return { finalMessage: async () => ({ stop_reason: 'tool_use', model: req.model, content: [{ type: 'tool_use', id: 't', name: NEWS_TOOL.name, input: { market_summary: 'From search.', items: [] } }], usage: { input_tokens: 1000, output_tokens: 100 } }) }; } } } };
+};
+
+test('Claude with web search stays the digest unless NEWS_DIGEST_MODEL asks for DeepSeek', () => {
+  assert.equal(digestFrom({ DEEPSEEK_API_KEY: 'k' }), null);
+  assert.equal(digestFrom({ NEWS_DIGEST_MODEL: 'deepseek-flash' }), null); // no key
+  assert.equal(digestFrom({ NEWS_DIGEST_MODEL: 'deepseek-flash', DEEPSEEK_API_KEY: 'k', NEWS_LEADS: 'off' }), null); // no feeds
+  assert.equal(digestFrom({ NEWS_DIGEST_MODEL: 'claude', DEEPSEEK_API_KEY: 'k' }), null);
+  assert.deepEqual(digestFrom({ NEWS_DIGEST_MODEL: 'deepseek-flash', DEEPSEEK_API_KEY: 'k' }), { model: 'deepseek-flash', apiKey: 'k' });
+});
+
+test('the DeepSeek digest reads the feeds\' headlines, cites only their links, and falls back to Claude', async () => {
+  const now = new Date('2026-09-28T12:00:00Z');
+  const articles = headlines(30, now);
+  const items = [
+    { symbols: ['AAPL', 'ZZZ'], date: '2026-09-28', headline: 'Apple news', summary: 's', type: 'product', tone: 'positive', source_url: 'https://example.com/1?utm_source=x' },
+    { symbols: ['D05.SI'], date: '2026-09-28', headline: 'Made up', summary: 's', type: 'other', tone: 'mixed', source_url: 'https://elsewhere.com/x' },
+  ];
+  const fetchImpl = fakeFetch({ ...answer(null), choices: [{ finish_reason: 'tool_calls', message: { tool_calls: [{ function: { name: NEWS_TOOL.name, arguments: JSON.stringify({ market_summary: 'From the feeds.', items }) } }] } }] });
+  const client = claudeDigest();
+  const news = await gatherNews({ client, quotes: prices.quotes, now, articles, digest: { model: 'deepseek-flash', apiKey: 'k', fetchImpl } });
+  assert.equal(client.calls.length, 0);
+  assert.equal(news.via, 'feeds');
+  assert.equal(news.model, 'deepseek-flash');
+  assert.deepEqual(news.items.map((i) => [i.symbols, i.source_url]), [[['AAPL'], 'https://example.com/1'], [['D05.SI'], null]]);
+  assert.equal(news.leads.length, 30);
+  assert.ok(news.usage.costUsd > 0 && news.usage.searches === 0);
+  const sent = fetchImpl.calls[0].body.messages[1].content;
+  assert.match(sent, /Headlines from the news feeds, newest first:\n- \[AAPL\] Headline 0|Headline 1/);
+  assert.deepEqual(digestQuality(news).via, 'feeds');
+  // too few headlines (the feeds down): Claude searches as before
+  const few = claudeDigest();
+  const fallback = await gatherNews({ client: few, quotes: prices.quotes, now, articles: headlines(FEED_DIGEST.min - 1, now), digest: { model: 'deepseek-flash', apiKey: 'k', fetchImpl: fakeFetch() } });
+  assert.equal(few.calls.length, 1);
+  assert.equal(fallback.via, 'search');
+  // DeepSeek failing after being billed: Claude searches, and both costs count
+  const bad = fakeFetch({ ...answer(null), choices: [{ finish_reason: 'tool_calls', message: { tool_calls: [{ function: { name: NEWS_TOOL.name, arguments: '{oops' } }] } }] });
+  const both = claudeDigest();
+  const rescued = await gatherNews({ client: both, quotes: prices.quotes, now, articles, digest: { model: 'deepseek-flash', apiKey: 'k', fetchImpl: bad } });
+  assert.equal(both.calls.length, 1);
+  assert.equal(rescued.market_summary, 'From search.');
+  assert.ok(rescued.usage.costUsd > 0.001 + 0.0015);
+  // no digest asked for: Claude, whatever the articles
+  const plain = claudeDigest();
+  assert.equal((await gatherNews({ client: plain, quotes: prices.quotes, now, articles })).via, 'search');
 });

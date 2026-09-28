@@ -297,7 +297,7 @@ test('each digest\'s quality is recorded, and compared week by week with the lea
     items: [{ source_url: 'https://x.example/1' }, { source_url: 'https://search.example/a' }, { source_url: null }],
   };
   const r = digestQuality(news, { by: 'picks', on: true });
-  assert.deepEqual(r, { at: '2026-09-28T02:00:00Z', by: 'picks', leadsOn: true, leads: 2, items: 3, verified: 2, fromLeads: 1, searches: 5, costUsd: 0.12 });
+  assert.deepEqual(r, { at: '2026-09-28T02:00:00Z', by: 'picks', via: 'search', leadsOn: true, leads: 2, items: 3, verified: 2, fromLeads: 1, searches: 5, costUsd: 0.12 });
   const off = digestQuality({ ...news, createdAt: '2026-10-06T02:00:00Z', leads: undefined }, { on: false });
   assert.equal(off.leads, 0);
   let list = addQuality(null, r);

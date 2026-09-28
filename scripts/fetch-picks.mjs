@@ -12,7 +12,7 @@
 
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { recommend, TIERS } from '../ai.js';
+import { recommend, digestFrom, TIERS } from '../ai.js';
 import { addSpend, capReached, monthSpend } from '../spend.js';
 import { recordPicks } from '../scorecard.js';
 import { mergeEvents, eventsFromDigest, marketEvents } from '../memory.js';
@@ -47,10 +47,11 @@ if (process.env.FORCE_PICKS !== 'true' && ageH < maxAgeH && previous?.picks?.len
     const filings = await readJson(join(dirname(file), 'results-dates.json'));
     const events = marketEvents((await readJson(join(dirname(file), 'news-events.json'))) ?? [], prices.quotes, { filings, company });
     const leadsOn = process.env.NEWS_LEADS !== 'off';
+    const digest = digestFrom(process.env); // opt-in: DeepSeek's digest from the feeds (NEWS_DIGEST_MODEL)
     const articles = leadsOn ? (await Promise.all(recentMonths(new Date(), 2).map((m) => readJson(join(dirname(file), 'articles', `${m}.json`))))).flat().filter(Boolean) : null;
     const { news, ...picks } = await recommend({
       client: new Anthropic(), Anthropic, prices, company, calendar: resultsCalendar({ company, filings, quotes: prices.quotes, events }), articles,
-      model: process.env.AI_MODEL || TIERS.advanced, newsModel: process.env.AI_NEWS_MODEL || TIERS.simple,
+      model: process.env.AI_MODEL || TIERS.advanced, newsModel: process.env.AI_NEWS_MODEL || TIERS.simple, digest,
     });
     await writeFile(file, JSON.stringify(picks, null, 1));
     await writeFile(spendFile, JSON.stringify(addSpend(spend, 'picks', picks.usage?.costUsd)));

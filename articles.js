@@ -410,7 +410,7 @@ export function digestQuality(news, { by = 'picks', on = true } = {}) {
   const items = news?.items ?? [];
   const leadUrls = new Set((news?.leads ?? []).map((l) => l.url));
   return {
-    at: news?.createdAt ?? null, by, leadsOn: Boolean(on), leads: leadUrls.size, items: items.length,
+    at: news?.createdAt ?? null, by, via: news?.via ?? 'search', leadsOn: Boolean(on), leads: leadUrls.size, items: items.length,
     verified: items.filter((i) => i.source_url).length, fromLeads: items.filter((i) => leadUrls.has(i.source_url)).length,
     searches: news?.usage?.searches ?? 0, costUsd: news?.usage?.costUsd ?? 0,
   };

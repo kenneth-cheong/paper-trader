@@ -210,6 +210,7 @@ export async function askDeepSeek({ apiKey, model = 'deepseek-flash', system, co
     }
     let body;
     try { body = await res.json(); } catch { throw billed(new AIError('DeepSeek\'s answer could not be read.')); }
+    if (!body || typeof body !== 'object') throw billed(new AIError('DeepSeek\'s answer could not be read.'));
     const u = body.usage ?? {};
     const hit = u.prompt_cache_hit_tokens ?? 0;
     usage.cacheRead += hit;
@@ -359,13 +360,51 @@ export const NEWS_TOOL = {
 // How the digest reads the news feeds' headlines (articles.js freshLeads), when it gets some.
 const LEADS = 'Leads (headlines only): the latest headlines naming these stocks in news feeds, newest first, with their site, age and link. They are only headlines: use them to decide what to search for. An item may use a lead\'s link as its source_url when that article is where the news comes from, and must say no more than the headline and your searches support.';
 
+// The news digest from DeepSeek, which has no web search: it reads the news feeds' tagged headlines
+// (articles.js freshLeads, up to FEED_DIGEST.headlines from the last few days, the markets in turn) and
+// turns them into the same digest, every item citing one of those headlines' links. Used when `digest`
+// names a DeepSeek model (the job: only when the NEWS_DIGEST_MODEL variable asks for it, digestFrom).
+// With too few headlines about these stocks (the feeds down), or if DeepSeek fails, gatherNews asks Claude
+// with web search as before, adding what the failed call cost.
+export const FEED_DIGEST = { headlines: 60, min: 8 };
+// Which digest the scheduled jobs use, from their environment. By default Claude with web search (null):
+// it reads the articles themselves and finds news the feeds don't carry, so it's the better digest.
+// Opt-in: the NEWS_DIGEST_MODEL variable set to a DeepSeek model (deepseek-flash) with the
+// DEEPSEEK_API_KEY secret, and the feeds on (NEWS_LEADS isn't 'off'): headlines only, about a twentieth
+// of the cost. Each digest records which it was (`via`), so articles.js digestQuality can compare them.
+export function digestFrom(env) {
+  const model = env.NEWS_DIGEST_MODEL;
+  return env.DEEPSEEK_API_KEY && isDeepSeek(model) && env.NEWS_LEADS !== 'off' ? { model, apiKey: env.DEEPSEEK_API_KEY } : null;
+}
+const FEEDS_SYSTEM = `You write the news digest for a trading simulator covering a watchlist of Singapore (SGX) and US stocks. You get the latest headlines from news feeds that name these stocks, each with its site, age and link; you cannot search the web or open the articles. Pick the developments that could move these stocks, merge headlines about the same news, and give each item's date as the day it was published. Say no more than the headlines support: a summary restates what its headline says, with no figures or claims that aren't in it, and a headline that only reports a price move is not news about the company. Every item's source_url must be the link of a headline given. Rate each item's type and tone as reported. The market_summary covers only what these headlines show. Finish by calling submit_news.`;
+async function feedDigest({ digest, quotes, mine, now, articles }) {
+  const leads = freshLeads(articles, mine, now, { marketOf: (s) => quotes[s]?.market ?? '', n: FEED_DIGEST.headlines });
+  if (leads.length < FEED_DIGEST.min) return null;
+  const watchlist = mine.map((s) => `${s} (${quotes[s].name}, ${quotes[s].market})`);
+  const res = await askDeepSeek({
+    ...digest, system: FEEDS_SYSTEM, tool: NEWS_TOOL, now,
+    content: `Today is ${now.toUTCString()}. The watchlist:\n${watchlist.join('\n')}\n\nHeadlines from the news feeds, newest first:\n${leadsText(leads, now)}`,
+  });
+  const items = (res.input.items ?? []).map((i) => ({ ...i, source_url: knownUrls([i.source_url], leads)[0] ?? null, symbols: (i.symbols ?? []).filter((x) => quotes[x]) }));
+  return { market_summary: res.input.market_summary ?? '', items, sources: [], leads, via: 'feeds', model: res.model, usage: res.usage, createdAt: now.toISOString() };
+}
+
 // Searches and summarises the news for the given stocks (all of them by default) with the cheap model.
 // `articles`: the news feeds' tagged headlines (state/articles, articles.js); the freshest about these
 // stocks go in as leads (headlines only), and an item may cite a lead's link. Without them (the page, or
 // the NEWS_LEADS variable set to off) the request is as it always was. The digest keeps the leads it
 // was given (`leads`), so its quality can be compared with and without them (articles.js digestQuality).
-export async function gatherNews({ client, Anthropic, model = TIERS.simple, quotes, symbols = Object.keys(quotes), now = new Date(), maxSearches = 5, articles = null }) {
+export async function gatherNews({ client, Anthropic, model = TIERS.simple, quotes, symbols = Object.keys(quotes), now = new Date(), maxSearches = 5, articles = null, digest = null }) {
   const mine = symbols.filter((s) => quotes[s]);
+  let failed = null; // what a DeepSeek digest that failed had cost
+  if (isDeepSeek(digest?.model) && articles) {
+    try {
+      const d = await feedDigest({ digest, quotes, mine, now, articles });
+      if (d) return d;
+    } catch (err) {
+      failed = err.usage ?? null;
+    }
+  }
   const watchlist = mine.map((s) => `${s} (${quotes[s].name}, ${quotes[s].market})`);
   const leads = articles ? freshLeads(articles, mine, now, { marketOf: (s) => quotes[s]?.market ?? '' }) : [];
   const res = await askClaude({
@@ -377,7 +416,7 @@ export async function gatherNews({ client, Anthropic, model = TIERS.simple, quot
   });
   const seen = [...res.sources, ...leads];
   const items = (res.input.items ?? []).map((i) => ({ ...i, source_url: knownUrls([i.source_url], seen)[0] ?? null, symbols: (i.symbols ?? []).filter((x) => quotes[x]) }));
-  return { market_summary: res.input.market_summary ?? '', items, sources: res.sources, ...(leads.length ? { leads } : {}), model: res.model, usage: res.usage, createdAt: now.toISOString() };
+  return { market_summary: res.input.market_summary ?? '', items, sources: res.sources, ...(leads.length ? { leads } : {}), via: 'search', model: res.model, usage: failed ? addUsage(failed, res.usage) : res.usage, createdAt: now.toISOString() };
 }
 
 // The part of a digest a decision model sees: no raw search results, just the summary and items, each
@@ -627,10 +666,10 @@ export function parsePicks(json, quotes, sources = []) {
 // news feeds' headlines as leads, given `articles`). `company` (company-data.json) and `calendar`
 // (calendar.js resultsCalendar) add analysts' views and the results due soon, when the scheduled job
 // has them.
-export async function recommend({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, prices, news, company = null, calendar = null, articles = null, now = new Date() }) {
+export async function recommend({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, prices, news, company = null, calendar = null, articles = null, digest = null, now = new Date() }) {
   const quotes = prices.quotes ?? {};
   const fresh = !news;
-  news ??= await gatherNews({ client, Anthropic, model: newsModel, quotes, now, articles });
+  news ??= await gatherNews({ client, Anthropic, model: newsModel, quotes, now, articles, digest });
   const context = {
     now: now.toISOString(), prices_as_of: prices.updatedAt, sample_data: !!prices.sample,
     news: newsForPrompt(news, null, now), watchlist: stockList(quotes, Object.keys(quotes), false, company, now),
@@ -852,11 +891,11 @@ function ownContext({ fund, quotes, playbook, calendar = null, dossiers = null, 
 // market. `dossiers` ({ symbol: card }) add each position's risk numbers to the fund's own part.
 // A fund on DeepSeek (`model` a DEEPSEEK id) asks it for the decision with `deepseek` ({ apiKey, fetchImpl });
 // the news still comes from Claude. DeepSeek caches a repeated prompt start by itself.
-export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, playbook = null, company = null, calendar = null, macro = null, cards = null, notes = null, dossiers = null, articles = null, cacheShared = false, deepseek = null, now = new Date() }) {
+export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, playbook = null, company = null, calendar = null, macro = null, cards = null, notes = null, dossiers = null, articles = null, cacheShared = false, deepseek = null, digest = null, now = new Date() }) {
   const fresh = !news;
   if (fresh) {
     const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === fund.currency);
-    news = await gatherNews({ client, Anthropic, model: newsModel, quotes, symbols, now, maxSearches: 3, articles });
+    news = await gatherNews({ client, Anthropic, model: newsModel, quotes, symbols, now, maxSearches: 3, articles, digest });
   }
   const stockCards = typeof cards === 'function' ? cards(news) : cards;
   const market = marketContext({ currency: fund.currency, quotes, picks, news, company, calendar, macro, cards: stockCards, notes: notesForPrompt(notes, quotes, fund.currency), now });

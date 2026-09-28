@@ -59,6 +59,7 @@ jobs:
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }} # opt-in: for a fund whose AI model is DeepSeek (README → DeepSeek)
+      NEWS_DIGEST_MODEL: ${{ vars.NEWS_DIGEST_MODEL }} # opt-in: deepseek-flash for a news digest from the feeds' headlines (README → DeepSeek)
       AI_MODEL: ${{ vars.AI_MODEL }}           # decisions; default claude-sonnet-5
       AI_NEWS_MODEL: ${{ vars.AI_NEWS_MODEL }} # news gathering; default claude-haiku-4-5
       AI_REVIEW_MODEL: ${{ vars.AI_REVIEW_MODEL }} # opt-in: the weekly review, once its market has 150 graded ideas (README)

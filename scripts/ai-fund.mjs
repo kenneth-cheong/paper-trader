@@ -25,6 +25,7 @@
 //   OHLCV_FILE              the two years of daily prices for the factor lab (default data/ohlcv.json)
 //   ANTHROPIC_API_KEY, AI_MODEL (decisions, default Sonnet; a fund can choose its own), AI_NEWS_MODEL (news, default Haiku)
 //   DEEPSEEK_API_KEY        for a fund whose model is DeepSeek (its decisions only; its news still comes from Claude)
+//   NEWS_DIGEST_MODEL       opt-in: deepseek-flash makes a digest this step gathers DeepSeek's, from the feeds' headlines
 //   AI_REVIEW_MODEL         opt-in: the weekly review's model once the fund's market has 150 graded ideas (else the news model)
 //   AI_MONTHLY_CAP_USD      skip AI decisions once the month's scheduled AI spend reaches this (ai-spend.json)
 //   NEWS_LEADS=off          a digest a fund gathers itself gets no news feed headlines as leads (on otherwise)
@@ -93,7 +94,7 @@
 import { readFileSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { decideFund, reviewPlaybook, readCalls, askSpec, analyze, strategistJobContext, TIERS } from '../ai.js';
+import { decideFund, reviewPlaybook, readCalls, askSpec, analyze, strategistJobContext, digestFrom, TIERS } from '../ai.js';
 import {
   decisionDue, executeDecision, setProtections, checkProtections, recordValue, stopFund,
   approveProposals, rejectProposals, expireProposals, applyBrokerFills, pauseFund, resumeFund, checkDailyLoss, syncGuards, DECLINE_REASONS,
@@ -437,7 +438,7 @@ for (const fund of c.funds) {
             cards: cardsFor(market), notes: c.stockNotes ?? null, dossiers, articles: news ? null : await leadArticles(),
             model: modelOf(fund), newsModel: env.AI_NEWS_MODEL || TIERS.simple,
             cacheShared: (deciding[`${fund.currency}|${modelOf(fund)}`] ?? 0) >= 2,
-            deepseek: { apiKey: env.DEEPSEEK_API_KEY },
+            deepseek: { apiKey: env.DEEPSEEK_API_KEY }, digest: digestFrom(env),
           });
           if (d.news) {
             newsFor[fund.currency] = d.news;
