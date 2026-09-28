@@ -71,10 +71,13 @@ export function applyCorporateActions(portfolio, quotes = {}, now = new Date()) 
       if (held && pos) {
         // The shares held at the split are multiplied; the position's total cost stays the same.
         const extra = Math.round(held * e.ratio) - held;
-        const cost = pos.avgCost * pos.qty;
+        const cost = pos.avgCost * pos.qty, paid = pos.entry > 0 ? pos.entry * pos.qty : null;
         pos.qty += extra;
         if (pos.qty === 0) delete p.positions[e.symbol];
-        else pos.avgCost = cost / pos.qty;
+        else {
+          pos.avgCost = cost / pos.qty;
+          if (paid != null) pos.entry = paid / pos.qty;
+        }
         record.newQty = pos.qty;
       }
     } else {

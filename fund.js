@@ -31,7 +31,7 @@
 // logged with the stock's typical daily move at the time (fund.protectionLog), for the page's stops
 // and risk. Both are records only: neither changes a limit or a stop.
 
-import { newPortfolio, applyTrade, summarize } from './portfolio.js';
+import { newPortfolio, applyTrade, summarize, entryOf } from './portfolio.js';
 import { pricePoints } from './rules.js';
 import { MARKETS, marketForCurrency, minutesSinceOpen, sessionMinutes, tradingStatus } from './markets.js';
 import { planFor } from './fees.js';
@@ -143,7 +143,7 @@ export function limitPrice(side, price, market) {
   return Math.round(steps * tick * 1e6) / 1e6;
 }
 
-// A stop price `pct`% from `avgCost` on the price grid: below it for a sell stop (a long), above it
+// A stop price `pct`% from the price paid (`avgCost`, entryOf) on the price grid: below it for a sell stop (a long), above it
 // for a buy stop (a short), rounded away from the price.
 export function stopPriceFor(side, avgCost, pct, market) {
   const raw = side === 'sell' ? avgCost * (1 - pct / 100) : avgCost * (1 + pct / 100);
@@ -452,14 +452,14 @@ export function setProtections(fund, protections = [], { now = new Date(), daily
 // only known when the next sync notices it, after that run's prices were fetched). When the position
 // closes, the track is copied onto the exit (the protection event, the AI's sell or cover, the Tiger
 // fill) as `track` { openedAt, worst, best } and dropped.
-const moveOf = (pos, price) => ((price - pos.avgCost) / pos.avgCost) * Math.sign(pos.qty);
+const moveOf = (pos, price) => ((price - entryOf(pos)) / entryOf(pos)) * Math.sign(pos.qty);
 const r4 = (x) => Math.round(x * 1e4) / 1e4;
 function seeTrack(fund, symbol, pos, price, time) {
-  if (!pos?.qty || !(pos.avgCost > 0) || !(price > 0)) return;
+  if (!pos?.qty || !(entryOf(pos) > 0) || !(price > 0)) return;
   const m = moveOf(pos, price);
   const tracks = (fund.tracks ??= {});
   const tr = (tracks[symbol] ??= { openedAt: time ?? null, late: true, entry: null, worst: m, best: m });
-  tr.entry = Number(pos.avgCost.toPrecision(7));
+  tr.entry = Number(entryOf(pos).toPrecision(7));
   tr.worst = r4(Math.min(tr.worst ?? m, m));
   tr.best = r4(Math.max(tr.best ?? m, m));
 }
@@ -520,7 +520,7 @@ export function checkProtections(fund, quotes, now = new Date()) {
     const pos = fund.portfolio.positions[symbol];
     if (pos) seeTrack(fund, symbol, pos, price, new Date(t * 1000).toISOString());
     if (!pos || (broker && hasOpenClose(fund, symbol))) continue;
-    const move = (price - pos.avgCost) / pos.avgCost * Math.sign(pos.qty); // + is profit
+    const move = moveOf(pos, price); // + is profit, from the price paid (not counting fees)
     const prot = fund.protections[symbol] ?? {};
     const guarded = broker && guardAtTiger(fund, symbol); // Tiger's stop order handles the losses
     let why = null;
@@ -576,7 +576,7 @@ export function syncGuards(fund, quotes = {}, now = new Date()) {
       if (pos.qty < 0) pct = Math.min(pct || Infinity, SHORT_MAX_LOSS * 100);
       if (pct > 0 && !closingNow) {
         const market = quotes[symbol]?.market ?? marketForCurrency(fund.currency);
-        want = { side, action: pos.qty > 0 ? 'sell' : 'cover', qty: Math.abs(pos.qty), stopPrice: stopPriceFor(side, pos.avgCost, pct, market), pct, market };
+        want = { side, action: pos.qty > 0 ? 'sell' : 'cover', qty: Math.abs(pos.qty), stopPrice: stopPriceFor(side, entryOf(pos), pct, market), pct, market };
       }
     }
     const keep = want && live.find((o) => o.side === want.side && o.qty === want.qty && o.stopPrice === want.stopPrice && o.status !== 'partial');

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { newPortfolio, applyTrade, summarize, validatePortfolio, buyingPower } from '../portfolio.js';
+import { newPortfolio, applyTrade, summarize, validatePortfolio, buyingPower, entryOf } from '../portfolio.js';
 import { toQuote } from '../scripts/fetch-prices.mjs';
 
 const buy = (p, symbol, qty, price, currency = 'USD') => applyTrade(p, { symbol, side: 'buy', qty, price, currency });
@@ -11,7 +11,7 @@ test('buying moves cash into a position at average cost', () => {
   p = buy(p, 'AAPL', 10, 100);
   p = buy(p, 'AAPL', 10, 200);
   assert.equal(p.accounts.USD.cash, 7000);
-  assert.deepEqual(p.positions.AAPL, { qty: 20, avgCost: 150, currency: 'USD' });
+  assert.deepEqual(p.positions.AAPL, { qty: 20, avgCost: 150, entry: 150, currency: 'USD' });
 });
 
 test('selling realizes profit against average cost and closes the position', () => {
@@ -103,7 +103,7 @@ test('daily bars keep the day\'s volume as a third value, which [t, close] reade
 test('selling more than you hold opens a short that profits when the price falls', () => {
   let p = newPortfolio({ USD: 10000 });
   p = sell(p, 'TSLA', 10, 200);
-  assert.deepEqual(p.positions.TSLA, { qty: -10, avgCost: 200, currency: 'USD' });
+  assert.deepEqual(p.positions.TSLA, { qty: -10, avgCost: 200, entry: 200, currency: 'USD' });
   assert.equal(p.accounts.USD.cash, 12000);
   assert.equal(buyingPower(p, 'USD'), 12000 - 3000);
   let s = summarize(p, { TSLA: { price: 150 } });
@@ -120,7 +120,7 @@ test('a sale bigger than a long position flips it to short at the sale price', (
   let p = buy(newPortfolio({ USD: 10000 }), 'A', 10, 100);
   p = sell(p, 'A', 15, 120);
   assert.equal(p.accounts.USD.realized, 200);
-  assert.deepEqual(p.positions.A, { qty: -5, avgCost: 120, currency: 'USD' });
+  assert.deepEqual(p.positions.A, { qty: -5, avgCost: 120, entry: 120, currency: 'USD' });
 });
 
 test('shorting needs 150% collateral, and short collateral cannot be spent on buys', () => {
@@ -133,3 +133,18 @@ test('shorting needs 150% collateral, and short collateral cannot be spent on bu
   assert.equal(p.accounts.USD.cash, 400);
 });
 
+
+test('a position keeps the average price paid without fees (for its stops) beside its cost with fees', () => {
+  let p = newPortfolio();
+  p = applyTrade(p, { symbol: 'A', side: 'buy', qty: 10, price: 100, currency: 'USD', fee: 10 });
+  p = applyTrade(p, { symbol: 'A', side: 'buy', qty: 10, price: 110, currency: 'USD', fee: 10 });
+  assert.equal(p.positions.A.entry, 105);
+  assert.equal(p.positions.A.avgCost, 106);
+  p = applyTrade(p, { symbol: 'A', side: 'sell', qty: 5, price: 120, currency: 'USD', fee: 1 });
+  assert.equal(p.positions.A.entry, 105); // a partial sale leaves it
+  p = applyTrade(p, { symbol: 'A', side: 'sell', qty: 25, price: 90, currency: 'USD', fee: 1 });
+  assert.equal(p.positions.A.qty, -10);
+  assert.equal(p.positions.A.entry, 90); // flipped short at the sale price
+  // a position from before the price paid was kept falls back to its cost
+  assert.equal(entryOf({ qty: 5, avgCost: 42 }), 42);
+});

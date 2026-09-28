@@ -435,9 +435,10 @@ export function positionRisk(positions, equity, dossiers = {}, protections = {},
     const weight = equity > 0 ? Math.abs(p.marketValue) / equity : null;
     const stop = Number(protections?.[p.symbol]?.stop_loss_pct) || null;
     const side = p.short || p.qty < 0 ? 'short' : 'long';
-    // the stop-loss is a loss from the average price (fund.js checkProtections), so where it sits
-    // against today's price depends on the profit or loss so far
-    const level = stop && p.avgCost > 0 ? p.avgCost * (side === 'long' ? 1 - stop / 100 : 1 + stop / 100) : null;
+    // the stop-loss is a loss from the average price paid (fund.js checkProtections, not counting fees),
+    // so where it sits against today's price depends on the profit or loss so far
+    const paid = p.entry > 0 ? p.entry : p.avgCost;
+    const level = stop && paid > 0 ? paid * (side === 'long' ? 1 - stop / 100 : 1 + stop / 100) : null;
     const stopDistance = level != null && p.price > 0 ? (side === 'long' ? p.price - level : level - p.price) / p.price : null;
     return {
       symbol: p.symbol, side, value: Math.abs(p.marketValue), weight, move, risk: move != null && weight != null ? weight * move : null,

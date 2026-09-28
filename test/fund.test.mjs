@@ -134,3 +134,36 @@ test('stopping closes everything; recordValue tracks the fund value', () => {
   assert.equal(f.portfolio.accounts.USD.cash, 1100);
   assert.equal(f.decisions.at(-1).orders[0].status, 'filled');
 });
+
+test('a small order\'s minimum fee doesn\'t set off its stop-loss: stops count from the price paid', () => {
+  // SGD 100, as the owner's first SGX fund: SGD 25 orders pay the S$1.99 minimum plus GST (about 8.7%)
+  const sgx = (price, extra = {}) => ({ currency: 'SGD', market: 'SGX', price, daily: [], intraday: [], ...extra });
+  const f = newFund({ budget: 100, currency: 'SGD', now: at('01:00') });
+  const [r] = applyOrders(f, [{ symbol: 'C38U.SI', action: 'buy', shares: 10, reason: '' }], { 'C38U.SI': sgx(2.5) }, at('01:30'));
+  assert.equal(r.status, 'filled');
+  const pos = f.portfolio.positions['C38U.SI'];
+  assert.ok(pos.avgCost > 2.7, 'the cost, for profit and loss, includes the fee');
+  assert.equal(pos.entry, 2.5);
+  setProtections(f, [{ symbol: 'C38U.SI', stop_loss_pct: 5, take_profit_pct: 8 }]);
+  const t = (hhmm) => at(hhmm).getTime() / 1000;
+  // unchanged and 2% down: nothing (before the fix, the fee alone put it 8% "down" and it sold at once)
+  assert.deepEqual(checkProtections(f, { 'C38U.SI': sgx(2.45, { intraday: [[t('01:45'), 2.5], [t('02:00'), 2.45]] }) }), []);
+  assert.equal(f.portfolio.positions['C38U.SI'].qty, 10);
+  assert.equal(f.tracks['C38U.SI'].entry, 2.5);
+  assert.equal(f.tracks['C38U.SI'].worst, -0.02);
+  // 5.2% under the price paid: the stop fires
+  const events = checkProtections(f, { 'C38U.SI': sgx(2.37, { intraday: [[t('02:15'), 2.37]] }) });
+  assert.deepEqual(events.map((e) => e.why), ['stop-loss at -5%']);
+  assert.deepEqual(f.portfolio.positions, {});
+});
+
+test('a short\'s stop also counts from the price it was sold at, not after the fee', () => {
+  const sgx = (price, extra = {}) => ({ currency: 'SGD', market: 'SGX', price, daily: [], intraday: [], ...extra });
+  const f = newFund({ budget: 100, currency: 'SGD', now: at('01:00') });
+  applyOrders(f, [{ symbol: 'C38U.SI', action: 'short', shares: 10, reason: '' }], { 'C38U.SI': sgx(2.5) }, at('01:30'));
+  assert.equal(f.portfolio.positions['C38U.SI'].entry, 2.5);
+  setProtections(f, [{ symbol: 'C38U.SI', stop_loss_pct: 5, take_profit_pct: 0 }]);
+  const t = (hhmm) => at(hhmm).getTime() / 1000;
+  assert.deepEqual(checkProtections(f, { 'C38U.SI': sgx(2.55, { intraday: [[t('01:45'), 2.5], [t('02:00'), 2.55]] }) }), []);
+  assert.deepEqual(checkProtections(f, { 'C38U.SI': sgx(2.63, { intraday: [[t('02:15'), 2.63]] }) }).map((e) => e.why), ['stop-loss at -5%']);
+});

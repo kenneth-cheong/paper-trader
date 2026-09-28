@@ -41,6 +41,12 @@ export function buyingPower(portfolio, currency) {
 }
 
 // Returns a new portfolio with the trade applied, or throws an Error whose message is shown to the user.
+// The average price paid for a position's shares (for a short, received), without fees: what its
+// stop-loss and take-profit are measured from. avgCost includes the fees, for profit and loss; on a small
+// order a broker's minimum fee is several percent, so a stop measured from avgCost would fire at once.
+// Positions from before `entry` was kept fall back to avgCost.
+export const entryOf = (pos) => (pos?.entry > 0 ? pos.entry : pos?.avgCost ?? 0);
+
 export function applyTrade(portfolio, { symbol, side, qty, price, currency, market, fee, time = new Date().toISOString() }) {
   const p = structuredClone(portfolio);
   qty = Number(qty);
@@ -67,6 +73,9 @@ export function applyTrade(portfolio, { symbol, side, qty, price, currency, mark
   if (q1 === 0) pos.avgCost = 0;
   else if (opening > 0 && closing > 0) pos.avgCost = net; // flipped from long to short or back
   else if (opening > 0) pos.avgCost = (Math.abs(q0) * pos.avgCost + opening * net) / Math.abs(q1);
+  if (q1 === 0) delete pos.entry;
+  else if (opening > 0 && closing > 0) pos.entry = price;
+  else if (opening > 0) pos.entry = (Math.abs(q0) * entryOf(pos) + opening * price) / Math.abs(q1);
   pos.qty = q1;
 
   const value = money(qty * price);
@@ -157,7 +166,7 @@ export function summarize(portfolio, quotes = {}) {
     acct.unrealized += unrealized;
     if (pos.qty < 0) acct.hasShorts = true;
     return {
-      symbol, currency: pos.currency, qty: pos.qty, short: pos.qty < 0, avgCost: pos.avgCost, price,
+      symbol, currency: pos.currency, qty: pos.qty, short: pos.qty < 0, avgCost: pos.avgCost, entry: entryOf(pos), price,
       marketValue, costBasis, unrealized,
       unrealizedPct: costBasis ? unrealized / Math.abs(costBasis) : 0,
       unpriced: !(quote?.price > 0),

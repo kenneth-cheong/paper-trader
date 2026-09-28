@@ -388,8 +388,8 @@ test('with Tiger, the fill that closes a position carries its track; a split doe
   applyBrokerFills(f, at('15:00'));
   assert.equal(f.tracks.A.openedAt, at('15:00').toISOString());
   checkProtections(f, { A: q(92, { intraday: [[t('15:15'), 92], [t('15:30'), 108]] }) });
-  // a 2-for-1 split halves the average cost and the prices: the same moves
-  f.portfolio.positions.A = { ...f.portfolio.positions.A, qty: 20, avgCost: 50 };
+  // a 2-for-1 split halves the average cost, the price paid and the prices (actions.js): the same moves
+  f.portfolio.positions.A = { ...f.portfolio.positions.A, qty: 20, avgCost: 50, entry: 50 };
   checkProtections(f, { A: q(53, { intraday: [[t('15:45'), 53]] }) });
   assert.deepEqual([f.tracks.A.worst, f.tracks.A.best], [-0.08, 0.08]);
   f.brokerOrders.push({ id: 'b2', source: 'decision', symbol: 'A', action: 'sell', side: 'sell', qty: 20, filledQty: 20, appliedQty: 0, avgFillPrice: 52, fee: 0, status: 'filled', market: 'US' });
