@@ -2859,6 +2859,9 @@ function fundHead(x, c, tabs, tab) {
 // ----- AI fund: one fund's tabs -----
 
 // What a fund with no decisions says instead (a stopped fund won't make its first).
+// What of a DeepSeek answer had to be fixed to fit the decision's format (ai.js repairAnswer): values read
+// as the right kind or an unknown category taken as 'other', and items left out because they couldn't be.
+const repairedNote = (r) => (r && (r.fixed || r.dropped) ? ` <span class="muted small">· answer tidied: ${[r.fixed ? `${plural(r.fixed, 'value')} fixed` : '', r.dropped ? `${plural(r.dropped, 'item')} left out` : ''].filter(Boolean).join(', ')}</span>` : '');
 const noDecisions = (f) => `<p class="muted">${f.stoppedAt ? 'It made no decisions before it was stopped.' : 'No decisions yet. The first one happens 15 minutes after the market opens.'}</p>`;
 
 // One decision: what the AI thought, its orders (or none) and, in the full list, what else it considered
@@ -2874,7 +2877,7 @@ function decisionOrders(d, f, known) {
 function decisionItem(d, f, known) {
   if (d.skipped) return `<p class="muted small decision-skip">${fmtDateTime(d.time)}: ${esc(d.outlook)}</p>`;
   return `<article class="decision">
-    <header><strong>${fmtDateTime(d.time)}</strong>${d.usage ? ` <span class="muted small">${esc(madeBy(d))} · about US$${d.usage.costUsd.toFixed(2)}</span>` : ''}${d.learned ? ' <span class="chip">used its lessons</span>' : ''}</header>
+    <header><strong>${fmtDateTime(d.time)}</strong>${d.usage ? ` <span class="muted small">${esc(madeBy(d))} · about US$${d.usage.costUsd.toFixed(2)}</span>` : ''}${d.learned ? ' <span class="chip">used its lessons</span>' : ''}${repairedNote(d.repaired)}</header>
     <p>${esc(d.outlook)}</p>
     ${decisionOrders(d, f, known)}
     ${d.considered?.length ? `<p class="small muted">Also considered: ${d.considered.map((c, i, a) => `${esc(c.stance)} ${esc(c.symbol)} (${esc(c.why_not)})${i < a.length - 1 ? ';' : '.'}${citedChips(c.lessonsApplied, known)}`).join(' ')}</p>` : ''}

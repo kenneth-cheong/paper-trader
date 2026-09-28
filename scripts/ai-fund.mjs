@@ -456,6 +456,7 @@ for (const fund of c.funds) {
           fund.decisions.push({
             time: now.toISOString(), outlook: d.outlook, orders, considered, protections: d.protections,
             source_urls: d.source_urls, model: d.model, newsModel: d.newsModel, usage: d.usage, learned: Boolean(playbook),
+            ...(d.repaired ? { repaired: d.repaired } : {}), // what of a DeepSeek answer had to be fixed (ai.js repairAnswer)
             snapshot: decisionSnapshot(fund, quotes, marks),
           });
           // the wording of the lessons it cited, for the page once they've gone

@@ -62,9 +62,14 @@ test('askDeepSeek: one reminder when it answers without the tool; errors say why
   assert.equal(res.usage.input, 11000);
   // never calling it: refused, with the cost of both answers
   await assert.rejects(askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(noCall, noCall) }), (e) => /did not return an answer/.test(e.message) && e.usage.costUsd > 0);
-  // wrong types or values: refused, naming what
-  await assert.rejects(askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(answer({ a: '1', items: [{ k: 'x', side: 'hold' }] })) }),
-    (e) => /answer\.a isn't a number; answer\.items\[0\]\.side isn't one of buy, sell/.test(e.message) && e.usage.costUsd > 0);
+  // small slips are repaired rather than costing the answer: a number sent as text is read as one, and
+  // an item that can't be fixed (an unknown side, where the list has no 'other') is left out on its own
+  const tidied = await askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(answer({ a: '1', items: [{ k: 'x', side: 'hold' }, { k: 'y', side: 'sell' }] })) });
+  assert.deepEqual(tidied.input, { a: 1, items: [{ k: 'y', side: 'sell' }] });
+  assert.deepEqual(tidied.repaired, { fixed: 1, dropped: 1 });
+  // a top-level field that can't be fixed still refuses it, with what was billed
+  await assert.rejects(askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(answer({ a: 'lots', items: [] })) }),
+    (e) => /answer\.a doesn't fit/.test(e.message) && e.usage.costUsd > 0);
   await assert.rejects(askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(answer('{not json')) }), /not in the expected format/);
   await assert.rejects(askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(answer({ items: [] })) }), /answer\.a is missing/);
   await assert.rejects(askDeepSeek({ apiKey: 'k', system: 's', content: 'c', tool, fetchImpl: fakeFetch(answer({ a: 1, items: [] }, undefined, 'length')) }), /cut off/);
@@ -169,4 +174,22 @@ test('the DeepSeek digest reads the feeds\' headlines, cites only their links, a
   // no digest asked for: Claude, whatever the articles
   const plain = claudeDigest();
   assert.equal((await gatherNews({ client: plain, quotes: prices.quotes, now, articles })).via, 'search');
+});
+
+
+test('the slip that cost a real decision: an idea of an unknown kind is kept as "other", a broken order is left out', async () => {
+  const { repairAnswer } = await import('../ai.js');
+  const top = { outlook: 'Hold.', orders: [], considered: [], protections: [], source_urls: [] };
+  // what DeepSeek sent on 2026-09-28: an idea_type outside the list
+  const r = repairAnswer(FUND_TOOL.input_schema, { ...top, considered: [{ symbol: 'D05.SI', stance: 'long', idea_type: 'dividend', why_not: 'Waiting.' }] });
+  assert.deepEqual(r.errors, []);
+  assert.equal(r.value.considered[0].idea_type, 'other');
+  assert.deepEqual([r.fixed, r.dropped], [1, 0]);
+  // an order with an unknown action, or shares that aren't whole, is left out; the good one stays
+  const o = repairAnswer(FUND_TOOL.input_schema, { ...top, orders: [{ symbol: 'AAPL', action: 'hodl', shares: 3 }, { symbol: 'MSFT', action: 'buy', shares: 2.5 }, { symbol: 'NVDA', action: 'buy', shares: '4' }] });
+  assert.deepEqual(o.value.orders, [{ symbol: 'NVDA', action: 'buy', shares: 4 }]);
+  assert.deepEqual([o.fixed, o.dropped], [1, 2]);
+  // the decision itself missing: refused
+  assert.deepEqual(repairAnswer(FUND_TOOL.input_schema, { orders: [] }).errors.slice(0, 1), ['answer.outlook is missing']);
+  assert.deepEqual(repairAnswer(FUND_TOOL.input_schema, 'hold').errors, ["the answer isn't an object"]);
 });

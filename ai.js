@@ -174,6 +174,71 @@ export function schemaErrors(schema, value, path = 'answer', { lenient = false, 
   }
 }
 
+// DeepSeek's answer made to fit a tool's schema where the fix is certain, so one slip doesn't cost the whole
+// decision: an unknown enum value becomes 'other' (or 'any') when the list has it, a number or true/false
+// sent as text is read as one, a number where text is wanted becomes text. An item of a list that still
+// doesn't fit (an order with an unknown action, shares that aren't a whole number) is dropped on its own;
+// only a top-level field that is missing or can't be fixed refuses the answer. Missing inner fields are
+// tolerated, as for decisions from before them. Returns { value, errors, fixed, dropped }.
+const BAD = Symbol('does not fit');
+export function repairAnswer(schema, input) {
+  const count = { fixed: 0, dropped: 0 };
+  const errors = [];
+  const fit = (s, v, path) => {
+    if (s.enum && !s.enum.includes(v)) {
+      const to = ['other', 'any'].find((x) => s.enum.includes(x));
+      if (to === undefined) return BAD;
+      count.fixed++;
+      return to;
+    }
+    switch (s.type) {
+      case 'object': {
+        if (!v || typeof v !== 'object' || Array.isArray(v)) return BAD;
+        const out = {};
+        for (const [k, x] of Object.entries(v)) {
+          if (!s.properties?.[k]) continue; // extra fields are left out
+          const y = fit(s.properties[k], x, `${path}.${k}`);
+          if (y === BAD) {
+            if (path === 'answer') errors.push(`${path}.${k} doesn't fit`);
+            return BAD;
+          }
+          out[k] = y;
+        }
+        if (path === 'answer') for (const k of s.required ?? []) if (!(k in out)) errors.push(`${path}.${k} is missing`);
+        return out;
+      }
+      case 'array': {
+        if (!Array.isArray(v)) return BAD;
+        const out = [];
+        for (const [i, x] of v.entries()) {
+          const y = s.items ? fit(s.items, x, `${path}[${i}]`) : x;
+          if (y === BAD) count.dropped++;
+          else out.push(y);
+        }
+        return out;
+      }
+      case 'string':
+        if (typeof v === 'string') return v;
+        if (typeof v === 'number' || typeof v === 'boolean') { count.fixed++; return String(v); }
+        return BAD;
+      case 'number': case 'integer': {
+        const n = typeof v === 'string' && v.trim() !== '' ? Number(v) : v;
+        if (typeof n !== 'number' || !Number.isFinite(n) || (s.type === 'integer' && !Number.isInteger(n))) return BAD;
+        if (n !== v) count.fixed++;
+        return n;
+      }
+      case 'boolean':
+        if (typeof v === 'boolean') return v;
+        if (v === 'true' || v === 'false') { count.fixed++; return v === 'true'; }
+        return BAD;
+      default: return v;
+    }
+  };
+  const value = fit(schema, input, 'answer');
+  if (value === BAD && !errors.length) errors.push("the answer isn't an object");
+  return { value: value === BAD ? null : value, errors, ...count };
+}
+
 // One answer from DeepSeek through `tool`, the same contract as askClaude (no web search): { input, sources:
 // [], model, usage }. The tool is forced; an answer without it gets one reminder. Errors carry what was billed.
 export const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
@@ -222,9 +287,9 @@ export async function askDeepSeek({ apiKey, model = 'deepseek-flash', system, co
     if (call) {
       let input;
       try { input = JSON.parse(call.function.arguments); } catch { throw billed(new AIError('DeepSeek\'s answer was not in the expected format.')); }
-      const errs = schemaErrors(tool.input_schema, input, 'answer', { lenient: true });
-      if (errs.length) throw billed(new AIError(`DeepSeek's answer was not in the expected format (${errs.slice(0, 3).join('; ')}).`));
-      return { input, sources: [], model, usage: { ...usage, costUsd: costOf(usage, spec) } };
+      const fitted = repairAnswer(tool.input_schema, input);
+      if (fitted.errors.length) throw billed(new AIError(`DeepSeek's answer was not in the expected format (${fitted.errors.slice(0, 3).join('; ')}).`));
+      return { input: fitted.value, repaired: { fixed: fitted.fixed, dropped: fitted.dropped }, sources: [], model, usage: { ...usage, costUsd: costOf(usage, spec) } };
     }
     messages.push({ role: 'assistant', content: choice?.message?.content ?? '' });
     messages.push({ role: 'user', content: `Please call ${tool.name} with your answer now.` });
@@ -916,6 +981,7 @@ export async function decideFund({ client, Anthropic, model = TIERS.advanced, ne
   }
   return {
     ...res.input, source_urls: knownUrls(res.input.source_urls, newsUrls(news)),
+    ...(res.repaired?.fixed || res.repaired?.dropped ? { repaired: res.repaired } : {}),
     model: res.model, newsModel: news.model, usage: addUsage(fresh ? news.usage : null, res.usage), news: fresh ? news : undefined,
   };
 }
