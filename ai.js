@@ -345,6 +345,29 @@ export function buildContext({ prices, portfolio, focus = 'all', risk = 'balance
   };
 }
 
+// The strategist run by the scheduled job for an admin with no key in the browser: the app sends what only
+// it knows (its buildContext without the stock list: the owner's fees, accounts, holdings, rules and
+// trades), and the job adds the stocks from its own fresh prices. Only those keys are kept.
+export const STRATEGIST_SENT = ['trading_fees', 'accounts', 'holdings', 'active_rules', 'trading_record'];
+export const strategistRequest = ({ context, focus = 'all', risk = 'balanced', question = '' }) => ({
+  focus, risk, question: String(question ?? '').trim().slice(0, 300),
+  context: Object.fromEntries(STRATEGIST_SENT.filter((k) => context?.[k] !== undefined).map((k) => [k, context[k]])),
+});
+export function strategistJobContext({ sent = {}, prices, now = new Date() }) {
+  const quotes = prices?.quotes ?? {};
+  const focus = quotes[sent.focus] ? sent.focus : 'all';
+  const own = sent.context && typeof sent.context === 'object' ? sent.context : {};
+  return {
+    now: now.toISOString(),
+    prices_as_of: prices?.updatedAt ?? null,
+    sample_data: !!prices?.sample,
+    risk_profile: RISK[sent.risk] ?? RISK.balanced,
+    question: String(sent.question ?? '').trim().slice(0, 300) || null,
+    ...Object.fromEntries(STRATEGIST_SENT.filter((k) => own[k] !== undefined).map((k) => [k, own[k]])),
+    stocks: stockList(quotes, focus === 'all' ? Object.keys(quotes) : [focus], true),
+  };
+}
+
 const conditionHelp = Object.entries(CONDITIONS).map(([k, c]) => `- ${k}: ${c.label} <value> (${c.unit})`).join('\n');
 const unitHelp = Object.entries(UNITS).map(([side, u]) => `- ${side}: ${Object.entries(u).map(([k, v]) => `${k} (${v})`).join(', ')}`).join('\n');
 
@@ -437,6 +460,7 @@ export function parseStrategies(json, quotes, sources = []) {
 
 export async function analyze({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, context, quotes, news }) {
   const symbols = context.stocks.map((s) => s.symbol);
+  const given = Boolean(news); // a digest the caller already paid for (the job's): its cost isn't counted again
   news ??= await gatherNews({ client, Anthropic, model: newsModel, quotes, symbols, maxSearches: 4 });
   const res = await askClaude({
     client, Anthropic, model,
@@ -447,7 +471,7 @@ export async function analyze({ client, Anthropic, model = TIERS.advanced, newsM
   });
   return {
     ...parseStrategies(res.input, quotes, newsUrls(news)), sources: news.sources,
-    model: res.model, newsModel: news.model, usage: addUsage(news.usage, res.usage), createdAt: new Date().toISOString(),
+    model: res.model, newsModel: news.model, usage: given ? res.usage : addUsage(news.usage, res.usage), createdAt: new Date().toISOString(),
   };
 }
 

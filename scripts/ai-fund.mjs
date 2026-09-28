@@ -17,9 +17,10 @@
 //                           { restore } | { keep } } (the owner's lessons, learning.js editPlaybook) or, with fund
 //                           "all", { stockNote: { symbol, text } } (the owner's note on a stock, shared by every
 //                           fund, dossier.js setStockNote; empty text clears it), { reading: { url?, text? } }
-//                           (an article the owner logged, below) or { ask: text } (the owner's question, Ask the
-//                           data, below). The app sends the last four, and a reject with a reason, as 'settings',
-//                           which reach here whole.
+//                           (an article the owner logged, below), { ask: text } (the owner's question, Ask the
+//                           data, below) or { strategist: { focus, risk, question, context } } (the AI strategist
+//                           for an admin with no key in the browser, below). The app sends the last five, and a
+//                           reject with a reason, as 'settings', which reach here whole.
 //   READING_PAGE_DIR        where scripts/page_fetch.py downloaded a logged article's page (default raw-page)
 //   OHLCV_FILE              the two years of daily prices for the factor lab (default data/ohlcv.json)
 //   ANTHROPIC_API_KEY, AI_MODEL (decisions, default Sonnet; a fund can choose its own), AI_NEWS_MODEL (news, default Haiku)
@@ -53,6 +54,12 @@
 // 30) to be answered: one on the funds' own ideas at the end of this step, one on the ten years of prices
 // by scripts/build-history.mjs answer, in a later step of this job (within a day). The question's words
 // are never printed, the app's message only says how it went, and no AI prompt of the funds sees them.
+// The AI strategist, for an admin with no Anthropic key in the browser: the app sends its own part of the
+// strategist's data (ai.js strategistRequest: the owner's fees, accounts, holdings, rules and last trades),
+// this step adds the stocks from this run's prices and the picks job's news digest when it's fresh, and
+// runs the same analysis as the browser (ai.js analyze), counted as 'strategist' in the spend ledger. The
+// answer is kept with the funds (c.strategist, the latest one only), so the page shows it only from their
+// private copy; the owner's trades and question are never printed.
 // Every order and idea carries the AI's thesis (thesis.js); after all funds have run, the theses are
 // graded for calibration pooled across each market's funds (c.calibration), which the next run's
 // lessons use.
@@ -85,7 +92,7 @@
 import { readFileSync } from 'node:fs';
 import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
-import { decideFund, reviewPlaybook, readCalls, askSpec, TIERS } from '../ai.js';
+import { decideFund, reviewPlaybook, readCalls, askSpec, analyze, strategistJobContext, TIERS } from '../ai.js';
 import {
   decisionDue, executeDecision, setProtections, checkProtections, recordValue, stopFund,
   approveProposals, rejectProposals, expireProposals, applyBrokerFills, pauseFund, resumeFund, checkDailyLoss, syncGuards, DECLINE_REASONS,
@@ -293,6 +300,32 @@ async function askQuestion(raw) {
   }
 }
 if (command.ask !== undefined) await askQuestion(command.ask);
+
+// The AI strategist (see the top of this file). What the browser would have spent goes in the ledger instead.
+const STRATEGIST_MAX_CHARS = 40000;
+async function runStrategist(sent) {
+  if (!sent || typeof sent !== 'object' || Array.isArray(sent)) return note('strategist', 'The strategist request was empty.', false);
+  if (JSON.stringify(sent).length > STRATEGIST_MAX_CHARS) return note('strategist', 'The strategist request was too large.', false);
+  if (!env.ANTHROPIC_API_KEY) return note('strategist', 'ANTHROPIC_API_KEY isn\'t set, so the strategist couldn\'t run.', false);
+  if (capReached(await readJson(spendFile), env.AI_MONTHLY_CAP_USD, now)) return note('strategist', 'This month\'s AI spend has reached the cap, so the strategist can\'t run until next month.', false);
+  if (!Object.keys(quotes).length) return note('strategist', 'There are no prices this run; try again in a few minutes.', false);
+  try {
+    const { default: Anthropic } = await import('@anthropic-ai/sdk');
+    const context = strategistJobContext({ sent, prices, now });
+    const digest = await readJson(newsFile);
+    const news = digest && now - Date.parse(digest.createdAt) < NEWS_MAX_AGE_MS ? digest : undefined;
+    const res = await analyze({ client: new Anthropic(), Anthropic, model: env.AI_MODEL || TIERS.advanced, newsModel: env.AI_NEWS_MODEL || TIERS.simple, context, quotes, news });
+    await writeFile(spendFile, JSON.stringify(addSpend(await readJson(spendFile), 'strategist', res.usage?.costUsd, now)));
+    c.strategist = { ...res, sources: (res.sources ?? []).slice(0, 30), focus: context.stocks.length === 1 ? context.stocks[0].symbol : 'all', risk: sent.risk ?? 'balanced', question: context.question };
+    note('strategist', `The strategist answered with ${res.strategies.length === 1 ? 'one strategy' : `${res.strategies.length} strategies`}: see the AI strategist tab.`, true);
+  } catch (err) {
+    // what the API billed before it failed still counts (ai.js askClaude)
+    if (err?.usage?.costUsd) await writeFile(spendFile, JSON.stringify(addSpend(await readJson(spendFile), 'strategist', err.usage.costUsd, now)));
+    console.warn(`! AI strategist: it couldn't run this time (${err?.name ?? 'error'}).`);
+    note('strategist', 'The AI strategist couldn\'t answer this time. Try again later.', false);
+  }
+}
+if (command.strategist !== undefined) await runStrategist(command.strategist);
 
 // ---------- what every fund learns from ----------
 

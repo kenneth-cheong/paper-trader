@@ -8,7 +8,7 @@ import { valueHistory, indexHistory, realizedHistory } from './history.js';
 import { MIN_CASES as MEMORY_MIN_CASES, MOVE_NEWS } from './memory.js';
 import { regimeNow, regimeWords, yearLessons, studyNumbers, STUDY_LABELS, STUDY_SHORT, LONG, HOLDOUT_NOISE } from './memory-long.js';
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest, fillPendingOrders } from './rules.js';
-import { MODELS, TIERS, loadClient, analyze, recommend, buildContext } from './ai.js';
+import { MODELS, TIERS, loadClient, analyze, recommend, buildContext, strategistRequest } from './ai.js';
 import { MARKETS, marketForCurrency, marketDate, tradingStatus, STATUS_LABELS } from './markets.js';
 import { resultsCalendar, nextResults } from './calendar.js';
 import { recentRatingChanges, describeChange } from './analysts.js';
@@ -1304,6 +1304,17 @@ function testRuleInEditor() {
 
 // ---------- AI strategist ----------
 
+// With a key in this browser the strategist runs here, straight away. Without one, an admin's request goes
+// to the scheduled job like the fund buttons ({ fund: 'all', strategist }, sent as 'settings'; see
+// scripts/ai-fund.mjs), which runs it with the repository's key and keeps the answer with the funds
+// (c.strategist), so it's shown from their private copy. The page shows the newer of the two answers.
+const STRATEGIST_TEXT = { run: ['Asking the AI strategist', 'The strategist has answered.'] };
+const strategistByJob = () => !state.ai.key && authEnabled && state.user?.isAdmin;
+function shownStrategy() {
+  const mine = state.strategist, job = state.user?.isAdmin ? state.funds?.strategist : null;
+  if (!job?.strategies) return mine ?? null;
+  return !mine || Date.parse(job.createdAt) > Date.parse(mine.createdAt) ? job : mine;
+}
 function renderStrategist() {
   const count = String(Object.keys(state.prices.quotes ?? {}).length);
   if ($('st-focus').dataset.count !== count) {
@@ -1311,9 +1322,20 @@ function renderStrategist() {
     $('st-focus').innerHTML = `<option value="all">Whole watchlist</option>${symbolOptions(keep)}`;
     $('st-focus').dataset.count = count;
   }
-  if (!$('st-run').disabled) $('st-status').innerHTML = state.ai.key ? '' : 'Needs your Anthropic API key. <button type="button" class="ghost small-btn" data-open-settings>Add API key</button>';
-  const a = state.strategist;
+  const cmd = state.fundCmd?.text === STRATEGIST_TEXT.run ? state.fundCmd : null;
+  if (strategistByJob()) {
+    const running = cmd && ['sending', 'sent', 'accepted'].includes(cmd.phase);
+    $('st-run').disabled = running;
+    $('st-status').innerHTML = cmd ? `<span class="${cmd.phase === 'failed' ? 'down' : ''}">${esc(cmd.message)}</span>`
+      : 'Runs on GitHub with the scheduled AI\'s key (no key in this browser): the answer appears here in about 3–5 minutes and counts toward the monthly cap.';
+  } else if (!$('st-run').disabled) $('st-status').innerHTML = state.ai.key ? '' : 'Needs your Anthropic API key. <button type="button" class="ghost small-btn" data-open-settings>Add API key</button>';
+  const a = shownStrategy();
   if (!a) { $('strategist').innerHTML = ''; return; }
+  // the backtests belong to the answer shown: a newer answer starts them afresh
+  if (state.backtestsFor !== a.createdAt) {
+    for (const k of Object.keys(state.backtests)) if (k.startsWith('s')) delete state.backtests[k];
+    state.backtestsFor = a.createdAt;
+  }
   a.strategies.forEach((s, i) => { state.backtests[`s${i}`] ??= s.rules.length ? backtest(s.rules, quote(s.symbol), btOptions()) : null; });
   $('strategist').innerHTML = `
     <div class="analysis">
@@ -1340,6 +1362,14 @@ function renderStrategist() {
 
 async function runStrategist(e) {
   e.preventDefault();
+  if (strategistByJob()) {
+    const context = buildContext({ prices: state.prices, portfolio: state.portfolio, focus: $('st-focus').value, risk: $('st-risk').value, question: $('st-question').value });
+    const strategist = strategistRequest({ context, focus: $('st-focus').value, risk: $('st-risk').value, question: $('st-question').value });
+    $('st-error').textContent = '';
+    submitFundCommand('settings', { payload: { fund: 'all', strategist } }, STRATEGIST_TEXT.run);
+    render();
+    return;
+  }
   if (!state.ai.key) { openSettings(); return; }
   $('st-run').disabled = true;
   $('st-error').textContent = '';
@@ -1362,7 +1392,7 @@ async function runStrategist(e) {
 }
 
 function adoptStrategy(i) {
-  const s = state.strategist.strategies[i];
+  const s = shownStrategy().strategies[i];
   saveRules((rules) => {
     for (const r of s.rules) rules.push({ ...structuredClone(r), id: newRule(r).id, enabled: false, state: freshState() });
   });
@@ -1633,7 +1663,7 @@ async function watchFundCommand(cmd) {
     } catch (err) {
       console.warn('Checking the fund request failed', err);
     }
-    if (currentView() === 'fund' || currentView() === 'home' || $('stock-dialog').open) render();
+    if (['fund', 'home', 'strategist'].includes(currentView()) || $('stock-dialog').open) render();
     if (['done', 'failed'].includes(cmd.phase)) return;
   }
   if (state.fundCmd === cmd && cmd.phase !== 'done') {
@@ -2460,7 +2490,7 @@ const SPEND_SERIES = [
   { key: 'picks', label: 'AI picks', color: SERIES[0] }, { key: 'fund', label: 'AI fund decisions', color: SERIES[1] },
   { key: 'learning', label: 'Weekly reviews', color: SERIES[2] }, { key: 'backfill', label: 'News backfill', color: SERIES[3] },
   { key: 'articles', label: 'Article look-ups', color: SERIES[4] }, { key: 'reading', label: 'Reading guide', color: SERIES[5] },
-  { key: 'ask', label: 'Ask the data', color: SERIES[6] },
+  { key: 'ask', label: 'Ask the data', color: SERIES[6] }, { key: 'strategist', label: 'AI strategist', color: SERIES[7] },
 ];
 function renderSpend() {
   const months = Object.entries(state.spend?.months ?? {}).sort(([a], [b]) => a.localeCompare(b)).slice(-6);
@@ -3084,8 +3114,8 @@ function renderConnections() {
   const picksAt = state.sitePicks?.createdAt;
   const rows = [
     row('Anthropic (AI strategist, "Refresh now" on picks)',
-      status(!!state.ai.key, state.ai.key ? 'Key saved in this browser' : 'No key yet'),
-      `<p class="muted small">${state.ai.key ? 'Change or remove it below.' : '<a href="#api-key-heading" data-focus-key>Add it below</a>.'} Stored only in this browser.
+      status(!!state.ai.key || strategistByJob(), state.ai.key ? 'Key saved in this browser' : strategistByJob() ? 'Strategist runs on GitHub' : 'No key yet'),
+      `<p class="muted small">${strategistByJob() ? 'Without a key here, the AI strategist runs on GitHub with the scheduled key (3–5 minutes); a key here makes it answer straight away and turns on "Refresh now". ' : ''}${state.ai.key ? 'Change or remove it below.' : '<a href="#api-key-heading" data-focus-key>Add it below</a>.'} Stored only in this browser.
         Spent from this browser this month: about US$${monthSpend(state.browserSpend).toFixed(2)}.</p>`),
     row('Anthropic (scheduled AI picks and AI fund)',
       status(!!picksAt, picksAt ? `Working, last picks ${fmtDateTime(picksAt)}` : 'No AI picks yet'),

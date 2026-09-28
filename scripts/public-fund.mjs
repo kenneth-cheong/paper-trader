@@ -21,7 +21,8 @@
 // The articles the owner logged (reading.js, c.reading: links, titles and calls) are left out; only how
 // many there are stays (c.readingLogged), so the page can tell an admin where to see them.
 // The owner's questions (Ask the data, hypotheses.js, c.questions: their words and answers) are left out
-// too; only how many there are stays (c.questionsAsked).
+// too; only how many there are stays (c.questionsAsked). So is the AI strategist's latest answer for an
+// admin (c.strategist), made from the owner's own holdings and trades.
 // Usage: node scripts/public-fund.mjs <ai-fund.json> <output.json>
 
 import { readFile, writeFile } from 'node:fs/promises';
@@ -43,6 +44,7 @@ if (c.reading) {
   c.readingLogged = Array.isArray(c.reading) ? c.reading.length : 0;
   delete c.reading;
 }
+delete c.strategist; // the owner's holdings, trades and question, and the answer to them
 if (c.questions) {
   c.questionsAsked = Array.isArray(c.questions) ? c.questions.length : 0;
   delete c.questions;
