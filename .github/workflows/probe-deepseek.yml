@@ -29,15 +29,22 @@ jobs:
           const bal = await fetch('https://api.deepseek.com/user/balance', { headers: h });
           console.log('balance endpoint', bal.status, 'is_available:', (await bal.json().catch(() => null))?.is_available);
           const tool = { type: 'function', function: { name: 'submit', description: 'Submit the answer.', parameters: { type: 'object', additionalProperties: false, required: ['side', 'n'], properties: { side: { type: 'string', enum: ['buy', 'sell'] }, n: { type: 'integer' } } } } };
-          const ids = [...new Set([...(models?.data ?? []).map((m) => m.id), 'deepseek-flash', 'deepseek-v4-flash', 'deepseek-v4-pro', 'deepseek-chat'])];
-          for (const model of ids) for (const choice of [{ type: 'function', function: { name: 'submit' } }, 'required']) {
+          const cases = [
+            ['deepseek-flash', { thinking: { type: 'disabled' }, tool_choice: { type: 'function', function: { name: 'submit' } } }],
+            ['deepseek-flash', { thinking: { type: 'disabled' }, tool_choice: 'required' }],
+            ['deepseek-flash', { tool_choice: 'auto' }],
+            ['deepseek-flash', {}],
+            ['deepseek-v4-pro', { thinking: { type: 'disabled' }, tool_choice: { type: 'function', function: { name: 'submit' } } }],
+            ['deepseek-v4-pro', { tool_choice: 'auto' }],
+          ];
+          for (const [model, extra] of cases) {
             const r = await fetch('https://api.deepseek.com/chat/completions', { method: 'POST', headers: h, body: JSON.stringify({
-              model, max_tokens: 300, tools: [tool], tool_choice: choice,
+              model, max_tokens: 2000, tools: [tool], ...extra,
               messages: [{ role: 'system', content: 'You are a test. Answer only by calling the tool.' }, { role: 'user', content: 'Choose buy or sell, and a number from 1 to 9.' }],
             }) });
             const j = await r.json().catch(() => null);
             const msg = j?.choices?.[0]?.message;
-            console.log(JSON.stringify({ model, choice: typeof choice === 'string' ? choice : 'named', status: r.status, error: j?.error?.message?.slice(0, 160), served: j?.model, finish: j?.choices?.[0]?.finish_reason, messageKeys: msg ? Object.keys(msg) : null, args: msg?.tool_calls?.[0]?.function?.arguments, usage: j?.usage }));
+            console.log(JSON.stringify({ model, extra: Object.keys(extra).map((k) => `${k}=${JSON.stringify(extra[k])}`).join(' '), status: r.status, error: j?.error?.message?.slice(0, 160), served: j?.model, finish: j?.choices?.[0]?.finish_reason, messageKeys: msg ? Object.keys(msg) : null, reasoningChars: msg?.reasoning_content?.length ?? null, args: msg?.tool_calls?.[0]?.function?.arguments, usage: j?.usage }));
           }
           JS
           node probe.mjs
