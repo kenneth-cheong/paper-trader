@@ -262,7 +262,8 @@ jobs:
       - name: Collect site files
         run: |
           mkdir -p _site/data
-          cp index.html *.js styles.css _site/
+          cp index.html *.js styles.css manifest.webmanifest _site/
+          cp -r icons _site/                                            # the app's icons, for installing it
           cp data/sample-prices.json _site/data/
           cp data/prices.json _site/data/ 2>/dev/null || echo "::warning::No prices this run; the site shows sample prices."
           cp state/picks.json _site/data/ 2>/dev/null || true

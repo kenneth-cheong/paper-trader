@@ -1,0 +1,16 @@
+{
+  "name": "Paper Trader",
+  "short_name": "Paper Trader",
+  "description": "Simulate trading SGX and US stocks with virtual cash, with AI picks, rule-based trading and AI funds.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#171a20",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

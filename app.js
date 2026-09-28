@@ -3792,3 +3792,9 @@ if (authEnabled) {
   state.portfolio = loadPortfolio();
   startApp();
 }
+
+// Installable as an app, and opens offline with the last prices (sw.js). Only on the real site (https):
+// a local copy served over http runs without it.
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  navigator.serviceWorker.register('sw.js').catch((err) => console.warn('The offline copy could not be set up', err));
+}

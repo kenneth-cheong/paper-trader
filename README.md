@@ -89,6 +89,8 @@ The page reloads everything every 5 minutes. Prices can be 20–30 minutes old, 
 
 **A dependable timer:** GitHub starts scheduled workflows late and, at busy times, skips them altogether (a new repository can wait hours for its first scheduled run). Once the AI fund controls are set up (the GitHub token in Supabase Vault, below), run `supabase/schedule.sql` in Supabase's SQL Editor: Supabase then asks GitHub for a run on the same timetable. When both timers fire, the job still runs once.
 
+**Install it as an app:** on a computer, open the site in Chrome or Edge and use the install button in the address bar (or the menu's *Install Paper Trader*); on Android, Chrome's *Add to Home screen* / *Install app*; on an iPhone or iPad, Safari's Share button → *Add to Home Screen*. It then opens in its own window without the browser's bars. `manifest.webmanifest` and the icons in `icons/` make it installable, and `sw.js` fetches everything fresh from the network first (the newest prices and app when online), keeping the last copy only so it still opens offline. An app added to an iPhone's home screen keeps its own storage, so you sign in once more there.
+
 ## Setup
 
 1. Create a **public** GitHub repository, e.g. `paper-trader`, and push this folder to its `main` branch. GitHub Pages is free only for public repos. Your own trades stay in your browser, but AI picks and the AI fund are published on the site.
