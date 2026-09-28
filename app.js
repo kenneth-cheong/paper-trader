@@ -1425,6 +1425,30 @@ const readMandate = (p) => ({
   },
 });
 
+// The fund forms are redrawn whenever a command moves on (sending, running, done), from the fund's saved
+// values. So a change the owner made, or has just saved and is waiting for, isn't wiped: each field
+// remembers the value it was drawn with, and one that differs is carried into the redrawn form (for the
+// same fund only). Once the job has saved the change, the field is drawn with it and nothing differs.
+const FUND_FORMS = '#fund-settings-form, #fund-start-form';
+const fieldValue = (x) => (x.type === 'checkbox' ? String(x.checked) : x.value);
+function unsavedEdits(el, fundId) {
+  const edits = {};
+  for (const x of el.querySelectorAll(`:is(${FUND_FORMS}) :is(input, select, textarea)`)) {
+    if (x.id && x.dataset.drawn !== undefined && x.dataset.fund === String(fundId) && fieldValue(x) !== x.dataset.drawn) edits[x.id] = fieldValue(x);
+  }
+  return edits;
+}
+function keepEdits(el, fundId, edits) {
+  for (const x of el.querySelectorAll(`:is(${FUND_FORMS}) :is(input, select, textarea)`)) {
+    x.dataset.drawn = fieldValue(x);
+    x.dataset.fund = String(fundId);
+    if (!(x.id in edits)) continue;
+    if (x.type === 'checkbox') x.checked = edits[x.id] === 'true'; else x.value = edits[x.id];
+  }
+  const style = $('set-style');
+  if (style && 'set-style' in edits) $('set-style-brief').textContent = STYLES[style.value]?.brief ?? '';
+}
+
 // Start/stop/pause buttons and settings for admins. Rebuilt only when something they show changes,
 // so typing isn't lost when prices refresh.
 let fundControlsKey = null;
@@ -1483,21 +1507,25 @@ function renderFundControls() {
     ${f.stoppedAt ? '' : `<details class="fund-new"><summary>Mandate, approval and limits</summary>
       <form id="fund-settings-form" class="form-grid fund-form">
         ${mandateFields('set', { name: f.name, style: f.style, focus: f.focus, model: s.model, maxOrderPct: s.maxOrderPct ?? 25, dailyLossPct: s.dailyLossPct ?? 5, allowShorts: s.allowShorts, learning: s.learning, skipQuiet: s.skipQuiet })}
-        <label>Approval
+        ${s.broker === 'tiger' ? `<label>Approval
           <select id="set-approval"><option value="manual" ${s.approval === 'manual' ? 'selected' : ''}>I approve each trade</option><option value="auto" ${s.approval === 'auto' ? 'selected' : ''}>Automatic</option></select>
-        </label>
+        </label>` : '<p class="small muted">Approval: none needed. The simulator trades with virtual money, so its trades go through as the AI decides; approving each trade is for funds that trade through Tiger.</p>'}
         <p class="small muted wide">Changing the style changes the AI's brief from its next decision. It doesn't change the limits above by itself.</p>
         <div class="row"><button type="submit" class="primary" ${busy}>Save</button></div>
       </form>
     </details>`}` : '';
   // Keep open sections open when the controls are redrawn.
   const wasOpen = new Set([...el.querySelectorAll('details[open] > summary')].map((x) => x.textContent));
+  const edits = unsavedEdits(el, f?.id);
+  // A fund that has just started empties the start form, so it can't be started twice by mistake.
+  if (cmd?.action === 'start' && cmd.phase === 'done') for (const id of Object.keys(edits)) if (id.startsWith('new-') || id.startsWith('fund-')) delete edits[id];
   el.innerHTML = `
     <div class="panel-head"><h2>${list.length ? 'Control the AI funds' : 'Start an AI fund'}</h2></div>
     ${selectedControls}
     ${list.length ? `<details class="fund-new"><summary>Start another fund</summary>${startForm}</details>` : startForm}
     ${cmd?.message ? `<p class="small ${cmd.phase === 'failed' ? 'down' : 'muted'}" role="status">${esc(cmd.message)}</p>` : ''}`;
   for (const d of el.querySelectorAll('details')) if (wasOpen.has(d.querySelector('summary')?.textContent)) d.open = true;
+  keepEdits(el, f?.id, edits);
   const brokerSel = $('fund-broker');
   if (brokerSel) {
     const sync = () => {
@@ -1668,7 +1696,7 @@ document.addEventListener('submit', (e) => {
   if (e.target.id === 'fund-settings-form') {
     e.preventDefault();
     const m = readMandate('set');
-    submitFundCommand('settings', { payload: { fund: selectedFund()?.id, name: m.name, style: m.style, focus: m.focus, settings: { ...m.settings, approval: $('set-approval').value } } });
+    submitFundCommand('settings', { payload: { fund: selectedFund()?.id, name: m.name, style: m.style, focus: m.focus, settings: { ...m.settings, ...($('set-approval') ? { approval: $('set-approval').value } : {}) } } });
   }
 });
 document.addEventListener('click', (e) => {
