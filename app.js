@@ -2,8 +2,8 @@ import { newPortfolio, applyTrade, placeOrder, cancelOrder, convertCash, summari
 import { applyCorporateActions, describeAction } from './actions.js';
 import { BENCHMARKS, benchmarkFor, benchmarkSeries } from './benchmark.js';
 import { scorePicks, summarizeScores } from './scorecard.js';
-import { addSpend, monthSpend, fundAiCost } from './spend.js';
-import { hbars, stackBar, columns, lineChart, rangeBars, sparkTrend, tableToggle, focusQuietly, tipOpenFor, hideTips, SERIES, OTHER, CASH, TRACK } from './charts.js';
+import { addSpend, monthSpend } from './spend.js';
+import { hbars, stackBar, columns, lineChart, rangeBars, sparkTrend, tableToggle, shareLabels, focusQuietly, tipOpenFor, hideTips, SERIES, OTHER, CASH, TRACK } from './charts.js';
 import { valueHistory, indexHistory, realizedHistory } from './history.js';
 import { MIN_CASES as MEMORY_MIN_CASES, MOVE_NEWS } from './memory.js';
 import { regimeNow, regimeWords, yearLessons, studyNumbers, STUDY_LABELS, STUDY_SHORT, LONG, HOLDOUT_NOISE } from './memory-long.js';
@@ -13,6 +13,7 @@ import { MARKETS, marketForCurrency, marketDate, tradingStatus, STATUS_LABELS } 
 import { resultsCalendar, nextResults } from './calendar.js';
 import { recentRatingChanges, describeChange } from './analysts.js';
 import { loadFunds, reconcileAll, STYLES, DEFAULT_STYLE, MAX_ACTIVE_FUNDS } from './funds.js';
+import { ALL, fundsOverview } from './fund-views.js';
 import {
   activeLessons, lessonKind, filterWords, behaviourBase, OUTCOME_LABELS, IDEA_LABELS, REVIEW_MIN_NEW, NOISE_CHECK, CAL_NOISE_CHECK, CALIBRATION,
   FILTER_KEYS, FILTER_VALUES, TRACK_LABELS, BOOK, HOLD_NOISE, DECLINE_MIN_CASES,
@@ -21,7 +22,7 @@ import { DECLINE_REASONS, DECISION_CHOICES, EVERY_RUN } from './fund.js';
 import { reportLines, reportLabel, dayWords, lessonName, weekOf, droppedWords, REPORT } from './report.js';
 import { positionThesis, thesisProgress, moveWords, CATALYST_LABELS, HORIZON_LABELS, STALE_DAYS } from './thesis.js';
 import { buildDossiers, picksRecord, positionRisk, exDateVsStop, exDateLate, stopLogSummary, indexName, DOSSIER } from './dossier.js';
-import { GATE, confidenceOf, fundBeta, FUND_BETA_DAYS } from './stats.js';
+import { GATE, confidenceOf, FUND_BETA_DAYS } from './stats.js';
 import { READING, READING_NOISE, REASON_LABELS, siteName, siteRecords, latestCalls, monthResults, recordOf, soFar, gradeDay } from './reading.js';
 import { FACTOR_LABELS, BUCKETS, PAGE_MIN_BETS, LAB, CASE_DAYS, COND_NOISE_CHECK, conditionWords } from './factors.js';
 import { statusLabel, describeSpec, ASK } from './hypotheses.js';
@@ -29,7 +30,7 @@ import { calcFee, planFor, fxSpreadFor, FEE_PLANS } from './fees.js';
 import { authEnabled, onAuthChange, signOut, myInvite, loadCloudPortfolio, saveCloudPortfolio, sendFundCommand, fundCommandStatus, loadPrivateFund } from './auth.js';
 import { showAuth, hideAuth, wireAuthScreen, openInvites, wireInvites } from './login.js';
 
-const KEYS = { portfolio: 'paper-trader:portfolio', ai: 'paper-trader:ai', picks: 'paper-trader:picks', strategist: 'paper-trader:strategist', spend: 'paper-trader:ai-spend', fundId: 'paper-trader:fund', deepLink: 'paper-trader:deep-link' };
+const KEYS = { portfolio: 'paper-trader:portfolio', ai: 'paper-trader:ai', picks: 'paper-trader:picks', strategist: 'paper-trader:strategist', spend: 'paper-trader:ai-spend', fundId: 'paper-trader:fund', fundTab: 'paper-trader:fund-tab', deepLink: 'paper-trader:deep-link' };
 const PRICE_REFRESH_MS = 5 * 60 * 1000;
 const $ = (id) => document.getElementById(id);
 
@@ -57,7 +58,9 @@ const state = {
   localPicks: readStore(KEYS.picks),
   strategist: readStore(KEYS.strategist),
   funds: undefined, // the AI funds (funds.js): undefined = not loaded yet, null = none
-  fundId: readStore(KEYS.fundId), // the fund shown on the AI fund page
+  fundId: readStore(KEYS.fundId), // the fund shown on the AI fund page, or ALL for all funds combined
+  fundTab: readSession(KEYS.fundTab) ?? 'overview', // the fund's sub-tab shown (FUND_TABS), kept for the session
+  startOpen: false, // the "Start a fund" form is open (its card in the switcher)
   fundCmd: null, // the admin's latest start/stop request: { id, action, createdAt, phase, message }
   lessonDraft: null, // the owner's lesson being written, kept while the page re-renders (lessonForm)
   reportWeek: {}, // the week picked in each fund's weekly report (renderWeekly): { fundId: '2026-W40' }; the latest by default
@@ -84,6 +87,13 @@ function writeStore(key, value) {
   } catch {
     return false;
   }
+}
+// For this visit only (the fund page's sub-tab): gone when the tab is closed.
+function readSession(key) {
+  try { return JSON.parse(sessionStorage.getItem(key)); } catch { return null; }
+}
+function writeSession(key, value) {
+  try { sessionStorage.setItem(key, JSON.stringify(value)); } catch { /* kept in memory for this page */ }
 }
 
 // Each signed-in user gets their own local copy; without accounts there's one per browser.
@@ -387,7 +397,7 @@ const VIEWS = ['home', 'markets', 'auto', 'strategist', 'fund', 'history'];
 const currentView = () => (VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'home');
 
 // A link from Telegram (alerts.js fundLink): #fund/<id> opens that fund's page at its weekly report, and
-// #fund/<id>/approve at its trades waiting for approval. The address becomes #fund, so the tabs work as
+// #fund/<id>/approve at its trades waiting for approval; #fund/all opens all the funds combined. The address becomes #fund, so the tabs work as
 // usual, and the link waits for the funds to load (resolveLinkedFund): then the fund is remembered as if
 // it had been tapped, or, if it has been removed, the page says so rather than showing another fund's
 // report as if it were the linked one. A sign-in on the way, which can drop the address (Google's
@@ -397,6 +407,18 @@ function followDeepLink() {
   if (!m) return false;
   let id;
   try { id = decodeURIComponent(m[1]); } catch { return false; }
+  if (id === ALL && !m[2]) {
+    state.fundId = ALL;
+    writeStore(KEYS.fundId, ALL);
+    // a working link: no notice about an earlier link to a removed fund, and no fund link still waiting
+    state.linkGone = null;
+    state.linkedFund = null;
+    // no fund id in what's kept for a sign-in (it would read as a removed fund): only that the page is #fund
+    try { sessionStorage.setItem(KEYS.deepLink, JSON.stringify({ view: 'fund' })); } catch { /* the address below is enough without a sign-in */ }
+    history.replaceState(null, '', `${location.pathname}${location.search}#fund`);
+    fundControlsKey = null;
+    return true;
+  }
   state.linkedFund = { id, jump: m[2] === 'approve' ? 'approve' : 'week' };
   try { sessionStorage.setItem(KEYS.deepLink, JSON.stringify(state.linkedFund)); } catch { /* the address below is enough without a sign-in */ }
   history.replaceState(null, '', `${location.pathname}${location.search}#fund`);
@@ -506,8 +528,13 @@ function redrawCharts() {
 function focusKey() {
   const a = document.activeElement;
   if (!a || a === document.body) return null;
-  if (a.dataset?.fundSelect) return { sel: `[data-fund-select="${CSS.escape(a.dataset.fundSelect)}"]` };
+  if (a.dataset?.fundSelect) return { sel: `#fund-switcher [data-fund-select="${CSS.escape(a.dataset.fundSelect)}"]` };
+  // the fund's sub-tabs, and its header's buttons (data-fk: a name for what the button does)
+  if (a.dataset?.fundTab && a.closest('#fund-tabs')) return { sel: `#fund-tabs [data-fund-tab="${CSS.escape(a.dataset.fundTab)}"]` };
+  if (a.dataset?.fk) return { sel: `[data-fk="${CSS.escape(a.dataset.fk)}"]` };
   if (a.id === 'report-week') return { sel: '#report-week' };
+  // a field of the fund's settings or start form, when a command moving on redraws it
+  if (a.id && a.closest?.(FUND_FORMS)) return { sel: `#${CSS.escape(a.id)}`, caret: typeof a.selectionStart === 'number' ? a.selectionStart : null };
   // the owner's lesson (lessonForm), note on a stock (stockNoteSection), logged article (readingForm) or
   // question (askForm) being written, with the caret where it was
   if (a.id && a.closest?.('#lesson-form, #stock-note-form, #reading-form, #ask-form')) return { sel: `#${CSS.escape(a.id)}`, caret: typeof a.selectionStart === 'number' ? a.selectionStart : null };
@@ -1423,12 +1450,22 @@ function selectedFund() {
   const list = fundList();
   return list.find((f) => f.id === state.fundId) ?? list.find((f) => !f.stoppedAt) ?? list[0] ?? null;
 }
+// What the AI fund page shows: ALL (every fund combined, once there are two or more), else a fund.
+const shownFund = () => (state.fundId === ALL && fundList().length >= 2 ? ALL : selectedFund());
 function selectFund(id) {
   state.fundId = id;
   state.linkGone = null;
   writeStore(KEYS.fundId, id);
   fundControlsKey = null;
   render();
+}
+// The fund's sub-tabs: every section of its page is under one of them. Ask the data and Settings are
+// for admins. The tab picked is kept for the session and for every fund.
+const FUND_TABS = { overview: 'Overview', holdings: 'Holdings', decisions: 'Decisions', learning: 'Learning', reports: 'Reports', ask: 'Ask the data', settings: 'Settings' };
+const fundTabs = () => Object.keys(FUND_TABS).filter((t) => !['ask', 'settings'].includes(t) || (authEnabled && state.user?.isAdmin));
+function setFundTab(tab) {
+  state.fundTab = tab;
+  writeSession(KEYS.fundTab, tab);
 }
 
 const modelOptions = (selected) => `<option value="">Default (${esc(modelName(TIERS.advanced))})</option>${Object.entries(FUND_MODELS)
@@ -1479,20 +1516,22 @@ const readMandate = (p) => ({
 // The fund forms are redrawn whenever a command moves on (sending, running, done), from the fund's saved
 // values. So a change the owner made, or has just saved and is waiting for, isn't wiped: each field
 // remembers the value it was drawn with, and one that differs is carried into the redrawn form (for the
-// same fund only). Once the job has saved the change, the field is drawn with it and nothing differs.
+// same fund only; the start form's, whichever fund is shown). Once the job has saved the change, the
+// field is drawn with it and nothing differs.
 const FUND_FORMS = '#fund-settings-form, #fund-start-form';
 const fieldValue = (x) => (x.type === 'checkbox' ? String(x.checked) : x.value);
+const formOwner = (x, fundId) => (x.closest('#fund-start-form') ? 'new' : String(fundId));
 function unsavedEdits(el, fundId) {
   const edits = {};
   for (const x of el.querySelectorAll(`:is(${FUND_FORMS}) :is(input, select, textarea)`)) {
-    if (x.id && x.dataset.drawn !== undefined && x.dataset.fund === String(fundId) && fieldValue(x) !== x.dataset.drawn) edits[x.id] = fieldValue(x);
+    if (x.id && x.dataset.drawn !== undefined && x.dataset.fund === formOwner(x, fundId) && fieldValue(x) !== x.dataset.drawn) edits[x.id] = fieldValue(x);
   }
   return edits;
 }
 function keepEdits(el, fundId, edits) {
   for (const x of el.querySelectorAll(`:is(${FUND_FORMS}) :is(input, select, textarea)`)) {
     x.dataset.drawn = fieldValue(x);
-    x.dataset.fund = String(fundId);
+    x.dataset.fund = formOwner(x, fundId);
     if (!(x.id in edits)) continue;
     if (x.type === 'checkbox') x.checked = edits[x.id] === 'true'; else x.value = edits[x.id];
   }
@@ -1500,22 +1539,24 @@ function keepEdits(el, fundId, edits) {
   if (style && 'set-style' in edits) $('set-style-brief').textContent = STYLES[style.value]?.brief ?? '';
 }
 
-// Start/stop/pause buttons and settings for admins. Rebuilt only when something they show changes,
-// so typing isn't lost when prices refresh.
+// For admins: the Settings tab of the fund shown (pause, stop or remove it, and its mandate, approval
+// and limits), and the "Start a fund" form under the switcher. Rebuilt only when something they show
+// changes, so typing isn't lost when prices refresh.
 let fundControlsKey = null;
 function renderFundControls() {
-  const el = $('fund-controls');
+  const el = $('fund-controls'), startEl = $('fund-start');
   const list = fundList();
   const f = selectedFund();
   const running = list.filter((x) => !x.stoppedAt);
   const cmd = state.fundCmd;
-  const key = JSON.stringify([authEnabled, state.user?.isAdmin, state.funds === undefined, f?.id, list.map((x) => [x.id, x.name, x.style, x.focus, x.stoppedAt, x.paused?.at, x.settings, x.decisionsPerDay]), cmd?.phase, cmd?.message]);
+  const admin = authEnabled && state.user?.isAdmin && state.funds !== undefined;
+  const key = JSON.stringify([admin, state.startOpen, f?.id, list.map((x) => [x.id, x.name, x.style, x.focus, x.stoppedAt, x.paused?.at, x.settings, x.decisionsPerDay, x.broker?.accountType]), cmd?.phase]);
   if (key === fundControlsKey) return;
   fundControlsKey = key;
-  el.hidden = !authEnabled || state.funds === undefined;
-  if (el.hidden) return;
-  if (!state.user?.isAdmin) {
-    el.innerHTML = '<p class="muted small">Only admins can start, pause or stop AI funds.</p>';
+  startEl.hidden = !admin || !(state.startOpen || !list.length);
+  if (!admin) {
+    el.innerHTML = '';
+    startEl.innerHTML = '';
     return;
   }
   const busy = cmd && ['sending', 'sent', 'accepted'].includes(cmd.phase) ? 'disabled' : '';
@@ -1544,18 +1585,21 @@ function renderFundControls() {
       <div class="row"><button type="submit" class="primary" ${busy}>Start fund</button></div>
     </form>`;
   const s = f?.settings ?? {};
-  const selectedControls = f ? `
-    <p class="small"><strong>${esc(f.name)}</strong> · trading through <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? ` · ${s.approval === 'manual' ? 'you approve each trade' : 'automatic'}` : ''}</p>
-    <div class="row">
-      ${f.stoppedAt
-        ? `<button type="button" class="ghost" data-fund-cmd="remove" ${busy}>Remove this fund from the list</button>`
-        : `${f.paused
-          ? `<button type="button" class="primary" data-fund-cmd="resume" ${busy}>Resume trading</button>`
-          : `<button type="button" class="danger" data-fund-cmd="pause" ${busy}>Pause this fund</button>`}
-        <button type="button" class="ghost" data-fund-stop ${busy}>Stop fund and close positions</button>`}
-      ${running.length > 1 ? `<button type="button" class="danger" data-fund-cmd="pause-all" ${busy}>Pause all funds</button>` : ''}
-    </div>
-    ${f.stoppedAt ? '' : `<details class="fund-new"><summary>Mandate, approval and limits</summary>
+  const settings = f ? `<section class="panel">
+      <div class="panel-head"><h2>Settings</h2></div>
+      <p class="small"><strong>${esc(f.name)}</strong> · trading through <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? ` · ${s.approval === 'manual' ? 'you approve each trade' : 'automatic'}` : ''}</p>
+      <div class="row">
+        ${f.stoppedAt
+          ? `<button type="button" class="ghost" data-fund-cmd="remove" ${busy}>Remove this fund from the list</button>`
+          : `${f.paused
+            ? `<button type="button" class="primary" data-fund-cmd="resume" ${busy}>Resume trading</button>`
+            : `<button type="button" class="danger" data-fund-cmd="pause" ${busy}>Pause this fund</button>`}
+          <button type="button" class="ghost" data-fund-stop ${busy}>Stop fund and close positions</button>`}
+      </div>
+      ${f.stoppedAt ? '<p class="small muted">A stopped fund stays listed until you remove it; a one-line summary of its result is kept.</p>' : '<p class="small muted">Pausing stops new trades and cancels open orders; stop-losses keep working. Stopping closes every position and ends the fund. Pause all funds is on All funds.</p>'}
+    </section>
+    ${f.stoppedAt ? '' : `<section class="panel">
+      <div class="panel-head"><h2>Mandate, approval and limits</h2></div>
       <form id="fund-settings-form" class="form-grid fund-form">
         ${mandateFields('set', { name: f.name, style: f.style, focus: f.focus, model: s.model, maxOrderPct: s.maxOrderPct ?? 25, dailyLossPct: s.dailyLossPct ?? 5, allowShorts: s.allowShorts, learning: s.learning, skipQuiet: s.skipQuiet })}
         <label>Decisions per trading day <select id="set-decisions">${decisionOptions(f.decisionsPerDay, s.model)}</select></label>
@@ -1565,19 +1609,16 @@ function renderFundControls() {
         <p class="small muted wide">Changing the style changes the AI's brief from its next decision. It doesn't change the limits above by itself.</p>
         <div class="row"><button type="submit" class="primary" ${busy}>Save</button></div>
       </form>
-    </details>`}` : '';
-  // Keep open sections open when the controls are redrawn.
-  const wasOpen = new Set([...el.querySelectorAll('details[open] > summary')].map((x) => x.textContent));
-  const edits = unsavedEdits(el, f?.id);
+    </section>`}` : '';
+  const view = el.closest('.view');
+  const edits = unsavedEdits(view, f?.id);
   // A fund that has just started empties the start form, so it can't be started twice by mistake.
   if (cmd?.action === 'start' && cmd.phase === 'done') for (const id of Object.keys(edits)) if (id.startsWith('new-') || id.startsWith('fund-')) delete edits[id];
-  el.innerHTML = `
-    <div class="panel-head"><h2>${list.length ? 'Control the AI funds' : 'Start an AI fund'}</h2></div>
-    ${selectedControls}
-    ${list.length ? `<details class="fund-new"><summary>Start another fund</summary>${startForm}</details>` : startForm}
-    ${cmd?.message ? `<p class="small ${cmd.phase === 'failed' ? 'down' : 'muted'}" role="status">${esc(cmd.message)}</p>` : ''}`;
-  for (const d of el.querySelectorAll('details')) if (wasOpen.has(d.querySelector('summary')?.textContent)) d.open = true;
-  keepEdits(el, f?.id, edits);
+  el.innerHTML = settings;
+  startEl.innerHTML = `<div class="panel-head"><h2>${list.length ? 'Start a fund' : 'Start an AI fund'}</h2>
+      ${list.length ? '<button type="button" class="ghost" data-close-start data-fk="close-start">Close</button>' : ''}</div>
+    ${startForm}`;
+  keepEdits(view, f?.id, edits);
   const brokerSel = $('fund-broker');
   if (brokerSel) {
     const sync = () => {
@@ -1685,7 +1726,7 @@ async function watchFundCommand(cmd) {
           const own = lc && Date.parse(lc.time) >= Date.parse(cmd.createdAt);
           cmd.phase = own && !lc.ok ? 'failed' : 'done';
           cmd.message = own && lc.message ? lc.message : doneText;
-          if (cmd.action === 'start' && own && lc.ok && lc.fund) selectFund(lc.fund); // show the new fund
+          if (cmd.action === 'start' && own && lc.ok && lc.fund) { state.startOpen = false; selectFund(lc.fund); } // show the new fund
           if (cmd.text === READING_TEXT.log && cmd.phase === 'done') state.readingDraft = null; // logged: the box empties (a failure keeps it, to add the text)
           if (cmd.text === ASK_TEXT.ask && cmd.phase === 'done') state.askDraft = null; // asked: the box empties (a failure keeps it)
         }
@@ -1762,10 +1803,34 @@ document.addEventListener('submit', (e) => {
   }
 });
 document.addEventListener('click', (e) => {
-  const t = e.target.closest('[data-fund-stop], [data-fund-cmd], [data-proposal], [data-fund-select], [data-lesson-remove], [data-lesson-restore], [data-lesson-keep], [data-decline], [data-decline-why], [data-decline-cancel]');
+  const t = e.target.closest('[data-fund-stop], [data-fund-cmd], [data-proposal], [data-fund-select], [data-fund-open], [data-fund-tab], [data-open-start], [data-close-start], [data-lesson-remove], [data-lesson-restore], [data-lesson-keep], [data-decline], [data-decline-why], [data-decline-cancel]');
   if (!t) return;
   const f = selectedFund();
-  if (t.dataset.decline) {
+  if (t.dataset.fundTab) {
+    // a sub-tab, or a link to one from inside the page ("All details"): that tab, with the tabs in sight
+    const inTabs = Boolean(t.closest('#fund-tabs'));
+    setFundTab(t.dataset.fundTab);
+    render();
+    if (!inTabs) {
+      const tab = document.querySelector(`#fund-tabs [data-fund-tab="${CSS.escape(t.dataset.fundTab)}"]`);
+      tab?.focus({ preventScroll: true });
+      if (tab && tab.getBoundingClientRect().top < 0) $('fund-head').scrollIntoView({ block: 'start' });
+    }
+  } else if (t.dataset.fundOpen) {
+    // a fund named on All funds: that fund, with its card focused
+    selectFund(t.dataset.fundOpen);
+    document.querySelector(`#fund-switcher [data-fund-select="${CSS.escape(t.dataset.fundOpen)}"]`)?.focus();
+  } else if (t.matches('[data-open-start]')) {
+    state.startOpen = !state.startOpen;
+    fundControlsKey = null;
+    render();
+    if (state.startOpen) { $('fund-start').scrollIntoView({ block: 'nearest' }); ($('new-name') ?? $('fund-start'))?.focus({ preventScroll: true }); }
+  } else if (t.matches('[data-close-start]')) {
+    state.startOpen = false;
+    fundControlsKey = null;
+    render();
+    document.querySelector('[data-open-start]')?.focus();
+  } else if (t.dataset.decline) {
     // Reject asks why: its four reasons appear under the trade, the first one focused
     state.declining = state.declining === t.dataset.decline ? null : t.dataset.decline;
     render();
@@ -2205,7 +2270,6 @@ function renderLearning(f, c) {
     ${hiddenList.length && admin ? `<p class="small muted">Removed lessons: ${hiddenList.map((id) => `<button type="button" class="ghost small-btn" data-lesson-restore="${esc(id)}" title="${esc(known.get(id))}">Restore: ${esc(known.get(id).slice(0, 50))}${known.get(id).length > 50 ? '…' : ''}</button>`).join(' ')}</p>` : ''}
     ${edgeChart(pb, f.currency)}
     ${calibrationTable(pb, c.calibration?.[market])}
-    ${callsTable(f)}
     ${pb?.recent?.length ? `<details class="fund-new"><summary>Latest graded ideas</summary><ul class="orders">${pb.recent.slice(0, 15).map((g) => `<li>${fmtDate(g.time)}:
       <span class="chip ${g.action === 'buy' || g.action === 'cover' ? 'buy' : 'sell'}">${esc(g.action)}</span> ${esc(g.symbol)} <span class="muted small">(${esc(OUTCOME_LABELS[g.outcome] ?? g.outcome)}, ${esc(IDEA_LABELS[g.ideaType] ?? g.ideaType)}${g.repeats > 1 ? `, came up ${g.repeats} times that week` : ''})</span>
       · a week later ${moveCell(g.week)} · a month later ${moveCell(g.month)}${g.quarter ? ` · a quarter later ${moveCell(g.quarter)}` : ''}${g.thesis?.expected != null && g.thesis.horizon ? ` <span class="muted small">(expected ${moveWords(g.thesis.expected / 100, g.action === 'short')} in ${HORIZON_LABELS[g.thesis.horizon]})</span>` : ''}${g.reason ? `<br><span class="muted small">${esc(g.reason)}</span>` : ''}</li>`).join('')}</ul></details>` : ''}
@@ -2238,8 +2302,7 @@ function renderLearning(f, c) {
     ${renderRatingChanges(market)}
     ${!memory?.events ? `<p class="small">To fill this in from the past year's news (one-off, about US$1–2), run ${repoActionsUrl() ? `<a href="${repoActionsUrl()}" target="_blank" rel="noopener">Actions → Update prices, AI picks and AI fund</a>` : 'Actions → Update prices, AI picks and AI fund'} → Run workflow with <em>Learning: look up the past year of news</em> ticked. New news is added every day by itself.</p>` : ''}
   </section>
-  ${renderLongMemory(market, { hidden, admin })}
-  ${admin ? renderAskData() : ''}`;
+  ${renderLongMemory(market, { hidden, admin })}`;
 }
 
 // ----- AI fund: the factor and regime lab (factors.js) -----
@@ -2576,7 +2639,7 @@ const trendLine = (points, name) => (points.length >= 2 ? `<br>${sparkSlot((el) 
 const trendTable = (rows, key) => keptTable(tableToggle(['Lesson', 'Week to', 'Separate bets', 'A week'],
   rows.flatMap(({ name, points }) => [...points].reverse().map((p) => [name, dayWords(p.date), String(p.bets), pct(p.edge)])), 2), key);
 
-// The fund's weekly report ("What we learned", report.js), at the top of its page, with a picker for
+// The fund's weekly report ("What we learned", report.js), under its Reports tab, with a picker for
 // the weeks kept: how the week went against the index, the ideas graded, what changed in its lessons
 // (each with its trend over the weeks), the review's summary, your calls, what's coming up and the cost.
 // Counts and trends, not verdicts.
@@ -2616,50 +2679,6 @@ function renderWeekly(f) {
   </section>`;
 }
 
-// The funds side by side, best first: return, against the index, and after the AI's cost.
-function renderLeaderboard(c, selected) {
-  const quotes = state.prices.quotes ?? {};
-  const fx = state.prices.fx?.USDSGD;
-  const rows = c.funds.map((f) => {
-    const a = summarize(f.portfolio, quotes).accounts[f.currency];
-    const bench = benchmarkFor({ currency: f.currency, amount: f.budget, since: f.startedAt, quotes, plan: planFor(f.settings?.feePlan ?? 'tiger') });
-    const costUsd = fundAiCost(f);
-    const cost = f.currency === 'USD' ? costUsd : fx ? costUsd * fx : 0;
-    return { f, a, bench, afterCost: (a.net - cost) / f.budget, beta: fundBeta(f.history, quotes[BENCHMARKS[f.currency]?.symbol]) };
-  }).sort((x, y) => Number(Boolean(x.f.stoppedAt)) - Number(Boolean(y.f.stoppedAt)) || y.afterCost - x.afterCost);
-  const status = (f) => (f.stoppedAt ? 'stopped' : f.paused ? 'paused' : 'running');
-  const bars = rows.map(({ f, a, bench, afterCost }) => ({
-    label: f.name, sub: `${STYLES[f.style]?.label ?? ''} · ${f.currency}`, value: a.netPct * 100, display: pct(a.netPct),
-    marker: bench ? bench.pct * 100 : null,
-    tip: [
-      { value: pct(a.netPct), label: `${f.name} return` },
-      ...(bench ? [{ value: pct(bench.pct), label: `${bench.label}, same money` }] : []),
-      { value: pct(afterCost), label: 'after AI cost' },
-    ],
-  }));
-  return `<section class="panel">
-    <div class="panel-head"><h2>${c.funds.length > 1 ? 'Your AI funds, best first' : 'Your AI fund'}</h2></div>
-    ${chartSlot((el) => hbars(el, bars, { signColors: true, markerLabel: 'Its index, same money and time', tickFmt: pctTick, ariaLabel: 'Fund returns' }),
-      { caption: `Each bar is a fund's return since it started.${rows.some((r) => r.bench) ? ` The short upright tick is what the same money made in its index (${esc(BENCHMARKS.USD.label)} for USD funds, ${esc(BENCHMARKS.SGD.label)} for SGD) over the same time.` : ''}`, key: 'leaderboard' })}
-    <div class="table-wrap"><table class="leaderboard">
-      <thead><tr><th>Fund</th><th class="num">Value</th><th class="num">Return</th><th class="num">vs index</th><th class="num hide-sm">Beta</th><th class="num hide-sm">After AI cost</th><th class="hide-sm">Status</th></tr></thead>
-      <tbody>${rows.map(({ f, a, bench, afterCost, beta }) => `<tr data-fund-select="${esc(f.id)}" class="${f.id === selected?.id ? 'selected' : ''}" tabindex="0">
-        <td><strong>${esc(f.name)}</strong><span class="chip">${esc(STYLES[f.style]?.label ?? f.style)}</span>
-          <span class="name">${esc(f.currency)} · ${f.settings?.broker === 'tiger' ? 'Tiger' : 'simulator'}${f.settings?.model ? ` · ${esc(modelName(f.settings.model))}` : ''}${f.settings?.learning === false ? ' · not learning' : ''}${f.focus ? ` · ${esc(f.focus)}` : ''}</span></td>
-        <td class="num">${money(a.equity, f.currency)}</td>
-        <td class="num ${tone(a.netPct)}">${pct(a.netPct)}</td>
-        <td class="num ${bench ? tone(a.netPct - bench.pct) : ''}">${bench ? `${a.netPct - bench.pct >= 0 ? '+' : '−'}${Math.abs((a.netPct - bench.pct) * 100).toFixed(2)} pts` : '–'}</td>
-        <td class="num hide-sm" title="${beta ? `From ${beta.days} trading days` : `Shown after ${FUND_BETA_DAYS} trading days`}">${beta ? beta.beta.toFixed(2) : '–'}</td>
-        <td class="num hide-sm ${tone(afterCost)}">${pct(afterCost)}</td>
-        <td class="hide-sm small">${status(f)}</td>
-      </tr>`).join('')}</tbody>
-    </table></div>
-    <p class="muted small">${c.funds.length > 1 ? 'Tap a fund to see it below. ' : ''}"vs index" is the fund's return minus what the same money made in ${esc(BENCHMARKS.USD.label)} or ${esc(BENCHMARKS.SGD.label)} since it started, after fees.
-      Beta is how much the fund's value has moved with its index day to day (1: in step with it; 0.5: half as much, as with half in cash; below 0: against it, as when net short), shown after ${FUND_BETA_DAYS} trading days. A fund with a beta above 1 should beat a rising index without any skill, so judge "vs index" with it in mind.
-      ${c.archived?.length ? `Removed earlier: ${c.archived.slice(-5).map((x) => `${esc(x.name)} ${pct((x.finalValue ?? x.budget) / x.budget - 1)}`).join(', ')}.` : ''}</p>
-  </section>`;
-}
-
 // How far a closed position went against and for the fund while it was held (fund.js tracks), after its
 // exit; one opened before tracking began was followed only from then.
 const heldLine = (tr) => (tr?.worst == null ? '' : ` <span class="muted small">· ${tr.late ? `since tracking began${tr.openedAt ? ` (${esc(fmtDate(tr.openedAt))})` : ''}` : 'while held'}: at worst ${pctP(tr.worst * 100)}, at best ${pctP(tr.best * 100)}</span>`);
@@ -2677,92 +2696,286 @@ function fundValueChart(f, bench, quotes) {
   });
 }
 
-function renderFund() {
-  const el = $('fund');
-  const c = state.funds;
-  const f = c === undefined ? undefined : selectedFund();
-  const actions = repoActionsUrl();
-  const runLink = actions
-    ? `<a href="${actions}" target="_blank" rel="noopener">Actions → Update prices, AI picks and AI fund</a>`
-    : '<strong>Actions → Update prices, AI picks and AI fund</strong>';
-  if (f === undefined) { el.innerHTML = '<section class="panel"><p class="muted">Loading…</p></section>'; return; }
-  if (!f) {
-    state.jumpTo = null;
-    el.innerHTML = `${state.linkGone ? '<div class="notice warn fund-alert link-gone" role="status"><span><strong>That fund has been removed:</strong> the link you followed was for a fund that\'s no longer here.</span></div>' : ''}<section class="panel">
-      <h2>AI fund</h2>
-      <p>Give Claude an amount and let it trade on its own, aiming for the biggest profit it can make, in the simulator or through your Tiger Brokers account. It runs on GitHub, so it keeps trading while this page is closed.</p>
-      <p>You can run up to ${MAX_ACTIVE_FUNDS} funds at once, each with its own amount, market, style (cautious, balanced or aggressive), focus and AI model, and compare them side by side.</p>
-      ${authEnabled ? '' : `<ol>
-        <li>Add your Anthropic API key to the GitHub repo as a secret named <code>ANTHROPIC_API_KEY</code> (Settings → Secrets and variables → Actions).</li>
-        <li>Open ${runLink}, press <strong>Run workflow</strong>, and fill in <em>Start a NEW AI fund with this amount</em>, its currency (USD trades US stocks, SGD trades SGX stocks) and how many decisions a day.</li>
-        <li>Come back here in a few minutes.</li>
-      </ol>`}
-      <p class="small"><strong>Hard limits:</strong> the fund can only use its amount; any order costing more than its buying power, or more than the per-order limit, is rejected. It pauses itself after losing the daily limit, and shorts are closed automatically at a 40% loss.</p>
-      <p class="muted small">Cost: each decision is one Claude call with web search, roughly US$0.05–0.15: Claude Haiku 4.5 reads the news and Claude Sonnet 5 decides.</p>
-    </section>
-    ${renderSpend()}`;
-    flushCharts();
-    return;
+// ----- AI fund: the page -----
+
+// The AI fund page: the fund switcher on top (a card per fund, ranked, and "All funds" once there are
+// two or more), then the fund picked, with its header, its notices and its sub-tabs (FUND_TABS), or all
+// the funds combined. The figures come from fund-views.js; this only draws them.
+
+const pts = (x) => `${x >= 0 ? '+' : '−'}${Math.abs(x * 100).toFixed(2)} pts`;
+const pct1 = (x) => (x == null ? '–' : `${(x * 100).toFixed(1)}%`);
+const styleLabel = (f) => STYLES[f.style]?.label ?? f.style ?? '';
+const fundModel = (f) => modelName(f.settings?.model || TIERS.advanced);
+const listWords = (xs) => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs.at(-1)}` : xs[0] ?? '');
+const STATUS_CHIP = { paused: ['Paused', 'warn'], stopped: ['Stopped', ''] };
+// A share as a bar, beside the number it draws (so the bar is never the only way to read it).
+const shareBar = (share, max = 1) => `<span class="share-bar" aria-hidden="true"><span style="width:${Math.max(0, Math.min(100, (share / (max || 1)) * 100)).toFixed(1)}%"></span></span>`;
+// How much is invested against what's free to spend, with the numbers in its label and beside it.
+const investedBar = (share, rest) => `<div class="inv-bar" role="img" aria-label="${Math.round(share * 100)}% invested, ${Math.round((1 - share) * 100)}% ${esc(rest)}"><span class="inv" style="width:${(share * 100).toFixed(1)}%"></span><span class="rest"></span></div>`;
+const commandBusy = () => (state.fundCmd && ['sending', 'sent', 'accepted'].includes(state.fundCmd.phase) ? 'disabled' : '');
+const runLink = () => (repoActionsUrl()
+  ? `<a href="${repoActionsUrl()}" target="_blank" rel="noopener">Actions → Update prices, AI picks and AI fund</a>`
+  : '<strong>Actions → Update prices, AI picks and AI fund</strong>');
+
+// The switcher: the funds ranked as the leaderboard ranks them (return after AI cost, stopped funds last),
+// each with its value, return, stocks held and share invested; "All funds" first, and for admins a card
+// that opens the start form. On a phone they're a row of small chips that scrolls sideways. Redrawn only
+// when what it shows changes, so a row scrolled by hand stays where it was.
+let switcherHtml = '';
+function renderFundSwitcher(ov, shown) {
+  const el = $('fund-switcher');
+  el.hidden = !ov.funds.length;
+  if (el.hidden) { switcherHtml = ''; el.innerHTML = ''; return; }
+  const ret = (x) => `<strong class="${tone(x)}"><span class="sr-only">return </span>${pct(x)}</strong>`;
+  const card = (id, cls, body) => {
+    const on = id === (shown === ALL ? ALL : shown?.id);
+    return `<li><button type="button" class="fund-card${cls}${on ? ' selected' : ''}" data-fund-select="${esc(id)}"${on ? ' aria-current="true"' : ''}>${body}</button></li>`;
+  };
+  const cards = [];
+  const v = ov.combined;
+  if (v) {
+    const t = v.totals;
+    cards.push(card(ALL, ' all', `<span class="fc-head"><span class="fc-name">All funds</span><span class="chip fc-chip">${plural(ov.funds.length, 'fund')}</span></span>
+      <span class="fc-style">${t ? `Combined, in ${t.currency}` : v.currencies.length ? 'Each currency on its own' : 'No fund running'}</span>
+      <span class="fc-value"><span class="v">${t ? money(t.value, t.currency) : v.currencies.map((x) => money(x.value, x.currency)).join(' + ')}</span>${t ? ret(t.netPct) : ''}</span>
+      <span class="fc-stocks">${plural(v.stocks, 'stock')}${t ? ` · ${Math.round(t.investedPct * 100)}% invested` : ''}</span>
+      <span class="fc-compact">${plural(v.stocks, 'stock')}${t ? ` · ${ret(t.netPct)}` : ''}</span>`));
   }
-  const quotes = state.prices.quotes ?? {};
-  const { accounts, positions } = summarize(f.portfolio, quotes);
-  const a = accounts[f.currency];
-  const market = marketForCurrency(f.currency);
-  const s = f.settings ?? {};
-  const status = f.stoppedAt
-    ? `Stopped ${fmtDateTime(f.stoppedAt)}`
-    : f.paused
-      ? 'Paused'
-      : `Running · ${f.decisionsPerDay ? `${f.decisionsPerDay} decision${f.decisionsPerDay > 1 ? 's' : ''} per trading day` : 'deciding at every run'} · ${MARKETS[market].label} ${STATUS_LABELS[marketStatus(market)]}`;
+  for (const x of ov.funds) {
+    const f = x.fund;
+    const [word, cls] = STATUS_CHIP[x.status] ?? [];
+    cards.push(card(f.id, x.status === 'stopped' ? ' stopped' : '', `<span class="fc-head"><span class="fc-name">${esc(f.name ?? 'AI fund')}</span>
+        <span class="fc-chips">${word ? `<span class="chip ${cls}">${word}</span>` : ''}<span class="chip fc-chip">${esc(MARKETS[x.market].label)}</span></span></span>
+      <span class="fc-style">${esc(styleLabel(f))} · ${esc(fundModel(f))}${f.settings?.learning === false ? ' · learning off' : ''}</span>
+      <span class="fc-value"><span class="v">${money(x.account.equity, f.currency)}</span>${ret(x.account.netPct)}</span>
+      <span class="fc-stocks">${plural(x.stocks, 'stock')} · ${Math.round(x.investedPct * 100)}% invested</span>
+      <span class="fc-compact">${word ? `${word} · ` : ''}${plural(x.stocks, 'stock')} · ${ret(x.account.netPct)}</span>`));
+  }
+  if (authEnabled && state.user?.isAdmin) {
+    cards.push(`<li><button type="button" class="fund-card add" data-open-start data-fk="open-start" aria-expanded="${state.startOpen}" aria-controls="fund-start">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Start a fund</button></li>`);
+  }
+  const html = `<div class="fs-head"><h2 class="fs-title">Your AI funds</h2>${ov.funds.length > 1 ? '<span class="muted small">Ranked by return after AI cost</span>' : ''}</div>
+    <ul class="fund-cards" id="fund-cards">${cards.join('')}</ul>`;
+  if (html === switcherHtml) return;
+  const before = $('fund-cards');
+  const order = (row) => [...(row?.querySelectorAll('[data-fund-select]') ?? [])].map((b) => b.dataset.fundSelect).join(' ');
+  const scrolled = before?.scrollLeft ?? 0, was = before?.querySelector('[aria-current="true"]')?.dataset.fundSelect, wasOrder = order(before);
+  switcherHtml = html;
+  el.innerHTML = html;
+  const row = $('fund-cards'), sel = row.querySelector('[aria-current="true"]');
+  row.scrollLeft = scrolled;
+  // a fund just picked (or the page just opened), or the funds re-ranked (the prices came in after the
+  // funds, or changed) so the chosen card moved: its card in sight, on a phone where the row scrolls
+  if (sel && (sel.dataset.fundSelect !== was || order(row) !== wasOrder) && row.scrollWidth > row.clientWidth) {
+    const a = sel.getBoundingClientRect(), b = row.getBoundingClientRect();
+    if (a.left < b.left || a.right > b.right) row.scrollLeft += a.left - b.left - 16;
+  }
+}
+
+// What the latest request to the job is doing (sending, running, done or failed), under the switcher.
+function renderFundStatus() {
+  const el = $('fund-status'), cmd = state.fundCmd;
+  const text = cmd?.message ?? '';
+  if (el.textContent !== text) el.textContent = text;
+  el.className = `small fund-status ${cmd?.phase === 'failed' ? 'down' : 'muted'}`;
+}
+
+// A part of the page drawn only when its HTML changes (the fund's header keeps its tabs scrolled, and
+// the buttons in it their focus).
+const drawn = {};
+function drawIfChanged(id, html) {
+  if (drawn[id] === html && $(id).innerHTML) return false;
+  drawn[id] = html;
+  $(id).innerHTML = html;
+  return true;
+}
+
+// <details> opened on the fund page stay open when it's redrawn (by the fund and tab, and their summary).
+const openDetails = new Set();
+const detailsKey = (d) => `${d.closest('[data-panel]')?.dataset.panel ?? ''}|${d.querySelector('summary')?.textContent.trim() ?? ''}`;
+document.addEventListener('toggle', (e) => {
+  const d = e.target;
+  if (d.tagName !== 'DETAILS' || d.dataset.key || !d.closest('#fund-body')) return;
+  if (d.open) openDetails.add(detailsKey(d)); else openDetails.delete(detailsKey(d));
+}, true);
+function drawFundBody(html, panel) {
+  const body = $('fund-body');
+  body.innerHTML = `<div data-panel="${esc(panel)}">${html}</div>`;
+  for (const d of body.querySelectorAll('details:not([data-key])')) if (openDetails.has(detailsKey(d))) d.open = true;
+}
+
+// The notices that belong at the top of a fund: a link to a removed fund, Tiger's account against the
+// funds, the AI's monthly cap, a pause, Tiger's errors and a decision that failed.
+function fundNotices(f, c) {
   const check = c.brokerCheck ?? reconcileAll(c); // all Tiger funds against the one Tiger account
-  const bench = benchmarkFor({ currency: f.currency, amount: f.budget, since: f.startedAt, quotes, plan: planFor(s.feePlan ?? 'tiger') });
-  const fx = state.prices.fx?.USDSGD;
-  const aiCostUsd = fundAiCost(f);
-  const aiCost = f.currency === 'USD' ? aiCostUsd : fx ? aiCostUsd * fx : null; // in the fund's currency
+  return [
+    state.linkGone ? `<div class="notice warn fund-alert link-gone" role="status"><span><strong>That fund has been removed:</strong> the link you followed was for a fund that's no longer here, so this is ${f ? `"${esc(f.name ?? 'AI fund')}"` : 'all your funds'}.</span></div>` : '',
+    check && !check.ok ? `<div class="notice warn fund-alert"><span><strong>Your Tiger account doesn't hold what the funds think:</strong> ${check.mismatches.map((m) => `${esc(m.symbol)}: funds ${m.fund}, Tiger ${m.tiger}`).join('; ')}. Check the Tiger app before trading further.</span></div>` : '',
+    ...(f ? [
+      f.aiCapped ? `<div class="notice warn fund-alert"><span><strong>AI paused for the month:</strong> ${esc(f.aiCapped.message)}</span></div>` : '',
+      f.paused ? `<div class="notice warn fund-alert"><span><strong>Trading is paused</strong> (${fmtDateTime(f.paused.at)}): ${esc(f.paused.reason)} Stop-losses still work.</span></div>` : '',
+      f.broker?.error && f.settings?.broker === 'tiger' ? `<div class="notice warn fund-alert"><span><strong>Tiger:</strong> ${esc(f.broker.error)}</span></div>` : '',
+      f.lastError ? `<div class="notice warn fund-alert"><span><strong>Last decision failed</strong> ${esc(ago(f.lastError.time))}: ${esc(f.lastError.message)}</span></div>` : '',
+    ] : []),
+  ].join('');
+}
+
+// The fund's header: its name, what it is (status, style, broker, decisions and model, focus), Pause or
+// Resume and Settings for admins, and its sub-tabs; then its notices and any trades waiting for approval.
+function fundHead(x, c, tabs, tab) {
+  const f = x.fund, s = f.settings ?? {};
+  const admin = authEnabled && state.user?.isAdmin;
+  const perDay = Number(f.decisionsPerDay);
+  const chips = [
+    x.status === 'stopped' ? `<span class="chip">Stopped ${esc(fmtDate(f.stoppedAt))}</span>`
+      : x.status === 'paused' ? '<span class="chip warn">Paused</span>'
+        : `<span class="chip ok">Running · ${esc(MARKETS[x.market].label)} ${esc(STATUS_LABELS[marketStatus(x.market)])}</span>`,
+    `<span class="chip">${esc(styleLabel(f))}</span>`,
+    `<span class="chip${f.broker?.accountType === 'live' ? ' sell' : ''}">${esc(brokerLabel(f))}${s.broker === 'tiger' ? ` · ${s.approval === 'manual' ? 'you approve each trade' : 'automatic'}` : ''}</span>`,
+    // a stopped fund decides no more: only when it last did, if it ever did
+    x.status === 'stopped' ? '' : `<span class="chip">${perDay === EVERY_RUN ? 'Decides at every run' : `${plural(Math.max(1, perDay || 1), 'decision')} a trading day`} · ${esc(fundModel(f))}</span>`,
+    f.lastDecisionAt ? `<span class="chip">Last decision ${esc(ago(f.lastDecisionAt))}</span>`
+      : x.status === 'stopped' ? '<span class="chip">No decisions made</span>' : '<span class="chip">Last decision not yet</span>',
+    s.learning === false ? '<span class="chip">Learning off, for comparison</span>' : '',
+    f.focus ? `<span class="chip focus">Focus: ${esc(f.focus)}</span>` : '',
+  ].join('');
+  const busy = commandBusy();
+  const actions = admin ? `<div class="fund-actions">
+      ${x.status === 'stopped' ? '' : f.paused
+        ? `<button type="button" class="primary" data-fund-cmd="resume" data-fk="resume" ${busy}>Resume</button>`
+        : `<button type="button" class="danger" data-fund-cmd="pause" data-fk="pause" ${busy}>Pause</button>`}
+      <button type="button" data-fund-tab="settings" data-fk="settings">Settings</button></div>` : '';
+  const count = (n) => ` <span class="tab-count"><span class="sr-only">(</span>${n}<span class="sr-only"> ${n === 1 ? 'stock' : 'stocks'})</span></span>`;
+  const tabHtml = tabs.map((t) => `<button type="button" role="tab" id="fund-tab-${t}" data-fund-tab="${t}" aria-selected="${t === tab}" aria-controls="${t === 'settings' ? 'fund-controls' : 'fund-body'}" tabindex="${t === tab ? 0 : -1}">${esc(FUND_TABS[t])}${t === 'holdings' ? count(x.stocks) : ''}</button>`).join('');
+  return `<section class="panel fund-head" aria-labelledby="fund-name">
+      <div class="fund-head-top"><div class="fund-head-text"><h2 id="fund-name">${esc(f.name ?? 'AI fund')}</h2><div class="fund-chips">${chips}</div></div>${actions}</div>
+      <div class="fund-tabs" role="tablist" id="fund-tabs" aria-label="${esc(f.name ?? 'AI fund')}: sections">${tabHtml}</div>
+    </section>
+    ${fundNotices(f, c)}
+    ${renderProposals(f)}`;
+}
+
+// ----- AI fund: one fund's tabs -----
+
+// What a fund with no decisions says instead (a stopped fund won't make its first).
+const noDecisions = (f) => `<p class="muted">${f.stoppedAt ? 'It made no decisions before it was stopped.' : 'No decisions yet. The first one happens 15 minutes after the market opens.'}</p>`;
+
+// One decision: what the AI thought, its orders (or none) and, in the full list, what else it considered
+// and its sources.
+function decisionOrders(d, f, known) {
+  return d.orders.length ? `<ul class="orders">${d.orders.map((o) => `<li><span class="chip ${o.action === 'buy' || o.action === 'cover' ? 'buy' : 'sell'}">${esc(o.action)}</span>
+    ${Number(o.shares).toLocaleString()} ${esc(o.symbol)}
+    ${o.status === 'filled' ? `at ${price(o.price)}${o.fee ? ` <span class="muted small">+ ${money(o.fee, f.currency)} fees</span>` : ''}${heldLine(o.track)}`
+      : o.status === 'rejected' ? `<span class="down">rejected: ${esc(o.message)}</span>`
+      : `<span class="muted">${esc(o.status)}${o.limitPrice ? `, limit ${price(o.limitPrice)}` : ''}</span>`}
+    <span class="muted small">${esc(o.reason)}</span>${o.thesis ? `<br><span class="thesis small">${esc(thesisWords(o.thesis, { short: o.action === 'short' }))}</span>` : ''}${citedChips(o.lessonsApplied, known)}</li>`).join('')}</ul>` : '<p class="muted small">No trades this round.</p>';
+}
+function decisionItem(d, f, known) {
+  if (d.skipped) return `<p class="muted small decision-skip">${fmtDateTime(d.time)}: ${esc(d.outlook)}</p>`;
+  return `<article class="decision">
+    <header><strong>${fmtDateTime(d.time)}</strong>${d.usage ? ` <span class="muted small">${esc(madeBy(d))} · about US$${d.usage.costUsd.toFixed(2)}</span>` : ''}${d.learned ? ' <span class="chip">used its lessons</span>' : ''}</header>
+    <p>${esc(d.outlook)}</p>
+    ${decisionOrders(d, f, known)}
+    ${d.considered?.length ? `<p class="small muted">Also considered: ${d.considered.map((c, i, a) => `${esc(c.stance)} ${esc(c.symbol)} (${esc(c.why_not)})${i < a.length - 1 ? ';' : '.'}${citedChips(c.lessonsApplied, known)}`).join(' ')}</p>` : ''}
+    ${sources(d.source_urls)}
+  </article>`;
+}
+
+// "Needs you": trades waiting for approval (shown at the top of the fund), and its stops and risk's
+// warnings; otherwise what happens to its trades.
+function needsYou(x, owner) {
+  const f = x.fund, s = f.settings ?? {};
+  const waiting = (f.proposals ?? []).filter((p) => p.status === 'awaiting').length;
+  const items = [];
+  if (waiting) items.push(`<strong>${plural(waiting, 'trade')} waiting for ${owner ? 'your' : 'the owner\'s'} approval</strong>, at the top of this fund. A proposal expires after an hour.`);
+  if (x.positions.length) {
+    const { rows, uneven } = positionRisk(x.positions, x.account.equity, dossiers(), f.protections, { quotes: state.prices.quotes ?? {}, now: new Date() });
+    if (uneven) items.push(`${esc(uneven.symbol)} is ${Math.round(uneven.weight * 100)}% of the fund but ${Math.round(uneven.riskShare * 100)}% of its daily risk (Holdings: Stops and risk).`);
+    const close = rows.filter((r) => stopMovesShown(r) != null && stopMovesShown(r) < 2).map((r) => r.symbol);
+    if (close.length) items.push(`${esc(listWords(close))} ${close.length === 1 ? 'is' : 'are'} within 2 typical daily moves of ${close.length === 1 ? 'its' : 'their'} stop-loss, which ordinary swings often reach.`);
+  }
+  const calm = x.status === 'stopped' ? 'Nothing: the fund is stopped.'
+    : s.broker !== 'tiger' ? 'Nothing waiting. Simulator trades go through by themselves.'
+      : s.approval === 'manual' ? 'Nothing waiting. Trades the AI proposes wait at the top of this fund for approval, for up to an hour.'
+        : 'Nothing waiting. Its trades go to Tiger by themselves.';
+  return `<section class="panel needs">
+    <div class="panel-head"><h2>${owner ? 'Needs you' : 'Needs attention'}</h2></div>
+    <ul class="needs-list">${(items.length ? items : [calm]).map((t) => `<li class="${items.length ? 'warn-item' : ''}">${t}</li>`).join('')}</ul>
+  </section>`;
+}
+
+// Overview: the fund in four tiles (value, against the index, holdings, AI cost), its value against the
+// index, its holdings in short, its latest decision and what needs you.
+function fundOverview(x, c, ov) {
+  const f = x.fund, a = x.account, s = f.settings ?? {};
+  const quotes = state.prices.quotes ?? {};
+  const bench = x.bench;
   const cap = state.spend?.cap, month = monthSpend(state.spend);
+  const owner = state.user?.isAdmin || !authEnabled;
   const known = lessonsById(f, c);
-  el.innerHTML = `
-    ${state.linkGone ? `<div class="notice warn fund-alert link-gone" role="status"><span><strong>That fund has been removed:</strong> the link you followed was for a fund that's no longer here, so this is "${esc(f.name ?? 'AI fund')}".</span></div>` : ''}
-    ${renderWeekly(f)}
-    ${renderLeaderboard(c, f)}
-    ${check && !check.ok ? `<div class="notice warn fund-alert"><span><strong>Your Tiger account doesn't hold what the funds think:</strong> ${check.mismatches.map((m) => `${esc(m.symbol)}: funds ${m.fund}, Tiger ${m.tiger}`).join('; ')}. Check the Tiger app before trading further.</span></div>` : ''}
-    <div class="fund-title"><h2>${esc(f.name ?? 'AI fund')}</h2><span class="chip">${esc(STYLES[f.style]?.label ?? '')}</span>
-      ${f.focus ? `<span class="muted small">Focus: ${esc(f.focus)}</span>` : ''}</div>
-    ${f.aiCapped ? `<div class="notice warn fund-alert"><span><strong>AI paused for the month:</strong> ${esc(f.aiCapped.message)}</span></div>` : ''}
-    ${f.paused ? `<div class="notice warn fund-alert"><span><strong>Trading is paused</strong> (${fmtDateTime(f.paused.at)}): ${esc(f.paused.reason)} Stop-losses still work.</span></div>` : ''}
-    ${f.broker?.error && s.broker === 'tiger' ? `<div class="notice warn fund-alert"><span><strong>Tiger:</strong> ${esc(f.broker.error)}</span></div>` : ''}
-    ${renderProposals(f)}
-    <section class="cards">
-      <div class="card"><div class="label">${esc(f.name ?? 'AI fund')} · profit / loss</div>
-        <div class="big ${tone(a.net)}">${money(a.net, f.currency, { sign: true })}</div>
-        <div class="${tone(a.net)}">${pct(a.netPct)} on ${money(f.budget, f.currency)}</div></div>
-      <div class="card"><div class="label">Value now</div><div class="big">${money(a.equity, f.currency)}</div>
-        <div class="sub"><span>Cash</span><span>${money(a.cash, f.currency)}</span><span>Buying power</span><span>${money(a.buyingPower, f.currency)}</span>
-          <span>Fees paid</span><span>${money(a.fees ?? 0, f.currency)}</span></div></div>
-      <div class="card"><div class="label">Versus the index</div>
-        ${bench ? `<div class="big ${tone(a.net - bench.net)}">${money(a.net - bench.net, f.currency, { sign: true })}</div>
-          <div class="small">${a.net >= bench.net ? 'ahead of' : 'behind'} ${esc(bench.label)} bought with the same ${money(f.budget, f.currency)} ${bench.partial ? `on ${fmtDate(bench.since)}` : 'when the fund started'}</div>
-          <div class="sub"><span>Index</span><span class="${tone(bench.pct)}">${pct(bench.pct)} (${money(bench.value, f.currency)})</span><span>AI fund</span><span class="${tone(a.netPct)}">${pct(a.netPct)}</span></div>`
-          : '<p class="muted small">No index prices yet.</p>'}</div>
-      <div class="card"><div class="label">AI cost (estimated)</div>
-        <div class="big">US$${aiCostUsd.toFixed(2)}</div>
-        <div class="small">for this fund's ${f.decisions.filter((d) => d.usage).length} decisions</div>
-        <div class="sub">${aiCost != null ? `<span>Profit after AI cost</span><span class="${tone(a.net - aiCost)}">${money(a.net - aiCost, f.currency, { sign: true })}</span>` : ''}
-          <span>All scheduled AI, ${new Date().toLocaleDateString(undefined, { month: 'long' })}</span><span>US$${month.toFixed(2)}${cap ? ` of US$${cap} cap` : ''}</span></div></div>
-      <div class="card"><div class="label">Status</div><p>${esc(status)}</p>
-        <p class="small">Trades through: <strong class="${f.broker?.accountType === 'live' ? 'down' : ''}">${esc(brokerLabel(f))}</strong>${s.broker === 'tiger' ? `<br>${s.approval === 'manual' ? 'You approve each trade' : 'Trades automatically'}` : ''}</p>
-        <p class="muted small">Limits: ${s.maxOrderPct ?? 25}% of the budget per order; pauses after losing ${s.dailyLossPct ?? 5}% in a day; ${s.allowShorts === false ? 'no short selling' : 'shorts allowed'}.<br>
-          Model: ${esc(modelName(s.model || TIERS.advanced))}.<br>
-          Fees: ${esc(s.broker === 'tiger' ? 'what Tiger charges' : planFor(s.feePlan ?? 'tiger').label)}.<br>
-          Started ${fmtDateTime(f.startedAt)}. Last decision ${f.lastDecisionAt ? ago(f.lastDecisionAt) : 'not yet'}.</p>
-        ${f.lastError ? `<p class="down small">Last decision failed ${ago(f.lastError.time)}: ${esc(f.lastError.message)}</p>` : ''}</div>
-    </section>
-    <section class="panel">
-      <div class="panel-head"><h2>Fund value</h2></div>
-      ${fundValueChart(f, bench, quotes)}
-      <p class="muted small">Hard limit: the fund can only use its ${money(f.budget, f.currency)}. Orders beyond its buying power or the per-order limit are rejected, and shorts are closed automatically at a 40% loss.${s.broker === 'tiger' ? ' Values use Tiger\'s actual fill prices.' : ''}</p>
-    </section>
-    <section class="panel">
+  const freeWord = x.shorts ? 'buying power' : 'cash';
+  const tiles = `<section class="kpis" aria-label="${esc(f.name ?? 'AI fund')} in figures">
+    <div class="card"><div class="label">Value now</div>
+      <div class="big">${money(a.equity, f.currency)}</div>
+      <div class="${tone(a.net)}">${money(a.net, f.currency, { sign: true })} (${pct(a.netPct)}) on ${money(f.budget, f.currency)}</div>
+      <div class="sub"><span>Cash</span><span>${money(a.cash, f.currency)}</span><span>Buying power</span><span>${money(a.buyingPower, f.currency)}</span>
+        <span>Fees paid</span><span>${money(a.fees ?? 0, f.currency)}</span></div></div>
+    <div class="card"><div class="label">Against the index</div>
+      ${bench ? `<div class="big ${tone(x.vsIndex)}">${pts(x.vsIndex)}</div>
+        <div class="small">${esc(bench.label)} made <span class="${tone(bench.pct)}">${pct(bench.pct)}</span> (${money(bench.value, f.currency)}) with the same ${money(f.budget, f.currency)} ${bench.partial ? `since ${fmtDate(bench.since)}` : 'since the fund started'}: the fund is ${a.net >= bench.net ? 'ahead' : 'behind'} by ${money(Math.abs(a.net - bench.net), f.currency)}.</div>
+        <div class="sub"><span>Beta</span><span>${x.beta ? `${x.beta.beta.toFixed(2)} <span class="muted">(${x.beta.days} days)</span>` : `after ${FUND_BETA_DAYS} trading days`}</span></div>`
+        : '<p class="muted small">No index prices yet.</p>'}</div>
+    <div class="card"><div class="label">Holdings</div>
+      <div class="big">${x.stocks ? plural(x.stocks, 'stock') : 'All in cash'}</div>
+      ${investedBar(x.investedPct, freeWord)}
+      <div class="small">${Math.round(x.investedPct * 100)}% invested · ${money(x.free, f.currency)} ${freeWord}</div></div>
+    <div class="card"><div class="label">AI cost (estimated)</div>
+      <div class="big">US$${x.costUsd.toFixed(2)}</div>
+      <div class="small">for this fund's ${plural(f.decisions.filter((d) => d.usage).length, 'decision')}</div>
+      <div class="sub">${x.cost != null ? `<span>Profit after AI cost</span><span class="${tone(a.net - x.cost)}">${money(a.net - x.cost, f.currency, { sign: true })}</span>` : ''}
+        <span>All scheduled AI, ${new Date().toLocaleDateString(undefined, { month: 'long' })}</span><span>US$${month.toFixed(2)}${cap ? ` of US$${cap} cap` : ''}</span></div></div>
+  </section>`;
+  const top = x.positions.slice(0, 8);
+  const most = Math.max(0, ...top.map((p) => p.weight ?? 0));
+  const holdings = `<section class="panel">
+    <div class="panel-head"><h2>Holdings (${x.stocks})</h2><button type="button" class="link-btn" data-fund-tab="holdings">All details</button></div>
+    ${top.length ? `<ul class="hold-list">${top.map((p) => `<li><span class="hl-name">${stockLink(p.symbol, f.id)}${p.short ? '<span class="chip sell">short</span>' : ''} <span class="muted small">${esc(quotes[p.symbol]?.name ?? '')}</span></span>
+        ${shareBar(p.weight ?? 0, most)}<span class="hl-num">${pct1(p.weight)}</span><span class="hl-num ${tone(p.unrealizedPct)}">${pct(p.unrealizedPct)}</span></li>`).join('')}</ul>
+      ${x.stocks > top.length ? `<p class="small">And ${x.stocks - top.length} more in All details.</p>` : ''}
+      <p class="muted small">The bar and first number: each stock's share of the fund. The last: its profit or loss since bought, after the fees on buying.</p>`
+      : '<p class="muted">All in cash.</p>'}
+  </section>`;
+  const d = [...f.decisions].reverse().find((x) => !x.skipped);
+  const latest = `<section class="panel">
+    <div class="panel-head"><h2>Latest decision${d ? ` · ${esc(fmtDateTime(d.time))}` : ''}</h2>${f.decisions.length ? '<button type="button" class="link-btn" data-fund-tab="decisions">All decisions</button>' : ''}</div>
+    ${d ? `<p>${esc(d.outlook)}</p>${decisionOrders(d, f, known)}` : noDecisions(f)}
+  </section>`;
+  const archived = !ov.combined && c.archived?.length ? `Removed earlier: ${c.archived.slice(-5).map((y) => `${esc(y.name)} ${pct((y.finalValue ?? y.budget) / y.budget - 1)}`).join(', ')}.` : '';
+  return `${tiles}
+    <div class="ov-grid">
+      <section class="panel">
+        <div class="panel-head"><h2>Fund value</h2></div>
+        ${fundValueChart(f, bench, quotes)}
+        <p class="muted small">Hard limit: the fund can only use its ${money(f.budget, f.currency)}. Orders beyond its buying power or the per-order limit are rejected, and shorts are closed automatically at a 40% loss.${s.broker === 'tiger' ? ' Values use Tiger\'s actual fill prices.' : ''}</p>
+        <p class="muted small">Limits: ${s.maxOrderPct ?? 25}% of the budget per order; pauses after losing ${s.dailyLossPct ?? 5}% in a day; ${s.allowShorts === false ? 'no short selling' : 'shorts allowed'}. Fees: ${esc(s.broker === 'tiger' ? 'what Tiger charges' : planFor(s.feePlan ?? 'tiger').label)}. Started ${fmtDateTime(f.startedAt)}.</p>
+      </section>
+      ${holdings}
+      ${latest}
+      ${needsYou(x, owner)}
+    </div>
+    <p class="muted small">"Against the index" is the fund's return minus what the same money made in ${esc(BENCHMARKS[f.currency].label)} since it started, after fees, in percentage points. Beta is how much the fund's value has moved with its index day to day (1: in step with it; 0.5: half as much, as with half in cash; below 0: against it, as when net short), shown after ${FUND_BETA_DAYS} trading days: a fund with a beta above 1 should beat a rising index without any skill. ${archived}</p>
+    ${ov.combined ? '' : renderSpend()}
+    ${authEnabled && state.user && !state.user.isAdmin ? '<p class="muted small">Only admins can start, pause or stop AI funds.</p>' : ''}
+    ${authEnabled ? '' : `<p class="muted small">To stop the fund and close its positions, or to start a new one, use ${runLink()} → Run workflow.</p>`}`;
+}
+
+// Holdings: every position, where the money is, profit or loss by position, stops and risk, Tiger's
+// orders and the automatic events (stop-losses, take-profits, dividends, splits).
+function fundHoldings(x) {
+  const f = x.fund, a = x.account, positions = x.positions;
+  const quotes = state.prices.quotes ?? {};
+  return `<section class="panel">
       <div class="panel-head"><h2>Positions</h2></div>
       ${positions.length ? `<div class="chart-grid">${allocationChart(positions, a.buyingPower, f.currency, 'Where the money is', f.portfolio)}${pnlChart(positions, 'Profit or loss by position')}</div>` : ''}
       <div class="table-wrap"><table>${positions.length ? `
@@ -2778,31 +2991,210 @@ function renderFund() {
       ${renderStopsAndRisk(f, positions, a.equity)}
     </section>
     ${renderBrokerOrders(f)}
-    ${renderLearning(f, c)}
-    <section class="panel">
-      <div class="panel-head"><h2>Decisions</h2></div>
-      ${f.decisions.slice().reverse().slice(0, 30).map((d) => d.skipped ? `<p class="muted small decision-skip">${fmtDateTime(d.time)}: ${esc(d.outlook)}</p>` : `<article class="decision">
-        <header><strong>${fmtDateTime(d.time)}</strong>${d.usage ? ` <span class="muted small">${esc(madeBy(d))} · about US$${d.usage.costUsd.toFixed(2)}</span>` : ''}${d.learned ? ' <span class="chip">used its lessons</span>' : ''}</header>
-        <p>${esc(d.outlook)}</p>
-        ${d.orders.length ? `<ul class="orders">${d.orders.map((o) => `<li><span class="chip ${o.action === 'buy' || o.action === 'cover' ? 'buy' : 'sell'}">${esc(o.action)}</span>
-          ${Number(o.shares).toLocaleString()} ${esc(o.symbol)}
-          ${o.status === 'filled' ? `at ${price(o.price)}${o.fee ? ` <span class="muted small">+ ${money(o.fee, f.currency)} fees</span>` : ''}${heldLine(o.track)}`
-            : o.status === 'rejected' ? `<span class="down">rejected: ${esc(o.message)}</span>`
-            : `<span class="muted">${esc(o.status)}${o.limitPrice ? `, limit ${price(o.limitPrice)}` : ''}</span>`}
-          <span class="muted small">${esc(o.reason)}</span>${o.thesis ? `<br><span class="thesis small">${esc(thesisWords(o.thesis, { short: o.action === 'short' }))}</span>` : ''}${citedChips(o.lessonsApplied, known)}</li>`).join('')}</ul>` : '<p class="muted small">No trades this round.</p>'}
-        ${d.considered?.length ? `<p class="small muted">Also considered: ${d.considered.map((c, i, a) => `${esc(c.stance)} ${esc(c.symbol)} (${esc(c.why_not)})${i < a.length - 1 ? ';' : '.'}${citedChips(c.lessonsApplied, known)}`).join(' ')}</p>` : ''}
-        ${sources(d.source_urls)}
-      </article>`).join('') || '<p class="muted">No decisions yet. The first one happens 15 minutes after the market opens.</p>'}
-    </section>
     ${f.events.length ? `<section class="panel"><div class="panel-head"><h2>Automatic events</h2></div><ul class="orders">
       ${f.events.slice().reverse().slice(0, 20).map((e) => `<li>${fmtDateTime(e.time)}: ${['split', 'dividend'].includes(e.action) ? esc(e.why) : `${esc(e.action)} ${Number(e.shares).toLocaleString()} ${esc(e.symbol)} at ${price(e.price)} <span class="muted small">(${esc(e.why)})</span>${heldLine(e.track)}`}</li>`).join('')}
-    </ul></section>` : ''}
-    ${renderSpend()}
-    ${authEnabled ? '' : `<p class="muted small">To stop the fund and close its positions, or to start a new one, use ${runLink} → Run workflow.</p>`}`;
+    </ul></section>` : ''}`;
+}
+
+// Reports: the weekly report and your calls on the trades you declined.
+function fundReports(f) {
+  const weekly = renderWeekly(f), calls = callsTable(f);
+  return `${weekly}${calls ? `<section class="panel calls-panel">${calls}</section>` : ''}${weekly || calls ? '' : '<section class="panel"><p class="muted">No weekly reports: the fund stopped before its first one.</p></section>'}`;
+}
+
+function fundTabBody(x, c, ov, tab) {
+  const f = x.fund;
+  if (tab === 'holdings') return fundHoldings(x);
+  if (tab === 'decisions') {
+    const known = lessonsById(f, c);
+    return `<section class="panel">
+      <div class="panel-head"><h2>Decisions</h2></div>
+      ${f.decisions.slice().reverse().slice(0, 30).map((d) => decisionItem(d, f, known)).join('') || noDecisions(f)}
+    </section>`;
+  }
+  if (tab === 'learning') return renderLearning(f, c);
+  if (tab === 'reports') return fundReports(f);
+  if (tab === 'ask') return renderAskData();
+  return fundOverview(x, c, ov);
+}
+
+// ----- AI fund: all funds combined -----
+
+// "Where the money is" across the funds `t` (fund-views.js totals): US stocks, SGX stocks and what's
+// free to spend, in one currency.
+function combinedMoneyChart(t, title = '') {
+  const segs = [
+    { label: 'US stocks', value: t.longs.US, color: SERIES[0] },
+    { label: 'SGX stocks', value: t.longs.SGX, color: SERIES[2] },
+    { label: t.shorts ? 'Buying power' : 'Cash', value: t.free, color: CASH },
+  ].filter((x) => x.value > 0).map((x) => ({ ...x, display: money(x.value, t.currency) }));
+  if (!segs.length) return '';
+  const shares = shareLabels(segs.map((x) => x.value));
+  return chartSlot((el) => stackBar(el, segs, { ariaLabel: `Where the money is, in ${t.currency}` }), {
+    title, key: `combined-money-${t.currency}`,
+    caption: `In ${t.currency}${t.shorts ? '. Short positions and the cash set aside for them aren\'t shown' : ''}.`,
+    table: tableToggle(['Where', `In ${t.currency}`, 'Share'], segs.map((x, i) => [x.label, x.display, shares[i]])),
+  });
+}
+
+// Every stock the funds hold, the same stock in several funds as one row, largest first.
+function combinedHoldingsTable(rows, base) {
+  const quotes = state.prices.quotes ?? {};
+  const most = Math.max(0, ...rows.map((h) => h.weight ?? 0));
+  return `<div class="table-wrap" tabindex="0" role="region" aria-label="Every holding, combined"><table class="all-holdings">
+    <thead><tr><th>Stock</th><th class="hide-sm">Held by</th><th class="num">Value${base ? ` (${base})` : ''}</th><th class="hide-sm">Weight</th><th class="num">Since bought</th></tr></thead>
+    <tbody>${rows.map((h) => `<tr><td>${stockLink(h.symbol)}${h.short ? '<span class="chip sell">short</span>' : ''}<span class="name">${esc(quotes[h.symbol]?.name ?? '')}</span><span class="name show-sm held-by-sm">${pct1(h.weight)} of the funds · held by ${esc(h.funds.map((x) => x.name).join(', '))}</span></td>
+      <td class="held-by hide-sm">${h.funds.map((x) => `<span class="chip">${esc(x.name)}</span>`).join('')}</td>
+      <td class="num">${money(h.value, base ?? h.currency)}</td>
+      <td class="hide-sm"><span class="share-cell">${shareBar(h.weight ?? 0, most)}<span class="hl-num">${pct1(h.weight)}</span></span></td>
+      <td class="num ${tone(h.plPct)}">${pct(h.plPct)}</td></tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+// All funds: what they're worth together and against their indexes, the stocks they hold, the month's AI
+// cost, where the money is, each fund side by side (the leaderboard) and every holding combined.
+function renderCombined(ov, c) {
+  const v = ov.combined, t = v.totals;
+  const admin = authEnabled && state.user?.isAdmin;
+  const running = ov.funds.filter((x) => x.status !== 'stopped');
+  const indexes = [...new Set(running.map((x) => BENCHMARKS[x.currency].label))];
+  const cap = state.spend?.cap, month = monthSpend(state.spend);
+  const sub = [
+    `${v.running > v.paused || !v.paused ? plural(v.running - v.paused, 'running fund') : ''}${v.running > v.paused && v.paused ? ', ' : ''}${v.paused ? plural(v.paused, 'paused fund') : ''}${v.stopped ? ` (${v.stopped} stopped, not counted)` : ''}`,
+    v.fx ? `US dollars shown in SGD at ${v.fx.toFixed(4)}, the latest rate; each fund's own figures ignore exchange rates`
+      : !t && v.currencies.length > 1 ? 'no exchange rate yet, so each currency is added up on its own' : t ? `in ${t.currency}` : '',
+  ].filter(Boolean).join(' · ');
+  const waiting = ov.funds.map((x) => [x, (x.fund.proposals ?? []).filter((p) => p.status === 'awaiting').length]).filter(([, n]) => n);
+  const paused = running.filter((x) => x.status === 'paused');
+  const capped = running.find((x) => x.fund.aiCapped);
+  const head = `<section class="panel fund-head combined-head" aria-labelledby="fund-name">
+      <div class="fund-head-top"><div class="fund-head-text"><h2 id="fund-name">All funds, combined</h2><p class="muted small">${esc(sub)}</p></div>
+        ${admin && running.some((x) => x.status === 'running') ? `<div class="fund-actions"><button type="button" class="danger" data-fund-cmd="pause-all" data-fk="pause-all" ${commandBusy()}>Pause all funds</button></div>` : ''}</div>
+    </section>
+    ${fundNotices(null, c)}
+    ${capped ? `<div class="notice warn fund-alert"><span><strong>AI paused for the month:</strong> ${esc(capped.fund.aiCapped.message)}</span></div>` : ''}
+    ${paused.length ? `<div class="notice warn fund-alert"><span><strong>Paused:</strong> ${esc(listWords(paused.map((x) => x.fund.name)))}. Stop-losses still work.</span></div>` : ''}
+    ${waiting.map(([x, n]) => `<div class="notice warn fund-alert"><span><strong>${esc(x.fund.name)}:</strong> ${plural(n, 'trade')} waiting for approval.</span><button type="button" class="small-btn" data-fund-open="${esc(x.id)}">Open the fund<span class="sr-only">: ${esc(x.fund.name)}</span></button></div>`).join('')}`;
+  const shared = v.shared.length ? `: ${esc(listWords(v.shared.map((h) => h.symbol)))} ${v.shared.length === 1 ? 'is' : 'are'} held by more than one fund` : v.positions ? ', none held by more than one fund' : '';
+  const stocksTile = `<div class="card"><div class="label">Stocks held</div>
+      <div class="big">${v.stocks ? plural(v.stocks, 'stock') : 'All in cash'}</div>
+      ${t ? investedBar(t.investedPct, t.shorts ? 'buying power' : 'cash') : ''}
+      <div class="small">${t ? `${Math.round(t.investedPct * 100)}% invested · ` : ''}${plural(v.positions, 'position')}${shared}</div></div>`;
+  const costTile = `<div class="card"><div class="label">AI cost this month</div>
+      <div class="big">US$${month.toFixed(2)}</div>
+      <div class="small">${cap ? `of the US$${cap} monthly cap, ` : ''}for all the scheduled AI, the picks included</div>
+      <div class="sub"><span>These funds' decisions, since they started</span><span>US$${v.costUsd.toFixed(2)}</span></div></div>`;
+  const tiles = t ? `<div class="card"><div class="label">Combined value</div>
+      <div class="big">${money(t.value, t.currency)}</div>
+      <div class="${tone(t.net)}">${money(t.net, t.currency, { sign: true })} (${pct(t.netPct)}) on ${money(t.invested, t.currency)}</div></div>
+    <div class="card"><div class="label">Against their ${indexes.length > 1 ? 'indexes' : 'index'}</div>
+      ${t.vsIndex != null ? `<div class="big ${tone(t.vsIndex)}">${pts(t.vsIndex)}</div><div class="small">The same money in ${esc(listWords(indexes))} made <span class="${tone(t.benchPct)}">${pct(t.benchPct)}</span>.</div>`
+        : '<p class="muted small">Not every fund\'s index has prices yet.</p>'}</div>`
+    : v.currencies.map((y) => `<div class="card"><div class="label">${esc(y.currency)} ${y.funds === 1 ? 'fund' : 'funds'} (${y.funds})</div>
+      <div class="big">${money(y.value, y.currency)}</div>
+      <div class="${tone(y.net)}">${money(y.net, y.currency, { sign: true })} (${pct(y.netPct)}) on ${money(y.invested, y.currency)}</div>
+      ${y.vsIndex != null ? `<div class="small">${pts(y.vsIndex)} against ${esc(BENCHMARKS[y.currency].label)}</div>` : ''}</div>`).join('');
+  const where = t ? combinedMoneyChart(t) : v.currencies.map((y) => combinedMoneyChart(y, `${y.currency} funds`)).join('');
+  const byFund = `<div class="table-wrap" tabindex="0" role="region" aria-label="Your funds, by fund"><table class="by-fund">
+      <thead><tr><th>Fund</th><th class="num hide-sm">Value</th>${v.fx ? '<th class="num hide-sm">In SGD</th>' : ''}<th class="num">Return</th><th class="num hide-sm">vs index</th><th class="num hide-sm">Beta</th><th class="num hide-sm">After AI cost</th><th class="num">Stocks</th><th>Share of the total</th></tr></thead>
+      <tbody>${v.byFund.map((x) => `<tr class="${x.status === 'stopped' ? 'muted-row' : ''}">
+        <td><button type="button" class="link-btn fund-link" data-fund-open="${esc(x.id)}">${esc(x.fund.name)}</button>
+          <span class="name show-sm">${money(x.account.equity, x.currency)}${x.inBase != null && x.currency !== v.base ? ` (${money(x.inBase, v.base)})` : ''}${x.vsIndex == null ? '' : ` · <span class="${tone(x.vsIndex)}">${pts(x.vsIndex)}</span> vs index`}</span>
+          <span class="name">${x.status === 'running' ? '' : `<strong>${x.status}</strong> · `}${esc(x.currency)} · ${esc(styleLabel(x.fund))} · ${x.fund.settings?.broker === 'tiger' ? 'Tiger' : 'simulator'} · ${esc(fundModel(x.fund))}${x.fund.settings?.learning === false ? ' · not learning' : ''}${x.fund.focus ? ` · ${esc(x.fund.focus)}` : ''}</span></td>
+        <td class="num hide-sm">${money(x.account.equity, x.currency)}</td>
+        ${v.fx ? `<td class="num hide-sm">${x.inBase == null ? '–' : money(x.inBase, 'SGD')}</td>` : ''}
+        <td class="num ${tone(x.account.netPct)}">${pct(x.account.netPct)}</td>
+        <td class="num hide-sm ${x.vsIndex == null ? '' : tone(x.vsIndex)}">${x.vsIndex == null ? '–' : pts(x.vsIndex)}</td>
+        <td class="num hide-sm">${x.beta ? x.beta.beta.toFixed(2) : '–'}</td>
+        <td class="num hide-sm ${x.afterCost == null ? '' : tone(x.afterCost)}">${x.afterCost == null ? '–' : pct(x.afterCost)}</td>
+        <td class="num">${x.stocks}</td>
+        <td>${x.share == null ? '<span class="muted">–</span>' : `<span class="share-cell">${shareBar(x.share)}<span class="hl-num">${Math.round(x.share * 100)}%</span></span>`}</td>
+      </tr>`).join('')}</tbody>
+    </table></div>
+    <p class="muted small">Best first, by return after the AI's cost; paused and stopped funds are marked, and stopped ones come last. "vs index" is a fund's return minus what the same money made in ${esc(BENCHMARKS.USD.label)} or ${esc(BENCHMARKS.SGD.label)} since it started, after fees. Beta is how much a fund's value has moved with its index day to day (1: in step with it; 0.5: half as much, as with half in cash; below 0: against it, as when net short), shown after ${FUND_BETA_DAYS} trading days: a fund with a beta above 1 should beat a rising index without any skill, so judge "vs index" with it in mind. ${v.fx ? 'Share of the total is in SGD. ' : !t ? 'Without an exchange rate, each fund\'s share is of the funds in its own currency. ' : ''}
+      ${c.archived?.length ? `Removed earlier: ${c.archived.slice(-5).map((y) => `${esc(y.name)} ${pct((y.finalValue ?? y.budget) / y.budget - 1)}`).join(', ')}.` : ''}</p>`;
+  const body = `${v.running ? `<section class="kpis" aria-label="All funds in figures">${tiles}${stocksTile}${costTile}</section>` : '<section class="panel"><p class="muted">No fund is running: the stopped ones are listed below until you remove them.</p></section>'}
+    ${where ? `<section class="panel"><div class="panel-head"><h2>Where the money is</h2></div>${where}</section>` : ''}
+    <section class="panel"><div class="panel-head"><h2>By fund</h2></div>${byFund}</section>
+    ${v.holdings.length ? `<section class="panel"><div class="panel-head"><h2>Every holding, combined (${plural(v.stocks, 'stock')})</h2><span class="muted small">Largest first · weight is of ${t ? 'all the funds together' : 'the funds in the same currency'}</span></div>
+      ${combinedHoldingsTable(v.holdings, t?.currency ?? null)}
+      <p class="muted small">Since bought: the profit or loss of every fund's position in the stock together, after the fees on buying.</p></section>` : ''}
+    ${renderSpend()}`;
+  return { head, body };
+}
+
+// The AI fund page: the switcher, then the fund picked (or all funds), redrawn at every render.
+function renderFund() {
+  const c = state.funds;
+  renderFundStatus();
+  if (c === undefined) {
+    renderFundSwitcher({ funds: [], combined: null }, null);
+    drawIfChanged('fund-head', '');
+    $('fund-controls').hidden = true;
+    $('fund-body').innerHTML = '<section class="panel"><p class="muted">Loading…</p></section>';
+    return;
+  }
+  const ov = fundsOverview(c, state.prices.quotes ?? {}, { fx: state.prices.fx?.USDSGD });
+  const shown = ov.funds.length ? shownFund() : null;
+  renderFundSwitcher(ov, shown);
+  const body = $('fund-body');
+  if (!shown) {
+    state.jumpTo = null;
+    drawIfChanged('fund-head', state.linkGone ? '<div class="notice warn fund-alert link-gone" role="status"><span><strong>That fund has been removed:</strong> the link you followed was for a fund that\'s no longer here.</span></div>' : '');
+    $('fund-controls').hidden = true;
+    body.hidden = false;
+    body.removeAttribute('role');
+    body.innerHTML = `<section class="panel">
+      <h2>AI fund</h2>
+      <p>Give Claude an amount and let it trade on its own, aiming for the biggest profit it can make, in the simulator or through your Tiger Brokers account. It runs on GitHub, so it keeps trading while this page is closed.</p>
+      <p>You can run up to ${MAX_ACTIVE_FUNDS} funds at once, each with its own amount, market, style (cautious, balanced or aggressive), focus and AI model, and compare them side by side.</p>
+      ${authEnabled ? '' : `<ol>
+        <li>Add your Anthropic API key to the GitHub repo as a secret named <code>ANTHROPIC_API_KEY</code> (Settings → Secrets and variables → Actions).</li>
+        <li>Open ${runLink()}, press <strong>Run workflow</strong>, and fill in <em>Start a NEW AI fund with this amount</em>, its currency (USD trades US stocks, SGD trades SGX stocks) and how many decisions a day.</li>
+        <li>Come back here in a few minutes.</li>
+      </ol>`}
+      <p class="small"><strong>Hard limits:</strong> the fund can only use its amount; any order costing more than its buying power, or more than the per-order limit, is rejected. It pauses itself after losing the daily limit, and shorts are closed automatically at a 40% loss.</p>
+      <p class="muted small">Cost: each decision is one Claude call with web search, roughly US$0.05–0.15: Claude Haiku 4.5 reads the news and Claude Sonnet 5 decides.</p>
+    </section>
+    ${renderSpend()}`;
+    flushCharts();
+    return;
+  }
+  if (shown === ALL) {
+    state.jumpTo = null;
+    const { head, body: html } = renderCombined(ov, c);
+    drawIfChanged('fund-head', head);
+    $('fund-controls').hidden = true;
+    body.hidden = false;
+    body.removeAttribute('role');
+    body.removeAttribute('aria-labelledby');
+    drawFundBody(html, 'all');
+    flushCharts();
+    return;
+  }
+  const x = ov.funds.find((y) => y.fund === shown);
+  const tabs = fundTabs();
+  // after a link from Telegram: its weekly report (Reports), or its trades waiting for approval (at the
+  // top of every tab; the weekly report when none are waiting any more)
+  const waiting = (shown.proposals ?? []).some((p) => p.status === 'awaiting');
+  if (state.jumpTo === 'week' || (state.jumpTo === 'approve' && !waiting)) setFundTab('reports');
+  const tab = tabs.includes(state.fundTab) ? state.fundTab : 'overview';
+  if (drawIfChanged('fund-head', fundHead(x, c, tabs, tab))) {
+    // on a phone the sub-tabs scroll sideways: keep the one shown in sight
+    const row = $('fund-tabs'), sel = row.querySelector('[aria-selected="true"]');
+    if (sel && row.scrollWidth > row.clientWidth) {
+      const a = sel.getBoundingClientRect(), b = row.getBoundingClientRect();
+      if (a.left < b.left || a.right > b.right) row.scrollLeft += a.left - b.left - 12;
+    }
+  }
+  $('fund-controls').hidden = tab !== 'settings';
+  body.hidden = tab === 'settings';
+  body.setAttribute('role', 'tabpanel');
+  body.setAttribute('aria-labelledby', `fund-tab-${tab}`);
+  drawFundBody(tab === 'settings' ? '' : fundTabBody(x, c, ov, tab), `${shown.id}:${tab}`);
   flushCharts();
-  // after a link from Telegram: its weekly report, or its trades waiting for approval
   if (state.jumpTo) {
-    const target = state.jumpTo === 'approve' ? el.querySelector('.approvals') ?? el.querySelector('.weekly') : el.querySelector('.weekly');
+    const target = state.jumpTo === 'approve' ? document.querySelector('#fund-head .approvals') : body.querySelector('.weekly');
     state.jumpTo = null;
     target?.scrollIntoView({ block: 'start' });
   }
@@ -3323,9 +3715,17 @@ $('strategist-form').addEventListener('submit', runStrategist);
 $('picks-refresh').addEventListener('click', refreshPicks);
 
 $('cards').addEventListener('click', (e) => { if (e.target.id === 'open-convert') openConvert(); });
+// The fund's sub-tabs, as tabs work: the arrow keys (and Home, End) move to the next tab and show it.
 document.addEventListener('keydown', (e) => {
-  const row = e.target.closest?.('[data-fund-select]');
-  if (row && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); selectFund(row.dataset.fundSelect); }
+  const tab = e.target.closest?.('#fund-tabs [data-fund-tab]');
+  if (!tab || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
+  e.preventDefault();
+  const all = [...$('fund-tabs').querySelectorAll('[data-fund-tab]')];
+  const i = all.indexOf(tab);
+  const next = all[e.key === 'Home' ? 0 : e.key === 'End' ? all.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : -1) + all.length) % all.length];
+  setFundTab(next.dataset.fundTab);
+  render();
+  document.querySelector(`#fund-tabs [data-fund-tab="${CSS.escape(next.dataset.fundTab)}"]`)?.focus();
 });
 $('convert-form').addEventListener('submit', submitConvert);
 $('convert-form').addEventListener('input', () => { $('convert-error').textContent = ''; updateConvert(); });

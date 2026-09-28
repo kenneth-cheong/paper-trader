@@ -10,6 +10,7 @@
   --up: #12813f;
   --down: #c62828;
   --up-bg: #e5f5ec;
+  --up-text: #0f7336; /* green text on a tinted background (the up-bg chips, the selected fund card): 4.5:1 there */
   --down-bg: #fbe9e9;
   --warn-bg: #fff4d6;
   --warn-text: #6b4a00;
@@ -37,6 +38,7 @@
     --up: #3ccf78;
     --down: #ff6b6b;
     --up-bg: #133222;
+    --up-text: #3ccf78;
     --down-bg: #3a1a1c;
     --warn-bg: #3a3014;
     --warn-text: #f3d68a;
@@ -151,11 +153,11 @@ td.num, th.num { text-align: right; }
 td .name { display: block; font-size: 12px; color: var(--muted); max-width: 220px; overflow: hidden; text-overflow: ellipsis; }
 .empty { color: var(--muted); padding: 12px 10px; white-space: normal; }
 .chip { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 99px; background: var(--surface-2); color: var(--muted); margin-left: 6px; vertical-align: 1px; }
-.chip.buy { background: var(--up-bg); color: var(--up); }
+.chip.buy { background: var(--up-bg); color: var(--up-text); }
 .chip.sell { background: var(--down-bg); color: var(--down); }
 .chip.results { background: var(--warn-bg); color: var(--warn-text); white-space: nowrap; }
 /* the ten-year memory: a pattern that held on the held-out years, and today's regime (descriptive) */
-.chip.held { background: var(--up-bg); color: var(--up); }
+.chip.held { background: var(--up-bg); color: var(--up-text); }
 .chip.regime-chip { margin-left: 0; white-space: normal; max-width: 100%; }
 .regime-line { margin: 4px 0 10px; }
 .regime-line .chip { margin-right: 6px; }
@@ -313,12 +315,6 @@ body.locked { overflow: hidden; }
   .chip.results { white-space: normal; display: inline-block; max-width: 100%; margin-left: 0; }
 }
 
-.leaderboard tbody tr { cursor: pointer; }
-.leaderboard tbody tr:hover { background: var(--hover, rgba(127, 127, 127, .08)); }
-.leaderboard tbody tr.selected { background: var(--surface-2); box-shadow: inset 3px 0 0 var(--accent); }
-.leaderboard tbody tr:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.fund-title { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; margin: 18px 0 8px; }
-.fund-title h2 { margin: 0; }
 .lessons { padding-left: 18px; display: grid; gap: 8px; margin: 8px 0; }
 .lessons li { font-size: 14px; }
 .lesson-form { margin: 8px 0; }
@@ -498,4 +494,140 @@ textarea { font: inherit; width: 100%; padding: 7px 10px; border: 1px solid var(
 .chart-table tr.muted-row td { color: var(--muted); }
 @media (max-width: 800px) {
   .lab-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ---------- the AI fund page: switcher, fund header and sub-tabs, overview, all funds ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.fund-switcher { margin-bottom: 14px; }
+/* what a visually hidden text is placed against, so it never widens a row that scrolls */
+.fund-card, .fund-tabs, .fund-alert { position: relative; }
+.fs-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px 12px; margin-bottom: 8px; }
+.fs-title { font-size: 13px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.fund-cards { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.fund-cards > li { display: flex; min-width: 0; }
+.fund-card { display: flex; flex-direction: column; gap: 2px; width: 100%; min-height: 112px; padding: 12px 14px; text-align: left; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); color: var(--text); }
+.fund-card:hover { background: var(--surface); border-color: color-mix(in srgb, var(--accent) 45%, var(--border)); }
+.fund-card.selected { border: 2px solid var(--accent); padding: 11px 13px; background: var(--surface-2); background: color-mix(in srgb, var(--accent) 10%, var(--surface)); }
+.fund-card.selected .up { color: var(--up-text); }
+.fund-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fund-card.stopped { border-style: dashed; }
+.fund-card.stopped .fc-name { color: var(--muted); }
+.fund-card.add { flex-direction: row; align-items: center; justify-content: center; gap: 8px; border-style: dashed; color: var(--muted); font-weight: 600; }
+.fund-card.add:hover, .fund-card.add[aria-expanded="true"] { color: var(--text); }
+.fund-card.add svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; flex: none; }
+.fc-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 4px 8px; }
+.fc-name { font-weight: 700; font-size: 16px; min-width: 0; overflow-wrap: anywhere; }
+.fc-chips { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 4px; }
+.fc-chips .chip, .fc-head .chip { margin: 0; white-space: nowrap; }
+.fc-style, .fc-stocks, .fc-compact { font-size: 13px; color: var(--muted); }
+.fc-value { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 0 8px; margin-top: auto; padding-top: 6px; }
+.fc-value .v { font-size: 17px; font-weight: 700; }
+.fc-compact { display: none; }
+.fund-status { margin: -6px 0 12px; }
+.fund-status:empty { display: none; }
+.fund-start .fund-form { margin-top: 0; }
+
+/* the fund's header: its name, what it is, its main actions and its sub-tabs */
+.fund-head { padding-bottom: 0; }
+.fund-head-top { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px 24px; }
+.fund-head-text { min-width: 0; flex: 1 1 320px; }
+.fund-head h2 { font-size: 24px; overflow-wrap: anywhere; }
+.fund-head-text > p { margin: 6px 0 0; }
+.combined-head { padding-bottom: 14px; }
+.fund-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.fund-chips .chip { margin: 0; font-size: 13px; padding: 3px 10px; white-space: normal; max-width: 100%; }
+.chip.ok { background: var(--up-bg); color: var(--up-text); font-weight: 600; }
+.fund-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.fund-actions button { min-height: 44px; padding: 0 18px; font-weight: 600; }
+.fund-tabs { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; margin: 14px -16px 0; padding: 0 10px; border-top: 1px solid var(--border); }
+.fund-tabs [role="tab"] { flex: none; min-height: 44px; padding: 0 12px; border: 0; border-radius: 0; border-bottom: 3px solid transparent; background: none; color: var(--muted); white-space: nowrap; font-size: 14px; }
+.fund-tabs [role="tab"]:hover { color: var(--text); background: var(--surface-2); }
+.fund-tabs [role="tab"][aria-selected="true"] { color: var(--text); font-weight: 700; border-bottom-color: var(--accent); }
+.fund-tabs [role="tab"]:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.tab-count { display: inline-block; font-size: 12px; font-weight: 400; padding: 0 7px; border-radius: 99px; background: var(--surface-2); color: var(--text); margin-left: 2px; }
+.link-btn { min-height: 44px; padding: 0 2px; border: 0; background: none; color: var(--accent); font-size: 14px; }
+.link-btn:hover { background: none; text-decoration: underline; }
+.link-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+.link-btn.fund-link { min-height: 32px; font-size: 14px; font-weight: 700; color: var(--text); text-align: left; text-decoration: underline dotted; text-decoration-color: var(--muted); text-underline-offset: 3px; }
+.link-btn.fund-link:hover { color: var(--accent); }
+
+/* the fund in four tiles */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+.kpis .card { min-width: 0; }
+.kpis .card .big { overflow-wrap: anywhere; }
+.inv-bar { display: flex; gap: 2px; height: 8px; margin: 8px 0 6px; border-radius: 4px; overflow: hidden; }
+.inv-bar .inv { background: var(--series-1); }
+.inv-bar .rest { flex: 1; background: var(--series-cash); }
+/* shares as bars, beside their numbers */
+.share-bar { display: block; height: 8px; min-width: 40px; border-radius: 4px; overflow: hidden; background: var(--grid); }
+.share-bar > span { display: block; height: 100%; border-radius: 4px; background: var(--series-1); }
+.share-cell { display: flex; align-items: center; gap: 8px; min-width: 130px; }
+.share-cell .share-bar { flex: 1; }
+.share-cell .hl-num { min-width: 44px; }
+.hl-num { text-align: right; white-space: nowrap; }
+.ov-grid { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); gap: 0 16px; align-items: start; }
+.ov-grid > .panel { min-width: 0; }
+.hold-list { list-style: none; margin: 4px 0 8px; padding: 0; display: grid; gap: 10px; }
+.hold-list li { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(40px, 1fr) auto auto; gap: 4px 10px; align-items: center; font-size: 14px; }
+.hl-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hl-name .chip { margin-left: 4px; }
+.needs-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
+.needs-list li { padding-left: 12px; border-left: 3px solid var(--up); }
+.needs-list li.warn-item { border-left-color: var(--warn-text); }
+/* all funds: the funds side by side and every holding */
+.by-fund td:first-child, .all-holdings td:first-child { white-space: normal; min-width: 150px; }
+.by-fund td .name { max-width: 260px; white-space: normal; }
+.by-fund .share-cell { min-width: 110px; }
+.held-by { white-space: normal; }
+.held-by .chip { margin: 2px 4px 2px 0; }
+.held-by .chip { white-space: nowrap; }
+.name.show-sm { display: none; }
+@media (max-width: 560px) { .name.show-sm { display: block; } td .held-by-sm { white-space: normal; max-width: 160px; } }
+/* on a phone the two tables fit their main columns: headings that wrap, a narrower name column and a
+   short share bar by each fund (every holding's weight goes under its name, app.js) */
+@media (max-width: 600px) {
+  .by-fund th, .all-holdings th { white-space: normal; letter-spacing: 0; }
+  .by-fund th, .by-fund td, .all-holdings th, .all-holdings td { padding-left: 4px; padding-right: 4px; }
+  .by-fund td:first-child, .all-holdings td:first-child { min-width: 104px; }
+  .by-fund td .name, .all-holdings td .name, td .held-by-sm { max-width: 116px; }
+  .by-fund .share-cell { min-width: 0; gap: 6px; }
+  .by-fund .share-cell .share-bar { min-width: 16px; }
+  .by-fund .share-cell .hl-num { min-width: 0; }
+}
+.table-wrap[tabindex]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+tr.muted-row td { color: var(--muted); }
+.fund-alert { flex-wrap: wrap; }
+.fund-alert .small-btn { flex: none; min-height: 44px; }
+@media (max-width: 900px) {
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ov-grid { grid-template-columns: minmax(0, 1fr); }
+}
+/* on a phone: the funds as a row of chips that scrolls sideways, and compact tiles */
+@media (max-width: 600px) {
+  .fund-cards { display: flex; overflow-x: auto; gap: 8px; padding: 3px; margin: -3px; scrollbar-width: none; }
+  .fund-cards > li { flex: none; }
+  .fund-card { min-height: 44px; width: auto; max-width: 72vw; padding: 7px 12px; gap: 1px; }
+  .fund-card.selected { padding: 6px 11px; }
+  .fund-card.add { padding: 7px 12px; }
+  .fc-style, .fc-value, .fc-stocks, .fc-chips { display: none; }
+  .fc-compact { display: block; white-space: nowrap; font-size: 12px; }
+  .fc-name { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal; }
+  .fund-head h2 { font-size: 20px; }
+  .fund-chips .chip { font-size: 12px; padding: 2px 8px; }
+  .fund-actions { width: 100%; }
+  .fund-actions button { flex: 1; }
+  .kpis { gap: 10px; }
+  .kpis .card { padding: 12px; }
+  .kpis .card .big { font-size: 17px; overflow-wrap: normal; }
+  .kpis .card .sub { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .kpis .card .sub span:nth-child(even) { text-align: left; margin-bottom: 4px; }
+  .hold-list { gap: 2px; }
+  .hold-list li { grid-template-columns: minmax(0, 1fr) auto auto; row-gap: 0; }
+  /* each stock a full-size tap target */
+  .hold-list .stock-link { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; }
+  .hold-list .stock-link:focus-visible { outline-offset: -2px; } /* inside the name cell, which clips */
+  .hold-list .share-bar { grid-column: 1 / -1; grid-row: 2; }
+}
+@media (max-width: 360px) {
+  .kpis { grid-template-columns: minmax(0, 1fr); }
 }

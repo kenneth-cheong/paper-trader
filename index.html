@@ -139,8 +139,17 @@
 
     <!-- AI fund -->
     <div class="view" data-view="fund">
-      <section id="fund-controls" class="panel" hidden></section>
-      <div id="fund"></div>
+      <!-- the fund switcher: one card per fund, "All funds" and "Start a fund" (app.js renderFundSwitcher) -->
+      <section id="fund-switcher" class="fund-switcher" aria-label="Choose a fund" hidden></section>
+      <p id="fund-status" class="small fund-status" role="status"></p>
+      <section id="fund-start" class="panel fund-start" aria-label="Start a fund" hidden></section>
+      <!-- the fund picked (its header, notices, sub-tabs and the tab shown), or all funds combined -->
+      <div id="fund">
+        <div id="fund-head"></div>
+        <div id="fund-body"></div>
+      </div>
+      <!-- its Settings tab, kept apart so typing survives the page's re-renders (renderFundControls) -->
+      <div id="fund-controls" role="tabpanel" aria-labelledby="fund-tab-settings" hidden></div>
     </div>
 
     <!-- History -->
