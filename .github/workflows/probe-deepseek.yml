@@ -1,0 +1,43 @@
+name: Probe DeepSeek (one-off)
+
+# Run by hand. Lists the models the DEEPSEEK_API_KEY secret can use and makes one tiny test call to each
+# candidate, printing only model names, status codes, finish reasons and the shape of the usage the API
+# reports (no key, no fund data). Removed once the DeepSeek option is set up.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        run: |
+          cat > probe.mjs <<'JS'
+          const key = process.env.DEEPSEEK_API_KEY;
+          if (!key) { console.log('DEEPSEEK_API_KEY is not set'); process.exit(0); }
+          const h = { Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' };
+          const list = await fetch('https://api.deepseek.com/models', { headers: h });
+          const models = await list.json().catch(() => null);
+          console.log('models', list.status, JSON.stringify(models?.data?.map((m) => m.id) ?? models));
+          const bal = await fetch('https://api.deepseek.com/user/balance', { headers: h });
+          console.log('balance endpoint', bal.status, 'is_available:', (await bal.json().catch(() => null))?.is_available);
+          const tool = { type: 'function', function: { name: 'submit', description: 'Submit the answer.', parameters: { type: 'object', additionalProperties: false, required: ['side', 'n'], properties: { side: { type: 'string', enum: ['buy', 'sell'] }, n: { type: 'integer' } } } } };
+          const ids = [...new Set([...(models?.data ?? []).map((m) => m.id), 'deepseek-flash', 'deepseek-v4-flash', 'deepseek-v4-pro', 'deepseek-chat'])];
+          for (const model of ids) for (const choice of [{ type: 'function', function: { name: 'submit' } }, 'required']) {
+            const r = await fetch('https://api.deepseek.com/chat/completions', { method: 'POST', headers: h, body: JSON.stringify({
+              model, max_tokens: 300, tools: [tool], tool_choice: choice,
+              messages: [{ role: 'system', content: 'You are a test. Answer only by calling the tool.' }, { role: 'user', content: 'Choose buy or sell, and a number from 1 to 9.' }],
+            }) });
+            const j = await r.json().catch(() => null);
+            const msg = j?.choices?.[0]?.message;
+            console.log(JSON.stringify({ model, choice: typeof choice === 'string' ? choice : 'named', status: r.status, error: j?.error?.message?.slice(0, 160), served: j?.model, finish: j?.choices?.[0]?.finish_reason, messageKeys: msg ? Object.keys(msg) : null, args: msg?.tool_calls?.[0]?.function?.arguments, usage: j?.usage }));
+          }
+          JS
+          node probe.mjs
