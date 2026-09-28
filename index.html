@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Paper Trader</title>
-  <meta name="description" content="Simulate trading SGX and US stocks with virtual cash, with AI picks, auto-trading rules and an autonomous AI fund.">
+  <meta name="description" content="Simulate trading SGX and US stocks with virtual cash, with AI picks, rule-based trading and an autonomous AI fund.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M1 12l4-4 3 3 6-7' fill='none' stroke='%2316a34a' stroke-width='2'/></svg>">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -32,7 +32,7 @@
   <nav class="tabs" role="tablist" id="tabs">
     <a role="tab" href="#home">Home</a>
     <a role="tab" href="#markets">Markets</a>
-    <a role="tab" href="#auto">Auto-trading</a>
+    <a role="tab" href="#auto">Rule-based</a>
     <a role="tab" href="#strategist">AI strategist</a>
     <a role="tab" href="#fund">AI fund</a>
     <a role="tab" href="#history">History</a>
@@ -92,11 +92,11 @@
       </section>
     </div>
 
-    <!-- Auto-trading -->
+    <!-- Rule-based trading -->
     <div class="view" data-view="auto">
       <section class="panel">
         <div class="panel-head">
-          <h2>Auto-trading rules</h2>
+          <h2>Rule-based trading</h2>
           <button id="new-rule" class="primary">New rule</button>
         </div>
         <p class="muted small">
@@ -113,7 +113,7 @@
       <section class="panel">
         <div class="panel-head"><h2>AI strategist</h2></div>
         <p class="muted small">
-          Claude reads the last year of prices, today's news and your own trades, then proposes strategies as auto-trading
+          Claude reads the last year of prices, today's news and your own trades, then proposes strategies as trading
           rules. Each one is backtested on the past year before you decide to use it. Runs with your Anthropic API key.
         </p>
         <form id="strategist-form" class="form-grid">

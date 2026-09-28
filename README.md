@@ -8,8 +8,8 @@ Practice trading Singapore (SGX) and US stocks with virtual cash at real market 
 |---|---|
 | **Home** | Your profit/loss, a chart of each account's value over time against the index, **AI picks** (which watchlist stocks to go long or short now, based on current news, with sources) with their track record, your holdings with where your money is and each holding's profit or loss, and the **reading guide**: what investing sites recommended for the watchlist's stocks and how their calls did, plus the articles you log yourself (see *Reading guide* below). Tap a stock's symbol for its **stock notes** (below). |
 | **Markets** | Prices, day change and a 1-month sparkline for every stock, and a *results in N days* tag when a company reports soon. Buy, sell or short from here, or tap a symbol for its stock notes. |
-| **Auto-trading** | Rules that trade for you: limit buys, stop-losses, take-profits, trailing stops, moving-average crossovers and scheduled buys. Each rule can be backtested on the past year. |
-| **AI strategist** | Claude reads a year of prices, current news and your own trades, then proposes strategies written as auto-trading rules. Each strategy is backtested automatically, and you can add it as paused rules. |
+| **Rule-based** | Rules that trade for you: limit buys, stop-losses, take-profits, trailing stops, moving-average crossovers and scheduled buys. Each rule can be backtested on the past year. |
+| **AI strategist** | Claude reads a year of prices, current news and your own trades, then proposes strategies written as trading rules. Each strategy is backtested automatically, and you can add it as paused rules. |
 | **AI fund** | Give Claude an amount and it trades on its own to make as much profit as possible, without ever using more than that amount. Run up to 5 funds side by side, each with its own style, focus and model, and compare them on a chart. Each fund's page opens with *This week*, its weekly report of what it learned. Charts show its value, positions, what it has learned and the AI's monthly cost; a *Stops and risk* table shows how much of its daily risk each position carries. |
 | **History** | Realized profit over time, and every trade, with automatic ones marked. |
 
@@ -31,7 +31,7 @@ Every trade pays fees, so all profit and loss is **after fees**:
 - **Buying:** the fee is added to what the shares cost you, so it's in your average price.
 - **Selling:** the fee is taken from what you receive.
 - **Where you see them:** the trade window shows the fees before you confirm, each account card shows *Fees paid*, and History lists the fee for every trade.
-- **Also included in:** backtests, auto-trading rules, orders placed while a market is closed, and the AI fund.
+- **Also included in:** backtests, rule-based trading, orders placed while a market is closed, and the AI fund.
 
 Choose the fees in *Settings → Trading fees*:
 
@@ -62,7 +62,7 @@ For anyone changing them: the charts are hand-drawn SVG in `charts.js` with no l
 
 Every scheduled set of picks is kept with each stock's price when it was picked. Under the picks, the **track record** scores each one after a week and a month of trading: whether it made money in its direction (a short gains when the price falls), and whether it beat the index over the same days (the S&P 500 for US stocks, the STI for SGX). Dividends count, for the stock and the index (a long receives them, after US withholding tax for US stocks; a short pays them). Before fees. Picks older than the year of daily prices drop out of the record. If the picks can't beat the index, don't follow them.
 
-### Auto-trading rules
+### Rule-based trading
 
 Rules run whenever the page is open. When you come back after being away, they replay the last 5 trading days of 15-minute prices, so a rule still fires at the time and price it would have. If you're away longer than that, the gap is skipped. Rules only manage long positions; they never open shorts.
 
@@ -394,7 +394,7 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `calendar.js`, `scripts/fetch-filings.mjs` | The results calendar: US results releases from SEC filings (`state/results-dates.json`), merged with Yahoo's dates, and each stock's typical results-day move. |
 | `dossier.js` | Stock notes: each stock's own history and risk (typical day, the stocks it moves with, results days, dividends and the next ex-date, the 1-in-5 stop, the picks' record), the cards the AI sees, the owner's notes, and each position's risk. `scripts/build-history.mjs dossiers` writes their public part (`state/dossiers.json`) once a day. |
 | `analysts.js`, `scripts/company-data.mjs` | Yahoo Finance's company data, once a day (`state/company-data.json`): next results date, earnings surprises, analysts' ratings and targets, and real rating changes. |
-| `rules.js` | Auto-trading rules engine and backtester. |
+| `rules.js` | Rule-based trading: the rules engine and backtester. |
 | `fund.js` | The AI fund: budget limit, order execution, proposals (approved, or declined with your reason), protections (with the log of every stop change, and each position's worst and best move since it opened), decision schedule. |
 | `ai.js` | Every Claude call: the Haiku news digest (with the news feeds' headlines as leads), then picks, strategies and fund decisions, each answered through a validated "submit" tool; the learning calls (the news backfill, the search behind a big move without news, the weekly review); the reading guide's call, which finds the calls in articles; and the call that turns your *Ask the data* question into a query. |
 | `markets.js` | Exchange trading hours, trading days between dates, and which session news released at a given time falls in. |

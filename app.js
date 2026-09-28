@@ -314,9 +314,9 @@ function runAutomation() {
     const when = fmtDateTime(entry.time);
     if (entry.trade) {
       const t = entry.trade;
-      notify(`Auto-trade: ${t.side === 'buy' ? 'bought' : 'sold'} ${t.qty.toLocaleString()} ${t.symbol} at ${price(t.price)} ${t.currency} (${when}).`, rule);
+      notify(`Rule-based trade: ${t.side === 'buy' ? 'bought' : 'sold'} ${t.qty.toLocaleString()} ${t.symbol} at ${price(t.price)} ${t.currency} (${when}).`, rule);
     } else {
-      notify(`Auto-trade skipped for ${rule?.symbol}: ${entry.error} (${when}).`, rule, true);
+      notify(`Rule-based trade skipped for ${rule?.symbol}: ${entry.error} (${when}).`, rule, true);
     }
   }
 }
@@ -1038,7 +1038,7 @@ function renderTrades() {
     </tr></thead>
     <tbody>${trades.map((t) => `<tr>
       <td class="when">${fmtDate(t.time)}<br><span class="small muted">${new Date(t.time).toLocaleTimeString(undefined, { timeStyle: 'short' })}</span></td>
-      <td><strong>${esc(t.symbol)}</strong><span class="chip ${t.side}">${t.side}</span>${t.rule ? `<span class="chip" title="${esc(ruleNote(t.rule) || 'Auto-trading rule')}">auto</span>` : ''}</td>
+      <td><strong>${esc(t.symbol)}</strong><span class="chip ${t.side}">${t.side}</span>${t.rule ? `<span class="chip" title="${esc(ruleNote(t.rule) || 'Trading rule')}">rule</span>` : ''}</td>
       <td class="num">${t.qty.toLocaleString()}<span class="show-md small muted"><br>@ ${price(t.price)}</span>${t.realized ? `<span class="show-md small ${tone(t.realized)}"><br>${t.realized > 0 ? '+' : '\u2212'}${price(Math.abs(t.realized))}</span>` : ''}</td>
       <td class="num hide-md">${price(t.price)}</td>
       <td class="num hide-md">${money(t.value, t.currency)}</td>
@@ -1366,7 +1366,7 @@ function adoptStrategy(i) {
   saveRules((rules) => {
     for (const r of s.rules) rules.push({ ...structuredClone(r), id: newRule(r).id, enabled: false, state: freshState() });
   });
-  notify(`Added ${s.rules.length} paused rule${s.rules.length > 1 ? 's' : ''} from "${s.title}". Review them under Auto-trading and switch them on.`);
+  notify(`Added ${s.rules.length} paused rule${s.rules.length > 1 ? 's' : ''} from "${s.title}". Review them under Rule-based and switch them on.`);
 }
 
 // ---------- AI fund ----------
