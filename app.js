@@ -17,7 +17,7 @@ import {
   activeLessons, lessonKind, filterWords, behaviourBase, OUTCOME_LABELS, IDEA_LABELS, REVIEW_MIN_NEW, NOISE_CHECK, CAL_NOISE_CHECK, CALIBRATION,
   FILTER_KEYS, FILTER_VALUES, TRACK_LABELS, BOOK, HOLD_NOISE, DECLINE_MIN_CASES,
 } from './learning.js';
-import { DECLINE_REASONS } from './fund.js';
+import { DECLINE_REASONS, DECISION_CHOICES, EVERY_RUN } from './fund.js';
 import { reportLines, reportLabel, dayWords, lessonName, weekOf, droppedWords, REPORT } from './report.js';
 import { positionThesis, thesisProgress, moveWords, CATALYST_LABELS, HORIZON_LABELS, STALE_DAYS } from './thesis.js';
 import { buildDossiers, picksRecord, positionRisk, exDateVsStop, exDateLate, stopLogSummary, indexName, DOSSIER } from './dossier.js';
@@ -1447,6 +1447,20 @@ const mandateFields = (p, v) => `
   <label class="check"><input type="checkbox" id="${p}-shorts" ${v.allowShorts !== false ? 'checked' : ''}> Short selling allowed</label>
   <label class="check"><input type="checkbox" id="${p}-learning" ${v.learning !== false ? 'checked' : ''}> Learns from its results (leave one fund off to compare)</label>
   <label class="check"><input type="checkbox" id="${p}-skip-quiet" ${v.skipQuiet !== false ? 'checked' : ''}> Save AI cost: skip a decision when nothing has changed</label>`;
+// How often a fund decides, with roughly what that costs a month: each decision is one AI call of about
+// US$0.05-0.15 (the default model, reusing the day's news), over about 21 trading days. Every run is about
+// 26 a day; "skip when nothing has changed" skips up to two quiet runs in a row, so roughly a third of that.
+const DECISION_COST = [0.05, 0.15];
+const decisionWords = (n) => (Number(n) === EVERY_RUN ? 'at every run (about every 15 minutes)' : `${n} time${n > 1 ? 's' : ''} a trading day`);
+function decisionOptions(selected = 1) {
+  return DECISION_CHOICES.map((n) => {
+    const perDay = n === EVERY_RUN ? 26 : n;
+    const [lo, hi] = DECISION_COST.map((c) => Math.round(perDay * 21 * c));
+    const label = n === EVERY_RUN ? `Every run, about every 15 minutes (about US$${lo}–${hi} a month; about a third with quiet runs skipped)`
+      : `${n}${n === 1 ? ' (cheapest)' : ''}: about US$${Math.max(1, lo)}–${hi} a month`;
+    return `<option value="${n}" ${Number(selected) === n ? 'selected' : ''}>${label}</option>`;
+  }).join('');
+}
 const readMandate = (p) => ({
   name: $(`${p}-name`).value.trim(), style: $(`${p}-style`).value, focus: $(`${p}-focus`).value.trim(),
   settings: {
@@ -1488,7 +1502,7 @@ function renderFundControls() {
   const f = selectedFund();
   const running = list.filter((x) => !x.stoppedAt);
   const cmd = state.fundCmd;
-  const key = JSON.stringify([authEnabled, state.user?.isAdmin, state.funds === undefined, f?.id, list.map((x) => [x.id, x.name, x.style, x.focus, x.stoppedAt, x.paused?.at, x.settings]), cmd?.phase, cmd?.message]);
+  const key = JSON.stringify([authEnabled, state.user?.isAdmin, state.funds === undefined, f?.id, list.map((x) => [x.id, x.name, x.style, x.focus, x.stoppedAt, x.paused?.at, x.settings, x.decisionsPerDay]), cmd?.phase, cmd?.message]);
   if (key === fundControlsKey) return;
   fundControlsKey = key;
   el.hidden = !authEnabled || state.funds === undefined;
@@ -1508,7 +1522,7 @@ function renderFundControls() {
         <select id="fund-currency"><option value="USD">USD · trades US stocks</option><option value="SGD">SGD · trades SGX stocks</option></select>
       </label>
       <label>Decisions per trading day
-        <select id="fund-decisions"><option value="1">1 (cheapest)</option><option value="2">2</option><option value="4">4</option></select>
+        <select id="fund-decisions">${decisionOptions(1)}</select>
       </label>
       <label>Trades go to
         <select id="fund-broker"><option value="simulator">Simulator (virtual money)</option><option value="tiger">Tiger Brokers account</option></select>
@@ -1537,6 +1551,7 @@ function renderFundControls() {
     ${f.stoppedAt ? '' : `<details class="fund-new"><summary>Mandate, approval and limits</summary>
       <form id="fund-settings-form" class="form-grid fund-form">
         ${mandateFields('set', { name: f.name, style: f.style, focus: f.focus, model: s.model, maxOrderPct: s.maxOrderPct ?? 25, dailyLossPct: s.dailyLossPct ?? 5, allowShorts: s.allowShorts, learning: s.learning, skipQuiet: s.skipQuiet })}
+        <label>Decisions per trading day <select id="set-decisions">${decisionOptions(f.decisionsPerDay)}</select></label>
         ${s.broker === 'tiger' ? `<label>Approval
           <select id="set-approval"><option value="manual" ${s.approval === 'manual' ? 'selected' : ''}>I approve each trade</option><option value="auto" ${s.approval === 'auto' ? 'selected' : ''}>Automatic</option></select>
         </label>` : '<p class="small muted">Approval: none needed. The simulator trades with virtual money, so its trades go through as the AI decides; approving each trade is for funds that trade through Tiger.</p>'}
@@ -1687,8 +1702,10 @@ document.addEventListener('submit', (e) => {
     if (!(amount > 0)) return;
     const where = broker === 'tiger' ? `through your Tiger account (${settings.approval === 'manual' ? 'you approve each trade' : 'automatically'})` : 'in the simulator';
     const label = m.name ? `"${m.name}"` : 'a new AI fund';
-    if (!confirm(`Start ${label} (${STYLES[m.style].label}) with ${money(amount, currency)}, trading ${where}, deciding ${decisionsPerDay} time${decisionsPerDay > 1 ? 's' : ''} a trading day? Funds already running keep going.`)) return;
-    submitFundCommand('start', { amount, currency, decisionsPerDay, payload: { name: m.name, style: m.style, focus: m.focus, settings } });
+    if (!confirm(`Start ${label} (${STYLES[m.style].label}) with ${money(amount, currency)}, trading ${where}, deciding ${decisionWords(decisionsPerDay)}? Funds already running keep going.`)) return;
+    // The Supabase table takes only 1, 2 or 4 (supabase/fund-control.sql); the choice itself travels in the
+    // command, which the job reads first.
+    submitFundCommand('start', { amount, currency, decisionsPerDay: [1, 2, 4].includes(decisionsPerDay) ? decisionsPerDay : 1, payload: { name: m.name, style: m.style, focus: m.focus, decisionsPerDay, settings } });
   }
   if (e.target.id === 'lesson-form') {
     e.preventDefault();
@@ -1726,7 +1743,7 @@ document.addEventListener('submit', (e) => {
   if (e.target.id === 'fund-settings-form') {
     e.preventDefault();
     const m = readMandate('set');
-    submitFundCommand('settings', { payload: { fund: selectedFund()?.id, name: m.name, style: m.style, focus: m.focus, settings: { ...m.settings, ...($('set-approval') ? { approval: $('set-approval').value } : {}) } } });
+    submitFundCommand('settings', { payload: { fund: selectedFund()?.id, name: m.name, style: m.style, focus: m.focus, decisionsPerDay: Number($('set-decisions').value), settings: { ...m.settings, ...($('set-approval') ? { approval: $('set-approval').value } : {}) } } });
   }
 });
 document.addEventListener('click', (e) => {
@@ -2681,7 +2698,7 @@ function renderFund() {
     ? `Stopped ${fmtDateTime(f.stoppedAt)}`
     : f.paused
       ? 'Paused'
-      : `Running · ${f.decisionsPerDay} decision${f.decisionsPerDay > 1 ? 's' : ''} per trading day · ${MARKETS[market].label} ${STATUS_LABELS[marketStatus(market)]}`;
+      : `Running · ${f.decisionsPerDay ? `${f.decisionsPerDay} decision${f.decisionsPerDay > 1 ? 's' : ''} per trading day` : 'deciding at every run'} · ${MARKETS[market].label} ${STATUS_LABELS[marketStatus(market)]}`;
   const check = c.brokerCheck ?? reconcileAll(c); // all Tiger funds against the one Tiger account
   const bench = benchmarkFor({ currency: f.currency, amount: f.budget, since: f.startedAt, quotes, plan: planFor(s.feePlan ?? 'tiger') });
   const fx = state.prices.fx?.USDSGD;

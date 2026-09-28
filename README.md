@@ -118,7 +118,7 @@ Note that the site's static files are public, including the shared prices, AI pi
 
 ### Several AI funds
 
-Up to **5 funds** can run at once. Each has its own amount, currency (market), broker (simulator or Tiger), approval setting, decisions per day, limits and:
+Up to **5 funds** can run at once. Each has its own amount, currency (market), broker (simulator or Tiger), approval setting, decisions per day (see below), limits and:
 
 - **Style**, which is the AI's brief and sets the default limits (you can still change them):
   - **Cautious:** large, established companies, gradual positions, a stop-loss on everything, no shorts. 10% max per order, pauses after a 3% daily loss.
@@ -270,6 +270,12 @@ Admins get an **Ask the data** box on each fund's page, under the ten-year panel
 - **Cost:** about 0.3 US cents a question (the spend chart's *Ask the data*, task *ask*), stopping at the monthly cap. The answers cost nothing.
 - **Not built:** the optional quarterly call that would have a stronger model propose its own questions from tables of 2016–2022. Only your questions are answered.
 
+### Decisions per trading day
+
+How often a fund asks the AI what to do: **1, 2, 4, 8 or 16 times a trading day, or at every run** (about every 15 minutes while its market trades, about 26 a day). Set it when starting a fund and change it any time under *Mandate, approval and limits*. The trading day, from 15 minutes after the open to the close by the clock, is cut into that many equal parts, and the fund decides at the first run in each, so a day never has more than you chose; a part that falls wholly in SGX's lunch break (12:00–13:00) is skipped, so 16 a day on SGX is 15. Stop-losses and take-profits are checked at every run whatever you choose.
+
+Each decision is one AI call, about US$0.05–0.15 on the default model, so this sets most of a fund's cost: roughly US$1–3 a month at 1 a day, US$17–50 at 16, and US$27–82 at every run, or about a third of that with *Save AI cost: skip a decision when nothing has changed* on (it skips up to two quiet runs in a row). Every fund shares the monthly cap (US$30 unless you change `AI_MONTHLY_CAP_USD`), and reaching it stops all the scheduled AI, picks included, for the rest of the month, so raise the cap before choosing every run. A cheaper AI model for the fund (same panel) cuts the cost further.
+
 ### Starting, stopping or replacing the AI fund
 
 **From the app (accounts on, admins only):** the AI fund tab has *Start AI fund* and *Stop fund* buttons. They need a one-time setup, because Supabase starts the GitHub workflow for you:
@@ -285,7 +291,7 @@ The token never reaches the browser. Only admins can send start or stop requests
 
 - *Start a NEW AI fund with this amount*: e.g. `10000`. It runs alongside any others (balanced style; use the app to choose a style, focus and model).
 - *New fund's currency*: `USD` (US stocks) or `SGD` (SGX stocks).
-- *How many times a trading day the AI decides*: 1, 2 or 4.
+- *How many times a trading day the AI decides*: 1, 2 or 4. (From the app you can also choose 8, 16 or every run, and change it on a running fund; see *Decisions per trading day*.)
 - *Stop the AI fund*: closes all its positions and stops it (only when one fund is running; with several, use the app).
 
 ### Trading through Tiger Brokers

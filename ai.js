@@ -721,7 +721,7 @@ function ownContext({ fund, quotes, playbook, calendar = null, dossiers = null, 
     fund: {
       currency: ccy, budget: fund.budget, value: round2(a.equity), profit: round2(a.net), profit_pct: pct(a.netPct),
       cash: round2(a.cash), buying_power: round2(buyingPower(fund.portfolio, ccy)), started: fund.startedAt,
-      decisions_per_day: fund.decisionsPerDay, fees_paid: round2(a.fees ?? 0),
+      decisions_per_day: fund.decisionsPerDay || 'every run, about every 15 minutes', fees_paid: round2(a.fees ?? 0),
       max_order_value: round2(fund.budget * (fund.settings?.maxOrderPct ?? 25) / 100),
     },
     trading_fees: describeFees(planFor(fund.settings?.feePlan ?? 'tiger'), market, Math.min(fund.budget, fund.budget * (fund.settings?.maxOrderPct ?? 25) / 100)),

@@ -4,14 +4,14 @@
 // Environment:
 //   FUND_START_AMOUNT       start a new fund with this budget, alongside any running ones
 //   FUND_CURRENCY           USD (US stocks) or SGD (SGX stocks), with FUND_START_AMOUNT
-//   FUND_DECISIONS_PER_DAY  1, 2 or 4, with FUND_START_AMOUNT
+//   FUND_DECISIONS_PER_DAY  1, 2 or 4, with FUND_START_AMOUNT (the app can send 8, 16 or 0, every run, as the command's decisionsPerDay)
 //   FUND_STOP=true          close every position of a fund and stop it (FUND_COMMAND's fund, or the only one running)
 //   FUND_COMMAND            JSON from the app (in Actions, the workflow's fund_command input, read from the
 //                           event file on the runner rather than the step's environment, which the public
 //                           log prints: it can hold the owner's notes and reasons). `fund` names the fund
 //                           (an id; "all" for pause/resume). With
 //                           FUND_START_AMOUNT: { name, style, focus, settings } for the new fund. Otherwise one of
-//                           { settings, name, style, focus }, { approve: [ids] }, { reject: [ids], why? } (why: the
+//                           { settings, name, style, focus, decisionsPerDay }, { approve: [ids] }, { reject: [ids], why? } (why: the
 //                           owner's reason, a fund.js DECLINE_REASONS key), { pause: true }, { resume: true },
 //                           { remove: true } (a stopped fund), { playbook: { add, filter, claim } | { remove } |
 //                           { restore } | { keep } } (the owner's lessons, learning.js editPlaybook) or, with fund
@@ -144,6 +144,7 @@ const note = (action, message, ok = true, fund = null) => {
   c.lastCommand = { time: now.toISOString(), action, message, ok, fund: fund?.id ?? command.fund ?? null };
   console.log(`${ok ? '' : '! '}${action}: ${message}`);
 };
+const often = (f) => (f.decisionsPerDay ? `${f.decisionsPerDay} decision(s) a day` : 'deciding at every run');
 const where = (f) => (f.settings.broker === 'tiger' ? `through Tiger (${f.settings.approval === 'manual' ? 'you approve each trade' : 'automatic'})` : 'in the simulator');
 // What the owner did to a fund's lessons, in the words the app shows when it's done (never the lesson itself).
 const lessonNote = (p, f) => (p.add ? `Added your lesson to "${f.name}"${Object.keys(cleanFilter(p.filter)).length ? '; the ideas it\'s about are tracked from now on' : ''}.`
@@ -157,9 +158,9 @@ if (Number(env.FUND_START_AMOUNT) > 0) {
   try {
     const f = addFund(c, {
       name: command.name, style: command.style, focus: command.focus, settings: command.settings ?? {},
-      budget: env.FUND_START_AMOUNT, currency: env.FUND_CURRENCY || 'USD', decisionsPerDay: env.FUND_DECISIONS_PER_DAY || 1, now,
+      budget: env.FUND_START_AMOUNT, currency: env.FUND_CURRENCY || 'USD', decisionsPerDay: command.decisionsPerDay ?? (env.FUND_DECISIONS_PER_DAY || 1), now,
     });
-    note('start', `Started "${f.name}": ${f.budget} ${f.currency}, ${f.decisionsPerDay} decision(s) a day, trading ${where(f)}.`, true, f);
+    note('start', `Started "${f.name}": ${f.budget} ${f.currency}, ${often(f)}, trading ${where(f)}.`, true, f);
   } catch (err) {
     note('start', `Couldn't start the fund: ${err.message}`, false);
   }
@@ -200,9 +201,9 @@ try {
     const who = list.length === 1 ? `"${list[0].name}" is` : `All ${list.length} funds are`;
     note(command.pause ? 'pause' : 'resume', command.pause ? `${who} paused; open orders are being cancelled.` : `${who} trading again.`, true, list.length === 1 ? list[0] : null);
   }
-  if (command.settings || command.name !== undefined || command.style !== undefined || command.focus !== undefined) {
+  if (command.settings || command.name !== undefined || command.style !== undefined || command.focus !== undefined || command.decisionsPerDay !== undefined) {
     const f = targetFund(c, command.fund);
-    updateFund(f, { name: command.name, style: command.style, focus: command.focus, settings: command.settings });
+    updateFund(f, { name: command.name, style: command.style, focus: command.focus, settings: command.settings, decisionsPerDay: command.decisionsPerDay });
     note('settings', `Saved "${f.name}".`, true, f);
   }
   if (command.playbook) {

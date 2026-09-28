@@ -167,3 +167,42 @@ test('a short\'s stop also counts from the price it was sold at, not after the f
   assert.deepEqual(checkProtections(f, { 'C38U.SI': sgx(2.55, { intraday: [[t('01:45'), 2.5], [t('02:00'), 2.55]] }) }), []);
   assert.deepEqual(checkProtections(f, { 'C38U.SI': sgx(2.63, { intraday: [[t('02:15'), 2.63]] }) }).map((e) => e.why), ['stop-loss at -5%']);
 });
+
+test('each trading day has exactly the decisions chosen, SGX\'s lunch break included; or one at every run', async () => {
+  const { decisionSlot, EVERY_RUN, DECISION_CHOICES } = await import('../fund.js');
+  // a quote 20 minutes old, as Yahoo's SGX prices are
+  const livePrices = (now, market) => pricesAt(new Date(now.getTime() - 20 * 60000), market, now);
+  const day = (ccy, market, from, to, n) => {
+    const f = newFund({ budget: 1000, currency: ccy, decisionsPerDay: n, now: new Date(from) });
+    const at = [];
+    for (let t = Date.parse(from); t <= Date.parse(to); t += 15 * 60000) {
+      const now = new Date(t);
+      if (decisionDue(f, now, livePrices(now, market))) { f.lastDecisionAt = now.toISOString(); at.push(now.toISOString().slice(11, 16)); }
+    }
+    return at;
+  };
+  // SGX 09:00-17:00 Singapore (01:00-09:00 UTC), with lunch 12:00-13:00; runs every 15 minutes
+  const sgx = (n) => day('SGD', 'SGX', '2026-09-28T00:45:00Z', '2026-09-28T09:15:00Z', n);
+  assert.deepEqual(sgx(1), ['01:30']); // before, a second one came at 16:30 Singapore time
+  assert.deepEqual(sgx(2), ['01:30', '05:15']);
+  assert.deepEqual(sgx(4), ['01:30', '03:15', '05:15', '07:15']);
+  assert.equal(sgx(8).length, 8);
+  assert.equal(sgx(16).length, 15); // a slot wholly inside the lunch break is skipped, never made up
+  assert.equal(sgx(EVERY_RUN).length, 26); // each run while it trades with fresh prices, lunch aside
+  // US 09:30-16:00 New York (13:30-20:00 UTC in September)
+  const us = (n) => day('USD', 'US', '2026-09-28T13:15:00Z', '2026-09-28T20:15:00Z', n);
+  assert.deepEqual([us(1).length, us(2).length, us(4).length, us(8).length, us(16).length], [1, 2, 4, 8, 16]);
+  // the next day starts afresh
+  const f = newFund({ budget: 1000, currency: 'SGD', decisionsPerDay: 1, now: new Date('2026-09-28T00:00:00Z') });
+  f.lastDecisionAt = '2026-09-28T01:30:00Z';
+  const next = new Date('2026-09-29T01:30:00Z');
+  assert.equal(decisionDue(f, next, livePrices(next, 'SGX')), true);
+  // every run: two runs minutes apart (both timers) are one run
+  const e = newFund({ budget: 1000, currency: 'SGD', decisionsPerDay: EVERY_RUN, now: new Date('2026-09-28T00:00:00Z') });
+  e.lastDecisionAt = '2026-09-28T02:00:00Z';
+  for (const [t, due] of [['2026-09-28T02:05:00Z', false], ['2026-09-28T02:15:00Z', true]]) assert.equal(decisionDue(e, new Date(t), livePrices(new Date(t), 'SGX')), due);
+  // only the listed choices
+  assert.deepEqual(DECISION_CHOICES, [1, 2, 4, 8, 16, 0]);
+  for (const bad of [3, 100, -1, '', 'x']) assert.throws(() => newFund({ budget: 1, currency: 'USD', decisionsPerDay: bad }), /Decisions per day/);
+  assert.equal(decisionSlot('SGX', 4, new Date('2026-09-28T04:30:00Z')), null); // lunch
+});

@@ -77,3 +77,15 @@ test('the AI is given the fund\'s mandate', () => {
   const ctx = fundContext({ fund: f, quotes: {}, picks: null, news: null, now });
   assert.deepEqual(ctx.mandate, { name: 'Banks', style: 'Cautious', style_brief: STYLES.cautious.brief, owner_focus: 'Singapore banks only', short_selling_allowed: false });
 });
+
+test('how often a fund decides can be set at the start and changed while it runs: 1, 2, 4, 8, 16 or every run', () => {
+  const c = loadFunds(null);
+  const f = addFund(c, { budget: 1000, currency: 'SGD', decisionsPerDay: 0 });
+  assert.equal(f.decisionsPerDay, 0);
+  updateFund(f, { decisionsPerDay: '16' });
+  assert.equal(f.decisionsPerDay, 16);
+  updateFund(f, { name: 'Renamed' }); // a save without it leaves it alone
+  assert.equal(f.decisionsPerDay, 16);
+  assert.throws(() => updateFund(f, { decisionsPerDay: 5 }), /Decisions per day/);
+  assert.equal(f.decisionsPerDay, 16);
+});

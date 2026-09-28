@@ -9,7 +9,7 @@
 //     opposite side of another Tiger fund's position or open order (see otherTigerHoldings);
 //   - whether Tiger holds what the funds think is checked for all of them together (reconcileAll).
 
-import { newFund, applySettings, reconcile, tigerSymbol } from './fund.js';
+import { newFund, applySettings, reconcile, tigerSymbol, decisionsPerDayOf } from './fund.js';
 
 export const MAX_ACTIVE_FUNDS = 5;
 const OPEN = ['queued', 'sent', 'partial'];
@@ -83,7 +83,8 @@ export function addFund(c, { name, style = DEFAULT_STYLE, focus = '', budget, cu
 }
 
 // Changes a fund's name, style, focus and settings. A new style doesn't change limits by itself.
-export function updateFund(fund, { name, style, focus, settings } = {}) {
+export function updateFund(fund, { name, style, focus, settings, decisionsPerDay } = {}) {
+  if (decisionsPerDay !== undefined) fund.decisionsPerDay = decisionsPerDayOf(decisionsPerDay);
   if (style !== undefined) {
     if (!STYLES[style]) throw new Error(`Unknown style ${style}.`);
     fund.style = style;

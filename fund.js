@@ -33,7 +33,7 @@
 
 import { newPortfolio, applyTrade, summarize, entryOf } from './portfolio.js';
 import { pricePoints } from './rules.js';
-import { MARKETS, marketForCurrency, minutesSinceOpen, sessionMinutes, tradingStatus } from './markets.js';
+import { MARKETS, marketForCurrency, minutesSinceOpen, marketDate, tradingStatus } from './markets.js';
 import { planFor } from './fees.js';
 import { roundTripFee } from './stats.js';
 import { checkedThesis, lessonsAppliedOf, beatsFees } from './thesis.js';
@@ -49,6 +49,19 @@ const isGuard = (o) => o.source === 'guard';
 const isOpen = (o) => OPEN_BROKER.includes(o.status);
 const newId = (p) => `${p}${Date.now().toString(36)}${Math.random().toString(36).slice(2, 6)}`;
 
+// How often a fund decides: that many times a trading day, or EVERY_RUN (0): at every run of the job, about
+// every 15 minutes while its market trades (with settings.skipQuiet, a run where nothing has changed is
+// skipped, at most twice in a row). Each decision is one AI call, so the choice sets most of its cost.
+export const EVERY_RUN = 0;
+export const DECISION_CHOICES = [1, 2, 4, 8, 16, EVERY_RUN];
+export function decisionsPerDayOf(v) {
+  const n = Number(v);
+  if (v === '' || v == null || !DECISION_CHOICES.includes(n)) throw new Error(`Decisions per day must be one of ${DECISION_CHOICES.filter(Boolean).join(', ')} or every run.`);
+  return n;
+}
+// Runs this close together (the two timers can both start one) count as the same run.
+const SAME_RUN_MIN = 10;
+
 export function newFund({ budget, currency, decisionsPerDay = 2, settings = {}, now = new Date() }) {
   budget = Number(budget);
   if (!(budget > 0)) throw new Error('The AI fund needs an amount above 0.');
@@ -58,7 +71,7 @@ export function newFund({ budget, currency, decisionsPerDay = 2, settings = {}, 
     startedAt: now.toISOString(),
     currency,
     budget,
-    decisionsPerDay: Number(decisionsPerDay) || 2,
+    decisionsPerDay: decisionsPerDayOf(decisionsPerDay),
     settings: { ...DEFAULT_SETTINGS },
     portfolio: newPortfolio({ [currency]: budget }),
     protections: {}, // symbol -> { stop_loss_pct, take_profit_pct }
@@ -154,18 +167,30 @@ export function stopPriceFor(side, avgCost, pct, market) {
 
 // ---------- schedule ----------
 
-// Decisions are spread evenly through the market's trading day, starting 15 minutes after the open,
-// and only while the market is really trading (`prices` shows today's prices arriving), so the fund
-// never decides, or fills at stale prices, on a public holiday or after an early close.
+// Exactly `decisionsPerDay` decisions a trading day: the day, from 15 minutes after the open to the
+// close by the clock (SGX's lunch break included), is cut into that many equal slots, and the fund decides
+// at the first run in each slot. A slot with no run while the market trades (a late or missed run, SGX's
+// lunch break) is skipped, never made up later, so the count can't go over. It decides only while the
+// market is really trading (`prices` shows today's prices arriving), so never, or at stale prices, on a
+// public holiday or after an early close.
+export function decisionSlot(market, decisionsPerDay, when) {
+  const since = minutesSinceOpen(market, when);
+  if (since == null || since < 15) return null;
+  const sessions = MARKETS[market].sessions;
+  const span = sessions.at(-1)[1] - sessions[0][0] - 15;
+  return Math.min(decisionsPerDay - 1, Math.floor((since - 15) / (span / decisionsPerDay)));
+}
 export function decisionDue(fund, now = new Date(), prices = null) {
   if (fund.stoppedAt || fund.paused) return false;
   const market = marketForCurrency(fund.currency);
   if (tradingStatus(market, prices, now) !== 'open') return false;
-  const since = minutesSinceOpen(market, now);
-  if (since == null || since < 15) return false;
-  if (!fund.lastDecisionAt) return true;
-  const gapMin = sessionMinutes(market) / fund.decisionsPerDay;
-  return (now - new Date(fund.lastDecisionAt)) / 60000 >= gapMin - 10;
+  const last = fund.lastDecisionAt ? new Date(fund.lastDecisionAt) : null;
+  if (Number(fund.decisionsPerDay) === EVERY_RUN) return (minutesSinceOpen(market, now) ?? 0) >= 15 && (!last || (now - last) / 60000 >= SAME_RUN_MIN);
+  const n = Math.max(1, Number(fund.decisionsPerDay) || 1);
+  const slot = decisionSlot(market, n, now);
+  if (slot == null) return false;
+  if (!last || marketDate(market, last) !== marketDate(market, now)) return true;
+  return (decisionSlot(market, n, last) ?? -1) < slot;
 }
 
 // ---------- orders ----------
