@@ -127,7 +127,8 @@ export function applySettings(fund, s = {}, { atStart = false } = {}) {
   if (s.learning !== undefined) next.learning = Boolean(s.learning);
   if (s.skipQuiet !== undefined) next.skipQuiet = Boolean(s.skipQuiet);
   if (s.model !== undefined) {
-    if (s.model && !/^claude-[a-z0-9.-]+$/.test(s.model)) throw new Error(`Unknown model ${s.model}.`);
+    // Claude's models, or DeepSeek's for the decisions (ai.js FUND_MODELS)
+    if (s.model && !/^(claude|deepseek)-[a-z0-9.-]+$/.test(s.model)) throw new Error(`Unknown model ${s.model}.`);
     next.model = s.model || null; // null: the default model
   }
   // With Tiger, fees are what Tiger actually charges; the Tiger plan is only used to estimate them.

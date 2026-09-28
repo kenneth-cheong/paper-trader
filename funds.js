@@ -83,12 +83,13 @@ export function addFund(c, { name, style = DEFAULT_STYLE, focus = '', budget, cu
 }
 
 // Changes a fund's name, style, focus and settings. A new style doesn't change limits by itself.
+// All or nothing: everything is checked before anything changes, so a refused save leaves the fund as it was.
 export function updateFund(fund, { name, style, focus, settings, decisionsPerDay } = {}) {
-  if (decisionsPerDay !== undefined) fund.decisionsPerDay = decisionsPerDayOf(decisionsPerDay);
-  if (style !== undefined) {
-    if (!STYLES[style]) throw new Error(`Unknown style ${style}.`);
-    fund.style = style;
-  }
+  const perDay = decisionsPerDay !== undefined ? decisionsPerDayOf(decisionsPerDay) : undefined;
+  if (style !== undefined && !STYLES[style]) throw new Error(`Unknown style ${style}.`);
+  if (settings) applySettings({ ...fund, settings: { ...fund.settings }, portfolio: null }, settings); // a trial run on a copy
+  if (perDay !== undefined) fund.decisionsPerDay = perDay;
+  if (style !== undefined) fund.style = style;
   if (name !== undefined) fund.name = String(name).trim().slice(0, 40) || fund.name;
   if (focus !== undefined) fund.focus = String(focus).trim().slice(0, 300);
   if (settings) applySettings(fund, settings);

@@ -89,3 +89,21 @@ test('how often a fund decides can be set at the start and changed while it runs
   assert.throws(() => updateFund(f, { decisionsPerDay: 5 }), /Decisions per day/);
   assert.equal(f.decisionsPerDay, 16);
 });
+
+test('every model the app offers for a fund is accepted by its settings, and nothing else', async () => {
+  const { FUND_MODELS } = await import('../ai.js');
+  const { applySettings } = await import('../fund.js');
+  const f = newFund({ budget: 1000, currency: 'USD' });
+  for (const model of Object.keys(FUND_MODELS)) {
+    applySettings(f, { model });
+    assert.equal(f.settings.model, model);
+  }
+  applySettings(f, { model: '' });
+  assert.equal(f.settings.model, null); // the default
+  assert.throws(() => applySettings(f, { model: 'gpt-4o' }), /Unknown model gpt-4o/);
+  // a refused save changes nothing, not even the fields before the bad one
+  const c = loadFunds(null);
+  const g = addFund(c, { name: 'Before', budget: 1000, currency: 'USD', decisionsPerDay: 1 });
+  assert.throws(() => updateFund(g, { name: 'After', decisionsPerDay: 4, settings: { model: 'gpt-4o' } }), /Unknown model/);
+  assert.deepEqual([g.name, g.decisionsPerDay, g.settings.model ?? null], ['Before', 1, null]);
+});
