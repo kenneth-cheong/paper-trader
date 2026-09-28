@@ -33,7 +33,7 @@
 
 import { newPortfolio, applyTrade, summarize, entryOf } from './portfolio.js';
 import { pricePoints } from './rules.js';
-import { MARKETS, marketForCurrency, minutesSinceOpen, marketDate, tradingStatus } from './markets.js';
+import { MARKETS, marketForCurrency, minutesSinceOpen, minutesToClose, marketDate, tradingStatus } from './markets.js';
 import { planFor } from './fees.js';
 import { roundTripFee } from './stats.js';
 import { checkedThesis, lessonsAppliedOf, beatsFees } from './thesis.js';
@@ -185,6 +185,7 @@ export function decisionDue(fund, now = new Date(), prices = null) {
   if (fund.stoppedAt || fund.paused) return false;
   const market = marketForCurrency(fund.currency);
   if (tradingStatus(market, prices, now) !== 'open') return false;
+  if (fund.style === 'daytrader' && (minutesToClose(market, now) ?? 0) <= DAY_TRADE.flatMinutes) return false; // closing out
   const last = fund.lastDecisionAt ? new Date(fund.lastDecisionAt) : null;
   if (Number(fund.decisionsPerDay) === EVERY_RUN) return (minutesSinceOpen(market, now) ?? 0) >= 15 && (!last || (now - last) / 60000 >= SAME_RUN_MIN);
   const n = Math.max(1, Number(fund.decisionsPerDay) || 1);
@@ -632,6 +633,54 @@ export function recordValue(fund, quotes, now = new Date()) {
   return value;
 }
 
+// Closes `symbols` (every position by default) at the latest prices, or with Tiger by sending closing
+// orders; returns one result per position.
+function closePositions(fund, quotes, now, reason, source, symbols = Object.keys(fund.portfolio.positions)) {
+  const broker = usesBroker(fund);
+  const results = [];
+  for (const symbol of symbols) {
+    const pos = fund.portfolio.positions[symbol];
+    if (!pos) continue;
+    const action = pos.qty > 0 ? 'sell' : 'cover';
+    const q = quotes[symbol];
+    if (broker) {
+      if (!q) { results.push({ symbol, action, shares: Math.abs(pos.qty), status: 'rejected', message: 'No price to close at.' }); continue; }
+      if ((fund.brokerOrders ?? []).some((o) => o.symbol === symbol && isOpen(o) && !o.cancelRequested && !isGuard(o) && (o.action === 'sell' || o.action === 'cover'))) continue; // a closing order is already out
+      const side = pos.qty > 0 ? 'sell' : 'buy';
+      const o = queueBrokerOrder(fund, { symbol, action, side, shares: Math.abs(pos.qty), refPrice: q.price, limitPrice: limitPrice(side, q.price, q.market), market: q.market, reason }, source, now);
+      results.push({ symbol, action, shares: o.qty, status: 'sent to Tiger', limitPrice: o.limitPrice, reason });
+    } else {
+      results.push(...applyOrders(fund, [{ symbol, action, shares: Math.abs(pos.qty), reason }], quotes, now));
+    }
+  }
+  return results;
+}
+
+// A day trader (style 'daytrader') holds nothing overnight: in the last DAY_TRADE.flatMinutes of the
+// day's trading it makes no new decisions (decisionDue) and every position is closed; a position still
+// held from an earlier day (the job didn't run near the close) is closed at the first run the market is
+// trading. Only while the market is really trading (fresh prices), so it never closes at stale prices.
+// Each close is logged as an automatic event. Returns the events.
+export const DAY_TRADE = { flatMinutes: 30 };
+export function dayTradeClose(fund, quotes, prices = null, now = new Date()) {
+  if (fund.style !== 'daytrader' || fund.stoppedAt) return [];
+  const market = marketForCurrency(fund.currency);
+  if (tradingStatus(market, prices, now) !== 'open') return [];
+  const today = marketDate(market, now);
+  const closing = (minutesToClose(market, now) ?? Infinity) <= DAY_TRADE.flatMinutes;
+  const symbols = Object.keys(fund.portfolio.positions).filter((s) => {
+    const opened = fund.tracks?.[s]?.openedAt;
+    return closing || !opened || marketDate(market, new Date(opened)) < today;
+  });
+  if (!symbols.length) return [];
+  const why = closing ? 'day trader: closed before the market closes' : 'day trader: held overnight, closed at the first chance';
+  const events = closePositions(fund, quotes, now, why, 'daytrade', symbols).filter((r) => r.status !== 'rejected').map((r) => ({
+    time: now.toISOString(), symbol: r.symbol, action: r.action, shares: r.shares, price: r.price ?? r.limitPrice ?? null, why,
+  }));
+  for (const e of events) { fund.events.push(e); delete fund.protections[e.symbol]; }
+  return events;
+}
+
 // Closes every position and stops the fund. In the simulator at current prices; with Tiger by sending
 // closing limit orders (and cancelling any other open ones).
 export function stopFund(fund, quotes, now = new Date()) {
@@ -640,19 +689,7 @@ export function stopFund(fund, quotes, now = new Date()) {
     for (const o of fund.brokerOrders ?? []) if (OPEN_BROKER.includes(o.status)) o.cancelRequested = true;
     for (const p of fund.proposals ?? []) if (p.status === 'awaiting') Object.assign(p, { status: 'expired', message: 'The fund was stopped.' });
   }
-  const results = [];
-  for (const [symbol, pos] of Object.entries(fund.portfolio.positions)) {
-    const action = pos.qty > 0 ? 'sell' : 'cover';
-    const q = quotes[symbol];
-    if (broker) {
-      if (!q) { results.push({ symbol, action, shares: Math.abs(pos.qty), status: 'rejected', message: 'No price to close at.' }); continue; }
-      const side = pos.qty > 0 ? 'sell' : 'buy';
-      const o = queueBrokerOrder(fund, { symbol, action, side, shares: Math.abs(pos.qty), refPrice: q.price, limitPrice: limitPrice(side, q.price, q.market), market: q.market, reason: 'Fund stopped' }, 'stop', now);
-      results.push({ symbol, action, shares: o.qty, status: 'sent to Tiger', limitPrice: o.limitPrice, reason: 'Fund stopped' });
-    } else {
-      results.push(...applyOrders(fund, [{ symbol, action, shares: Math.abs(pos.qty), reason: 'Fund stopped' }], quotes, now));
-    }
-  }
+  const results = closePositions(fund, quotes, now, 'Fund stopped', 'stop');
   fund.stoppedAt = now.toISOString();
   fund.decisions.push({ time: fund.stoppedAt, outlook: `Fund stopped by its owner; ${broker ? 'closing orders sent to Tiger' : 'all positions closed'}.`, orders: results, source_urls: [] });
   return results;

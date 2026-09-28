@@ -26,6 +26,12 @@ export const STYLES = {
     brief: 'Aim for steady growth with sensible risk: a spread of positions, stop-losses on every one, and shorts only with a clear reason.',
     defaults: { maxOrderPct: 25, dailyLossPct: 5, allowShorts: true },
   },
+  // A test of day trading (the owner's experiment): the job enforces the flat close (fund.js DAY_TRADE).
+  daytrader: {
+    label: 'Day trader',
+    brief: 'Trade moves within the day only: enter on momentum, news or sharp intraday moves, set tight stop-losses and take-profits, and hold nothing overnight. Every position is closed automatically in the last 30 minutes before the market closes, and no new trades are made then, so only open a position when the move can play out today. Trading fees apply to every trade, so skip small moves that wouldn\'t cover the round-trip fee.',
+    defaults: { maxOrderPct: 25, dailyLossPct: 5, allowShorts: true },
+  },
   aggressive: {
     label: 'Aggressive',
     brief: 'Go for the biggest gains: concentrated positions in the strongest ideas, momentum and news-driven trades, and shorts when a stock looks weak. Accept bigger swings, but still cut losing trades.',

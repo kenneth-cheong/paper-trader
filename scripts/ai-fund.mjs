@@ -96,7 +96,7 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { dirname, join } from 'node:path';
 import { decideFund, reviewPlaybook, readCalls, askSpec, analyze, strategistJobContext, digestFrom, TIERS } from '../ai.js';
 import {
-  decisionDue, executeDecision, setProtections, checkProtections, recordValue, stopFund,
+  decisionDue, executeDecision, dayTradeClose, setProtections, checkProtections, recordValue, stopFund,
   approveProposals, rejectProposals, expireProposals, applyBrokerFills, pauseFund, resumeFund, checkDailyLoss, syncGuards, DECLINE_REASONS,
 } from '../fund.js';
 import { loadFunds, addFund, updateFund, removeFund, targetFund, otherTigerHoldings, activeFunds, MAX_ACTIVE_FUNDS } from '../funds.js';
@@ -174,6 +174,15 @@ try {
   // its positions, and { startMany: [{ amount, currency, decisionsPerDay, name, style, settings,
   // experiment }] } then starts up to MAX_ACTIVE_FUNDS funds together, so they share a start. Counts only
   // are printed.
+  // { stopWhere: { experiment, role, currency } }: stops the running funds with that experiment role (in that
+  // currency, when given), e.g. to replace one arm of an experiment; used with startMany.
+  if (command.stopWhere && typeof command.stopWhere === 'object') {
+    const w = command.stopWhere;
+    const hit = activeFunds(c).filter((f) => f.experiment && f.experiment.id === w.experiment && f.experiment.role === w.role && (!w.currency || f.currency === w.currency));
+    for (const f of hit) stopFund(f, quotes, now);
+    note('stop', `Stopped ${hit.length} fund(s) of the experiment; their positions are being closed.`, hit.length > 0);
+    process.stdout.write(`Funds: stopped ${hit.length}.\n`);
+  }
   if (command.stopAll === true) {
     const running = activeFunds(c);
     for (const f of running) stopFund(f, quotes, now);
@@ -424,6 +433,7 @@ for (const fund of c.funds) {
 
   if (!fund.stoppedAt) {
     for (const e of checkProtections(fund, quotes, now)) log(`Protection: ${e.action} ${e.shares} ${e.symbol} at ${e.price} (${e.why})`);
+    for (const e of dayTradeClose(fund, quotes, prices, now)) log(`Day trade close: ${e.action} ${e.shares} ${e.symbol} (${e.why})`);
     if (Object.keys(quotes).length && checkDailyLoss(fund, quotes, now)) log(`! Daily loss limit hit: ${fund.paused.reason}`);
 
     // re-grade its ideas (free)

@@ -27,6 +27,12 @@ export function minutesSinceOpen(market, now = new Date()) {
   return localClock(market, now).mins - MARKETS[market].sessions[0][0];
 }
 
+// Minutes left before the day's last session closes (null when closed); SGX's lunch break isn't a close.
+export function minutesToClose(market, now = new Date()) {
+  if (!isOpen(market, now)) return null;
+  return MARKETS[market].sessions.at(-1)[1] - localClock(market, now).mins;
+}
+
 // The first trading day whose prices can react to news released on local `date` (YYYY-MM-DD, in the
 // market's own time zone) at local minute `mins`: that day if it came out on a weekday before the
 // close, otherwise the next weekday. Public holidays aren't known here; a day without a session

@@ -206,3 +206,37 @@ test('each trading day has exactly the decisions chosen, SGX\'s lunch break incl
   for (const bad of [3, 100, -1, '', 'x']) assert.throws(() => newFund({ budget: 1, currency: 'USD', decisionsPerDay: bad }), /Decisions per day/);
   assert.equal(decisionSlot('SGX', 4, new Date('2026-09-28T04:30:00Z')), null); // lunch
 });
+
+test('a day trader holds nothing overnight: no new decisions and everything closed in the last 30 minutes', async () => {
+  const { dayTradeClose, DAY_TRADE } = await import('../fund.js');
+  const { minutesToClose } = await import('../markets.js');
+  // US 16:00 New York = 21:00 UTC in January
+  assert.equal(minutesToClose('US', at('20:40')), 20);
+  assert.equal(minutesToClose('US', at('21:00')), null);
+  assert.equal(minutesToClose('SGX', new Date('2026-01-07T04:30:00Z')), null); // SGX's lunch break isn't the close
+  const dt = newFund({ budget: 10000, currency: 'USD', settings: { maxOrderPct: 100 }, now: at('14:00') });
+  dt.style = 'daytrader';
+  applyOrders(dt, [{ symbol: 'A', action: 'buy', shares: 10, reason: '' }, { symbol: 'B', action: 'short', shares: 5, reason: '' }], { A: q(100), B: q(50) }, at('15:00'));
+  const quotes = { A: q(101), B: q(49) };
+  // mid-session: nothing closed, decisions due
+  assert.deepEqual(dayTradeClose(dt, quotes, live(at('17:00')), at('17:00')), []);
+  assert.equal(decisionDue(dt, at('17:00'), live(at('17:00'))), true);
+  // 30 minutes before the close: no new decision, and both positions closed as automatic events
+  assert.equal(DAY_TRADE.flatMinutes, 30);
+  assert.equal(decisionDue(dt, at('20:35'), live(at('20:35'))), false);
+  const events = dayTradeClose(dt, quotes, live(at('20:35')), at('20:35'));
+  assert.deepEqual(events.map((e) => `${e.action} ${e.shares} ${e.symbol}`), ['sell 10 A', 'cover 5 B']);
+  assert.match(events[0].why, /closed before the market closes/);
+  assert.deepEqual(dt.portfolio.positions, {});
+  // a position still held from yesterday (no run near the close) is closed at the next run, mid-session
+  applyOrders(dt, [{ symbol: 'A', action: 'buy', shares: 3, reason: '' }], { A: q(100) }, at('16:00'));
+  const nextDay = new Date('2026-01-08T15:00:00Z');
+  assert.deepEqual(dayTradeClose(dt, quotes, live(nextDay), nextDay).map((e) => e.why), ['day trader: held overnight, closed at the first chance']);
+  // not while the market isn't really trading, and never for the other styles
+  applyOrders(dt, [{ symbol: 'A', action: 'buy', shares: 3, reason: '' }], { A: q(100) }, at('16:00'));
+  assert.deepEqual(dayTradeClose(dt, quotes, pricesAt(at('12:00')), at('20:35')), []); // stale prices
+  const other = newFund({ budget: 10000, currency: 'USD', now: at('14:00') });
+  applyOrders(other, [{ symbol: 'A', action: 'buy', shares: 10, reason: '' }], { A: q(100) }, at('15:00'));
+  assert.deepEqual(dayTradeClose(other, quotes, live(at('20:35')), at('20:35')), []);
+  assert.equal(decisionDue(other, at('20:35'), live(at('20:35'))), true);
+});

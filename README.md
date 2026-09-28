@@ -10,7 +10,7 @@ Practice trading Singapore (SGX) and US stocks with virtual cash at real market 
 | **Markets** | Prices, day change and a 1-month sparkline for every stock, and a *results in N days* tag when a company reports soon. Buy, sell or short from here, or tap a symbol for its stock notes. |
 | **Rule-based** | Rules that trade for you: limit buys, stop-losses, take-profits, trailing stops, moving-average crossovers and scheduled buys. Each rule can be backtested on the past year. |
 | **AI strategist** | Claude reads a year of prices, current news and your own trades, then proposes strategies written as trading rules. Each strategy is backtested automatically, and you can add it as paused rules. |
-| **AI fund** | Give Claude an amount and it trades on its own to make as much profit as possible, without ever using more than that amount. Run up to 5 funds side by side, each with its own style, focus and model. A switcher at the top has a card per fund (its value, return, how many stocks it holds and how much is invested) and *All funds*, every fund combined. Each fund's page has tabs: *Overview*, *Holdings*, *Decisions*, *Learning* (what it has learned), *Reports* (*This week*, its weekly report) and, for admins, *Ask the data* and *Settings*; a *Stops and risk* table shows how much of its daily risk each position carries. |
+| **AI fund** | Give Claude an amount and it trades on its own to make as much profit as possible, without ever using more than that amount. Run up to 10 funds side by side, each with its own style, focus and model. A switcher at the top has a card per fund (its value, return, how many stocks it holds and how much is invested) and *All funds*, every fund combined. Each fund's page has tabs: *Overview*, *Holdings*, *Decisions*, *Learning* (what it has learned), *Reports* (*This week*, its weekly report) and, for admins, *Ask the data* and *Settings*; a *Stops and risk* table shows how much of its daily risk each position carries. |
 | **History** | Realized profit over time, and every trade, with automatic ones marked. |
 
 ### Accounts and trading rules
@@ -126,6 +126,7 @@ Up to **5 funds** can run at once. Each has its own amount, currency (market), b
   - **Cautious:** large, established companies, gradual positions, a stop-loss on everything, no shorts. 10% max per order, pauses after a 3% daily loss.
   - **Balanced:** a spread of positions and sensible risk. 25% per order, 5% daily loss, shorts allowed.
   - **Aggressive:** concentrated bets on the strongest ideas, momentum and shorts. 40% per order, 8% daily loss.
+  - **Day trader:** trades moves within the day and holds nothing overnight. It makes no new decisions in the last 30 minutes of the session, and the job then closes every position it holds (an automatic event, like a stop); anything still held from an earlier day (a run missed near the close) is closed at the next run while the market trades. 25% per order, 5% daily loss, shorts allowed. Best with many decisions a day; mind the fees on every round trip.
 - **Focus** (optional), your own instruction, for example *Only Singapore banks and REITs* or *Big US tech*.
 - **AI model**: the default (Sonnet), or Haiku (cheapest) or Opus (strongest, most expensive).
 
@@ -302,7 +303,7 @@ Which settings work best can only be tested forward: the AI's decisions can't be
 
 The *All funds* view has an **Experiment** panel per market (`experiment.js`): each fund's return after its AI cost, and its average weekly return after AI cost minus the baseline's in the same weeks, with its likely range (8 in 10). The verdict is *Too early* for the first 6 weeks; then *Better* or *Worse than the baseline* only when the difference is at least 2.5 times what noise alone would usually give, *Leaning better/worse (not clear yet)* when the likely range is all on one side of zero, else *No clear difference yet*. With several funds against one baseline, one can look better by luck, so a verdict counts more the longer it holds. Expect months, not days.
 
-An experiment is set up in one run with the workflow's `fund_command` input: `{"fund": "all", "stopAll": true, "startMany": [{"amount": 10000, "currency": "SGD", "decisionsPerDay": 2, "name": "SGX A · baseline", "style": "balanced", "settings": {"model": "claude-sonnet-5"}, "experiment": {"id": "exp-1", "role": "A", "tests": "baseline"}}, …]}` stops every running fund and starts the new ones together (the log shows counts only).
+An experiment is set up in one run with the workflow's `fund_command` input: `{"fund": "all", "stopAll": true, "startMany": [{"amount": 10000, "currency": "SGD", "decisionsPerDay": 2, "name": "SGX A · baseline", "style": "balanced", "settings": {"model": "claude-sonnet-5"}, "experiment": {"id": "exp-1", "role": "A", "tests": "baseline"}}, …]}` stops every running fund and starts the new ones together (the log shows counts only). To replace one arm, `{"fund": "all", "stopWhere": {"experiment": "exp-1", "role": "E", "currency": "USD"}, "startMany": [ … role F … ]}` stops only the running funds with that role (in that currency) before starting the new one.
 
 ### Starting, stopping or replacing the AI fund
 

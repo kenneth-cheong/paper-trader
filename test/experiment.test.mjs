@@ -112,3 +112,29 @@ test('a difference whose likely range is all on one side, but not yet clear of n
   assert.ok(r.lo > 0 && Math.abs(r.t) < EXPERIMENT.t, JSON.stringify(r));
   assert.equal(r.verdict, 'leaning-better');
 });
+
+test('ai-fund.mjs: stopWhere stops one arm of an experiment in one market, and startMany adds its replacement', async () => {
+  const root = new URL('..', import.meta.url).pathname;
+  const dir = await mkdtemp(join(tmpdir(), 'exp-'));
+  for (const d of ['data', 'state']) await mkdir(join(dir, d));
+  await writeFile(join(dir, 'data', 'prices.json'), await readFile(new URL('../data/sample-prices.json', import.meta.url)));
+  const c = loadFunds(null);
+  for (const [currency, role] of [['SGD', 'A'], ['SGD', 'E'], ['USD', 'A'], ['USD', 'E']]) {
+    addFund(c, { name: `${currency} ${role} secret`, budget: 10000, currency, decisionsPerDay: 2, experiment: { id: 'exp-x', role, tests: 'x' } });
+  }
+  await writeFile(join(dir, 'state', 'ai-fund.json'), JSON.stringify(c));
+  const command = {
+    fund: 'all', stopWhere: { experiment: 'exp-x', role: 'E', currency: 'USD' },
+    startMany: [{ amount: 10000, currency: 'USD', decisionsPerDay: 0, name: 'US F · secret', style: 'daytrader', settings: { model: 'deepseek-flash' }, experiment: { id: 'exp-x', role: 'F', tests: 'day trading' } }],
+  };
+  const { FUND_COMMAND, GITHUB_EVENT_PATH, ...env } = process.env;
+  const out = spawnSync('node', [join(root, 'scripts/ai-fund.mjs'), 'state/ai-fund.json', 'state/picks.json'], {
+    cwd: dir, encoding: 'utf8', env: { ...env, ANTHROPIC_API_KEY: '', FUND_PRIVATE: 'true', FUND_COMMAND: JSON.stringify(command) },
+  });
+  assert.equal(out.status, 0, out.stderr);
+  assert.match(out.stdout, /Funds: stopped 1\.\nFunds: started 1\./);
+  assert.doesNotMatch(out.stdout + out.stderr, /secret/);
+  const after = JSON.parse(await readFile(join(dir, 'state', 'ai-fund.json'), 'utf8'));
+  assert.deepEqual(after.funds.filter((f) => f.stoppedAt).map((f) => `${f.currency}${f.experiment.role}`), ['USDE']);
+  assert.deepEqual(after.funds.filter((f) => !f.stoppedAt).map((f) => `${f.currency}${f.experiment.role}:${f.style}`), ['SGDA:balanced', 'SGDE:balanced', 'USDA:balanced', 'USDF:daytrader']);
+});
