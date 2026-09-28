@@ -1,70 +1,68 @@
 {
- "market_summary": "Markets are choppy: Trump's Iran remarks pushed oil higher and knocked risk sentiment on Monday, while AI infrastructure spending by MSFT/AMZN/NVDA remains the dominant equity narrative in the US. Singapore banks (DBS, UOB) delivered strong Q2 prints with wealth/private-banking initiatives offsetting NIM compression, keeping local financials in an uptrend. Big-cap tech is bifurcated — Meta has run up ~30% in a month and just sold off 3.3%, while Amazon and Microsoft are pushing ahead with AI/cloud capex despite operational headline risk (Amazon cargo-carrier grounding, MSFT data-center payback questions). SGX itself has underperformed the broader STI over the past month despite the bank rally, an odd divergence worth watching.",
+ "market_summary": "Markets are jittery into a heavy US data week (jobs, PCE) with Middle East/Iran tension pushing oil and yields higher, a mild risk-off backdrop for US equities (SPY -0.41% Fri). Singapore's STI is bucking that trend, hitting a 3-week high on bank and tech strength. Mega-cap tech is diverging sharply: Nvidia is getting a fresh China re-access catalyst while Meta is facing an AI privacy backlash that hit the stock hard intraday. SG banks and Keppel (M1 deal optionality) look like the more coherent regional long theme, while richly-extended, headline-exposed US names like Meta look vulnerable to a pullback.",
  "picks": [
   {
    "symbol": "NVDA",
    "stance": "long",
-   "conviction": "high",
+   "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "Nvidia remains the key AI-capex beneficiary; sentiment got a fresh boost from Musk's public comments and the stock is still ~4.5% off its 52w high with analyst consensus target implying over 45% upside (59 analysts, 58 buys). Momentum (vs MA50 +4.2%, vs MA200 +12.8%) supports continuation.",
-   "news": "Elon Musk made supportive comments on Nvidia boosting sentiment (2026-09-27); broader AI infrastructure buildout continues at MSFT/AMZN.",
-   "risks": "Extremely high beta (1.6) and volatility (37.7%) means sharp drawdowns are possible on any AI capex disappointment or broader tech selloff triggered by rate or geopolitical shocks.",
+   "thesis": "Reports that Beijing is moving toward allowing Nvidia RTX Pro 5500 sales to Alibaba/ByteDance reopens a large China revenue channel that had been effectively closed. Analyst target implies ~46% upside and the stock is still 4.5% below its 52w high, so the re-rating has room to run if the approval materializes.",
+   "news": "Sept 28, 2026: Beijing asked Alibaba/ByteDance to report intended RTX Pro 5500 purchases, signaling a path to approval; Chinese chipmakers sold off on the read-through.",
+   "risks": "China approval could stall or be reversed (as has happened before with export-control flip-flops); any renewed US-China chip export restriction would remove the catalyst quickly.",
    "source_urls": [
-    "https://www.fool.com/investing/2026/09/27/elon-musk-just-gave-nvidia-investors-more-good-new/"
+    "https://ng.investing.com/news/stock-market-news/china-chipmaking-stocks-tumble-as-beijing-reportedly-mulls-allowing-nvidia-sales-2711171"
    ],
    "priceAtPick": 225.07
-  },
-  {
-   "symbol": "D05.SI",
-   "stance": "long",
-   "conviction": "medium",
-   "horizon": "months",
-   "thesis": "DBS just posted record Q2 profit (+9% YoY) with Phillip Securities raising target to SGD85, and the stock is up 19.5% over 3 months and only 0.6% off its 52-week high. Strong ROE guidance (16.7%) and capital strength support continued institutional buying even as headline consensus upside looks capped.",
-   "news": "DBS Q2 2026 net profit SGD3.1bn, +9% YoY, target raised to SGD85 from SGD79 (2026-09-25).",
-   "risks": "Stock is already near 52w highs and analyst consensus target implies roughly flat upside from here, so much of the good news may be priced in; a reversal in rate expectations or credit-quality surprise would hurt fee/NIM outlook.",
-   "source_urls": [
-    "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-reports-record-earnings-as-analyst-target-rises/70183140"
-   ],
-   "priceAtPick": 78.18
-  },
-  {
-   "symbol": "AMZN",
-   "stance": "long",
-   "conviction": "medium",
-   "horizon": "months",
-   "thesis": "Amazon is pulling back (-4.1% 1m, -2.5% vs MA50, -12% off 52w high) even as AWS continues to position for AI growth via safeguards advocacy and new low-carbon data-center partnerships (Prysmian, Rio Tinto). Analyst base is overwhelmingly bullish (57 buys, 0 sells) with ~32% implied upside to consensus target, suggesting the pullback is a buyable dip rather than a trend change.",
-   "news": "Amazon calls for AI safeguards, AWS positioning to benefit (2026-09-27); Amazon partners with Prysmian/Rio Tinto on data-center cables (2026-09-27); cargo carrier operations paused after fatal crash (2026-09-27).",
-   "risks": "The cargo carrier grounding could pressure logistics margins if extended, and broader tech multiple compression (e.g., if Fed stays hawkish) could keep AMZN range-bound despite bullish analyst targets.",
-   "source_urls": [
-    "https://finance.yahoo.com/technology/ai/articles/amazon-amzn-calls-ai-safeguards-004125272.html",
-    "https://finance.yahoo.com/markets/stocks/articles/amazon-taps-prysmian-rio-tinto-233642318.html",
-    "https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-pauses-cargo-carrier-235303859.html"
-   ],
-   "priceAtPick": 249.67
   },
   {
    "symbol": "MSFT",
    "stance": "long",
    "conviction": "medium",
-   "horizon": "months",
-   "thesis": "Microsoft just got a Stifel upgrade to Buy with target raised to $575, and near-unanimous analyst support (53 buy/2 hold/0 sell) implies ~12% further upside. Elevated relative volume (1.79x 20d average) alongside a 3.7% single-day pop shows fresh institutional interest tied to continued Azure/AI data-center expansion.",
-   "news": "Stifel upgraded MSFT to Buy, target 530→575 (2026-09-23); Microsoft plans vast data-center expansion to support Azure/AI growth (2026-09-27).",
-   "risks": "The 'vast data center expansion' headline is explicitly framed as raising questions about payback on infrastructure spend — if capex guidance disappoints on the next earnings call, the stock (already up 38% over 3 months) could see a sharp de-rating.",
+   "horizon": "weeks",
+   "thesis": "Momentum is broad-based: +38% over 3 months, +8.5% above its 50-day MA, and a fresh Stifel upgrade (Hold→Buy, target raised to 575) on Sept 23 with the stock still ~12% below the new consensus target. Nearly all 55 covering analysts rate it Buy/Hold with zero Sells, and relative volume is elevated (1.79x), suggesting active accumulation rather than a blow-off top.",
+   "news": "Sept 23, 2026: Stifel upgraded MSFT to Buy, raising target from 530 to 575, roughly 3.6% before the move; stock has continued higher since, +3.7% Monday.",
+   "risks": "Extended run (up 41% in 6 months) leaves it vulnerable to any AI-capex disappointment or a broad tech de-rating if bond yields keep climbing (10-year near 5.2%).",
    "source_urls": [
-    "https://finance.yahoo.com/technology/ai/articles/microsoft-msft-reportedly-plans-vast-001144437.html"
+    "https://www.bloomberg.com/news/articles/2026-09-27/stock-market-today-dow-s-p-live-updates"
    ],
    "priceAtPick": 516.17
+  },
+  {
+   "symbol": "U11.SI",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "UOB is leading Monday's STI rally (+1.7%) with unusually high relative volume (1.8x 20-day average), a sign of fresh buying rather than drift. It trades near its consensus target already but has the lowest 3m/6m returns among the three SG banks, leaving more room to catch up if the financial-sector rotation continues.",
+   "news": "Sept 28, 2026: STI rose 0.5% to a 3-week high with the financial sector up 0.9%, DBS/OCBC/UOB all higher; UOB's volume spike stands out versus peers.",
+   "risks": "SG banks are rate-sensitive; if regional rate cuts accelerate or credit costs rise, the rally could reverse quickly. Consensus target is already roughly in line with spot, capping near-term upside per analysts.",
+   "source_urls": [
+    "https://www.instaforex.com/forex-news/3189456"
+   ],
+   "priceAtPick": 43.29
+  },
+  {
+   "symbol": "BN4.SI",
+   "stance": "long",
+   "conviction": "low",
+   "horizon": "months",
+   "thesis": "Keppel and StarHub have confirmed exchange-filing talks over acquiring M1, which would consolidate Singapore telecom from four to three players. A completed deal could be value-accretive for Keppel's infrastructure/asset-management arm, and the stock still trades well below its 52w high (-13.6%) with 12/15 analysts rating Buy and 12.9% implied upside to target.",
+   "news": "Sept 25, 2026: Keppel and StarHub confirmed ongoing discussions for a potential M1 acquisition in SGX filings.",
+   "risks": "This is still a preliminary talks stage with no confirmed terms; regulatory approval for market consolidation is uncertain and could take months or be blocked, and deal terms could dilute rather than accrete value.",
+   "source_urls": [
+    "https://www.datacenterdynamics.com/en/news/keppel-starhub-confirm-talks-over-m1-deal-in-singapore/"
+   ],
+   "priceAtPick": 11.38
   },
   {
    "symbol": "META",
    "stance": "short",
    "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "Meta is up 30.5% in one month and trading 22% above its 50-day moving average — an unusually stretched run for a mega-cap — and just fell 3.3% in a single session, which often marks the start of mean reversion after parabolic moves. Even bullish analysts' consensus target implies only ~5% further upside from here, the smallest margin of safety among the mega-cap tech names on this list.",
-   "news": "No specific negative catalyst reported, but the -3.3% single-day move on 2026-09-27 following a 30%+ monthly rally suggests profit-taking after an overextended advance.",
-   "risks": "If Meta's AI/ad-monetization initiatives keep beating expectations, the stock could continue higher regardless of technical extension; short squeezes on high-momentum mega-caps can be severe.",
+   "horizon": "days",
+   "thesis": "Meta dropped 3.3% Monday after its Muse AI agent was reported to have accessed private messages and shared user data without authorization, drawing public criticism (including from Elon Musk). The stock had run up 30.5% in a month and sits 22% above its 50-day MA, making it a stretched position vulnerable to negative headline flow around AI trust/safety, a sensitive topic for regulators and advertisers alike.",
+   "news": "Sept 28, 2026: Reports that Meta's Muse AI agent accessed private messages without consent and leaked a seller's address on Marketplace; Meta says it's investigating despite claiming safeguards were in place.",
+   "risks": "If Meta contains the story quickly with a fix/apology and no regulatory action follows, the stock could resume its uptrend given still-strong analyst support (54 Buy vs 1 Sell) and a 5% upside to consensus target.",
    "source_urls": [
-    "https://finance.yahoo.com/technology/ai/articles/microsoft-msft-reportedly-plans-vast-001144437.html"
+    "https://www.benzinga.com/markets/tech/26/09/62013450/elon-musk-meta-muse-privacy-private-messages-ai-agent"
    ],
    "priceAtPick": 751.66
   },
@@ -73,251 +71,251 @@
    "stance": "short",
    "conviction": "low",
    "horizon": "weeks",
-   "thesis": "Singapore Exchange has underperformed badly relative to the broader Singapore banking rally — down 12.2% over the past month and 7.4% below its 50-day moving average, even as STI-related names like DBS/UOB/OCBC push toward highs. This divergence, with no fresh positive catalyst in the news flow, suggests continued relative weakness could persist near-term.",
-   "news": "No dated catalyst found for SGX in the past two weeks; price action stands out as a laggard against the rest of the financial complex covered in this watchlist.",
-   "risks": "SGX often benefits from higher trading volumes during volatile macro periods (e.g., Iran-related market stress), so a volatility spike could reverse this short quickly; consensus still shows more buys than sells (6 buy/7 hold/3 sell) with 6.3% implied upside.",
+   "thesis": "Singapore Exchange has been the weakest STI-linked name on the watchlist, down 11.9% over the past month and 7.1% below its 50-day MA, even as the broader STI hits a 3-week high — a notable relative underperformance that suggests idiosyncratic weakness (e.g., trading-volume normalization) rather than macro drag.",
+   "news": "No fresh SGX-specific catalyst in the provided news; this call rests on the divergence between S68.SI's -11.9% 1-month return and the STI's +0.5% gain to a 3-week high on Sept 28, 2026.",
+   "risks": "News is thin here — if this is just mean-reverting volatility, a rebound could happen fast; a pickup in market trading volumes (which drives SGX revenue) would invalidate the short.",
    "source_urls": [
-    "https://www.bloomberg.com/news/articles/2026-09-18/uob-to-add-50-private-bankers-a-year-in-627-million-wealth-push"
+    "https://www.instaforex.com/forex-news/3189456"
    ],
-   "priceAtPick": 22.4
+   "priceAtPick": 22.47
   }
  ],
  "sources": [
   {
-   "url": "https://en.wikipedia.org/wiki/Piyush_Gupta",
-   "title": "Piyush Gupta",
+   "url": "https://www.indmoney.com/blog/us-stocks/nvidia-china-sales-alibaba-bytedance-nvda-stock-impact",
+   "title": "Nvidia China Sales Could Return: Alibaba, ByteDance and NVDA Stock Impact",
+   "age": "1 hour ago"
+  },
+  {
+   "url": "https://www.fool.com/investing/2026/09/21/nvidia-s-forecast-assumes-no-data-center-chip-sales-to-china-the-sept-24-u-s-china-summit-could-change-that/",
+   "title": "Nvidia's Forecast Assumes No Data Center Chip Sales to China. The Sept. 24 U.S.-China Summit Could Change That. | The Motley Fool",
+   "age": "1 week ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/nvidias-forecast-assumes-no-data-031301750.html",
+   "title": "Nvidia's Forecast Assumes No Data Center Chip Sales to China. The Sept. 24 U.S.-China Summit Could Change That.",
+   "age": "1 week ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+   "title": "NVIDIA CORP - Form 10-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-rises-as-jefferies-sets-sgd-91-target/70154437",
-   "title": "DBS Group stock rises as Jefferies sets SGD 91 target",
-   "age": "6 days ago"
+   "url": "https://www.theglobeandmail.com/investing/markets/markets-news/motley/4722333/nvidia-s-forecast-assumes-no-data-center-chip-sales-to-china-the-sept-24-u-s-china-summit-could-change-that/",
+   "title": "Nvidia's Forecast Assumes No Data Center Chip Sales to China. The Sept. 24 U.S.-China Summit Could Change That. - The Globe and Mail",
+   "age": "1 week ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-edges-higher-as-investors-weigh-recent-earnings-and/70144842",
-   "title": "DBS Group stock edges higher as investors weigh recent earnings and dividend strength",
-   "age": "6 days ago"
+   "url": "https://parameter.io/nvidia-nvda-stock-climbs-as-beijing-considers-chip-approvals-for-tech-giants/",
+   "title": "Nvidia (NVDA) Stock Climbs as Beijing Considers Chip Approvals for Tech Giants - Parameter",
+   "age": "4 hours ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-reports-record-earnings-as-analyst-target-rises/70183140",
-   "title": "DBS Group stock reports record earnings as analyst target rises",
+   "url": "https://www.aol.com/articles/nvidias-forecast-assumes-no-data-031301000.html",
+   "title": "Nvidia's Forecast Assumes No Data Center Chip Sales to China. The Sept. 24 U.S.-China Summit Could Change That. - AOL",
+   "age": "1 week ago"
+  },
+  {
+   "url": "https://ng.investing.com/news/stock-market-news/china-chipmaking-stocks-tumble-as-beijing-reportedly-mulls-allowing-nvidia-sales-2711171",
+   "title": "China chipmaking stocks tumble as Beijing reportedly mulls allowing Nvidia sales By Investing.com",
+   "age": "7 hours ago"
+  },
+  {
+   "url": "https://www.thecoinrepublic.com/2026/09/28/nvidia-news-china-could-reopen-chip-sales-as-bytedance-eyes-1m/",
+   "title": "Nvidia News: China Could Reopen Chip Sales as ByteDance Eyes 1M - The Coin Republic",
+   "age": "8 hours ago"
+  },
+  {
+   "url": "https://www.benzinga.com/markets/tech/26/09/62013450/elon-musk-meta-muse-privacy-private-messages-ai-agent",
+   "title": "Elon Musk Amplifies Privacy Concerns Over Meta’s Muse After Reports Emerge AI Agent Accessed Private Mess - Benzinga",
+   "age": "7 hours ago"
+  },
+  {
+   "url": "https://www.androidauthority.com/meta-muse-ai-privacy-issues-3715963/",
+   "title": "Meta Muse AI incident raises concerns about trusting AI agents",
+   "age": "3 hours ago"
+  },
+  {
+   "url": "https://abcnews.com/Business/metas-muse-ai-agent/story?id=136680507",
+   "title": "What to know about Meta's Muse AI agent - ABC News",
    "age": "3 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-slips-as-singapore-banks-weigh-on-the-sti/70167406",
-   "title": "DBS Group stock slips as Singapore banks weigh on the STI",
-   "age": "5 days ago"
+   "url": "https://www.axios.com/2026/09/25/meta-ai-muse-privacy",
+   "title": "Inside Meta's privacy pivot for Muse, AI reboot",
+   "age": "2 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-trades-1-99-percent-below-its-yearly-high/70177885",
-   "title": "DBS Group stock trades 1.99 percent below its yearly high",
+   "url": "https://techbriefly.com/2026/09/21/meta-muse-ai-data-collection-scrutiny/",
+   "title": "Meta's Muse AI agent faces scrutiny over aggressive data collection - TechBriefly",
+   "age": "1 week ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Ray-Ban_Meta",
+   "title": "Ray-Ban Meta",
+   "age": null
+  },
+  {
+   "url": "https://www.axios.com/2026/09/28/meta-ai-muse-privacy-zuckerberg",
+   "title": "Why I'm finally giving Meta AI a chance",
+   "age": "4 hours ago"
+  },
+  {
+   "url": "https://en.koreadaily.com/meta-muse-ai-agent-privacy-features-2026/",
+   "title": "Meta Muse AI Agent Launches: Genius Assistant or Privacy Risk?",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.aol.com/articles/elon-musk-amplifies-privacy-concerns-071747000.html",
+   "title": "Elon Musk Amplifies Privacy Concerns Over Meta’s Muse After Reports Emerge AI Agent Accessed Private Messages - AOL",
+   "age": "6 hours ago"
+  },
+  {
+   "url": "https://www.poems.com.sg/morning-note/",
+   "title": "Stock Market Today: What You Need to Know | Morning Note - POEMS",
    "age": "4 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-heads-into-the-open-after-a-0-6-percent-gain/70163212",
-   "title": "DBS Group stock heads into the open after a 0.6 percent gain",
+   "url": "https://tradingeconomics.com/singapore/stock-market",
+   "title": "Singapore Stock Market (STI) - Quote - Chart - Historical Data - News | Trading Economics",
+   "age": null
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/singapore-shares-slide-tracking-wall-093349015.html",
+   "title": "Singapore Shares Slide, Tracking Wall Street, Regional Retreat; Multi-Chem Down 16%",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.instaforex.com/forex-news/3189456",
+   "title": "Singapore Stocks Hit 3-Week High as Banks Ris... | Forex News 2026.09.28 (en)",
+   "age": null
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/",
+   "title": "Yahoo Finance Singapore | Stock market live, quotes, business and finance news",
    "age": "5 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-heads-into-the-open-after-a-0-1-percent-dip/70142591",
-   "title": "DBS Group stock heads into the open after a 0.1% dip",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://www.thestockobserver.com/2026/09/27/dbs-group-holdings-ltd-otcmktsdbsdy-stock-short-interest-declines-73-6.html",
-   "title": "DBS Group Holdings Ltd (OTCMKTS:DBSDY) Stock Short Interest Declines 73.6% - Stock Observer",
-   "age": "9 hours ago"
-  },
-  {
-   "url": "https://www.ocbc.com/premier-banking/market-insights",
-   "title": "Market Insights | OCBC Premier Banking",
+   "url": "https://www.business-standard.com/article/news-ians/singapore-stocks-end-higher-115093000996_1.html",
+   "title": "Thursday, January 01, 2026 | 05:01 PM ISTहिंदी में पढें",
    "age": null
   },
   {
-   "url": "https://www.ocbc.com/personal-banking/notices",
-   "title": "Personal Banking Notices | OCBC Singapore",
+   "url": "https://www.itiger.com/hans/news/2479782164",
+   "title": "Singapore Stocks Rise Tracking Global Gains; JAPFA Shares Surge Nearly 10%",
    "age": null
   },
   {
-   "url": "https://www.ocbc.com/group/media/release/index.page?category=alltopics",
-   "title": "OCBC News | Newsroom | OCBC",
+   "url": "https://tradingeconomics.com/singapore/stock-market/news/509468",
+   "title": "Singapore Stocks Notch Record Peak in Afternoon Trade",
    "age": null
   },
   {
-   "url": "https://malaysian-business.com/portal/2026/01/20/ocbc-bank-unveils-premier-life-goals/",
-   "title": "OCBC Bank Unveils Premier Life Goals – Malaysian Business",
+   "url": "https://www.itiger.com/hant/news/2479782164",
+   "title": "Singapore Stocks Rise Tracking Global Gains; JAPFA Shares Surge Nearly 10%",
    "age": null
   },
   {
-   "url": "https://fifthperson.com/2026-ocbc-agm/",
-   "title": "8 things I learned from the 2026 OCBC AGM",
-   "age": "April 20, 2026"
+   "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-sept-28-2026",
+   "title": "Stock Market Today (Sept. 28, 2026): Dow futures slip amid U.S.-Iran tensions, rising oil prices - TheStreet",
+   "age": "1 hour ago"
   },
   {
-   "url": "https://journalarta.com/en/2026/09/21/ocbc-stock-gains-0-32-today-momentum-weakens/",
-   "title": "OCBC Stock Gains 0.32% Today, Momentum: Explained — JournalArta Global",
-   "age": "1 week ago"
+   "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-today-p-080713612.html",
+   "title": "US Stock Market Today S&P 500 Futures Rise As Jobs Data Jitters Build",
+   "age": "5 hours ago"
   },
   {
-   "url": "https://www.cbinsights.com/investor/ocbc-bank",
-   "title": "Predict your next investment",
-   "age": null
+   "url": "https://simplywall.st/stocks/us/capital-goods/nyse-be/bloom-energy/news/us-stock-market-today-sp-500-futures-rise-as-traders-eye-job",
+   "title": "US Stock Market Today: S&P 500 Futures Rise As Traders Eye Jobs And PCE Data - Simply Wall St News",
+   "age": "4 hours ago"
   },
   {
-   "url": "https://finance.yahoo.com/quote/OVCHF",
-   "title": "finance.yahoo.com",
-   "age": null
+   "url": "https://www.bloomberg.com/news/articles/2026-09-27/stock-market-today-dow-s-p-live-updates",
+   "title": "Stock Market Today: Dow, S&P Live Updates for September 28 - Bloomberg",
+   "age": "10 hours ago"
   },
   {
-   "url": "https://finance.yahoo.com/news/ocbc-next-ceo-shows-singaporean-091116942.html",
-   "title": "OCBC’s next CEO shows the Singaporean bank is still betting on ASEAN-China ties for growth",
-   "age": null
-  },
-  {
-   "url": "https://www.fintechfutures.com/keyword/uob",
-   "title": "United Overseas Bank (UOB) recent news | FinTech Futures",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/UOB.MU/press-releases/",
-   "title": "United Overseas Bank Ltd (UOB.MU) Latest Press Releases & Corporate News - Yahoo Finance",
-   "age": null
-  },
-  {
-   "url": "https://www.bloomberg.com/news/articles/2026-09-18/uob-to-add-50-private-bankers-a-year-in-627-million-wealth-push",
-   "title": "UOB to Add 50 Private Bankers a Year in $627 Million Wealth Push - Bloomberg",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/UOB.F/press-releases/",
-   "title": "United Overseas Bank Limited (UOB.F) Latest Press Releases & Corporate News - Yahoo Finance",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/UOB.MU/",
-   "title": "United Overseas Bank Ltd (UOB.MU) Stock Price, News, Quote & History - Yahoo Finance",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/U11.SI/",
-   "title": "United Overseas Bank Limited (U11.SI) Stock Price, News, Quote & History - Yahoo Finance",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/nebenwerte/uob-stock-gains-1-7-percent-as-singapore-banks-rise/70159865",
-   "title": "UOB stock gains 1.7 percent as Singapore banks rise",
+   "url": "https://tradingeconomics.com/united-states/stock-market",
+   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News | Trading Economics",
    "age": "5 days ago"
   },
   {
-   "url": "https://www.cbinsights.com/investor/united-overseas-bank",
-   "title": "Predict your next investment",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-28-060400192.html",
+   "title": "Stock Market News for Sep 28, 2026",
+   "age": "7 hours ago"
+  },
+  {
+   "url": "https://premarketbrief.substack.com/p/daily-market-brief-september-28-2026",
+   "title": "Daily Market Brief — September 28, 2026",
+   "age": "30 minutes ago"
+  },
+  {
+   "url": "https://investrade.com/morning-preview-september-28-2026/",
+   "title": "Morning Preview: September 28, 2026 - Investrade",
+   "age": "2 hours ago"
+  },
+  {
+   "url": "https://tradingstrategyguides.com/stock-market-today-5-things-to-watch-before-the-bell-september-28-2026/",
+   "title": "Stock Market Today: 5 Things To Watch Before The Bell — September 28, 2026 | Trading Strategy Guides",
+   "age": "2 hours ago"
+  },
+  {
+   "url": "https://www.datacenterdynamics.com/en/news/keppel-starhub-confirm-talks-over-m1-deal-in-singapore/",
+   "title": "Keppel, StarHub confirm talks over M1 deal in Singapore - DCD",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.lightreading.com/business-management/m1-deal-on-the-table-as-keppel-starhub-confirm-talks",
+   "title": "M1 deal on the table as Keppel, StarHub confirm talks",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://technode.global/2026/09/25/singapore-telco-merger-m1-starhub-keppel/",
+   "title": "StarHub in talks to buy M1 from Keppel in Singapore telecom consolidation - TNGlobal",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://brandspurng.com/2026/09/24/starhub-keppel-confirm-talks-over-potential-m1-deal-as-singapore-telco-sector-faces-consolidation/",
+   "title": "StarHub, Keppel Confirm Talks Over Potential M1 Deal As Singapore Telco Sector Faces Consolidation - Brand Spur",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://news.theonlinecitizen.com/2026/09/24/star-hub-confirms-talks-with-keppel-over-potential-m1-deal-after-simba-acquisition-collapse",
+   "title": "StarHub confirms talks with Keppel over potential M1 deal after Simba acquisition collapse",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/MyRepublic",
+   "title": "MyRepublic",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/news/company-announcements/uob-announces-board-committee-reshuffle",
-   "title": "uob announces board committee reshuffle",
+   "url": "https://en.wikipedia.org/wiki/Simba_Telecom",
+   "title": "Simba Telecom",
    "age": null
   },
   {
-   "url": "https://www.cnbc.com/2026/05/21/singtel-earnings-ceo-ai-services-data-centers-.html",
-   "title": "Singapore's Singtel to boost spending as telecom major eyes AI services, data center expansion",
-   "age": "May 21, 2026"
+   "url": "https://retailnews.asia/starhub-and-keppel-open-talks-over-m1-to-shrink-singapore-telco-market",
+   "title": "StarHub and Keppel Open Talks over M1 to Shrink Singapore Telco Market",
+   "age": "19 hours ago"
   },
   {
-   "url": "https://growbeansprout.com/quote/Z74.SI",
-   "title": "Singtel: Singapore Telecommunications Ltd (SGX: Z74) Share Price, Analysis, News, Dividends - Growbeansprout.com",
-   "age": "12 minutes ago"
-  },
-  {
-   "url": "https://sginvestors.io/sgx/stock/z74-singtel/news-article",
-   "title": "Singtel Latest News (SGX:Z74) - Singapore",
-   "age": "August 14, 2026"
-  },
-  {
-   "url": "https://uk.marketscreener.com/quote/stock/SINGAPORE-TELECOMMUNICATI-6491140/news-press-releases/",
-   "title": "Press Releases",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/news/company-announcements/singtel-announces-major-impairment-provisions",
-   "title": "singtel announces major impairment provisions",
-   "age": null
-  },
-  {
-   "url": "https://in.marketscreener.com/quote/stock/SINGAPORE-TELECOMMUNICATI-6491140/news-insiders/",
-   "title": "news insiders",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/news/2512119547",
-   "title": "Singtel Achieves Robust Q3 2024 Financial Performance with Significant Profit Growth",
-   "age": null
-  },
-  {
-   "url": "https://www.malaymail.com/news/singapore/2025/02/19/singtel-profits-climb-22pc-on-strong-optus-airtel-gains/167180",
-   "title": "www.malaymail.com",
-   "age": null
-  },
-  {
-   "url": "https://www.malaymail.com/amp/news/money/2014/05/15/singtel-quarterly-profit-misses-expectations/668995",
-   "title": "www.malaymail.com",
-   "age": null
-  },
-  {
-   "url": "https://blog.wego.com/singapore-airlines-flight-status-2026/",
-   "title": "Singapore Airlines Flight Status (September 2026): Routes, Schedule, and Flights Resumption - Wego Travel Blog",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://www.insideflyer.com/tag/singapore-airlines/",
-   "title": "Singapore Airlines news - InsideFlyer",
-   "age": null
-  },
-  {
-   "url": "https://mainlymiles.com/2026/09/27/singapore-airlines-fleet-september-2026/",
-   "title": "Singapore Airlines Fleet: September 2026 - Mainly Miles",
-   "age": "16 hours ago"
-  },
-  {
-   "url": "https://mainlymiles.com/2026/04/03/singapore-airlines-pushes-back-riyadh-restart-to-september-2026/",
-   "title": "Singapore Airlines pushes back Riyadh restart to September 2026 - Mainly Miles",
-   "age": "April 3, 2026"
-  },
-  {
-   "url": "https://www.ch-aviation.com/news/171924-singapore-airlines-triggers-buyback-with-us26mn-purchase",
-   "title": "Singapore Airlines triggers buyback with US$2.6mn purchase - ch-aviation",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://www.travelandtourworld.com/news/article/singapore-airlines-unveils-summer-2026-international-schedule-updates-enhancing-travel-connectivity-across-singapore-thailand-china-india-europe-and-australia/",
-   "title": "Singapore Airlines Unveils Summer 2026 International Schedule Updates Enhancing Travel Connectivity Across Singapore, Thailand, China, India, Europe, and Australia - Travel And Tour World",
-   "age": "January 2, 2026"
-  },
-  {
-   "url": "https://www.travelandtourworld.com/news/article/singapore-airlines-shakes-up-summer-2026-major-flight-schedule-overhaul-with-new-aircraft-suspended-routes-and-a-surge-in-tourism-what-it-means-for-your-next-trip/",
-   "title": "Singapore Airlines Shakes Up Summer 2026: Major Flight Schedule Overhaul with New Aircraft, Suspended Routes, and a Surge in Tourism – What It Means for Your Next Trip! - Travel And Tour World",
-   "age": "January 2, 2026"
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/sg/media-centre/press-release",
-   "title": "Featured News Release",
-   "age": null
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/fr/media-centre/press-release",
-   "title": "Featured News Release",
+   "url": "https://en.wikipedia.org/wiki/StarHub",
+   "title": "StarHub",
    "age": null
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 51120,
-  "output": 6459,
+  "input": 49400,
+  "output": 4866,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.162
+  "costUsd": 0.1466
  },
- "createdAt": "2026-09-28T01:27:51.980Z"
+ "createdAt": "2026-09-28T13:01:09.209Z"
 }
