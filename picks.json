@@ -1,328 +1,323 @@
 {
- "market_summary": "Singapore banks are the dominant story: the Fed's Sept 16 hike lifted net interest margin expectations and Jefferies initiated coverage with Buy on DBS/UOB (Hold on OCBC) on Sept 22-23, reinforcing the STI's 24.6% YTD run. Institutional flows into SGX names are reversing course, with Keppel and Thai Beverage flipping from H1 outflows to Q3 inflows (per Sept 25 report), while SGX Group itself posted record FY2026 volumes and got a fresh price-target hike (Sept 27). On the US side, Big Tech earnings were mixed against lofty AI-spending expectations, and Meta's sharp one-day drop (-3.3%) after a huge 30%+ one-month run suggests some profit-taking/de-rating risk in the most extended AI trades. Overall risk appetite for SGX equities looks constructive and catalyst-driven, while US mega-cap tech looks stretched on some names and more balanced on others.",
+ "market_summary": "Markets are choppy: Trump's Iran remarks pushed oil higher and knocked risk sentiment on Monday, while AI infrastructure spending by MSFT/AMZN/NVDA remains the dominant equity narrative in the US. Singapore banks (DBS, UOB) delivered strong Q2 prints with wealth/private-banking initiatives offsetting NIM compression, keeping local financials in an uptrend. Big-cap tech is bifurcated — Meta has run up ~30% in a month and just sold off 3.3%, while Amazon and Microsoft are pushing ahead with AI/cloud capex despite operational headline risk (Amazon cargo-carrier grounding, MSFT data-center payback questions). SGX itself has underperformed the broader STI over the past month despite the bank rally, an odd divergence worth watching.",
  "picks": [
+  {
+   "symbol": "NVDA",
+   "stance": "long",
+   "conviction": "high",
+   "horizon": "weeks",
+   "thesis": "Nvidia remains the key AI-capex beneficiary; sentiment got a fresh boost from Musk's public comments and the stock is still ~4.5% off its 52w high with analyst consensus target implying over 45% upside (59 analysts, 58 buys). Momentum (vs MA50 +4.2%, vs MA200 +12.8%) supports continuation.",
+   "news": "Elon Musk made supportive comments on Nvidia boosting sentiment (2026-09-27); broader AI infrastructure buildout continues at MSFT/AMZN.",
+   "risks": "Extremely high beta (1.6) and volatility (37.7%) means sharp drawdowns are possible on any AI capex disappointment or broader tech selloff triggered by rate or geopolitical shocks.",
+   "source_urls": [
+    "https://www.fool.com/investing/2026/09/27/elon-musk-just-gave-nvidia-investors-more-good-new/"
+   ],
+   "priceAtPick": 225.07
+  },
   {
    "symbol": "D05.SI",
    "stance": "long",
-   "conviction": "high",
-   "horizon": "weeks",
-   "thesis": "DBS is the largest STI weight and just received a fresh Buy initiation from Jefferies alongside the Fed's Sept 16 hike, which directly expands bank net interest margins. Price is up 2.7% vs its 50-day MA and only 0.8% off its 52-week high, showing the market is already rewarding the rate tailwind, and further margin/dividend compounding could extend the move over the next few months.",
-   "news": "Jefferies initiated coverage with Buy on DBS (Sept 22, 2026); Fed hiked rates 25bp Sept 16, 2026, directly benefiting Singapore bank margins, with DBS/OCBC/UOB comprising 40-54% of STI weight.",
-   "risks": "Implied upside from consensus target is only ~0.2%, meaning much of the good news may already be priced in; any dovish Fed pivot or credit-quality scare in Singapore banks would remove the core rate-margin thesis.",
+   "conviction": "medium",
+   "horizon": "months",
+   "thesis": "DBS just posted record Q2 profit (+9% YoY) with Phillip Securities raising target to SGD85, and the stock is up 19.5% over 3 months and only 0.6% off its 52-week high. Strong ROE guidance (16.7%) and capital strength support continued institutional buying even as headline consensus upside looks capped.",
+   "news": "DBS Q2 2026 net profit SGD3.1bn, +9% YoY, target raised to SGD85 from SGD79 (2026-09-25).",
+   "risks": "Stock is already near 52w highs and analyst consensus target implies roughly flat upside from here, so much of the good news may be priced in; a reversal in rate expectations or credit-quality surprise would hurt fee/NIM outlook.",
    "source_urls": [
-    "https://www.minichart.com.sg/2026/09/23/jefferies-starts-singapore-banks-with-buy-on-dbs-and-uob-hold-on-ocbc/",
-    "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/"
+    "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-reports-record-earnings-as-analyst-target-rises/70183140"
    ],
-   "priceAtPick": 78
+   "priceAtPick": 78.18
   },
   {
-   "symbol": "BN4.SI",
-   "stance": "long",
-   "conviction": "high",
-   "horizon": "weeks",
-   "thesis": "Keppel just posted a sharp institutional flow reversal - S$159.2m of net inflows in Q3 versus a S$35.7m outflow in H1 - a concrete, dated signal that big money is rotating back in. Analysts are heavily bullish (12 buy/1 hold/2 sell) with 12.9% implied upside to consensus target, and the stock has been flat/range-bound (vs MA200 -0.1%) rather than overextended, leaving room to re-rate on the improving flow picture.",
-   "news": "Q3 2026 institutional inflow report (Sept 25, 2026): Keppel recorded S$159.2m net inflows, reversing a S$35.7m H1 outflow.",
-   "risks": "A single quarter of institutional buying can reverse quickly; if flows stall or broader SGX sentiment cools, the stock could revert to its prior 6-month softness (-5% over 6m).",
-   "source_urls": [
-    "https://www.businesstoday.com.my/2026/09/25/singapore-stocks-nudge-higher-after-institutional-flow-reversal/"
-   ],
-   "priceAtPick": 11.3
-  },
-  {
-   "symbol": "U11.SI",
+   "symbol": "AMZN",
    "stance": "long",
    "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "UOB received a Buy initiation from Jefferies alongside DBS on the same Fed-hike margin thesis, but the stock has lagged DBS/OCBC's rally (only +6.7% 3m vs OCBC's +28.7%), leaving more room to catch up. It also sits 5.3% off its 52-week high, giving a better entry point than the other two banks.",
-   "news": "Jefferies initiated Buy on UOB (Sept 22, 2026), citing scope for earnings/dividend compounding from the Fed's Sept 16 rate hike.",
-   "risks": "Analyst consensus is more cautious overall (3 buy/11 hold/2 sell), suggesting the Street sees UOB as fairly valued; underperformance versus peers could persist if the market keeps favoring DBS/OCBC.",
+   "horizon": "months",
+   "thesis": "Amazon is pulling back (-4.1% 1m, -2.5% vs MA50, -12% off 52w high) even as AWS continues to position for AI growth via safeguards advocacy and new low-carbon data-center partnerships (Prysmian, Rio Tinto). Analyst base is overwhelmingly bullish (57 buys, 0 sells) with ~32% implied upside to consensus target, suggesting the pullback is a buyable dip rather than a trend change.",
+   "news": "Amazon calls for AI safeguards, AWS positioning to benefit (2026-09-27); Amazon partners with Prysmian/Rio Tinto on data-center cables (2026-09-27); cargo carrier operations paused after fatal crash (2026-09-27).",
+   "risks": "The cargo carrier grounding could pressure logistics margins if extended, and broader tech multiple compression (e.g., if Fed stays hawkish) could keep AMZN range-bound despite bullish analyst targets.",
    "source_urls": [
-    "https://www.minichart.com.sg/2026/09/23/jefferies-starts-singapore-banks-with-buy-on-dbs-and-uob-hold-on-ocbc/"
+    "https://finance.yahoo.com/technology/ai/articles/amazon-amzn-calls-ai-safeguards-004125272.html",
+    "https://finance.yahoo.com/markets/stocks/articles/amazon-taps-prysmian-rio-tinto-233642318.html",
+    "https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-pauses-cargo-carrier-235303859.html"
    ],
-   "priceAtPick": 42.57
+   "priceAtPick": 249.67
   },
   {
-   "symbol": "S68.SI",
+   "symbol": "MSFT",
    "stance": "long",
    "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "SGX just reported record FY2026 volumes (securities turnover +35% y/y, derivatives +15% y/y, highest daily securities value in 18 years) and analysts raised the price target to S$24.15 from S$22.33 on Sept 27 - both fresh, fundamentally positive catalysts. The stock has pulled back 11.4% over the past month and sits 7.5% below its 50-day MA, so the price has not yet caught up to the improving operating and analyst-target trend, offering a valuation gap to close.",
-   "news": "SGX Group FY2026 record trading volumes report; price target raised to S$24.15 from S$22.33 (Sept 27, 2026).",
-   "risks": "The recent price weakness could reflect a real negative not captured in this news (e.g., cost pressure, one-off items, market-wide de-rating of exchanges); if the downtrend (-7.5% vs MA50) continues, the fundamental story alone may not be enough to turn price around quickly.",
+   "horizon": "months",
+   "thesis": "Microsoft just got a Stifel upgrade to Buy with target raised to $575, and near-unanimous analyst support (53 buy/2 hold/0 sell) implies ~12% further upside. Elevated relative volume (1.79x 20d average) alongside a 3.7% single-day pop shows fresh institutional interest tied to continued Azure/AI data-center expansion.",
+   "news": "Stifel upgraded MSFT to Buy, target 530→575 (2026-09-23); Microsoft plans vast data-center expansion to support Azure/AI growth (2026-09-27).",
+   "risks": "The 'vast data center expansion' headline is explicitly framed as raising questions about payback on infrastructure spend — if capex guidance disappoints on the next earnings call, the stock (already up 38% over 3 months) could see a sharp de-rating.",
    "source_urls": [
-    "https://www.theglobeandmail.com/investing/markets/markets-news/Tipranks/3264228/sgx-group-caps-stellar-fy2026-with-record-trading-volumes-and-broad-based-market-gains/",
-    "https://simplywall.st/markets/sg"
+    "https://finance.yahoo.com/technology/ai/articles/microsoft-msft-reportedly-plans-vast-001144437.html"
    ],
-   "priceAtPick": 22.4
+   "priceAtPick": 516.17
   },
   {
    "symbol": "META",
    "stance": "short",
    "conviction": "medium",
-   "horizon": "days",
-   "thesis": "Meta fell 3.3% on the day after an enormous run-up (+30.5% in one month, +22.1% above its 50-day MA), making it the most extended of the mega-cap AI names against a backdrop of mixed AI-spending sentiment following recent Big Tech earnings. The scale of the pullback after such a steep rally suggests profit-taking or a negative reassessment is underway, and a name this stretched is vulnerable to further mean reversion over the coming days to weeks.",
-   "news": "Big Tech earnings (Microsoft, Amazon, Alphabet) showed mixed results relative to elevated AI-spending expectations; Meta's stock dropped -3.3% intraday against this backdrop.",
-   "risks": "Analyst sentiment remains overwhelmingly bullish (55 buy/7 hold/0 sell) with 5.1% further upside to target, so this is a tactical, momentum-driven short, not a fundamental one; a single strong data point (e.g., ad-revenue beat) could quickly reverse the drop.",
+   "horizon": "weeks",
+   "thesis": "Meta is up 30.5% in one month and trading 22% above its 50-day moving average — an unusually stretched run for a mega-cap — and just fell 3.3% in a single session, which often marks the start of mean reversion after parabolic moves. Even bullish analysts' consensus target implies only ~5% further upside from here, the smallest margin of safety among the mega-cap tech names on this list.",
+   "news": "No specific negative catalyst reported, but the -3.3% single-day move on 2026-09-27 following a 30%+ monthly rally suggests profit-taking after an overextended advance.",
+   "risks": "If Meta's AI/ad-monetization initiatives keep beating expectations, the stock could continue higher regardless of technical extension; short squeezes on high-momentum mega-caps can be severe.",
    "source_urls": [
-    "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/"
+    "https://finance.yahoo.com/technology/ai/articles/microsoft-msft-reportedly-plans-vast-001144437.html"
    ],
    "priceAtPick": 751.66
   },
   {
-   "symbol": "O39.SI",
+   "symbol": "S68.SI",
    "stance": "short",
    "conviction": "low",
    "horizon": "weeks",
-   "thesis": "OCBC has had the strongest 1-year run of the three Singapore banks (+96.9%) yet Jefferies only gave it a Hold (versus Buy on DBS/UOB) on Sept 22, and consensus analyst target implies a slight -1.5% downside from current levels - a rare negative-implied-upside reading in this rally. This suggests OCBC's valuation has run ahead of its relative fundamentals within the sector, making it the weakest of the three banks on a forward basis.",
-   "news": "Jefferies initiated OCBC with a Hold rating (vs Buy on DBS/UOB) on Sept 22-23, 2026, even as the broader bank sector benefits from the Sept 16 Fed hike.",
-   "risks": "OCBC is still riding the same sector-wide margin tailwind as DBS/UOB, and its momentum (+3.6% 1m, +48.4% 6m) has been the strongest of the trio, so it could keep grinding higher purely on sector sentiment despite the softer analyst rating.",
+   "thesis": "Singapore Exchange has underperformed badly relative to the broader Singapore banking rally — down 12.2% over the past month and 7.4% below its 50-day moving average, even as STI-related names like DBS/UOB/OCBC push toward highs. This divergence, with no fresh positive catalyst in the news flow, suggests continued relative weakness could persist near-term.",
+   "news": "No dated catalyst found for SGX in the past two weeks; price action stands out as a laggard against the rest of the financial complex covered in this watchlist.",
+   "risks": "SGX often benefits from higher trading volumes during volatile macro periods (e.g., Iran-related market stress), so a volatility spike could reverse this short quickly; consensus still shows more buys than sells (6 buy/7 hold/3 sell) with 6.3% implied upside.",
    "source_urls": [
-    "https://www.minichart.com.sg/2026/09/23/jefferies-starts-singapore-banks-with-buy-on-dbs-and-uob-hold-on-ocbc/"
+    "https://www.bloomberg.com/news/articles/2026-09-18/uob-to-add-50-private-bankers-a-year-in-627-million-wealth-push"
    ],
-   "priceAtPick": 32.01
+   "priceAtPick": 22.4
   }
  ],
  "sources": [
   {
-   "url": "https://www.asiaone.com/money/best-bank-offers-singapore-september-2026-dbs-half-priced-holidays-uob-save-and-harvest-and",
-   "title": "Best bank offers in Singapore (September 2026): DBS Half-priced holidays, UOB Save and Harvest, and more, Money News - AsiaOne",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://www.theedgesingapore.com/news/banking-finance/analysts-favour-dbs-ocbc-while-uobs-asset-quality-concerns-resurface",
-   "title": "Analysts favour DBS, OCBC, while UOB’s asset quality concerns resurface | The Edge Singapore",
-   "age": "August 14, 2026"
-  },
-  {
-   "url": "https://drwealth.com/why-is-ocbc-stock-beating-dbs-and-uob-in-2026/",
-   "title": "Why Is OCBC Stock Beating DBS and UOB in 2026? | Dr Wealth",
-   "age": "May 13, 2026"
-  },
-  {
-   "url": "https://www.minichart.com.sg/2026/09/23/jefferies-starts-singapore-banks-with-buy-on-dbs-and-uob-hold-on-ocbc/",
-   "title": "Jefferies Starts Singapore Banks With Buy on DBS and UOB, Hold on OCBC – Minichart",
+   "url": "https://en.wikipedia.org/wiki/Piyush_Gupta",
+   "title": "Piyush Gupta",
    "age": null
   },
   {
-   "url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
-   "title": "Singapore Banks After the Fed Rate Hike: DBS, OCBC & UOB in Q4 2026",
-   "age": "1 week ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-rises-as-jefferies-sets-sgd-91-target/70154437",
+   "title": "DBS Group stock rises as Jefferies sets SGD 91 target",
+   "age": "6 days ago"
   },
   {
-   "url": "https://thekopinotes.com/articles/news/dbs-ocbc-uob-q2-2026-results/",
-   "title": "DBS, OCBC, UOB Q2 2026 Results: Record Profits (2026)",
-   "age": "August 11, 2026"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-edges-higher-as-investors-weigh-recent-earnings-and/70144842",
+   "title": "DBS Group stock edges higher as investors weigh recent earnings and dividend strength",
+   "age": "6 days ago"
   },
   {
-   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-2026-outlook",
-   "title": "Singapore banks 2026 outlook: DBS OCBC vs UOB",
-   "age": null
-  },
-  {
-   "url": "https://www.statista.com/statistics/1347156/generative-ai-market-size",
-   "title": "generative ai market size",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hans/news/2516570891",
-   "title": "Is It Still A Good Time to Buy Singapore Banks?",
-   "age": null
-  },
-  {
-   "url": "https://www.google.com/finance/quote/Z74:SGX",
-   "title": "Singapore Telecommunications Ltd (Z74) Stock Price & News - Google Finance",
-   "age": "August 7, 2026"
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/C6L.SI/",
-   "title": "Singapore Airlines Limited (C6L.SI) Stock Price, News, Quote & History - Yahoo Finance",
-   "age": null
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/press-release/",
-   "title": "News releases | Singapore Airlines",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/Z74.SI/",
-   "title": "Singapore Telecommunications Limited (Z74.SI) Stock Price, News, Quote & History - Yahoo Finance",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/newsalert-listing/",
-   "title": "Newsalert Listing | Singapore Airlines",
-   "age": null
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/quote/C6L.SI/news/",
-   "title": "Singapore Airlines Limited (C6L.SI) latest stock news and headlines – Yahoo Finance",
-   "age": null
-  },
-  {
-   "url": "https://sg.headtopics.com/news/singapore-corporate-awards-2026-keppel-singtel-and-others-88002512",
-   "title": "Singapore Corporate Awards 2026: Keppel, Singtel and Others Take Home Golden Governance Titles | Business & Finance",
-   "age": "5 days ago"
-  },
-  {
-   "url": "https://www.itiger.com/news/1157251114",
-   "title": "SG Morning Call | Singapore Stocks Open Lower on Monday; Singtel Sees $2.3B Impairment Hit, Net Loss in 2024 H2",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hans/news/1157251114",
-   "title": "SG Morning Call | Singapore Stocks Open Lower on Monday; Singtel Sees $2.3B Impairment Hit, Net Loss in 2024 H2",
-   "age": null
-  },
-  {
-   "url": "https://www.businesstoday.com.my/2026/09/25/singapore-stocks-nudge-higher-after-institutional-flow-reversal/",
-   "title": "Singapore Stocks Nudge Higher After Institutional Flow Reversal",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-reports-record-earnings-as-analyst-target-rises/70183140",
+   "title": "DBS Group stock reports record earnings as analyst target rises",
    "age": "3 days ago"
   },
   {
-   "url": "https://growbeansprout.com/weekly-market-review-26-jan-2026",
-   "title": "UOB and ThaiBev in focus: Weekly Review with SIAS - Growbeansprout.com",
-   "age": "January 26, 2026"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-slips-as-singapore-banks-weigh-on-the-sti/70167406",
+   "title": "DBS Group stock slips as Singapore banks weigh on the STI",
+   "age": "5 days ago"
   },
   {
-   "url": "https://www.marketscreener.com/quote/stock/THAI-BEVERAGE-6498120/",
-   "title": "Thai Beverage Stock (Y92) - Quote Singapore S.E.- MarketScreener",
-   "age": null
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-trades-1-99-percent-below-its-yearly-high/70177885",
+   "title": "DBS Group stock trades 1.99 percent below its yearly high",
+   "age": "4 days ago"
   },
   {
-   "url": "https://www.tipranks.com/news/global-markets/sgx-shares-capitalland-and-thai-beverage-price-targets",
-   "title": "SGX Shares: CapitalLand and Thai Beverage Price Targets - TipRanks.com",
-   "age": "March 29, 2023"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-heads-into-the-open-after-a-0-6-percent-gain/70163212",
+   "title": "DBS Group stock heads into the open after a 0.6 percent gain",
+   "age": "5 days ago"
   },
   {
-   "url": "https://thefinance.sg/2026/09/21/thai-beverage-a-5-dividend-yield-hiding-in-plain-sight/",
-   "title": "Thai Beverage: A 5% Dividend Yield Hiding in Plain Sight? - TheFinance.sg",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-heads-into-the-open-after-a-0-1-percent-dip/70142591",
+   "title": "DBS Group stock heads into the open after a 0.1% dip",
    "age": "1 week ago"
   },
   {
-   "url": "https://www.minichart.com.sg/2026/01/29/thai-beverage-thbev-approved-to-use-market-capitalisation-for-sgx-materiality-thresholds-in-fy2026/",
-   "title": "Thai Beverage (THBEV) Approved to Use Market Capitalisation for SGX Materiality Thresholds in FY2026 – Minichart",
-   "age": "January 30, 2026"
+   "url": "https://www.thestockobserver.com/2026/09/27/dbs-group-holdings-ltd-otcmktsdbsdy-stock-short-interest-declines-73-6.html",
+   "title": "DBS Group Holdings Ltd (OTCMKTS:DBSDY) Stock Short Interest Declines 73.6% - Stock Observer",
+   "age": "9 hours ago"
   },
   {
-   "url": "https://companiesmarketcap.com/hkd/thai-beverage/marketcap/",
-   "title": "Thai Beverage (Y92.SI) - Market capitalization",
+   "url": "https://www.ocbc.com/premier-banking/market-insights",
+   "title": "Market Insights | OCBC Premier Banking",
    "age": null
   },
   {
-   "url": "https://www.dbs.com.hk/treasures/aics/templatedata/article/generic/data/en/GR/000000/000000_insights_singapore_model_portfolio.xml",
-   "title": "Singapore Equity Picks",
-   "age": "June 22, 2021"
-  },
-  {
-   "url": "https://be.marketscreener.com/koers/aandeel/THAI-BEVERAGE-6498120/nieuws-andere-talen/",
-   "title": "Andere talen Thai Beverage",
+   "url": "https://www.ocbc.com/personal-banking/notices",
+   "title": "Personal Banking Notices | OCBC Singapore",
    "age": null
   },
   {
-   "url": "https://ca.marketscreener.com/quote/stock/THAI-BEVERAGE-6498120/company/",
-   "title": "ca.marketscreener.com",
+   "url": "https://www.ocbc.com/group/media/release/index.page?category=alltopics",
+   "title": "OCBC News | Newsroom | OCBC",
    "age": null
   },
   {
-   "url": "https://www.caproasia.com/2026/09/16/singapore-exchange-sgx-iedge-singapore-next-50-indices-september-2026-update-effective-28-9-26-1-total-market-value-at-s107-billion-31-8-26-2-add-1-company-sbs-transit-3-remove-1-company/",
-   "title": "Singapore Exchange (SGX) iEdge Singapore Next 50 Indices September 2026 Update (Effective 28/9/26): 1) Total Market Value at S$107 Billion (31/8/26), 2) Add 1 Company SBS Transit, 3) Remove 1 Company Guocoland, 4) Similar Changes Made on iEdge Singapore Next 50 Liquidity Weighted Index | Caproasia",
-   "age": "2 weeks ago"
-  },
-  {
-   "url": "https://simplywall.st/markets/sg",
-   "title": "Singaporean (SGX) Market Analysis & Valuation - Updated Today",
+   "url": "https://malaysian-business.com/portal/2026/01/20/ocbc-bank-unveils-premier-life-goals/",
+   "title": "OCBC Bank Unveils Premier Life Goals – Malaysian Business",
    "age": null
   },
   {
-   "url": "https://www.investing.com/equities/singapore-exchange",
-   "title": "Singapore Exchange Stock Price Today | SGX: SGXL Live - Investing.com",
+   "url": "https://fifthperson.com/2026-ocbc-agm/",
+   "title": "8 things I learned from the 2026 OCBC AGM",
+   "age": "April 20, 2026"
+  },
+  {
+   "url": "https://journalarta.com/en/2026/09/21/ocbc-stock-gains-0-32-today-momentum-weakens/",
+   "title": "OCBC Stock Gains 0.32% Today, Momentum: Explained — JournalArta Global",
+   "age": "1 week ago"
+  },
+  {
+   "url": "https://www.cbinsights.com/investor/ocbc-bank",
+   "title": "Predict your next investment",
    "age": null
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Singapore_Exchange",
-   "title": "Singapore Exchange",
+   "url": "https://finance.yahoo.com/quote/OVCHF",
+   "title": "finance.yahoo.com",
    "age": null
   },
   {
-   "url": "https://sg.finance.yahoo.com/quote/S68.SI/news/",
-   "title": "Singapore Exchange Limited (S68.SI) latest stock news and headlines – Yahoo Finance",
-   "age": "July 8, 2026"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/quote/S68.SI/",
-   "title": "Singapore Exchange Limited (S68.SI) stock price, news, quote and history - Yahoo Finance",
+   "url": "https://finance.yahoo.com/news/ocbc-next-ceo-shows-singaporean-091116942.html",
+   "title": "OCBC’s next CEO shows the Singaporean bank is still betting on ASEAN-China ties for growth",
    "age": null
   },
   {
-   "url": "https://www.theglobeandmail.com/investing/markets/markets-news/Tipranks/3264228/sgx-group-caps-stellar-fy2026-with-record-trading-volumes-and-broad-based-market-gains/",
-   "title": "SGX Group caps stellar FY2026 with record trading volumes and broad-based market gains - The Globe and Mail",
-   "age": "July 14, 2026"
-  },
-  {
-   "url": "https://www.sgx.com/stock-exchange/market-updates",
-   "title": "Market Updates - Singapore Exchange (SGX ...",
+   "url": "https://www.fintechfutures.com/keyword/uob",
+   "title": "United Overseas Bank (UOB) recent news | FinTech Futures",
    "age": null
   },
   {
-   "url": "https://www.sgx.com/",
-   "title": "Singapore Exchange - Singapore Exchange (SGX)",
+   "url": "https://finance.yahoo.com/quote/UOB.MU/press-releases/",
+   "title": "United Overseas Bank Ltd (UOB.MU) Latest Press Releases & Corporate News - Yahoo Finance",
    "age": null
   },
   {
-   "url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html",
-   "title": "Big Tech earnings: Meta, Apple, Tesla, Microsoft AI spend in focus",
-   "age": "January 27, 2026"
+   "url": "https://www.bloomberg.com/news/articles/2026-09-18/uob-to-add-50-private-bankers-a-year-in-627-million-wealth-push",
+   "title": "UOB to Add 50 Private Bankers a Year in $627 Million Wealth Push - Bloomberg",
+   "age": "1 week ago"
   },
   {
-   "url": "https://www.openingbelldailynews.com/p/nvidia-stock-market-earnings-outlook-apple-microsoft-amazon",
-   "title": "Without Nvidia, the Mag 7 look like the slow stocks in the S&P 500",
-   "age": "April 28, 2026"
-  },
-  {
-   "url": "https://fortune.com/2026/01/11/magnificent-7-stock-market-dominance-cracking-nvidia-microsoft-apple-meta-alphabet-amazon-tesla/",
-   "title": "Magnificent 7’s stock market dominance shows signs of cracking | Fortune",
-   "age": "January 11, 2026"
-  },
-  {
-   "url": "https://fortune.com/2026/07/26/big-tech-earnings-meta-microsoft-apple-amazon-market-revolt-ai-spending/",
-   "title": "Big Tech earnings slam into a market in revolt over AI spending | Fortune",
-   "age": "July 26, 2026"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/List_of_largest_corporate_profits_and_losses",
-   "title": "List of largest corporate profits and losses",
+   "url": "https://finance.yahoo.com/quote/UOB.F/press-releases/",
+   "title": "United Overseas Bank Limited (UOB.F) Latest Press Releases & Corporate News - Yahoo Finance",
    "age": null
   },
   {
-   "url": "https://www.cnbc.com/2026/07/31/apple-aapl-amazon-amzn-stock-today.html",
-   "title": "Alphabet, Amazon and Microsoft added nearly $1.5 trillion in combined value this week",
-   "age": "July 31, 2026"
+   "url": "https://finance.yahoo.com/quote/UOB.MU/",
+   "title": "United Overseas Bank Ltd (UOB.MU) Stock Price, News, Quote & History - Yahoo Finance",
+   "age": null
   },
   {
-   "url": "https://valueaddvc.com/big-tech-earnings",
-   "title": "Big Tech Earnings Q2 2026: Apple $143B, Nvidia $81B",
-   "age": "2 weeks ago"
+   "url": "https://finance.yahoo.com/quote/U11.SI/",
+   "title": "United Overseas Bank Limited (U11.SI) Stock Price, News, Quote & History - Yahoo Finance",
+   "age": "3 weeks ago"
   },
   {
-   "url": "https://valueaddvc.com/blog/big-tech-earnings-q1-2026-apple-microsoft-google-meta-amazon-nvidia-results",
-   "title": "Big Tech Q1 2026 Earnings: Azure +40%, Nvidia $81.6B",
-   "age": "June 23, 2026"
+   "url": "https://www.ad-hoc-news.de/boerse/news/nebenwerte/uob-stock-gains-1-7-percent-as-singapore-banks-rise/70159865",
+   "title": "UOB stock gains 1.7 percent as Singapore banks rise",
+   "age": "5 days ago"
   },
   {
-   "url": "https://www.fxstreet.com/news/microsoft-apple-remain-only-3-trillion-companies-as-nvidia-earnings-push-it-below-threshold-202408291617",
-   "title": "microsoft apple remain only 3 trillion companies as nvidia earnings push it below threshold 202408291617",
+   "url": "https://www.cbinsights.com/investor/united-overseas-bank",
+   "title": "Predict your next investment",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/news/company-announcements/uob-announces-board-committee-reshuffle",
+   "title": "uob announces board committee reshuffle",
+   "age": null
+  },
+  {
+   "url": "https://www.cnbc.com/2026/05/21/singtel-earnings-ceo-ai-services-data-centers-.html",
+   "title": "Singapore's Singtel to boost spending as telecom major eyes AI services, data center expansion",
+   "age": "May 21, 2026"
+  },
+  {
+   "url": "https://growbeansprout.com/quote/Z74.SI",
+   "title": "Singtel: Singapore Telecommunications Ltd (SGX: Z74) Share Price, Analysis, News, Dividends - Growbeansprout.com",
+   "age": "12 minutes ago"
+  },
+  {
+   "url": "https://sginvestors.io/sgx/stock/z74-singtel/news-article",
+   "title": "Singtel Latest News (SGX:Z74) - Singapore",
+   "age": "August 14, 2026"
+  },
+  {
+   "url": "https://uk.marketscreener.com/quote/stock/SINGAPORE-TELECOMMUNICATI-6491140/news-press-releases/",
+   "title": "Press Releases",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/news/company-announcements/singtel-announces-major-impairment-provisions",
+   "title": "singtel announces major impairment provisions",
+   "age": null
+  },
+  {
+   "url": "https://in.marketscreener.com/quote/stock/SINGAPORE-TELECOMMUNICATI-6491140/news-insiders/",
+   "title": "news insiders",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/news/2512119547",
+   "title": "Singtel Achieves Robust Q3 2024 Financial Performance with Significant Profit Growth",
+   "age": null
+  },
+  {
+   "url": "https://www.malaymail.com/news/singapore/2025/02/19/singtel-profits-climb-22pc-on-strong-optus-airtel-gains/167180",
+   "title": "www.malaymail.com",
+   "age": null
+  },
+  {
+   "url": "https://www.malaymail.com/amp/news/money/2014/05/15/singtel-quarterly-profit-misses-expectations/668995",
+   "title": "www.malaymail.com",
+   "age": null
+  },
+  {
+   "url": "https://blog.wego.com/singapore-airlines-flight-status-2026/",
+   "title": "Singapore Airlines Flight Status (September 2026): Routes, Schedule, and Flights Resumption - Wego Travel Blog",
+   "age": "3 weeks ago"
+  },
+  {
+   "url": "https://www.insideflyer.com/tag/singapore-airlines/",
+   "title": "Singapore Airlines news - InsideFlyer",
+   "age": null
+  },
+  {
+   "url": "https://mainlymiles.com/2026/09/27/singapore-airlines-fleet-september-2026/",
+   "title": "Singapore Airlines Fleet: September 2026 - Mainly Miles",
+   "age": "16 hours ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2026/04/03/singapore-airlines-pushes-back-riyadh-restart-to-september-2026/",
+   "title": "Singapore Airlines pushes back Riyadh restart to September 2026 - Mainly Miles",
+   "age": "April 3, 2026"
+  },
+  {
+   "url": "https://www.ch-aviation.com/news/171924-singapore-airlines-triggers-buyback-with-us26mn-purchase",
+   "title": "Singapore Airlines triggers buyback with US$2.6mn purchase - ch-aviation",
+   "age": "1 week ago"
+  },
+  {
+   "url": "https://www.travelandtourworld.com/news/article/singapore-airlines-unveils-summer-2026-international-schedule-updates-enhancing-travel-connectivity-across-singapore-thailand-china-india-europe-and-australia/",
+   "title": "Singapore Airlines Unveils Summer 2026 International Schedule Updates Enhancing Travel Connectivity Across Singapore, Thailand, China, India, Europe, and Australia - Travel And Tour World",
+   "age": "January 2, 2026"
+  },
+  {
+   "url": "https://www.travelandtourworld.com/news/article/singapore-airlines-shakes-up-summer-2026-major-flight-schedule-overhaul-with-new-aircraft-suspended-routes-and-a-surge-in-tourism-what-it-means-for-your-next-trip/",
+   "title": "Singapore Airlines Shakes Up Summer 2026: Major Flight Schedule Overhaul with New Aircraft, Suspended Routes, and a Surge in Tourism – What It Means for Your Next Trip! - Travel And Tour World",
+   "age": "January 2, 2026"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/sg/media-centre/press-release",
+   "title": "Featured News Release",
+   "age": null
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/fr/media-centre/press-release",
+   "title": "Featured News Release",
    "age": null
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 44359,
+  "input": 51120,
   "output": 6459,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1555
+  "costUsd": 0.162
  },
- "createdAt": "2026-09-27T13:47:38.956Z"
+ "createdAt": "2026-09-28T01:27:51.980Z"
 }
