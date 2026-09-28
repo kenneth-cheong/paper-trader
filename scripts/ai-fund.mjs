@@ -24,6 +24,7 @@
 //   READING_PAGE_DIR        where scripts/page_fetch.py downloaded a logged article's page (default raw-page)
 //   OHLCV_FILE              the two years of daily prices for the factor lab (default data/ohlcv.json)
 //   ANTHROPIC_API_KEY, AI_MODEL (decisions, default Sonnet; a fund can choose its own), AI_NEWS_MODEL (news, default Haiku)
+//   DEEPSEEK_API_KEY        for a fund whose model is DeepSeek (its decisions only; its news still comes from Claude)
 //   AI_REVIEW_MODEL         opt-in: the weekly review's model once the fund's market has 150 graded ideas (else the news model)
 //   AI_MONTHLY_CAP_USD      skip AI decisions once the month's scheduled AI spend reaches this (ai-spend.json)
 //   NEWS_LEADS=off          a digest a fund gathers itself gets no news feed headlines as leads (on otherwise)
@@ -436,6 +437,7 @@ for (const fund of c.funds) {
             cards: cardsFor(market), notes: c.stockNotes ?? null, dossiers, articles: news ? null : await leadArticles(),
             model: modelOf(fund), newsModel: env.AI_NEWS_MODEL || TIERS.simple,
             cacheShared: (deciding[`${fund.currency}|${modelOf(fund)}`] ?? 0) >= 2,
+            deepseek: { apiKey: env.DEEPSEEK_API_KEY },
           });
           if (d.news) {
             newsFor[fund.currency] = d.news;
@@ -465,6 +467,11 @@ for (const fund of c.funds) {
           const flags = (o) => `${o.thesis?.stale ? ' [catalyst over 10 trading days old]' : ''}${o.thesis?.beatsFees === false ? ' [expected move under the round-trip fee]' : ''}`;
           for (const o of orders) log(`Order: ${o.action} ${o.shares} ${o.symbol} -> ${o.status}${o.message ? ` (${o.message})` : ''}${flags(o)}`);
         } catch (err) {
+          // what the API billed before it failed still counts (ai.js askClaude, askDeepSeek)
+          if (err?.usage?.costUsd) {
+            await writeFile(spendFile, JSON.stringify(addSpend(await spent(), 'fund', err.usage.costUsd, now)));
+            fund.failedAiCost = Math.round(((fund.failedAiCost ?? 0) + err.usage.costUsd) * 1e4) / 1e4; // spend.js fundAiCost
+          }
           fund.lastError = { time: now.toISOString(), message: err.message };
           console.warn(`! [${fund.name}] AI decision failed (will retry next run): ${err.message}`);
         }

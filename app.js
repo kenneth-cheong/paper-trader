@@ -8,7 +8,7 @@ import { valueHistory, indexHistory, realizedHistory } from './history.js';
 import { MIN_CASES as MEMORY_MIN_CASES, MOVE_NEWS } from './memory.js';
 import { regimeNow, regimeWords, yearLessons, studyNumbers, STUDY_LABELS, STUDY_SHORT, LONG, HOLDOUT_NOISE } from './memory-long.js';
 import { CONDITIONS, UNITS, REPEATS, newRule, freshState, checkRule, describeRule, runRules, backtest, fillPendingOrders } from './rules.js';
-import { MODELS, TIERS, loadClient, analyze, recommend, buildContext, strategistRequest } from './ai.js';
+import { MODELS, FUND_MODELS, DEEPSEEK_PEAK, TIERS, loadClient, analyze, recommend, buildContext, strategistRequest } from './ai.js';
 import { MARKETS, marketForCurrency, marketDate, tradingStatus, STATUS_LABELS } from './markets.js';
 import { resultsCalendar, nextResults } from './calendar.js';
 import { recentRatingChanges, describeChange } from './analysts.js';
@@ -347,7 +347,7 @@ const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '
 const fmtDateTime = (t) => new Date(t).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
 const fmtDate = (t) => new Date(t).toLocaleDateString(undefined, { dateStyle: 'medium' });
 const domain = (url) => { try { return new URL(url).hostname.replace(/^www\./, ''); } catch { return url; } };
-const MODEL_NAMES = { 'claude-haiku-4-5': 'Haiku 4.5', 'claude-sonnet-5': 'Sonnet 5', 'claude-opus-5': 'Opus 5' };
+const MODEL_NAMES = { 'claude-haiku-4-5': 'Haiku 4.5', 'claude-sonnet-5': 'Sonnet 5', 'claude-opus-5': 'Opus 5', 'deepseek-flash': 'DeepSeek Flash', 'deepseek-v4-pro': 'DeepSeek V4 Pro' };
 const modelName = (id) => { const base = String(id ?? '').replace(/-\d{8}$/, ''); return MODEL_NAMES[base] ?? base; };
 // "Sonnet 5, news by Haiku 4.5"
 const madeBy = (x) => x.newsModel && modelName(x.newsModel) !== modelName(x.model) ? `${modelName(x.model)}, news by ${modelName(x.newsModel)}` : modelName(x.model);
@@ -1431,7 +1431,7 @@ function selectFund(id) {
   render();
 }
 
-const modelOptions = (selected) => `<option value="">Default (${esc(modelName(TIERS.advanced))})</option>${Object.entries(MODELS)
+const modelOptions = (selected) => `<option value="">Default (${esc(modelName(TIERS.advanced))})</option>${Object.entries(FUND_MODELS)
   .map(([id, m]) => `<option value="${id}" ${id === selected ? 'selected' : ''}>${esc(m.label)}</option>`).join('')}`;
 const styleOptions = (selected) => Object.entries(STYLES).map(([id, st]) => `<option value="${id}" ${id === selected ? 'selected' : ''}>${esc(st.label)}</option>`).join('');
 
@@ -1452,15 +1452,19 @@ const mandateFields = (p, v) => `
 // against it (Haiku about half, Opus about 2.5x), over about 21 trading days. Every run is about 26 a day;
 // "skip when nothing has changed" skips up to two quiet runs in a row, so roughly a third of that.
 const DECISION_COST = [0.05, 0.15];
-const modelCostFactor = (model) => (MODELS[model || TIERS.advanced]?.outPerM ?? MODELS[TIERS.advanced].outPerM) / MODELS[TIERS.advanced].outPerM;
+// by the blended price of a decision (about 30 tokens in for each one out, most of it the market data); for
+// DeepSeek at its peak-hour rate, which covers most of SGX's trading day, to be safe
+const blended = (m) => (m ? (m.inPerM * 30 + m.outPerM) * (m.provider === 'deepseek' ? DEEPSEEK_PEAK.factor : 1) : null);
+const modelCostFactor = (model) => (blended(FUND_MODELS[model || TIERS.advanced]) ?? blended(MODELS[TIERS.advanced])) / blended(MODELS[TIERS.advanced]);
 const decisionWords = (n) => (Number(n) === EVERY_RUN ? 'at every run (about every 15 minutes)' : `${n} time${n > 1 ? 's' : ''} a trading day`);
 function decisionOptions(selected = 1, model = null) {
   const factor = modelCostFactor(model);
   return DECISION_CHOICES.map((n) => {
     const perDay = n === EVERY_RUN ? 26 : n;
-    const [lo, hi] = DECISION_COST.map((c) => Math.round(perDay * 21 * c * factor));
-    const label = n === EVERY_RUN ? `Every run, about every 15 minutes (about US$${lo}–${hi} a month; about a third with quiet runs skipped)`
-      : `${n}${n === 1 ? ' (cheapest)' : ''}: about US$${Math.max(1, lo)}–${hi} a month`;
+    const [lo, hi] = DECISION_COST.map((c) => perDay * 21 * c * factor);
+    const cost = hi < 1 ? 'under US$1 a month' : `about US$${Math.max(1, Math.round(lo))}–${Math.max(1, Math.round(lo), Math.round(hi))} a month`;
+    const label = n === EVERY_RUN ? `Every run, about every 15 minutes (${cost}; about a third with quiet runs skipped)`
+      : `${n}${n === 1 ? ' (cheapest)' : ''}: ${cost}`;
     return `<option value="${n}" ${Number(selected) === n ? 'selected' : ''}>${label}</option>`;
   }).join('');
 }
@@ -3131,6 +3135,17 @@ function openSettings() {
 
 // What this app connects to and where each one's keys live. Keys that must stay secret (Tiger's
 // private key, the key the scheduled jobs use) are GitHub secrets, never fields on this public page.
+// DeepSeek, for the funds set to it: the key is a GitHub secret the page can't see, so this says which funds
+// use it and whether the latest decision of one failed (a missing or rejected key shows up there).
+function deepseekRow(row, status) {
+  const funds = fundList().filter((f) => !f.stoppedAt && FUND_MODELS[f.settings?.model]?.provider === 'deepseek');
+  if (!funds.length) return [];
+  const failing = funds.find((f) => f.lastError && (!f.lastDecisionAt || Date.parse(f.lastError.time) > Date.parse(f.lastDecisionAt)));
+  return [row('DeepSeek (AI fund decisions)',
+    status(!failing, failing ? `Failing in "${failing.name}"` : `Used by ${funds.map((f) => `"${f.name}"`).join(', ')}`),
+    `<p class="muted small">${failing ? `${esc(failing.lastError.message)} ` : ''}Uses the <code>DEEPSEEK_API_KEY</code> secret in GitHub (Settings → Secrets and variables → Actions). Only these funds' decisions go to DeepSeek, whose servers are in China; their news still comes from Claude.</p>`)];
+}
+
 function renderConnections() {
   const repo = repoUrl();
   const secretsLink = repo ? `<a href="${repo}/settings/secrets/actions" target="_blank" rel="noopener">GitHub → Settings → Secrets and variables → Actions</a>` : 'the GitHub repo → Settings → Secrets and variables → Actions';
@@ -3149,6 +3164,7 @@ function renderConnections() {
       status(!!picksAt, picksAt ? `Working, last picks ${fmtDateTime(picksAt)}` : 'No AI picks yet'),
       `<p class="muted small">Uses the <code>ANTHROPIC_API_KEY</code> secret in ${secretsLink}.
         This month: about US$${monthSpend(state.spend).toFixed(2)}${state.spend?.cap ? ` of the US$${state.spend.cap} monthly cap (change it with the <code>AI_MONTHLY_CAP_USD</code> repository variable)` : ' (no monthly cap)'}.</p>`),
+    ...deepseekRow(row, status),
     row('Tiger Brokers (AI fund orders)',
       status(tigerOk, tigerOk ? brokerLabel(f) : tiger ? 'Not connected' : 'Not in use (no fund trades through Tiger)'),
       `<p class="muted small">Tiger's keys are not typed in here: anything on this page is public, and Tiger's private key must stay secret.

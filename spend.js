@@ -30,5 +30,5 @@ export function capReached(ledger, cap, now = new Date()) {
   return c > 0 && monthSpend(ledger, now) >= c;
 }
 
-// What an AI fund's decisions have cost since it started (US$).
-export const fundAiCost = (fund) => cents((fund?.decisions ?? []).reduce((s, d) => s + (d.usage?.costUsd ?? 0), 0));
+// What an AI fund's decisions have cost since it started (US$): its decisions', plus what calls that failed after being billed cost (fund.failedAiCost).
+export const fundAiCost = (fund) => cents((fund?.decisions ?? []).reduce((s, d) => s + (d.usage?.costUsd ?? 0), 0) + (fund?.failedAiCost ?? 0));

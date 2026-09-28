@@ -32,10 +32,26 @@ const SDK_URL = 'https://cdn.jsdelivr.net/npm/@anthropic-ai/sdk@0.128.0/+esm';
 // Cheapest first. Haiku 4.5 uses the basic web search tool and no extended thinking; the newer
 // models use web search with dynamic filtering and adaptive thinking at the given effort.
 export const MODELS = {
-  'claude-haiku-4-5': { label: 'Claude Haiku 4.5 (cheapest)', inPerM: 1, outPerM: 5, search: 'web_search_20250305' },
+  'claude-haiku-4-5': { label: 'Claude Haiku 4.5 (cheapest Claude)', inPerM: 1, outPerM: 5, search: 'web_search_20250305' },
   'claude-sonnet-5': { label: 'Claude Sonnet 5 (better analysis, about 2x the cost)', inPerM: 2, outPerM: 10, search: 'web_search_20260209', effort: 'medium' },
   'claude-opus-5': { label: 'Claude Opus 5 (best analysis, about 5x the cost)', inPerM: 5, outPerM: 25, search: 'web_search_20260209', effort: 'high' },
 };
+// DeepSeek, for an AI fund's decisions only (not news, which needs web search, nor anything in the browser):
+// its OpenAI-style API with the DEEPSEEK_API_KEY secret. The ids are the API's own (its model list from
+// GitHub Actions, September 2026). Both models think by default, which refuses a forced tool call, so
+// thinking is switched off and the decision tool is forced, as a probe of the API showed works.
+// Prices per million tokens, off-peak, as listed in September 2026 (check api-docs.deepseek.com): new
+// input, a repeated prompt start (cache hit) and output; every rate doubles in DeepSeek's peak hours.
+export const DEEPSEEK = {
+  'deepseek-flash': { label: 'DeepSeek V4.1 Flash (cheapest; decisions only; needs the DEEPSEEK_API_KEY secret; data processed in China)', inPerM: 0.15, cacheReadPerM: 0.003, outPerM: 0.6, provider: 'deepseek' },
+  'deepseek-v4-pro': { label: 'DeepSeek V4 Pro (decisions only; needs the DEEPSEEK_API_KEY secret; data processed in China)', inPerM: 0.66, cacheReadPerM: 0.022, outPerM: 1.98, provider: 'deepseek' },
+};
+// DeepSeek's peak hours (UTC, Monday to Friday), when every rate is doubled: most of SGX's trading day.
+export const DEEPSEEK_PEAK = { hours: [[1, 4], [6, 10]], factor: 2 };
+export const deepseekPeak = (now = new Date()) => now.getUTCDay() >= 1 && now.getUTCDay() <= 5 && DEEPSEEK_PEAK.hours.some(([a, b]) => now.getUTCHours() >= a && now.getUTCHours() < b);
+// The models a fund's decisions can use.
+export const FUND_MODELS = { ...MODELS, ...DEEPSEEK };
+export const isDeepSeek = (model) => Boolean(DEEPSEEK[model]);
 // simple: gathering and summarising news. advanced: picks, strategies and fund trades.
 export const TIERS = { simple: 'claude-haiku-4-5', advanced: 'claude-sonnet-5' };
 export const DEFAULT_MODEL = TIERS.simple;
@@ -131,10 +147,95 @@ function friendlyError(err, Anthropic) {
   return err;
 }
 
+// What doesn't fit a tool's JSON schema in `value`, for the parts the tools use (object, array, string,
+// number, integer, boolean, enum). Claude's strict tools guarantee a fit; DeepSeek's answers are checked
+// here, so a wrongly typed decision is refused rather than half-executed. `lenient` (DeepSeek's check)
+// needs only the top-level fields and ignores extra ones: the job already copes with an order or idea
+// missing the newer fields, as it does with decisions from before them; every value given must still fit.
+export function schemaErrors(schema, value, path = 'answer', { lenient = false, top = true } = {}) {
+  if (schema.enum && !schema.enum.includes(value)) return [`${path} isn't one of ${schema.enum.join(', ')}`];
+  const inner = { lenient, top: false };
+  switch (schema.type) {
+    case 'object': {
+      if (!value || typeof value !== 'object' || Array.isArray(value)) return [`${path} isn't an object`];
+      const errs = lenient && !top ? [] : (schema.required ?? []).filter((k) => !(k in value)).map((k) => `${path}.${k} is missing`);
+      for (const [k, v] of Object.entries(value)) {
+        if (schema.properties?.[k]) errs.push(...schemaErrors(schema.properties[k], v, `${path}.${k}`, inner));
+        else if (schema.additionalProperties === false && !lenient) errs.push(`${path}.${k} isn't expected`);
+      }
+      return errs;
+    }
+    case 'array': return Array.isArray(value) ? value.flatMap((v, i) => (schema.items ? schemaErrors(schema.items, v, `${path}[${i}]`, inner) : [])) : [`${path} isn't a list`];
+    case 'string': return typeof value === 'string' ? [] : [`${path} isn't text`];
+    case 'number': return typeof value === 'number' && Number.isFinite(value) ? [] : [`${path} isn't a number`];
+    case 'integer': return Number.isInteger(value) ? [] : [`${path} isn't a whole number`];
+    case 'boolean': return typeof value === 'boolean' ? [] : [`${path} isn't true or false`];
+    default: return [];
+  }
+}
+
+// One answer from DeepSeek through `tool`, the same contract as askClaude (no web search): { input, sources:
+// [], model, usage }. The tool is forced; an answer without it gets one reminder. Errors carry what was billed.
+export const DEEPSEEK_URL = 'https://api.deepseek.com/chat/completions';
+export async function askDeepSeek({ apiKey, model = 'deepseek-flash', system, content, tool, fetchImpl = fetch, maxRounds = 2, timeoutMs = 180000, now = new Date() }) {
+  if (!apiKey) throw new AIError('DEEPSEEK_API_KEY isn\'t set: add it under GitHub → Settings → Secrets and variables → Actions, or choose another model for this fund.');
+  const base = DEEPSEEK[model] ?? DEEPSEEK['deepseek-flash'];
+  const peak = deepseekPeak(now) ? DEEPSEEK_PEAK.factor : 1;
+  const spec = { inPerM: base.inPerM * peak, cacheReadPerM: base.cacheReadPerM * peak, outPerM: base.outPerM * peak };
+  const text = Array.isArray(content) ? content.map((b) => b.text).join('\n\n') : String(content);
+  const messages = [{ role: 'system', content: system }, { role: 'user', content: text }];
+  const request = {
+    model, max_tokens: 8000, messages, thinking: { type: 'disabled' },
+    tools: [{ type: 'function', function: { name: tool.name, description: tool.description, parameters: tool.input_schema } }],
+    tool_choice: { type: 'function', function: { name: tool.name } },
+  };
+  const usage = { input: 0, output: 0, searches: 0, cacheWrite: 0, cacheRead: 0 };
+  const billed = (err) => {
+    if (usage.input + usage.cacheRead + usage.output > 0) err.usage = { ...usage, costUsd: costOf(usage, spec) };
+    return err;
+  };
+  for (let round = 0; round < maxRounds; round++) {
+    let res;
+    try {
+      res = await fetchImpl(DEEPSEEK_URL, {
+        method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+        body: JSON.stringify({ ...request, messages }), signal: AbortSignal.timeout(timeoutMs),
+      });
+    } catch (err) {
+      throw billed(new AIError(err?.name === 'TimeoutError' ? 'DeepSeek took too long to answer.' : 'Could not reach DeepSeek.'));
+    }
+    if (!res.ok) {
+      const why = { 400: 'DeepSeek refused the request (400)', 401: 'DeepSeek rejected the API key', 402: 'The DeepSeek account has no balance left', 422: 'DeepSeek refused the request (422)', 429: 'Rate limited by DeepSeek', 503: 'DeepSeek is overloaded (503)' }[res.status] ?? `DeepSeek API error ${res.status}`;
+      throw billed(new AIError(`${why}.`));
+    }
+    let body;
+    try { body = await res.json(); } catch { throw billed(new AIError('DeepSeek\'s answer could not be read.')); }
+    const u = body.usage ?? {};
+    const hit = u.prompt_cache_hit_tokens ?? 0;
+    usage.cacheRead += hit;
+    usage.input += u.prompt_cache_miss_tokens ?? Math.max(0, (u.prompt_tokens ?? 0) - hit);
+    usage.output += u.completion_tokens ?? 0;
+    const choice = body.choices?.[0];
+    const call = choice?.message?.tool_calls?.find((t) => t.function?.name === tool.name);
+    if (choice?.finish_reason === 'length') throw billed(new AIError('DeepSeek\'s answer was cut off before it finished.'));
+    if (call) {
+      let input;
+      try { input = JSON.parse(call.function.arguments); } catch { throw billed(new AIError('DeepSeek\'s answer was not in the expected format.')); }
+      const errs = schemaErrors(tool.input_schema, input, 'answer', { lenient: true });
+      if (errs.length) throw billed(new AIError(`DeepSeek's answer was not in the expected format (${errs.slice(0, 3).join('; ')}).`));
+      return { input, sources: [], model, usage: { ...usage, costUsd: costOf(usage, spec) } };
+    }
+    messages.push({ role: 'assistant', content: choice?.message?.content ?? '' });
+    messages.push({ role: 'user', content: `Please call ${tool.name} with your answer now.` });
+  }
+  throw billed(new AIError('DeepSeek did not return an answer.'));
+}
+
 const round2 = (n) => Math.round(n * 100) / 100;
 const round4 = (n) => Math.round(n * 10000) / 10000;
-// US$ for a call: cache writes cost 1.25x the input price and cache reads 0.1x (5-minute cache).
-const costOf = (u, price) => round4(((u.input + u.cacheWrite * 1.25 + u.cacheRead * 0.1) * price.inPerM + u.output * price.outPerM) / 1e6 + u.searches * SEARCH_COST);
+// US$ for a call: cache writes cost 1.25x the input price and cache reads 0.1x (Claude's 5-minute cache), or
+// the model's own cache-hit price (DeepSeek's cacheReadPerM).
+const costOf = (u, price) => round4(((u.input + u.cacheWrite * 1.25) * price.inPerM + u.cacheRead * (price.cacheReadPerM ?? price.inPerM * 0.1) + u.output * price.outPerM) / 1e6 + u.searches * SEARCH_COST);
 
 // Adds up the cost of the news step and the decision step.
 export const addUsage = (...us) => us.filter(Boolean).reduce((a, u) => ({
@@ -749,7 +850,9 @@ function ownContext({ fund, quotes, playbook, calendar = null, dossiers = null, 
 // cards (`cards`, or a function of the news giving them, which the job remembers per market) and the
 // owner's notes on stocks (`notes`, the collection's c.stockNotes) are the same for every fund in the
 // market. `dossiers` ({ symbol: card }) add each position's risk numbers to the fund's own part.
-export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, playbook = null, company = null, calendar = null, macro = null, cards = null, notes = null, dossiers = null, articles = null, cacheShared = false, now = new Date() }) {
+// A fund on DeepSeek (`model` a DEEPSEEK id) asks it for the decision with `deepseek` ({ apiKey, fetchImpl });
+// the news still comes from Claude. DeepSeek caches a repeated prompt start by itself.
+export async function decideFund({ client, Anthropic, model = TIERS.advanced, newsModel = TIERS.simple, fund, quotes, picks, news, playbook = null, company = null, calendar = null, macro = null, cards = null, notes = null, dossiers = null, articles = null, cacheShared = false, deepseek = null, now = new Date() }) {
   const fresh = !news;
   if (fresh) {
     const symbols = Object.keys(quotes).filter((s) => quotes[s].currency === fund.currency);
@@ -758,14 +861,20 @@ export async function decideFund({ client, Anthropic, model = TIERS.advanced, ne
   const stockCards = typeof cards === 'function' ? cards(news) : cards;
   const market = marketContext({ currency: fund.currency, quotes, picks, news, company, calendar, macro, cards: stockCards, notes: notesForPrompt(notes, quotes, fund.currency), now });
   const shared = { type: 'text', text: `Market data as JSON: news, analyst picks, results due and price statistics for the ${fund.currency} market.\n\n${JSON.stringify(market)}` };
-  if (cacheShared) shared.cache_control = { type: 'ephemeral' };
-  const res = await askClaude({
-    client, Anthropic, model,
+  if (cacheShared && !isDeepSeek(model)) shared.cache_control = { type: 'ephemeral' };
+  const ask = {
     system: FUND_SYSTEM,
     content: [shared, { type: 'text', text: `Decision time. The fund's state as JSON:\n\n${JSON.stringify(ownContext({ fund, quotes, playbook, calendar, dossiers, now }))}` }],
     tool: FUND_TOOL,
-    maxSearches: 0,
-  });
+  };
+  let res;
+  try {
+    res = isDeepSeek(model) ? await askDeepSeek({ ...deepseek, model, ...ask, now }) : await askClaude({ client, Anthropic, model, ...ask, maxSearches: 0 });
+  } catch (err) {
+    // the news this call gathered was billed too
+    if (fresh && news.usage) err.usage = addUsage(news.usage, err.usage);
+    throw err;
+  }
   return {
     ...res.input, source_urls: knownUrls(res.input.source_urls, newsUrls(news)),
     model: res.model, newsModel: news.model, usage: addUsage(fresh ? news.usage : null, res.usage), news: fresh ? news : undefined,
