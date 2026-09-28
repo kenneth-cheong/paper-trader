@@ -87,6 +87,8 @@ A GitHub Actions workflow (`.github/workflows/prices.yml`) runs every 15 minutes
 
 The page reloads everything every 5 minutes. Prices can be 20–30 minutes old, because Yahoo delays SGX quotes and GitHub sometimes starts scheduled runs late. Exchange holidays aren't known, so on a holiday the market simply shows no new prices.
 
+**A dependable timer:** GitHub starts scheduled workflows late and, at busy times, skips them altogether (a new repository can wait hours for its first scheduled run). Once the AI fund controls are set up (the GitHub token in Supabase Vault, below), run `supabase/schedule.sql` in Supabase's SQL Editor: Supabase then asks GitHub for a run on the same timetable. When both timers fire, the job still runs once.
+
 ## Setup
 
 1. Create a **public** GitHub repository, e.g. `paper-trader`, and push this folder to its `main` branch. GitHub Pages is free only for public repos. Your own trades stay in your browser, but AI picks and the AI fund are published on the site.
@@ -402,6 +404,7 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `auth.js`, `login.js`, `config.js` | Sign-in, invites and saving portfolios to Supabase. |
 | `supabase/setup.sql` | Database tables, access rules and the invite-only sign-up check. |
 | `supabase/fund-control.sql` | Lets admins start, pause, approve and stop the AI fund from the app. |
+| `supabase/schedule.sql` | Starts the scheduled job from Supabase on the same timetable, since GitHub's own schedule runs late or not at all. |
 | `scripts/tiger_broker.py` | Sends the AI fund's orders to Tiger and brings back fills (with `test/test_tiger_broker.py`). |
 | `scripts/public-fund.mjs` | Writes the public copy of the AI fund, without your Tiger account details, the idea log's theses, the lesson book's records of lessons that have gone (only the track record's counts of them), the words of your notes on stocks, the articles you logged and your questions (only how many of each), or your reasons for declining trades; each fund's stop log is cut to its latest 50 changes, each open position's track to its worst and best move (and when tracking began, for one from before it), and its weekly reports to the latest 4, without your calls. |
 | `app.js`, `index.html`, `styles.css` | The web app. |
