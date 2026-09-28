@@ -99,7 +99,7 @@ import {
   decisionDue, executeDecision, setProtections, checkProtections, recordValue, stopFund,
   approveProposals, rejectProposals, expireProposals, applyBrokerFills, pauseFund, resumeFund, checkDailyLoss, syncGuards, DECLINE_REASONS,
 } from '../fund.js';
-import { loadFunds, addFund, updateFund, removeFund, targetFund, otherTigerHoldings, activeFunds } from '../funds.js';
+import { loadFunds, addFund, updateFund, removeFund, targetFund, otherTigerHoldings, activeFunds, MAX_ACTIVE_FUNDS } from '../funds.js';
 import { applyCorporateActions, describeAction } from '../actions.js';
 import { addSpend, capReached, monthSpend } from '../spend.js';
 import {
@@ -170,6 +170,28 @@ if (Number(env.FUND_START_AMOUNT) > 0) {
 }
 
 try {
+  // An experiment set up in one run (experiment.js): { stopAll: true } stops every running fund, closing
+  // its positions, and { startMany: [{ amount, currency, decisionsPerDay, name, style, settings,
+  // experiment }] } then starts up to MAX_ACTIVE_FUNDS funds together, so they share a start. Counts only
+  // are printed.
+  if (command.stopAll === true) {
+    const running = activeFunds(c);
+    for (const f of running) stopFund(f, quotes, now);
+    note('stop', `Stopped ${running.length} fund(s); their positions are being closed.`, true);
+    process.stdout.write(`Funds: stopped ${running.length}.\n`);
+  }
+  if (Array.isArray(command.startMany)) {
+    const started = [];
+    for (const x of command.startMany.slice(0, MAX_ACTIVE_FUNDS)) {
+      if (!['USD', 'SGD'].includes(x?.currency) || !(Number(x?.amount) > 0)) continue;
+      started.push(addFund(c, {
+        name: x.name, style: x.style, focus: x.focus, settings: x.settings ?? {}, experiment: x.experiment,
+        budget: x.amount, currency: x.currency, decisionsPerDay: x.decisionsPerDay ?? 1, now,
+      }));
+    }
+    note('start', `Started ${started.length} fund(s) together${started.some((f) => f.experiment) ? ' as an experiment' : ''}.`, started.length > 0, started.length === 1 ? started[0] : null);
+    process.stdout.write(`Funds: started ${started.length}.\n`);
+  }
   if (env.FUND_STOP === 'true') {
     const f = targetFund(c, command.fund);
     if (!f.stoppedAt) {

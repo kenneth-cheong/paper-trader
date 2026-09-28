@@ -296,6 +296,14 @@ A fund's **AI model** can also be **DeepSeek V4.1 Flash** (the cheapest of all) 
 - **Judge it on results:** run it beside a fund on Claude with the same money; the switcher and *All funds* rank them after AI cost.
 - **The news digest stays on Claude by default.** Claude Haiku with web search reads the articles themselves and finds news the feeds don't carry (company announcements, analysts' notes), so it's the better digest. To save most of its cost instead, set the repository variable `NEWS_DIGEST_MODEL` to `deepseek-flash` (with the `DEEPSEEK_API_KEY` secret and the feeds on): DeepSeek then writes the digest from the news feeds' latest headlines about the watchlist (up to 60 from the last few days), each item citing one of their links, for about a twentieth of the cost. It sees headlines only, so it can't check a claim against the article. With fewer than 8 headlines about the stocks, or if DeepSeek fails, the digest falls back to Claude's web search (and what the failed call cost still counts). Each digest records which it was (`via`), so the *Market memory report* can compare them.
 
+### Experiments with the funds' settings
+
+Which settings work best can only be tested forward: the AI's decisions can't be backtested on past prices, because the models have read about those years and the news as it stood then can't be fetched. So an experiment is several funds started together with the same money, market and style, each changing one setting from a baseline (role A). Up to 10 funds can run at once, e.g. five per market.
+
+The *All funds* view has an **Experiment** panel per market (`experiment.js`): each fund's return after its AI cost, and its average weekly return after AI cost minus the baseline's in the same weeks, with its likely range (8 in 10). The verdict is *Too early* for the first 6 weeks; then *Better* or *Worse than the baseline* only when the difference is at least 2.5 times what noise alone would usually give, *Leaning better/worse (not clear yet)* when the likely range is all on one side of zero, else *No clear difference yet*. With several funds against one baseline, one can look better by luck, so a verdict counts more the longer it holds. Expect months, not days.
+
+An experiment is set up in one run with the workflow's `fund_command` input: `{"fund": "all", "stopAll": true, "startMany": [{"amount": 10000, "currency": "SGD", "decisionsPerDay": 2, "name": "SGX A · baseline", "style": "balanced", "settings": {"model": "claude-sonnet-5"}, "experiment": {"id": "exp-1", "role": "A", "tests": "baseline"}}, …]}` stops every running fund and starts the new ones together (the log shows counts only).
+
 ### Starting, stopping or replacing the AI fund
 
 **From the app (accounts on, admins only):** the AI fund tab has a *Start a fund* card, and each fund's *Settings* a *Stop fund* button. They need a one-time setup, because Supabase starts the GitHub workflow for you:

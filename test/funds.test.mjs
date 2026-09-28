@@ -26,7 +26,7 @@ test('funds start side by side with their style\'s limits, up to the maximum', (
   assert.deepEqual([b.settings.maxOrderPct, b.settings.allowShorts, b.settings.model], [30, true, 'claude-opus-5']);
   assert.match(b.name, /Aggressive SGD fund/);
   for (let i = 2; i < MAX_ACTIVE_FUNDS; i++) addFund(c, { budget: 100, currency: 'USD', now });
-  assert.throws(() => addFund(c, { budget: 100, currency: 'USD', now }), /Up to 5 funds/);
+  assert.throws(() => addFund(c, { budget: 100, currency: 'USD', now }), new RegExp(`Up to ${MAX_ACTIVE_FUNDS} funds`));
   assert.throws(() => targetFund(c), /choose one/);
   assert.equal(targetFund(c, a.id), a);
   assert.throws(() => addFund(loadFunds(null), { style: 'yolo', budget: 1, currency: 'USD' }), /Unknown style/);

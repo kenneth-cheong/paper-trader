@@ -11,7 +11,7 @@
 
 import { newFund, applySettings, reconcile, tigerSymbol, decisionsPerDayOf } from './fund.js';
 
-export const MAX_ACTIVE_FUNDS = 5;
+export const MAX_ACTIVE_FUNDS = 10;
 const OPEN = ['queued', 'sent', 'partial'];
 
 // A style sets the AI's brief and the fund's default limits (which can still be changed).
@@ -67,7 +67,16 @@ export function targetFund(c, id) {
 }
 
 // Starts a new fund alongside the others. `style` fills in limits not given in `settings`.
-export function addFund(c, { name, style = DEFAULT_STYLE, focus = '', budget, currency, decisionsPerDay, settings = {}, now = new Date() }) {
+// An experiment a fund belongs to (experiment.js): funds started together with the same money, market and
+// style, each changing one setting from its baseline (role 'A'), so their results can be compared.
+export function experimentOf(x) {
+  if (!x || typeof x !== 'object') return null;
+  const id = String(x.id ?? '').replace(/[^\w-]/g, '').slice(0, 40);
+  const role = String(x.role ?? '').replace(/[^A-Z]/g, '').slice(0, 1);
+  return id && role ? { id, role, tests: String(x.tests ?? '').trim().slice(0, 80) } : null;
+}
+
+export function addFund(c, { name, style = DEFAULT_STYLE, focus = '', budget, currency, decisionsPerDay, settings = {}, experiment = null, now = new Date() }) {
   if (activeFunds(c).length >= MAX_ACTIVE_FUNDS) throw new Error(`Up to ${MAX_ACTIVE_FUNDS} funds can run at once. Stop one first.`);
   if (!STYLES[style]) throw new Error(`Unknown style ${style}.`);
   const fund = newFund({ budget, currency, decisionsPerDay, settings: { ...STYLES[style].defaults, ...settings }, now });
@@ -77,6 +86,7 @@ export function addFund(c, { name, style = DEFAULT_STYLE, focus = '', budget, cu
     name: String(name ?? '').trim().slice(0, 40) || `${STYLES[style].label} ${currency} fund ${n}`,
     style,
     focus: String(focus ?? '').trim().slice(0, 300),
+    ...(experimentOf(experiment) ? { experiment: experimentOf(experiment) } : {}),
   });
   c.funds.push(fund);
   return fund;

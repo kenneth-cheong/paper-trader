@@ -2,7 +2,7 @@ import { newPortfolio, applyTrade, placeOrder, cancelOrder, convertCash, summari
 import { applyCorporateActions, describeAction } from './actions.js';
 import { BENCHMARKS, benchmarkFor, benchmarkSeries } from './benchmark.js';
 import { scorePicks, summarizeScores } from './scorecard.js';
-import { addSpend, monthSpend } from './spend.js';
+import { addSpend, monthSpend, fundAiCost } from './spend.js';
 import { hbars, stackBar, columns, lineChart, rangeBars, sparkTrend, tableToggle, shareLabels, focusQuietly, tipOpenFor, hideTips, SERIES, OTHER, CASH, TRACK } from './charts.js';
 import { valueHistory, indexHistory, realizedHistory } from './history.js';
 import { MIN_CASES as MEMORY_MIN_CASES, MOVE_NEWS } from './memory.js';
@@ -14,6 +14,7 @@ import { resultsCalendar, nextResults } from './calendar.js';
 import { recentRatingChanges, describeChange } from './analysts.js';
 import { loadFunds, reconcileAll, STYLES, DEFAULT_STYLE, MAX_ACTIVE_FUNDS } from './funds.js';
 import { ALL, fundsOverview } from './fund-views.js';
+import { experiments, EXPERIMENT } from './experiment.js';
 import {
   activeLessons, lessonKind, filterWords, behaviourBase, OUTCOME_LABELS, IDEA_LABELS, REVIEW_MIN_NEW, NOISE_CHECK, CAL_NOISE_CHECK, CALIBRATION,
   FILTER_KEYS, FILTER_VALUES, TRACK_LABELS, BOOK, HOLD_NOISE, DECLINE_MIN_CASES,
@@ -3119,11 +3120,47 @@ function renderCombined(ov, c) {
   const body = `${v.running ? `<section class="kpis" aria-label="All funds in figures">${tiles}${stocksTile}${costTile}</section>` : '<section class="panel"><p class="muted">No fund is running: the stopped ones are listed below until you remove them.</p></section>'}
     ${where ? `<section class="panel"><div class="panel-head"><h2>Where the money is</h2></div>${where}</section>` : ''}
     <section class="panel"><div class="panel-head"><h2>By fund</h2></div>${byFund}</section>
+    ${renderExperiments(c)}
     ${v.holdings.length ? `<section class="panel"><div class="panel-head"><h2>Every holding, combined (${plural(v.stocks, 'stock')})</h2><span class="muted small">Largest first · weight is of ${t ? 'all the funds together' : 'the funds in the same currency'}</span></div>
       ${combinedHoldingsTable(v.holdings, t?.currency ?? null)}
       <p class="muted small">Since bought: the profit or loss of every fund's position in the stock together, after the fees on buying.</p></section>` : ''}
     ${renderSpend()}`;
   return { head, body };
+}
+
+// Experiments with the funds' settings (experiment.js): per market, each fund against the baseline (role
+// A) week by week, after AI cost, with the likely range of its average weekly difference and a verdict
+// only once it's clear of noise. Several funds are compared with one baseline, so a single "better" is
+// read with care; the note says so.
+const VERDICTS = {
+  'too-early': ['Too early', ''], unclear: ['No clear difference yet', ''], better: ['Better than the baseline', 'ok'], worse: ['Worse than the baseline', 'sell'],
+  'leaning-better': ['Leaning better (not clear yet)', ''], 'leaning-worse': ['Leaning worse (not clear yet)', ''],
+};
+function renderExperiments(c) {
+  const list = experiments(c.funds, { fx: state.prices.fx?.USDSGD ?? null });
+  if (!list.length) return '';
+  const p2 = (x) => `${x >= 0 ? '+' : '−'}${Math.abs(x * 100).toFixed(2)}%`;
+  return list.map((e) => {
+    const weeks = Math.max(0, ...e.funds.map((x) => x.result?.weeks ?? 0));
+    return `<section class="panel experiment">
+      <div class="panel-head"><h2>Experiment · ${esc(MARKETS[marketForCurrency(e.currency)].label)}</h2><span class="muted small">Started ${fmtDate(e.started)} · ${money(e.amount, e.currency)} each · ${plural(weeks, 'week')} so far</span></div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Experiment, ${esc(e.currency)} funds"><table>
+        <thead><tr><th>Fund</th><th>Tests</th><th class="num">Return after AI cost</th><th class="num">vs baseline, a week</th><th>Verdict</th></tr></thead>
+        <tbody>${e.funds.map(({ fund: f, role, tests, result: r }) => {
+          const a = summarize(f.portfolio, state.prices.quotes ?? {}).accounts[f.currency];
+          const cost = f.currency === 'USD' ? fundAiCost(f) : state.prices.fx?.USDSGD ? fundAiCost(f) * state.prices.fx.USDSGD : null;
+          const after = cost == null ? null : (a.net - cost) / f.budget;
+          const [word, cls] = r ? VERDICTS[r.verdict] : ['Baseline', ''];
+          return `<tr${f.stoppedAt ? ' class="muted-row"' : ''}><td><button type="button" class="link-btn fund-link" data-fund-open="${esc(f.id)}">${esc(f.name)}</button></td>
+            <td class="small">${esc(role)} · ${esc(tests || '–')}</td>
+            <td class="num ${after == null ? '' : tone(after)}">${after == null ? '–' : pct(after)}</td>
+            <td class="num">${r && r.weeks > 1 ? `<span class="${tone(r.mean)}">${p2(r.mean)}</span><br><span class="small muted">likely ${p2(r.lo)} to ${p2(r.hi)}</span>` : '–'}</td>
+            <td><span class="chip ${cls}">${word}</span>${r?.verdict === 'too-early' ? `<br><span class="small muted">${r.weeks} of ${EXPERIMENT.minWeeks} weeks</span>` : ''}</td></tr>`;
+        }).join('')}</tbody>
+      </table></div>
+      <p class="muted small">Each fund changes one setting from the baseline (A), with the same money, market and style, started together. "vs baseline, a week" is its average weekly return after its AI cost minus the baseline's in the same weeks, with the range it likely lies in (8 in 10). A verdict needs ${EXPERIMENT.minWeeks} weeks and a difference at least ${EXPERIMENT.t} times what noise alone would usually give; with several funds against one baseline, one of them can look better by luck, so trust a verdict more when it holds for weeks. The AI's decisions can't be tested on past prices (the models have read about those years), so this is the test: it takes months, not days.</p>
+    </section>`;
+  }).join('');
 }
 
 // The AI fund page: the switcher, then the fund picked (or all funds), redrawn at every render.
