@@ -1447,15 +1447,18 @@ const mandateFields = (p, v) => `
   <label class="check"><input type="checkbox" id="${p}-shorts" ${v.allowShorts !== false ? 'checked' : ''}> Short selling allowed</label>
   <label class="check"><input type="checkbox" id="${p}-learning" ${v.learning !== false ? 'checked' : ''}> Learns from its results (leave one fund off to compare)</label>
   <label class="check"><input type="checkbox" id="${p}-skip-quiet" ${v.skipQuiet !== false ? 'checked' : ''}> Save AI cost: skip a decision when nothing has changed</label>`;
-// How often a fund decides, with roughly what that costs a month: each decision is one AI call of about
-// US$0.05-0.15 (the default model, reusing the day's news), over about 21 trading days. Every run is about
-// 26 a day; "skip when nothing has changed" skips up to two quiet runs in a row, so roughly a third of that.
+// How often a fund decides, with roughly what that costs a month for the fund's model: each decision is one
+// AI call of about US$0.05-0.15 on the default model (reusing the day's news), scaled by the model's price
+// against it (Haiku about half, Opus about 2.5x), over about 21 trading days. Every run is about 26 a day;
+// "skip when nothing has changed" skips up to two quiet runs in a row, so roughly a third of that.
 const DECISION_COST = [0.05, 0.15];
+const modelCostFactor = (model) => (MODELS[model || TIERS.advanced]?.outPerM ?? MODELS[TIERS.advanced].outPerM) / MODELS[TIERS.advanced].outPerM;
 const decisionWords = (n) => (Number(n) === EVERY_RUN ? 'at every run (about every 15 minutes)' : `${n} time${n > 1 ? 's' : ''} a trading day`);
-function decisionOptions(selected = 1) {
+function decisionOptions(selected = 1, model = null) {
+  const factor = modelCostFactor(model);
   return DECISION_CHOICES.map((n) => {
     const perDay = n === EVERY_RUN ? 26 : n;
-    const [lo, hi] = DECISION_COST.map((c) => Math.round(perDay * 21 * c));
+    const [lo, hi] = DECISION_COST.map((c) => Math.round(perDay * 21 * c * factor));
     const label = n === EVERY_RUN ? `Every run, about every 15 minutes (about US$${lo}–${hi} a month; about a third with quiet runs skipped)`
       : `${n}${n === 1 ? ' (cheapest)' : ''}: about US$${Math.max(1, lo)}–${hi} a month`;
     return `<option value="${n}" ${Number(selected) === n ? 'selected' : ''}>${label}</option>`;
@@ -1522,7 +1525,7 @@ function renderFundControls() {
         <select id="fund-currency"><option value="USD">USD · trades US stocks</option><option value="SGD">SGD · trades SGX stocks</option></select>
       </label>
       <label>Decisions per trading day
-        <select id="fund-decisions">${decisionOptions(1)}</select>
+        <select id="fund-decisions">${decisionOptions(1, null)}</select>
       </label>
       <label>Trades go to
         <select id="fund-broker"><option value="simulator">Simulator (virtual money)</option><option value="tiger">Tiger Brokers account</option></select>
@@ -1551,7 +1554,7 @@ function renderFundControls() {
     ${f.stoppedAt ? '' : `<details class="fund-new"><summary>Mandate, approval and limits</summary>
       <form id="fund-settings-form" class="form-grid fund-form">
         ${mandateFields('set', { name: f.name, style: f.style, focus: f.focus, model: s.model, maxOrderPct: s.maxOrderPct ?? 25, dailyLossPct: s.dailyLossPct ?? 5, allowShorts: s.allowShorts, learning: s.learning, skipQuiet: s.skipQuiet })}
-        <label>Decisions per trading day <select id="set-decisions">${decisionOptions(f.decisionsPerDay)}</select></label>
+        <label>Decisions per trading day <select id="set-decisions">${decisionOptions(f.decisionsPerDay, s.model)}</select></label>
         ${s.broker === 'tiger' ? `<label>Approval
           <select id="set-approval"><option value="manual" ${s.approval === 'manual' ? 'selected' : ''}>I approve each trade</option><option value="auto" ${s.approval === 'auto' ? 'selected' : ''}>Automatic</option></select>
         </label>` : '<p class="small muted">Approval: none needed. The simulator trades with virtual money, so its trades go through as the AI decides; approving each trade is for funds that trade through Tiger.</p>'}
@@ -1581,6 +1584,14 @@ function renderFundControls() {
     };
     brokerSel.addEventListener('change', sync);
     sync();
+  }
+  // The monthly costs beside each decisions choice follow the model picked.
+  for (const [p, id] of [['new', 'fund-decisions'], ['set', 'set-decisions']]) {
+    const model = $(`${p}-model`), decisions = $(id);
+    if (!model || !decisions) continue;
+    const redo = () => { const keep = decisions.value; decisions.innerHTML = decisionOptions(keep, model.value); };
+    model.addEventListener('change', redo);
+    if (model.value !== (p === 'set' ? f?.settings?.model ?? '' : '')) redo(); // a model carried over from an unsaved edit
   }
   // Picking a style for a new fund fills in that style's limits; for a running fund it only shows the brief.
   for (const p of ['new', 'set']) {
