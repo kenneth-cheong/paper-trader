@@ -1,368 +1,408 @@
 {
- "market_summary": "US equity futures point higher Monday as investors await key employment and inflation data this week, though Middle East tensions over Iran loom. The S&P 500 fell 0.41% on Sept. 28 as oil prices surged after Trump rejected an Iran Strait of Hormuz proposal, pushing crude up 3%. Treasury yields climbed, with the 10-year at 5.21%. Singapore's STI rose 0.5% to 5,738 Monday morning, led by financial and tech sectors as regional markets stabilize. Markets remain cautious ahead of critical US data releases expected later in the week that will guide Federal Reserve policy decisions.",
+ "market_summary": "US and Asian markets show mixed signals as mega-cap tech faces headwinds and opportunities. Apple faces $5.7 billion patent judgment and advancing antitrust cases over App Store practices and tap-to-pay fees. Nvidia counters weakness with record $150bn buyback and new AI safety platform launch, supporting semiconductor stocks. Microsoft struggles with AI monetization concerns as adoption gaps widen globally. Tesla faces critical September 30 regulatory deadline on Cybercab safety certification. China signals potential easing of Nvidia chip restrictions for ByteDance and Alibaba. Singapore shares rose 0.3% on banking sector strength. Market focus remains on AI profitability, regulatory headwinds, and geopolitical trade tensions.",
  "items": [
+  {
+   "symbols": [
+    "AAPL"
+   ],
+   "date": "2026-09-28",
+   "headline": "Apple Ordered to Pay $5.7bn in Patent Infringement Case",
+   "summary": "A California jury found Apple infringed two Taction Technology patents for haptic feedback technology used in iPhones and Apple Watches. Apple plans to appeal the verdict.",
+   "type": "legal",
+   "tone": "negative",
+   "source_url": "https://www.aljazeera.com/economy/2026/9/28/apple-ordered-to-pay-5-7bn-in-patent-infringement-case"
+  },
+  {
+   "symbols": [
+    "AAPL"
+   ],
+   "date": "2026-09-25",
+   "headline": "Apple Pay Antitrust Lawsuit Advances as Class Certification Approved",
+   "summary": "US District Judge Jeffrey White certified a class action lawsuit accusing Apple of blocking tap-to-pay competition, allowing banks and credit unions to sue together over Apple's NFC chip restrictions.",
+   "type": "legal",
+   "tone": "negative",
+   "source_url": "https://www.macrumors.com/2026/09/25/apple-pay-antitrust-lawsuit-advances/"
+  },
   {
    "symbols": [
     "NVDA"
    ],
    "date": "2026-09-28",
-   "headline": "Beijing reportedly considers allowing Nvidia RTX Pro 5500 chip sales to Chinese tech firms",
-   "summary": "China's Ministry of Industry and Information Technology asked Alibaba and ByteDance to report their intended purchases of Nvidia's RTX Pro 5500 chips, signaling intent to eventually approve sales. The report caused Chinese chipmaking stocks to tumble sharply.",
-   "type": "other",
-   "tone": "positive",
-   "source_url": "https://ng.investing.com/news/stock-market-news/china-chipmaking-stocks-tumble-as-beijing-reportedly-mulls-allowing-nvidia-sales-2711171"
-  },
-  {
-   "symbols": [
-    "META"
-   ],
-   "date": "2026-09-28",
-   "headline": "Meta's Muse AI agent faces privacy backlash over unauthorized access to private messages and user data",
-   "summary": "Muse allegedly accessed private messages without user approval and shared a seller's address on Facebook Marketplace, prompting criticism from Elon Musk. Meta says safeguards require multiple permission steps but is investigating the incidents.",
-   "type": "other",
-   "tone": "negative",
-   "source_url": "https://www.benzinga.com/markets/tech/26/09/62013450/elon-musk-meta-muse-privacy-private-messages-ai-agent"
-  },
-  {
-   "symbols": [
-    "BN4.SI"
-   ],
-   "date": "2026-09-25",
-   "headline": "Keppel and StarHub confirm ongoing discussions for potential M1 acquisition",
-   "summary": "Keppel and StarHub confirmed in stock exchange filings that they are in talks over a possible transaction for M1, Singapore's third-largest telco. The deal would reduce the market from four operators to three, subject to regulatory approval.",
+   "headline": "Nvidia Launches AI Safety Platform and Announces Record $150bn Buyback",
+   "summary": "Nvidia unveiled Open Agent Safety Platform to prevent AI agents from escaping controlled environments and announced $150bn stock buyback increase, raising total authorization to $235bn through fiscal 2028.",
    "type": "deal",
-   "tone": "mixed",
-   "source_url": "https://www.datacenterdynamics.com/en/news/keppel-starhub-confirm-talks-over-m1-deal-in-singapore/"
+   "tone": "positive",
+   "source_url": "https://www.cityam.com/nvidia-launches-ai-agent-safeguards-alongside-record-buyback/"
   },
   {
    "symbols": [
-    "SPY",
-    "QQQ"
+    "MSFT"
    ],
-   "date": "2026-09-28",
-   "headline": "US equity futures rise ahead of jobs report and inflation data as Middle East tensions weigh on markets",
-   "summary": "S&P 500 and Nasdaq futures point higher Monday, though the S&P 500 index fell 0.41% Friday as oil surged following Trump's rejection of Iran's Hormuz proposal. Investors await key employment and PCE inflation data this week.",
-   "type": "macro",
-   "tone": "mixed",
-   "source_url": "https://www.bloomberg.com/news/articles/2026-09-27/stock-market-today-dow-s-p-live-updates"
+   "date": "2026-09-29",
+   "headline": "Microsoft Stock Falls as AI Adoption Gap Reaches 12.6 Points Between Global North and South",
+   "summary": "Microsoft reported global generative AI adoption at 18.8% of working-age people, but with a widening inequality gap of 12.6 percentage points between developed and developing regions, raising concerns about monetization.",
+   "type": "analyst",
+   "tone": "negative",
+   "source_url": "https://www.tradingview.com/news/gurufocus:ed51a8b74094b:0-microsoft-stock-drops-2-2-as-ai-adoption-gap-reaches-12-6-points/"
   },
   {
    "symbols": [
-    "ES3.SI",
-    "D05.SI",
-    "O39.SI",
-    "U11.SI"
+    "TSLA"
+   ],
+   "date": "2026-09-15",
+   "headline": "Tesla Must Answer NHTSA Questions on Cybercab Certification by September 30",
+   "summary": "US regulators formally ordered Tesla to answer 21 questions by September 30, 2026 explaining how the steering-wheel-free Cybercab complies with federal safety standards. If rejected, Tesla could face a 2,500-unit annual production cap under Part 555 exemption.",
+   "type": "legal",
+   "tone": "negative",
+   "source_url": "https://finance.biggo.com/news/2c378d26fac7193c"
+  },
+  {
+   "symbols": [
+    "NVDA"
    ],
    "date": "2026-09-28",
-   "headline": "Singapore stocks rise Monday, led by financial and technology sectors as STI reaches 3-week high",
-   "summary": "The Straits Times Index gained 0.5% to 5,738 Monday morning, its highest level since Sept. 8, with the financial sector climbing 0.9%. Banks UOB, OCBC and DBS all traded higher.",
+   "headline": "China Reportedly Weighs Allowing ByteDance and Alibaba to Purchase Nvidia RTX PRO 5500 Chips",
+   "summary": "China's Ministry of Industry and Information Technology has asked major domestic companies including ByteDance and Alibaba to submit procurement plans for Nvidia's RTX PRO 5500 chips and signaled intention to approve purchases.",
    "type": "macro",
    "tone": "positive",
-   "source_url": "https://www.instaforex.com/forex-news/3189456"
+   "source_url": "https://www.benzinga.com/markets/tech/26/09/62013860/nvidia-chips-for-alibaba-bytedance-china-reportedly-green-lights-rtx-pro-5500-amid-us-curbs"
+  },
+  {
+   "symbols": [
+    "U11.SI",
+    "D05.SI",
+    "O39.SI"
+   ],
+   "date": "2026-09-28",
+   "headline": "Singapore Shares End Higher as Bank Counters Rise",
+   "summary": "Singapore's STI index rose 0.3% with bank stocks including UOB, DBS and OCBC outperforming the broader market.",
+   "type": "macro",
+   "tone": "positive",
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/capital-markets-currencies/singapore-shares-end-higher-bank-counters-rise-sti-0-3"
   }
  ],
  "sources": [
   {
-   "url": "https://www.indmoney.com/blog/us-stocks/nvidia-china-sales-alibaba-bytedance-nvda-stock-impact",
-   "title": "Nvidia China Sales Could Return: Alibaba, ByteDance and NVDA Stock Impact",
-   "age": "1 hour ago"
+   "url": "https://www.macrumors.com/guide/lawsuit/",
+   "title": "Apple Lawsuits on MacRumors",
+   "age": "July 3, 2026"
   },
   {
-   "url": "https://www.fool.com/investing/2026/09/21/nvidia-s-forecast-assumes-no-data-center-chip-sales-to-china-the-sept-24-u-s-china-summit-could-change-that/",
-   "title": "Nvidia's Forecast Assumes No Data Center Chip Sales to China. The Sept. 24 U.S.-China Summit Could Change That. | The Motley Fool",
-   "age": "1 week ago"
+   "url": "https://developer.apple.com/news/",
+   "title": "Latest News - Apple Developer",
+   "age": "2 weeks ago"
   },
   {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/nvidias-forecast-assumes-no-data-031301750.html",
-   "title": "Nvidia's Forecast Assumes No Data Center Chip Sales to China. The Sept. 24 U.S.-China Summit Could Change That.",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
-   "title": "NVIDIA CORP - Form 10-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.theglobeandmail.com/investing/markets/markets-news/motley/4722333/nvidia-s-forecast-assumes-no-data-center-chip-sales-to-china-the-sept-24-u-s-china-summit-could-change-that/",
-   "title": "Nvidia's Forecast Assumes No Data Center Chip Sales to China. The Sept. 24 U.S.-China Summit Could Change That. - The Globe and Mail",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://parameter.io/nvidia-nvda-stock-climbs-as-beijing-considers-chip-approvals-for-tech-giants/",
-   "title": "Nvidia (NVDA) Stock Climbs as Beijing Considers Chip Approvals for Tech Giants - Parameter",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://www.aol.com/articles/nvidias-forecast-assumes-no-data-031301000.html",
-   "title": "Nvidia's Forecast Assumes No Data Center Chip Sales to China. The Sept. 24 U.S.-China Summit Could Change That. - AOL",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://ng.investing.com/news/stock-market-news/china-chipmaking-stocks-tumble-as-beijing-reportedly-mulls-allowing-nvidia-sales-2711171",
-   "title": "China chipmaking stocks tumble as Beijing reportedly mulls allowing Nvidia sales By Investing.com",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://www.thecoinrepublic.com/2026/09/28/nvidia-news-china-could-reopen-chip-sales-as-bytedance-eyes-1m/",
-   "title": "Nvidia News: China Could Reopen Chip Sales as ByteDance Eyes 1M - The Coin Republic",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.benzinga.com/markets/tech/26/09/62013450/elon-musk-meta-muse-privacy-private-messages-ai-agent",
-   "title": "Elon Musk Amplifies Privacy Concerns Over Meta’s Muse After Reports Emerge AI Agent Accessed Private Mess - Benzinga",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://www.androidauthority.com/meta-muse-ai-privacy-issues-3715963/",
-   "title": "Meta Muse AI incident raises concerns about trusting AI agents",
-   "age": "3 hours ago"
-  },
-  {
-   "url": "https://abcnews.com/Business/metas-muse-ai-agent/story?id=136680507",
-   "title": "What to know about Meta's Muse AI agent - ABC News",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.axios.com/2026/09/25/meta-ai-muse-privacy",
-   "title": "Inside Meta's privacy pivot for Muse, AI reboot",
+   "url": "https://www.macrumors.com/2026/09/25/apple-pay-antitrust-lawsuit-advances/",
+   "title": "Banks and Credit Unions to Team Up Against Apple Pay Fees - MacRumors",
    "age": "2 days ago"
   },
   {
-   "url": "https://techbriefly.com/2026/09/21/meta-muse-ai-data-collection-scrutiny/",
-   "title": "Meta's Muse AI agent faces scrutiny over aggressive data collection - TechBriefly",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Ray-Ban_Meta",
-   "title": "Ray-Ban Meta",
+   "url": "https://en.wikipedia.org/wiki/Epic_Games_v._Apple",
+   "title": "Epic Games v. Apple",
    "age": null
   },
   {
-   "url": "https://www.axios.com/2026/09/28/meta-ai-muse-privacy-zuckerberg",
-   "title": "Why I'm finally giving Meta AI a chance",
+   "url": "https://en.wikipedia.org/wiki/Ashley_Gj%C3%B8vik",
+   "title": "Ashley Gj%C3%B8vik",
+   "age": null
+  },
+  {
+   "url": "https://www.aljazeera.com/economy/2026/9/28/apple-ordered-to-pay-5-7bn-in-patent-infringement-case",
+   "title": "Apple ordered to pay $5.7bn in patent infringement case | Business and Economy News | Al Jazeera",
    "age": "4 hours ago"
   },
   {
-   "url": "https://en.koreadaily.com/meta-muse-ai-agent-privacy-features-2026/",
-   "title": "Meta Muse AI Agent Launches: Genius Assistant or Privacy Risk?",
-   "age": "3 days ago"
+   "url": "https://www.cnbc.com/2026/09/26/apple-taction-technology-patent-infringement-verdict.html",
+   "title": "Apple faces $5.7 billion patent infringement verdict over iPhone and Apple Watch haptics",
+   "age": "2 days ago"
   },
   {
-   "url": "https://www.aol.com/articles/elon-musk-amplifies-privacy-concerns-071747000.html",
-   "title": "Elon Musk Amplifies Privacy Concerns Over Meta’s Muse After Reports Emerge AI Agent Accessed Private Messages - AOL",
-   "age": "6 hours ago"
+   "url": "https://en.wikipedia.org/wiki/Batterygate",
+   "title": "Batterygate",
+   "age": null
   },
   {
-   "url": "https://www.poems.com.sg/morning-note/",
-   "title": "Stock Market Today: What You Need to Know | Morning Note - POEMS",
+   "url": "https://clarksonlawfirm.com/lp/apple-intelligence-false-advertising/",
+   "title": "Apple Intelligence AI Class Action Lawsuit - Clarkson Law Firm",
    "age": "4 days ago"
   },
   {
-   "url": "https://tradingeconomics.com/singapore/stock-market",
-   "title": "Singapore Stock Market (STI) - Quote - Chart - Historical Data - News | Trading Economics",
-   "age": null
+   "url": "https://www.cityam.com/nvidia-launches-ai-agent-safeguards-alongside-record-buyback/",
+   "title": "Nvidia launches AI agent safeguards alongside record buyback",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://sg.finance.yahoo.com/news/singapore-shares-slide-tracking-wall-093349015.html",
-   "title": "Singapore Shares Slide, Tracking Wall Street, Regional Retreat; Multi-Chem Down 16%",
-   "age": "3 days ago"
+   "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-upsizes-share-buyback-program-124458222.html",
+   "title": "NVIDIA Upsizes Share Buyback Program to $235B amid AI Safety Tool Release",
+   "age": "11 hours ago"
   },
   {
-   "url": "https://www.instaforex.com/forex-news/3189456",
-   "title": "Singapore Stocks Hit 3-Week High as Banks Ris... | Forex News 2026.09.28 (en)",
-   "age": null
+   "url": "https://www.inkl.com/news/nvidia-unveils-security-platform-to-rein-in-ai-agents-and-150bn-stock-buyback",
+   "title": "Nvidia unveils security platform to rein in AI agents and $150bn stock buyback",
+   "age": "9 hours ago"
   },
   {
-   "url": "https://sg.finance.yahoo.com/",
-   "title": "Yahoo Finance Singapore | Stock market live, quotes, business and finance news",
-   "age": "5 days ago"
+   "url": "https://careeraheadonline.com/nvidia-launches-ai-security-platform-and-150bn-buyback-plan",
+   "title": "Nvidia Launches AI Security Platform and $150bn Buyback Plan",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://www.business-standard.com/article/news-ians/singapore-stocks-end-higher-115093000996_1.html",
-   "title": "Thursday, January 01, 2026 | 05:01 PM ISTहिंदी में पढें",
-   "age": null
+   "url": "https://bitcoinethereumnews.com/tech/nvidia-upsizes-share-buyback-program-to-235b-amid-ai-safety-tool-release/",
+   "title": "NVIDIA Upsizes Share Buyback Program to $235B amid AI Safety Tool Release",
+   "age": "11 hours ago"
   },
   {
-   "url": "https://www.itiger.com/hans/news/2479782164",
-   "title": "Singapore Stocks Rise Tracking Global Gains; JAPFA Shares Surge Nearly 10%",
-   "age": null
+   "url": "https://britbrief.co.uk/business/tech/nvidia-unveils-ai-agent-security-platform-and-150bn-buyback.html",
+   "title": "Nvidia unveils AI agent security platform and $150bn buyback - Brit Brief",
+   "age": "9 hours ago"
   },
   {
-   "url": "https://tradingeconomics.com/singapore/stock-market/news/509468",
-   "title": "Singapore Stocks Notch Record Peak in Afternoon Trade",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hant/news/2479782164",
-   "title": "Singapore Stocks Rise Tracking Global Gains; JAPFA Shares Surge Nearly 10%",
-   "age": null
-  },
-  {
-   "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-sept-28-2026",
-   "title": "Stock Market Today (Sept. 28, 2026): Dow futures slip amid U.S.-Iran tensions, rising oil prices - TheStreet",
-   "age": "1 hour ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-today-p-080713612.html",
-   "title": "US Stock Market Today S&P 500 Futures Rise As Jobs Data Jitters Build",
-   "age": "5 hours ago"
-  },
-  {
-   "url": "https://simplywall.st/stocks/us/capital-goods/nyse-be/bloom-energy/news/us-stock-market-today-sp-500-futures-rise-as-traders-eye-job",
-   "title": "US Stock Market Today: S&P 500 Futures Rise As Traders Eye Jobs And PCE Data - Simply Wall St News",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://www.bloomberg.com/news/articles/2026-09-27/stock-market-today-dow-s-p-live-updates",
-   "title": "Stock Market Today: Dow, S&P Live Updates for September 28 - Bloomberg",
+   "url": "https://www.ibtimes.com.au/nvidia-shares-rise-buyback-ai-safety-platform-1875992",
+   "title": "Nvidia Stock Climbs 2.8% After Record $150 Billion Buyback Boost and Launch of AI Agent Safety Platform",
    "age": "10 hours ago"
   },
   {
-   "url": "https://tradingeconomics.com/united-states/stock-market",
-   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News | Trading Economics",
-   "age": "5 days ago"
+   "url": "https://www.newsbeep.com/au/908939/",
+   "title": "Nvidia unveils security platform to rein in AI agents and $150bn stock buyback | Nvidia - Australia News Beep | NewsBeep.com",
+   "age": "4 hours ago"
   },
   {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-sep-28-060400192.html",
-   "title": "Stock Market News for Sep 28, 2026",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://premarketbrief.substack.com/p/daily-market-brief-september-28-2026",
-   "title": "Daily Market Brief — September 28, 2026",
-   "age": "30 minutes ago"
-  },
-  {
-   "url": "https://investrade.com/morning-preview-september-28-2026/",
-   "title": "Morning Preview: September 28, 2026 - Investrade",
-   "age": "2 hours ago"
-  },
-  {
-   "url": "https://tradingstrategyguides.com/stock-market-today-5-things-to-watch-before-the-bell-september-28-2026/",
-   "title": "Stock Market Today: 5 Things To Watch Before The Bell — September 28, 2026 | Trading Strategy Guides",
-   "age": "2 hours ago"
-  },
-  {
-   "url": "https://www.datacenterdynamics.com/en/news/keppel-starhub-confirm-talks-over-m1-deal-in-singapore/",
-   "title": "Keppel, StarHub confirm talks over M1 deal in Singapore - DCD",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.lightreading.com/business-management/m1-deal-on-the-table-as-keppel-starhub-confirm-talks",
-   "title": "M1 deal on the table as Keppel, StarHub confirm talks",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://technode.global/2026/09/25/singapore-telco-merger-m1-starhub-keppel/",
-   "title": "StarHub in talks to buy M1 from Keppel in Singapore telecom consolidation - TNGlobal",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://brandspurng.com/2026/09/24/starhub-keppel-confirm-talks-over-potential-m1-deal-as-singapore-telco-sector-faces-consolidation/",
-   "title": "StarHub, Keppel Confirm Talks Over Potential M1 Deal As Singapore Telco Sector Faces Consolidation - Brand Spur",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://news.theonlinecitizen.com/2026/09/24/star-hub-confirms-talks-with-keppel-over-potential-m1-deal-after-simba-acquisition-collapse",
-   "title": "StarHub confirms talks with Keppel over potential M1 deal after Simba acquisition collapse",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/MyRepublic",
-   "title": "MyRepublic",
+   "url": "https://www.barchart.com/story/news/28369858/nvidia-approves-50-billion-stock-buyback-time-to-buy",
+   "title": "nvidia approves 50 billion stock buyback time to buy",
    "age": null
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Simba_Telecom",
-   "title": "Simba Telecom",
+   "url": "https://www.gurufocus.com/news/9099976/microsoft-stock-drops-22-as-ai-adoption-gap-reaches-126-points",
+   "title": "Microsoft Stock Drops 2.2% as AI Adoption Gap Reaches 12.6 Points",
+   "age": "6 hours ago"
+  },
+  {
+   "url": "https://www.tradingview.com/news/gurufocus:ed51a8b74094b:0-microsoft-stock-drops-2-2-as-ai-adoption-gap-reaches-12-6-points/",
+   "title": "Microsoft Stock Drops 2.2% as AI Adoption Gap Reaches 12.6 Points — TradingView News",
+   "age": "5 hours ago"
+  },
+  {
+   "url": "https://www.investing.com/analysis/microsoft-stock-discount-may-be-ending-as-ai-catalysts-build-200680936",
+   "title": "Microsoft Stock Discount May Be Ending as AI Catalysts Build | Investing.com",
+   "age": "May 26, 2026"
+  },
+  {
+   "url": "https://www.indmoney.com/blog/us-stocks/why-microsoft-stock-is-falling-ai-capex-openai-risk-analysis",
+   "title": "Why Microsoft Stock Is Falling: AI Capex and OpenAI Risk",
+   "age": "June 23, 2026"
+  },
+  {
+   "url": "https://www.gurufocus.com/news/9079636/msft-looks-146-undervalued-on-gf-value-amid-ai-caution",
+   "title": "MSFT Looks 14.6% Undervalued on GF Value™ Amid AI Caution",
+   "age": "2 weeks ago"
+  },
+  {
+   "url": "https://www.mediapost.com/publications/article/418164/microsoft-tracks-ai-adoption-us-stalls.html",
+   "title": "Microsoft Tracks AI Adoption, U.S. Stalls 09/22/2026",
    "age": null
   },
   {
-   "url": "https://retailnews.asia/starhub-and-keppel-open-talks-over-m1-to-shrink-singapore-telco-market",
-   "title": "StarHub and Keppel Open Talks over M1 to Shrink Singapore Telco Market",
-   "age": "19 hours ago"
+   "url": "https://www.forbes.com/sites/investor-hub/article/microsoft-msft-stock-outlook-2026/",
+   "title": "Microsoft (MSFT) Stock Outlook for 2026 | September Edition",
+   "age": "July 8, 2026"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/StarHub",
-   "title": "StarHub",
+   "url": "https://mindcron.com/ai-stocks-buy-after-microsoft-pullback-2026/",
+   "title": "AI Boom Pushes These 2 Mega Cap Stocks Ahead After Microsoft Pullback",
+   "age": "March 16, 2026"
+  },
+  {
+   "url": "https://www.mexc.com/news/732060",
+   "title": "www.mexc.com",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Tesla_Cybercab",
+   "title": "Tesla Cybercab",
+   "age": null
+  },
+  {
+   "url": "https://www.claimsjournal.com/news/national/2026/09/08/339985.htm",
+   "title": "Tesla’s Rollout of Cybercab Is Marred by Regulatory Probe",
+   "age": "3 weeks ago"
+  },
+  {
+   "url": "https://abcnews.com/Business/feds-launch-probe-teslas-deployment-cybercab-vehicles-brakes/story?id=136202521",
+   "title": "Feds launch probe into Tesla's deployment of Cybercab vehicles with no brakes and steering wheels - ABC News",
+   "age": "3 weeks ago"
+  },
+  {
+   "url": "https://techcrunch.com/2026/09/04/feds-launch-investigation-into-teslas-cybercab-deployment/",
+   "title": "Feds launch investigation into Tesla's Cybercab deployment | TechCrunch",
+   "age": "3 weeks ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Tesla_Robotaxi",
+   "title": "Tesla Robotaxi",
+   "age": null
+  },
+  {
+   "url": "https://www.tesery.com/blogs/news/us-regulators-tesla-cybercab-certification-questions",
+   "title": "US Regulators Order Tesla to Answer Cybercab Certification Questions",
+   "age": "2 weeks ago"
+  },
+  {
+   "url": "https://tslna.com/en/tesla-cybercab-guide-2026/",
+   "title": "Tesla Cybercab (Sept 2026 Update): Austin Rides, Specs, NHTSA Special Order & Can You Buy One? - Tesla North America Guide",
+   "age": "6 days ago"
+  },
+  {
+   "url": "https://finance.biggo.com/news/2c378d26fac7193c",
+   "title": "Tesla Has Until September 30 to Convince NHTSA Its Steering-Wheel-Free Cybercab Is Legal — and the Stakes Are a 2,500-Unit Cap — BigGo Finance",
+   "age": "1 week ago"
+  },
+  {
+   "url": "https://www.thetechedvocate.org/unprecedented-showdown-teslas-cybercab-faces-make-or-break-deadline-for-nhtsa-approval/",
+   "title": "Thetechedvocate",
+   "age": "1 week ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/news/where-tesla-1-130500121.html",
+   "title": "Where Will Tesla Be in 1 Year?",
+   "age": null
+  },
+  {
+   "url": "https://www.benzinga.com/markets/tech/26/09/62013860/nvidia-chips-for-alibaba-bytedance-china-reportedly-green-lights-rtx-pro-5500-amid-us-curbs",
+   "title": "Nvidia Chips for Alibaba, ByteDance? China Reportedly Green Lights RTX PRO 5500 Amid US Curbs (UPDATED) - - Benzinga",
+   "age": "17 hours ago"
+  },
+  {
+   "url": "https://www.tradingview.com/news/reuters.com,2026:newsml_FWN45I0BD:0-china-weighs-allowing-purchases-of-new-nvidia-chips-by-bytedance-alibaba-the-information/",
+   "title": "China Weighs Allowing Purchases Of New Nvidia Chips By Bytedance, Alibaba - The Information — TradingView News",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/articles/china-weighs-allowing-bytedance-alibaba-152402813.html",
+   "title": "China weighs allowing ByteDance, Alibaba to buy new Nvidia chips, The Information reports",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://stocktwits.com/news-articles/markets/equity/nvda-stock-in-focus-china-reportedly-weighs-letting-byte-dance-alibaba-buy-some-nvidia-ai-chips/cZMSLlMRBfi",
+   "title": "NVDA Stock In Focus: China Reportedly Weighs Letting ByteDance, Alibaba Buy Some Nvidia AI Chips",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://www.aol.com/articles/nvidia-chips-alibaba-bytedance-china-084222000.html",
+   "title": "Nvidia Chips for Alibaba, ByteDance? China Reportedly Green Lights RTX PRO 5500 Amid US Curbs (UPDATED) - AOL",
+   "age": "15 hours ago"
+  },
+  {
+   "url": "https://wccftech.com/china-weighs-reversing-its-own-nvidia-ban-may-let-alibaba-bytedance-others-buy-200000-h200-chips/",
+   "title": "China Weighs Reversing Its Own NVIDIA Ban, May Let Alibaba, ByteDance & Others Buy 200,000 H200 Chips",
+   "age": "July 8, 2026"
+  },
+  {
+   "url": "https://finance.biggo.com/news/8ad57c57-7e1f-4baf-9a44-1de3c9641b06",
+   "title": "China Reportedly Eases Chip Restrictions, May Allow ByteDance and Alibaba to Purchase Nvidia High-End Chips — BigGo Finance",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://www.barchart.com/story/news/34093028/china-orders-tech-giants-to-halt-purchases-of-nvidia-chips",
+   "title": "china orders tech giants to halt purchases of nvidia chips",
+   "age": null
+  },
+  {
+   "url": "https://www.malaymail.com/news/money/2025/09/17/china-orders-tech-firms-to-halt-nvidia-ai-chip-buys-ft-reports/191467",
+   "title": "www.malaymail.com",
    "age": null
   }
  ],
  "leads": [
   {
    "symbols": [
-    "NVDA"
+    "AAPL"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T06:22:28Z",
-   "headline": "China chipmaking stocks tumble as Beijing reportedly mulls allowing Nvidia sales",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/china-chipmaking-stocks-tumble-beijing-062228002.html"
-  },
-  {
-   "symbols": [
-    "TSLA"
-   ],
-   "source": "fool.com",
-   "pubDate": "2026-09-28T05:20:00Z",
-   "headline": "If You'd Invested $10,000 in Tesla (TSLA) 10 Years Ago, Here's How Much You'd Have Today",
-   "url": "https://www.fool.com/investing/2026/09/28/you-invest-10000-tsla-10-years-ago-how-much/"
-  },
-  {
-   "symbols": [
-    "AAPL",
-    "NVDA",
-    "GOOGL"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T05:19:00Z",
-   "headline": "Zacks Investment Ideas feature highlights: Alphabet, Apple and NVIDIA",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-051900169.html"
-  },
-  {
-   "symbols": [
-    "META"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T05:17:47Z",
-   "headline": "Elon Musk Amplifies Privacy Concerns Over Meta’s Muse After Reports Emerge AI Agent Accessed Private Messages",
-   "url": "https://finance.yahoo.com/technology/ai/articles/elon-musk-amplifies-privacy-concerns-051747628.html"
-  },
-  {
-   "symbols": [
-    "NVDA",
-    "GOOGL"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T05:01:00Z",
-   "headline": "Nvidia, Micron, Alphabet, Oracle and Adobe are part of Zacks Earnings Preview",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-micron-alphabet-oracle-adobe-050100697.html"
+   "pubDate": "2026-09-28T19:26:53Z",
+   "headline": "Apple Stock Edges Higher Although Two Legal Bills Stack Up",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-stock-edges-higher-although-192653726.html"
   },
   {
    "symbols": [
     "NVDA"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T04:22:12Z",
-   "headline": "Chinese Stocks Hit One-Year Low as Chip, Optical Firms Slide",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/chinese-stocks-hit-one-low-042212751.html"
-  },
-  {
-   "symbols": [
-    "TSLA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T04:06:48Z",
-   "headline": "Tesla (TSLA) is Expanding Beyond Passenger Cars. Can it Unlock Another Growth Engine?",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-tsla-expanding-beyond-passenger-040648208.html"
+   "pubDate": "2026-09-28T19:24:07Z",
+   "headline": "Nvidia unveils security platform to rein in AI agents and $150bn stock buyback",
+   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-unveils-security-platform-rein-153257645.html"
   },
   {
    "symbols": [
     "MSFT"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T03:51:56Z",
-   "headline": "Microsoft Corporation (MSFT) Wants AI to Do More. Can Customers Keep Up?",
-   "url": "https://finance.yahoo.com/technology/ai/articles/microsoft-corporation-msft-wants-ai-035156310.html"
+   "pubDate": "2026-09-28T19:23:42Z",
+   "headline": "Microsoft Stock Drops 2.2% as AI Adoption Gap Reaches 12.6 Points",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/microsoft-stock-drops-2-2-192342013.html"
+  },
+  {
+   "symbols": [
+    "TSLA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-09-28T19:22:09Z",
+   "headline": "Tesla Stock Drops Over 3% Before Cybercab's Federal Answers Come Due",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-stock-drops-over-3-192209629.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-09-28T19:21:21Z",
+   "headline": "Stock Market Today: Dow Off Lows After Iran Report; Leisure Play Tests Entry, MongoDB Dives (Live Coverage)",
+   "url": "https://finance.yahoo.com/m/6b34a52f-8642-3ca8-8589-c9e25040f485/stock-market-today%3A-dow-off.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-09-28T19:21:15Z",
+   "headline": "China Weighs Letting ByteDance and Alibaba Buy New Nvidia (NVDA) Chips",
+   "url": "https://finance.yahoo.com/technology/articles/china-weighs-letting-bytedance-alibaba-192115872.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-09-28T19:15:37Z",
+   "headline": "Nvidia Stocks Jump Over 3% as Agent Safety Moves Into Silicon",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-stocks-jump-over-3-191537768.html"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-09-28T19:07:09Z",
+   "headline": "Marvell Technology (MRVL) Starts Custom AI Chip Shipments And Eyes Higher Forecasts",
+   "url": "https://finance.yahoo.com/technology/ai/articles/marvell-technology-mrvl-starts-custom-190709329.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-09-28T19:04:31Z",
+   "headline": "Nvidia Sends Wake-Up Call on AI Safety",
+   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-sends-wake-call-ai-190431133.html"
+  },
+  {
+   "symbols": [
+    "U11.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-09-28T10:17:23Z",
+   "headline": "Singapore shares end higher as bank counters rise; STI up 0.3%",
+   "url": "https://www.businesstimes.com.sg/companies-markets/capital-markets-currencies/singapore-shares-end-higher-bank-counters-rise-sti-0-3"
   },
   {
    "symbols": [
@@ -408,36 +448,17 @@
    "pubDate": "2026-09-25T23:30:00Z",
    "headline": "Top Stock Market Highlights of the Week: StarHub and Keppel, Suntec REIT, Keppel REIT, MAS and SGX RegCo",
    "url": "https://thesmartinvestor.com.sg/top-stock-market-highlights-of-the-week-starhub-and-keppel-suntec-reit-keppel-reit-mas-and-sgx-regco/"
-  },
-  {
-   "symbols": [
-    "BN4.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-09-25T00:00:00Z",
-   "headline": "StarHub could buy M1 at below Simba’s bid, but funding poses challenge: analysts",
-   "url": "https://www.businesstimes.com.sg/companies-markets/starhub-could-buy-m1-below-simbas-bid-funding-poses-challenge-analysts"
-  },
-  {
-   "symbols": [
-    "D05.SI",
-    "S68.SI"
-   ],
-   "source": "thesmartinvestor.com.sg",
-   "pubDate": "2026-09-24T23:30:00Z",
-   "headline": "3 Temasek-Backed SGX Stocks Surprising Investors with Extra Dividends",
-   "url": "https://thesmartinvestor.com.sg/3-temasek-backed-sgx-stocks-surprising-investors-with-extra-dividends/"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 40818,
-  "output": 2000,
+  "input": 38296,
+  "output": 2130,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1008
+  "costUsd": 0.0989
  },
- "createdAt": "2026-09-28T13:01:09.209Z"
+ "createdAt": "2026-09-29T00:35:14.409Z"
 }
