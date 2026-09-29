@@ -1,104 +1,101 @@
 {
- "market_summary": "Tech is bifurcated: Nvidia is getting fresh positive catalysts (a record buyback and signs China will loosen chip curbs for its ecosyststem) while Apple and Tesla face fresh legal/regulatory overhangs. Meanwhile Microsoft got an analyst upgrade despite AI-monetization concerns, and Meta had a sharp, unexplained ~8% single-day drop that the news flow doesn't yet account for. In Singapore, banks (DBS/OCBC/UOB) are extending a strong uptrend on sector strength, lifting the STI modestly. Broad indices (SPY/QQQ) are little changed, suggesting single-name catalysts matter more than macro right now.",
+ "market_summary": "Big single-stock catalysts dominate this week: Apple was hit with a record $5.7B jury verdict in the Taction haptics patent case (Sept 25) and is down against its 52-week high with analyst targets now below spot. Alphabet is fighting fresh EU orders to open up Search/Android data (filed Sept 28), adding a new regulatory overhang. Nvidia keeps pushing AI-agent security infrastructure (Open Agent Safety Platform, Sept 28) and is up on the day while carrying the largest gap between price and consensus target on the watchlist. In Singapore, the Sept 16 Fed hike to 3.75-4.00% and continued wealth-management momentum have kept bank stocks (DBS, OCBC, UOB) grinding to fresh highs, while SGX (S68.SI) and Singtel show diverging one-month momentum despite bullish analyst coverage. US mega-caps broadly pulled back today (META -4.8%, TSLA -3.9%, MSFT -1.3%) after a strong multi-month run, suggesting some profit-taking/de-risking into month-end.",
  "picks": [
   {
    "symbol": "NVDA",
    "stance": "long",
    "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Nvidia is stacking positive catalysts: a record $150bn buyback increase (total authorization $235bn through FY28) signals management confidence in cash generation, a new AI Agent Safety Platform broadens its enterprise/AI-infra moat, and China is reportedly moving to allow ByteDance/Alibaba to buy RTX PRO 5500 chips, reopening a large addressable market that had been curtailed by export controls. Stock is only ~3% off its 52w high with strong analyst support (58 buy/2 hold/1 sell) and a consensus target implying over 40% upside, though that target likely lags the recent run.",
-   "news": "Sept 28 2026: Nvidia launches Open Agent Safety Platform and announces $150bn buyback increase (cityam.com). Sept 28 2026: China reportedly weighing allowing ByteDance/Alibaba to buy Nvidia RTX PRO 5500 chips (benzinga.com).",
-   "risks": "If China talks stall or Beijing reverses course, or if the buyback is read as management having no better growth investments, the stock could give back recent gains; high beta (1.6) means broader tech/AI sentiment swings hit it hard.",
+   "thesis": "Nvidia keeps shipping new AI infrastructure products (Open Agent Safety Platform with Arm/Intel partnerships, Sept 28) that reinforce its ecosystem lock-in just as it bounced +1.7% on the day. Analyst consensus (58 buy/2 hold/1 sell) implies over 40% upside to target, among the widest gaps on the watchlist, and relative volume is elevated (1.22x) suggesting fresh buying interest.",
+   "news": "Sept 28, 2026: Nvidia launched the Open Agent Safety Platform (OpenShell + Sentry) with Arm and Intel partnerships for agentic AI security.",
+   "risks": "Analyst target of $327 vs many bull cases already priced in short-term; any AI capex slowdown headline or export-control news could hit sentiment quickly given 37.7% annualized volatility and 1.59 beta.",
    "source_urls": [
-    "https://www.cityam.com/nvidia-launches-ai-agent-safeguards-alongside-record-buyback/",
-    "https://www.benzinga.com/markets/tech/26/09/62013860/nvidia-chips-for-alibaba-bytedance-china-reportedly-green-lights-rtx-pro-5500-amid-us-curbs"
+    "https://nvidianews.nvidia.com/news/open-agent-safety-platform"
    ],
    "priceAtPick": 228.86
   },
   {
-   "symbol": "TSLA",
-   "stance": "short",
-   "conviction": "high",
-   "horizon": "days",
-   "thesis": "Tesla must answer NHTSA's 21 questions on Cybercab safety certification by Sept 30, 2026 (tomorrow) or risk a hard 2,500-unit annual production cap under the Part 555 exemption — a binary regulatory catalyst just ahead. The stock already fell 5.4% today, well before the deadline, suggesting the market is pricing in downside risk; shares are down 27% from their 52w high and analyst opinion is split (19 buy/20 hold/4 sell), reflecting genuine uncertainty rather than a floor.",
-   "news": "Sept 15 2026: NHTSA orders Tesla to answer Cybercab certification questions by Sept 30, 2026 or face a 2,500-unit production cap (biggo.com). Today's -5.4% day move suggests markets are front-running the deadline.",
-   "risks": "A satisfactory regulatory response or an extension/negotiated compromise on the Cybercab exemption would remove the overhang and could trigger a sharp relief rally given high short-term volatility (46% annualized) and beta (1.82).",
-   "source_urls": [
-    "https://finance.biggo.com/news/2c378d26fac7193c"
-   ],
-   "priceAtPick": 357.45
-  },
-  {
    "symbol": "AAPL",
    "stance": "short",
-   "conviction": "medium",
+   "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Apple is accumulating legal/regulatory overhangs: a $5.7bn jury verdict for patent infringement on haptic feedback tech (haptics used across iPhone/Watch lineup) and a newly certified class-action antitrust case over Apple Pay/NFC restrictions that could expose the company to a large multi-plaintiff damages claim. Despite this, the stock is only 0.8% off its 52-week high and analyst consensus target (328) is actually below the current price (338), implying the stock has run ahead of fundamentals while legal risk is rising.",
-   "news": "Sept 28 2026: Apple ordered to pay $5.7bn in patent case, plans to appeal (aljazeera.com). Sept 25 2026: Apple Pay antitrust class action certified, allowing banks/credit unions to sue jointly (macrumors.com).",
-   "risks": "Appeals often reduce or overturn large jury verdicts, and litigation timelines are slow so near-term price impact could be muted; a strong holiday-quarter iPhone cycle or services beat could override legal-headline risk.",
+   "thesis": "A San Diego jury awarded Taction Technology a record $5.72B verdict against Apple over Taptic Engine haptics patents (Sept 25). Even with an appeal planned, this creates a multi-quarter legal overhang, potential injunction risk on iPhone/Watch haptics, and headline risk during earnings season. Apple trades just 0.8% off its 52-week high while consensus target ($328) sits below the current $338 price, implying limited near-term upside even before the verdict.",
+   "news": "Sept 25-26, 2026: $5.72B jury verdict against Apple in Taction haptic patent case; Apple to appeal.",
+   "risks": "Appeals often reduce or overturn large jury verdicts, and Apple has deep pockets to absorb the hit; if the appeal signals a quick reversal or settlement at a much lower figure, the stock could shrug it off, especially into a strong upcoming product cycle.",
    "source_urls": [
-    "https://www.aljazeera.com/economy/2026/9/28/apple-ordered-to-pay-5-7bn-in-patent-infringement-case",
-    "https://www.macrumors.com/2026/09/25/apple-pay-antitrust-lawsuit-advances/"
+    "https://www.cnbc.com/2026/09/26/apple-taction-technology-patent-infringement-verdict.html"
    ],
    "priceAtPick": 338.4
   },
   {
-   "symbol": "U11.SI",
+   "symbol": "O39.SI",
    "stance": "long",
    "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "UOB led SGX bank gains today (+1.7%) amid broad-based Singapore bank strength reported in local press, and it's showing the freshest momentum among the three banks (1-month return +6.2% vs DBS +2.6% and OCBC +3.7%) with elevated relative volume (1.8x 20-day average) suggesting real buying interest rather than noise. Valuation is undemanding versus peers (consensus target roughly in line with price, unlike OCBC which trades above target).",
-   "news": "Sept 28 2026: Singapore STI rises 0.3% with DBS, UOB, OCBC bank counters outperforming (businesstimes.com.sg).",
-   "risks": "This is a one-day sector move on light background news; if it doesn't persist or if global rate-cut expectations reverse (hurting bank net interest margins), the rally could stall. UOB is also near its 52w high territory context relative to peers, limiting further re-rating room.",
+   "horizon": "months",
+   "thesis": "OCBC is a direct beneficiary of the Sept 16 Fed rate hike to 3.75-4.00%, which lifts net interest margins for Singapore banks. The stock is up 30.4% over 3 months and 96.8% over 1 year, trading 4.3% above its 50-day MA and just 0.3% off its 52-week high, showing the uptrend is intact and continued wealth-management momentum is supporting Singapore bank stocks broadly.",
+   "news": "Sept 16, 2026: Fed hiked rates 25bp to 3.75-4.00%, benefiting Singapore banks including OCBC. Sept 27, 2026: STI rose 0.3% led by bank counters.",
+   "risks": "Analyst consensus target ($31.53) is now slightly below the current price ($32.16), implying the stock may be ahead of fundamentals; any dovish Fed pivot or NIM compression from deposit competition would remove the main tailwind.",
    "source_urls": [
+    "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
     "https://www.businesstimes.com.sg/companies-markets/capital-markets-currencies/singapore-shares-end-higher-bank-counters-rise-sti-0-3"
    ],
-   "priceAtPick": 43.29
+   "priceAtPick": 32.16
   },
   {
    "symbol": "META",
    "stance": "short",
-   "conviction": "low",
+   "conviction": "medium",
    "horizon": "days",
-   "thesis": "Meta dropped a sharp 8% in a single day, an outsized move with no corresponding headline in available news, following a strong +24% one-month run. This pattern (parabolic move followed by a violent reversal) often continues in the near term as momentum unwinds, especially with elevated volatility (41% annualized) and a beta of 1.29 amplifying any broader tech risk-off.",
-   "news": "No specific Meta catalyst found in current news feed; the -8% day move is unexplained by available sources, which is itself a flag that the move may be driven by unreported/earnings-adjacent news or repositioning.",
-   "risks": "Without a confirmed catalyst this is speculative — the drop could be a one-off technical/index-rebalancing event or an overreaction that reverses quickly; consensus analyst target still implies over 10% upside, and sentiment remains very bullish (54 buy/7 hold/1 sell), arguing for caution on the short side.",
+   "thesis": "Meta dropped 4.8% today after a huge run (+25.3% in the past month, +16% above its 50-day MA), a classic setup for a sharp mean-reversion pullback once momentum stalls. High annualized volatility (41.8%) and beta (1.3) mean moves can extend once sentiment turns, and there is no fresh positive catalyst in the news feed to explain today's drop, suggesting profit-taking or a negative read-through investors are still digesting.",
+   "news": "No specific fresh headline found for META in this news pull; move is inferred from today's -4.8% price action after an extended rally, per price stats as of Sept 29, 2026.",
+   "risks": "If the sell-off is just broad market/tech de-risking (SPY -0.7%, QQQ -1.1% same day) rather than Meta-specific, the stock could quickly recover with the market; strong analyst backing (54 buy/7 hold/1 sell, target implies +10%) argues against a large sustained decline.",
    "source_urls": [
-    "https://www.aljazeera.com/economy/2026/9/28/apple-ordered-to-pay-5-7bn-in-patent-infringement-case"
+    "https://www.cnbc.com/2026/09/26/apple-taction-technology-patent-infringement-verdict.html"
    ],
    "priceAtPick": 715.62
+  },
+  {
+   "symbol": "S68.SI",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "Singapore Exchange has fallen 12.2% over the past month and now trades 7.3% below its 50-day moving average, a clear break in what had been a strong 1-year uptrend (+35.3%). Trading volume is subdued (0.82x 20-day average), suggesting the decline is orderly distribution rather than panic, but the trend break combined with only mixed analyst sentiment (6 buy/7 hold/3 sell) argues for continued underperformance versus the broader STI.",
+   "news": "Only dated background item is the Sept 19 Metasurface Catalist dual-listing filing (10 days old, not a fresh catalyst); no recent positive news has emerged to counter the one-month price decline.",
+   "risks": "SGX often re-rates quickly on trading-volume spikes (e.g., volatility events elsewhere driving derivatives turnover); a market volatility shock could boost SGX's trading revenues and reverse the recent weakness fast.",
+   "source_urls": [
+    "https://www.businesstimes.com.sg/companies-markets/hk-listed-engineering-firm-metasurface-files-dual-primary-listing-catalist"
+   ],
+   "priceAtPick": 22.4
+  },
+  {
+   "symbol": "Z74.SI",
+   "stance": "long",
+   "conviction": "low",
+   "horizon": "months",
+   "thesis": "Singtel carries the most bullish analyst skew on the watchlist (13 buy/2 hold/0 sell) with 24.3% implied upside to consensus target, despite a rough past month (-5.7%) and past quarter (-3.6%). This divergence between sell-side conviction and recent price weakness suggests a potential value entry if the stock stabilizes, though the trend is currently against it (price below both 50- and 200-day MAs).",
+   "news": "No fresh Singtel-specific catalyst in this news pull; view rests on analyst consensus data and relative underperformance versus STI, which is up on bank strength (Sept 27, 2026 STI note).",
+   "risks": "Continued negative momentum (still -3.3% vs 50-day MA, -7.1% vs 200-day MA) could persist if regional telecom competition or subsidiary drag (e.g., Bharti, Airtel) worsens; this is a slower, lower-conviction thesis given thin fresh news.",
+   "source_urls": [
+    "https://www.businesstimes.com.sg/companies-markets/capital-markets-currencies/singapore-shares-end-higher-bank-counters-rise-sti-0-3"
+   ],
+   "priceAtPick": 4.28
   }
  ],
  "sources": [
   {
-   "url": "https://www.macrumors.com/guide/lawsuit/",
-   "title": "Apple Lawsuits on MacRumors",
-   "age": "July 3, 2026"
+   "url": "https://finance.yahoo.com/technology/articles/apple-faces-5-7-billion-170453571.html",
+   "title": "Apple Faces $5.7 Billion Jury Verdict Over Haptic Engine Patent Dispute",
+   "age": "19 hours ago"
   },
   {
-   "url": "https://developer.apple.com/news/",
-   "title": "Latest News - Apple Developer",
-   "age": "2 weeks ago"
+   "url": "https://www.engadget.com/2269826/apple-hit-with-a-57-billion-verdict-for-alleged-patent-infringement/",
+   "title": "Apple hit with a $5.7 billion verdict for alleged patent infringement - Engadget",
+   "age": "3 days ago"
   },
   {
-   "url": "https://www.macrumors.com/2026/09/25/apple-pay-antitrust-lawsuit-advances/",
-   "title": "Banks and Credit Unions to Team Up Against Apple Pay Fees - MacRumors",
+   "url": "https://www.pymnts.com/apple/2026/apple-ordered-to-pay-5-7-billion-in-haptic-patent-lawsuit/",
+   "title": "Apple Ordered to Pay $5.7 Billion in Haptic Patent Lawsuit | PYMNTS.com",
    "age": "2 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Epic_Games_v._Apple",
-   "title": "Epic Games v. Apple",
-   "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Ashley_Gj%C3%B8vik",
-   "title": "Ashley Gj%C3%B8vik",
-   "age": null
-  },
-  {
-   "url": "https://www.aljazeera.com/economy/2026/9/28/apple-ordered-to-pay-5-7bn-in-patent-infringement-case",
-   "title": "Apple ordered to pay $5.7bn in patent infringement case | Business and Economy News | Al Jazeera",
-   "age": "4 hours ago"
   },
   {
    "url": "https://www.cnbc.com/2026/09/26/apple-taction-technology-patent-infringement-verdict.html",
@@ -106,210 +103,220 @@
    "age": "2 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Batterygate",
-   "title": "Batterygate",
-   "age": null
+   "url": "https://www.claimsjournal.com/news/national/2026/09/28/340403.htm",
+   "title": "Jury Rules Apple Owes Record $5.7 Billion in Haptic Technology Patent Case",
+   "age": "1 day ago"
   },
   {
-   "url": "https://clarksonlawfirm.com/lp/apple-intelligence-false-advertising/",
-   "title": "Apple Intelligence AI Class Action Lawsuit - Clarkson Law Firm",
-   "age": "4 days ago"
+   "url": "https://qz.com/apple-taction-haptic-patent-verdict-5-billion-092826",
+   "title": "Apple hit with $5.7 billion jury verdict over haptic patents",
+   "age": "1 day ago"
   },
   {
-   "url": "https://www.cityam.com/nvidia-launches-ai-agent-safeguards-alongside-record-buyback/",
-   "title": "Nvidia launches AI agent safeguards alongside record buyback",
-   "age": "8 hours ago"
+   "url": "https://news.bloomberglaw.com/ip-law/apple-owes-5-7-billion-to-litigation-funded-firm-in-patent-case",
+   "title": "Apple Owes $5.7 Billion for Infringement of Haptics Patents (2)",
+   "age": "3 days ago"
   },
   {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-upsizes-share-buyback-program-124458222.html",
-   "title": "NVIDIA Upsizes Share Buyback Program to $235B amid AI Safety Tool Release",
-   "age": "11 hours ago"
-  },
-  {
-   "url": "https://www.inkl.com/news/nvidia-unveils-security-platform-to-rein-in-ai-agents-and-150bn-stock-buyback",
-   "title": "Nvidia unveils security platform to rein in AI agents and $150bn stock buyback",
+   "url": "https://www.aljazeera.com/economy/2026/9/28/apple-ordered-to-pay-5-7bn-in-patent-infringement-case",
+   "title": "Apple ordered to pay $5.7bn in iPhone patent infringement case | Business and Economy News | Al Jazeera",
    "age": "9 hours ago"
   },
   {
-   "url": "https://careeraheadonline.com/nvidia-launches-ai-security-platform-and-150bn-buyback-plan",
-   "title": "Nvidia Launches AI Security Platform and $150bn Buyback Plan",
-   "age": "8 hours ago"
+   "url": "https://www.whalesbook.com/news/English/technology/Apple-Ordered-to-Pay-dollar57-Billion-in-Taction-Patent-Case/6ab9197e5aacb956d081cc5e",
+   "title": "Apple Ordered to Pay $5.7 Billion in Taction Patent Case | Whalesbook",
+   "age": "2 days ago"
   },
   {
-   "url": "https://bitcoinethereumnews.com/tech/nvidia-upsizes-share-buyback-program-to-235b-amid-ai-safety-tool-release/",
-   "title": "NVIDIA Upsizes Share Buyback Program to $235B amid AI Safety Tool Release",
-   "age": "11 hours ago"
-  },
-  {
-   "url": "https://britbrief.co.uk/business/tech/nvidia-unveils-ai-agent-security-platform-and-150bn-buyback.html",
-   "title": "Nvidia unveils AI agent security platform and $150bn buyback - Brit Brief",
-   "age": "9 hours ago"
-  },
-  {
-   "url": "https://www.ibtimes.com.au/nvidia-shares-rise-buyback-ai-safety-platform-1875992",
-   "title": "Nvidia Stock Climbs 2.8% After Record $150 Billion Buyback Boost and Launch of AI Agent Safety Platform",
-   "age": "10 hours ago"
-  },
-  {
-   "url": "https://www.newsbeep.com/au/908939/",
-   "title": "Nvidia unveils security platform to rein in AI agents and $150bn stock buyback | Nvidia - Australia News Beep | NewsBeep.com",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://www.barchart.com/story/news/28369858/nvidia-approves-50-billion-stock-buyback-time-to-buy",
-   "title": "nvidia approves 50 billion stock buyback time to buy",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000048/goog-20260331.htm",
+   "title": "Alphabet Inc. - Form 10-Q - FY2026",
    "age": null
   },
   {
-   "url": "https://www.gurufocus.com/news/9099976/microsoft-stock-drops-22-as-ai-adoption-gap-reaches-126-points",
-   "title": "Microsoft Stock Drops 2.2% as AI Adoption Gap Reaches 12.6 Points",
+   "url": "https://www.brecorder.com/news/40441770/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals - Markets - Business Recorder",
    "age": "6 hours ago"
   },
   {
-   "url": "https://www.tradingview.com/news/gurufocus:ed51a8b74094b:0-microsoft-stock-drops-2-2-as-ai-adoption-gap-reaches-12-6-points/",
-   "title": "Microsoft Stock Drops 2.2% as AI Adoption Gap Reaches 12.6 Points — TradingView News",
-   "age": "5 hours ago"
+   "url": "https://www.affiversemedia.com/google-appeals-eu-search-data-ai-rivals/",
+   "title": "Google Appeals EU Search-Data Order for AI Rivals",
+   "age": "3 hours ago"
   },
   {
-   "url": "https://www.investing.com/analysis/microsoft-stock-discount-may-be-ending-as-ai-catalysts-build-200680936",
-   "title": "Microsoft Stock Discount May Be Ending as AI Catalysts Build | Investing.com",
-   "age": "May 26, 2026"
+   "url": "https://1027wbow.com/2026/09/29/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals/",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals | 102.7 WBOW | The Valley's Greatest Hits | Terre Haute, IN",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://www.indmoney.com/blog/us-stocks/why-microsoft-stock-is-falling-ai-capex-openai-risk-analysis",
-   "title": "Why Microsoft Stock Is Falling: AI Capex and OpenAI Risk",
-   "age": "June 23, 2026"
+   "url": "https://www.globalbankingandfinance.com/google-challenges-eu-orders-open-up-ai-search-engine-rivals/",
+   "title": "Google Appeals EU Orders on AI & Search Data Under Digital Markets Act",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://www.gurufocus.com/news/9079636/msft-looks-146-undervalued-on-gf-value-amid-ai-caution",
-   "title": "MSFT Looks 14.6% Undervalued on GF Value™ Amid AI Caution",
-   "age": "2 weeks ago"
+   "url": "https://www.933thedrive.com/2026/09/29/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals/",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals | 93.3 The Drive",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://www.mediapost.com/publications/article/418164/microsoft-tracks-ai-adoption-us-stalls.html",
-   "title": "Microsoft Tracks AI Adoption, U.S. Stalls 09/22/2026",
-   "age": null
+   "url": "https://thedailyguardian.com/business/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals-4-761299/",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals - The Daily Guardian",
+   "age": "7 hours ago"
   },
   {
-   "url": "https://www.forbes.com/sites/investor-hub/article/microsoft-msft-stock-outlook-2026/",
-   "title": "Microsoft (MSFT) Stock Outlook for 2026 | September Edition",
-   "age": "July 8, 2026"
+   "url": "https://brusselsmorning.com/google-eu-dma-challenge-ai-search/104364/",
+   "title": "Google EU DMA Challenge Sparks Major Legal Dispute",
+   "age": "4 hours ago"
   },
   {
-   "url": "https://mindcron.com/ai-stocks-buy-after-microsoft-pullback-2026/",
-   "title": "AI Boom Pushes These 2 Mega Cap Stocks Ahead After Microsoft Pullback",
-   "age": "March 16, 2026"
+   "url": "https://finwire.io/news/stock-markets-news/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals | Stock Markets News | finwire.io",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://www.mexc.com/news/732060",
-   "title": "www.mexc.com",
-   "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Tesla_Cybercab",
-   "title": "Tesla Cybercab",
-   "age": null
-  },
-  {
-   "url": "https://www.claimsjournal.com/news/national/2026/09/08/339985.htm",
-   "title": "Tesla’s Rollout of Cybercab Is Marred by Regulatory Probe",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://abcnews.com/Business/feds-launch-probe-teslas-deployment-cybercab-vehicles-brakes/story?id=136202521",
-   "title": "Feds launch probe into Tesla's deployment of Cybercab vehicles with no brakes and steering wheels - ABC News",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://techcrunch.com/2026/09/04/feds-launch-investigation-into-teslas-cybercab-deployment/",
-   "title": "Feds launch investigation into Tesla's Cybercab deployment | TechCrunch",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Tesla_Robotaxi",
-   "title": "Tesla Robotaxi",
-   "age": null
-  },
-  {
-   "url": "https://www.tesery.com/blogs/news/us-regulators-tesla-cybercab-certification-questions",
-   "title": "US Regulators Order Tesla to Answer Cybercab Certification Questions",
-   "age": "2 weeks ago"
-  },
-  {
-   "url": "https://tslna.com/en/tesla-cybercab-guide-2026/",
-   "title": "Tesla Cybercab (Sept 2026 Update): Austin Rides, Specs, NHTSA Special Order & Can You Buy One? - Tesla North America Guide",
-   "age": "6 days ago"
-  },
-  {
-   "url": "https://finance.biggo.com/news/2c378d26fac7193c",
-   "title": "Tesla Has Until September 30 to Convince NHTSA Its Steering-Wheel-Free Cybercab Is Legal — and the Stakes Are a 2,500-Unit Cap — BigGo Finance",
+   "url": "https://www.asiaone.com/money/best-bank-offers-singapore-september-2026-dbs-half-priced-holidays-uob-save-and-harvest-and",
+   "title": "Best bank offers in Singapore (September 2026): DBS Half-priced Holidays, UOB Save and Harvest, and more, Money News - AsiaOne",
    "age": "1 week ago"
   },
   {
-   "url": "https://www.thetechedvocate.org/unprecedented-showdown-teslas-cybercab-faces-make-or-break-deadline-for-nhtsa-approval/",
-   "title": "Thetechedvocate",
-   "age": "1 week ago"
+   "url": "https://www.stashaway.sg/r/ocbc-dbs-uob-singapore-bank-stock",
+   "title": "OCBC vs DBS vs UOB Singapore's Leading Bank Stocks for 2026 | StashAway Singapore",
+   "age": "2 weeks ago"
   },
   {
-   "url": "https://finance.yahoo.com/news/where-tesla-1-130500121.html",
-   "title": "Where Will Tesla Be in 1 Year?",
+   "url": "https://www.stashaway.sg/r/dbs-ocbc-uob-singapore-banks-investment-outlook",
+   "title": "DBS, OCBC & UOB Outlook: Dividends, Earnings, Yields, and Valuations of Singapore’s Big-Three Banks [2026 Guide] | StashAway Singapore",
+   "age": "January 14, 2026"
+  },
+  {
+   "url": "https://www.sgx.com/research-education/market-updates/20250205-upcoming-earnings-reports-dbs-ocbc-and-uob-focus",
+   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus - Singapore Exchange (SGX)",
    "age": null
   },
   {
-   "url": "https://www.benzinga.com/markets/tech/26/09/62013860/nvidia-chips-for-alibaba-bytedance-china-reportedly-green-lights-rtx-pro-5500-amid-us-curbs",
-   "title": "Nvidia Chips for Alibaba, ByteDance? China Reportedly Green Lights RTX PRO 5500 Amid US Curbs (UPDATED) - - Benzinga",
-   "age": "17 hours ago"
+   "url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
+   "title": "Singapore Banks After the Fed Rate Hike: DBS, OCBC & UOB in Q4 2026",
+   "age": "2 weeks ago"
   },
   {
-   "url": "https://www.tradingview.com/news/reuters.com,2026:newsml_FWN45I0BD:0-china-weighs-allowing-purchases-of-new-nvidia-chips-by-bytedance-alibaba-the-information/",
-   "title": "China Weighs Allowing Purchases Of New Nvidia Chips By Bytedance, Alibaba - The Information — TradingView News",
+   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-2026-outlook",
+   "title": "Singapore banks 2026 outlook: DBS OCBC vs UOB",
    "age": null
   },
   {
-   "url": "https://finance.yahoo.com/technology/articles/china-weighs-allowing-bytedance-alibaba-152402813.html",
-   "title": "China weighs allowing ByteDance, Alibaba to buy new Nvidia chips, The Information reports",
+   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-performance-2026",
+   "title": "Singapore Banks Performance 2026 Analysis",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/2516570891",
+   "title": "Is It Still A Good Time to Buy Singapore Banks?",
+   "age": null
+  },
+  {
+   "url": "https://www.statista.com/statistics/1347156/generative-ai-market-size",
+   "title": "generative ai market size",
+   "age": null
+  },
+  {
+   "url": "https://nvidianews.nvidia.com/news/open-agent-safety-platform",
+   "title": "NVIDIA Launches Open Agent Safety Platform to Secure Agents From Testing to Deployment | NVIDIA Newsroom",
+   "age": "14 hours ago"
+  },
+  {
+   "url": "https://blog.rankiteo.com/nviamd1789014785-nvidia-amd-vulnerability-september-2026/",
+   "title": "Nvidia and AMD: Chipmaker Patch Tuesday: Nvidia, AMD, Arm Issue Security Advisories",
+   "age": "3 weeks ago"
+  },
+  {
+   "url": "https://newsroom.arm.com/blog/trusted-compute-foundation-agentic-ai",
+   "title": "Arm and NVIDIA: Building the trusted compute foundation for the agentic AI era - Arm Newsroom",
    "age": "1 day ago"
   },
   {
-   "url": "https://stocktwits.com/news-articles/markets/equity/nvda-stock-in-focus-china-reportedly-weighs-letting-byte-dance-alibaba-buy-some-nvidia-ai-chips/cZMSLlMRBfi",
-   "title": "NVDA Stock In Focus: China Reportedly Weighs Letting ByteDance, Alibaba Buy Some Nvidia AI Chips",
-   "age": "1 day ago"
+   "url": "https://www.gurufocus.com/news/9100855/nvidia-launches-ai-security-tools-amidst-industry-concerns",
+   "title": "NVIDIA Launches AI Security Tools Amidst Industry Concerns",
+   "age": "10 hours ago"
   },
   {
-   "url": "https://www.aol.com/articles/nvidia-chips-alibaba-bytedance-china-084222000.html",
-   "title": "Nvidia Chips for Alibaba, ByteDance? China Reportedly Green Lights RTX PRO 5500 Amid US Curbs (UPDATED) - AOL",
-   "age": "15 hours ago"
+   "url": "https://tech-insider.org/nvidia-two-layer-ai-agent-safety-silicon-2026/",
+   "title": "Nvidia Splits AI Agent Safety Into 2 Silicon Layers",
+   "age": "2 hours ago"
   },
   {
-   "url": "https://wccftech.com/china-weighs-reversing-its-own-nvidia-ban-may-let-alibaba-bytedance-others-buy-200000-h200-chips/",
-   "title": "China Weighs Reversing Its Own NVIDIA Ban, May Let Alibaba, ByteDance & Others Buy 200,000 H200 Chips",
-   "age": "July 8, 2026"
-  },
-  {
-   "url": "https://finance.biggo.com/news/8ad57c57-7e1f-4baf-9a44-1de3c9641b06",
-   "title": "China Reportedly Eases Chip Restrictions, May Allow ByteDance and Alibaba to Purchase Nvidia High-End Chips — BigGo Finance",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://www.barchart.com/story/news/34093028/china-orders-tech-giants-to-halt-purchases-of-nvidia-chips",
-   "title": "china orders tech giants to halt purchases of nvidia chips",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
+   "title": "NVIDIA CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.malaymail.com/news/money/2025/09/17/china-orders-tech-firms-to-halt-nvidia-ai-chip-buys-ft-reports/191467",
-   "title": "www.malaymail.com",
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+   "title": "NVIDIA CORP - Form 10-K - FY2026",
    "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/2026_in_technology_and_computing",
+   "title": "2026 in technology and computing",
+   "age": null
+  },
+  {
+   "url": "https://www.securityweek.com/chipmaker-patch-tuesday-nvidia-amd-arm-issue-security-advisories/",
+   "title": "Chipmaker Patch Tuesday: Nvidia, AMD, Arm Issue Security Advisories - SecurityWeek",
+   "age": "3 weeks ago"
+  },
+  {
+   "url": "https://www.microsoft.com/en-us/microsoft-cloud/blog/us-government/2026/09/02/microsoft-fabric-in-gcc-high-building-the-data-foundation-for-ai/",
+   "title": "Microsoft Fabric in GCC High: Building the data foundation for AI | The Microsoft Cloud Blog",
+   "age": "1 month ago"
+  },
+  {
+   "url": "https://azure.microsoft.com/en-us/blog/fabcon-and-sqlcon-2026-in-barcelona-building-the-data-foundation-for-microsoft-copilot-and-agents/",
+   "title": "FabCon and SQLCon 2026: Explore Microsoft Fabric and SQL innovations | Microsoft Azure Blog",
+   "age": "4 hours ago"
+  },
+  {
+   "url": "https://www.microsoft.com/en-us/microsoft-fabric/blog/content-type/events/",
+   "title": "Data Analytics Events | Microsoft Fabric Blog",
+   "age": null
+  },
+  {
+   "url": "https://martechseries.com/analytics/data-management-platforms/daivio-launches-ai-powered-data-analysis-workload-for-microsoft-fabric/",
+   "title": "Daivio Launches AI-Powered Data Analysis Workload for Microsoft Fabric",
+   "age": "3 hours ago"
+  },
+  {
+   "url": "https://www.manilatimes.net/2026/09/29/tmt-newswire/globenewswire/daivio-launches-ai-powered-data-analysis-workload-for-microsoft-fabric/2434737",
+   "title": "Daivio Launches AI-Powered Data Analysis Workload for Microsoft Fabric | The Manila Times",
+   "age": "6 hours ago"
+  },
+  {
+   "url": "https://www.globenewswire.com/news-release/2026/09/29/3370414/0/en/daivio-launches-ai-powered-data-analysis-workload-for-microsoft-fabric.html",
+   "title": "Daivio Launches AI-Powered Data Analysis Workload for Microsoft Fabric",
+   "age": "6 hours ago"
+  },
+  {
+   "url": "https://www.globenewswire.com/news-release/2026/09/29/3370412/0/es/daivio-lanza-una-soluci%C3%B3n-de-an%C3%A1lisis-de-datos-basada-en-ia-para-microsoft-fabric.html",
+   "title": "Daivio lanza una solución de análisis de datos basada en IA para Microsoft Fabric",
+   "age": "6 hours ago"
+  },
+  {
+   "url": "https://azure.microsoft.com/en-us/blog/introducing-microsoft-fabric-data-analytics-for-the-era-of-ai/",
+   "title": "Introducing Microsoft Fabric: The data platform for the era of AI | Microsoft Azure Blog | Microsoft Azure",
+   "age": "June 11, 2026"
+  },
+  {
+   "url": "https://imanagementpro.com/en/microsoft-ai/",
+   "title": "Microsoft AI in Data Analytics: Fabric, Copilot Updates | IMP",
+   "age": "March 17, 2026"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 47294,
-  "output": 5519,
+  "input": 48725,
+  "output": 5860,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1508
+  "costUsd": 0.1551
  },
- "createdAt": "2026-09-29T00:35:14.409Z"
+ "createdAt": "2026-09-29T13:00:58.025Z"
 }

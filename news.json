@@ -1,116 +1,124 @@
 {
- "market_summary": "US and Asian markets show mixed signals as mega-cap tech faces headwinds and opportunities. Apple faces $5.7 billion patent judgment and advancing antitrust cases over App Store practices and tap-to-pay fees. Nvidia counters weakness with record $150bn buyback and new AI safety platform launch, supporting semiconductor stocks. Microsoft struggles with AI monetization concerns as adoption gaps widen globally. Tesla faces critical September 30 regulatory deadline on Cybercab safety certification. China signals potential easing of Nvidia chip restrictions for ByteDance and Alibaba. Singapore shares rose 0.3% on banking sector strength. Market focus remains on AI profitability, regulatory headwinds, and geopolitical trade tensions.",
+ "market_summary": "US markets are processing a major patent verdict against Apple, while Alphabet/Google faces regulatory challenges in Europe. <cite index=\"1-1\">A San Diego jury handed Taction Technology a $5,721,961,750 verdict against Apple on September 25, 2026, over two patents covering the haptic technology used in the iPhone and Apple Watch's Taptic Engine.",
  "items": [
   {
    "symbols": [
     "AAPL"
    ],
-   "date": "2026-09-28",
-   "headline": "Apple Ordered to Pay $5.7bn in Patent Infringement Case",
-   "summary": "A California jury found Apple infringed two Taction Technology patents for haptic feedback technology used in iPhones and Apple Watches. Apple plans to appeal the verdict.",
-   "type": "legal",
-   "tone": "negative",
-   "source_url": "https://www.aljazeera.com/economy/2026/9/28/apple-ordered-to-pay-5-7bn-in-patent-infringement-case"
-  },
-  {
-   "symbols": [
-    "AAPL"
-   ],
    "date": "2026-09-25",
-   "headline": "Apple Pay Antitrust Lawsuit Advances as Class Certification Approved",
-   "summary": "US District Judge Jeffrey White certified a class action lawsuit accusing Apple of blocking tap-to-pay competition, allowing banks and credit unions to sue together over Apple's NFC chip restrictions.",
+   "headline": "Apple hit with record $5.7 billion verdict in Taction haptic patent case; plans appeal",
+   "summary": "<cite index=\"1-1\">A San Diego jury handed Taction Technology a $5,721,961,750 verdict against Apple over two patents covering the haptic technology used in the iPhone and Apple Watch's Taptic Engine.</cite> <cite index=\"1-4\">Apple said it would appeal.</cite>",
    "type": "legal",
    "tone": "negative",
-   "source_url": "https://www.macrumors.com/2026/09/25/apple-pay-antitrust-lawsuit-advances/"
+   "source_url": "https://www.cnbc.com/2026/09/26/apple-taction-technology-patent-infringement-verdict.html"
   },
   {
    "symbols": [
-    "NVDA"
+    "GOOGL"
    ],
-   "date": "2026-09-28",
-   "headline": "Nvidia Launches AI Safety Platform and Announces Record $150bn Buyback",
-   "summary": "Nvidia unveiled Open Agent Safety Platform to prevent AI agents from escaping controlled environments and announced $150bn stock buyback increase, raising total authorization to $235bn through fiscal 2028.",
-   "type": "deal",
-   "tone": "positive",
-   "source_url": "https://www.cityam.com/nvidia-launches-ai-agent-safeguards-alongside-record-buyback/"
+   "date": "2026-09-29",
+   "headline": "Google challenges EU orders requiring it to share search data and open Android to AI rivals",
+   "summary": "<cite index=\"11-2\">Alphabet's Google has challenged two EU orders to help AI rivals such as OpenAI access its services and search engine competitors to access its search data, saying these would undermine privacy safeguards and cause irreversible harm to European users.</cite> <cite index=\"12-6\">Google filed two challenges with the EU's General Court on September 28.</cite>",
+   "type": "legal",
+   "tone": "negative",
+   "source_url": "https://www.brecorder.com/news/40441770/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals"
   },
   {
    "symbols": [
     "MSFT"
    ],
    "date": "2026-09-29",
-   "headline": "Microsoft Stock Falls as AI Adoption Gap Reaches 12.6 Points Between Global North and South",
-   "summary": "Microsoft reported global generative AI adoption at 18.8% of working-age people, but with a widening inequality gap of 12.6 percentage points between developed and developing regions, raising concerns about monetization.",
-   "type": "analyst",
-   "tone": "negative",
-   "source_url": "https://www.tradingview.com/news/gurufocus:ed51a8b74094b:0-microsoft-stock-drops-2-2-as-ai-adoption-gap-reaches-12-6-points/"
+   "headline": "Daivio launches AI-powered data analysis workload for Microsoft Fabric",
+   "summary": "<cite index=\"42-1\">Daivio, the AI analyst for Microsoft Fabric, is available now in the Microsoft Fabric Workload Hub and on Microsoft Marketplace.</cite> The tool enables analysts to clean data and get answers in plain language without leaving Fabric.",
+   "type": "product",
+   "tone": "positive",
+   "source_url": "https://www.globenewswire.com/news-release/2026/09/29/3370414/0/en/daivio-launches-ai-powered-data-analysis-workload-for-microsoft-fabric.html"
   },
   {
    "symbols": [
-    "TSLA"
+    "MSFT"
    ],
-   "date": "2026-09-15",
-   "headline": "Tesla Must Answer NHTSA Questions on Cybercab Certification by September 30",
-   "summary": "US regulators formally ordered Tesla to answer 21 questions by September 30, 2026 explaining how the steering-wheel-free Cybercab complies with federal safety standards. If rejected, Tesla could face a 2,500-unit annual production cap under Part 555 exemption.",
-   "type": "legal",
-   "tone": "negative",
-   "source_url": "https://finance.biggo.com/news/2c378d26fac7193c"
+   "date": "2026-09-29",
+   "headline": "Microsoft Fabric available for GCC High customers; general AI data analytics platform expanding",
+   "summary": "<cite index=\"37-3,37-4\">Microsoft Fabric will be available in public preview for GCC High customers, with general availability starting October 1, 2026.</cite> The platform continues to roll out AI-powered data analytics features.",
+   "type": "product",
+   "tone": "positive",
+   "source_url": "https://www.microsoft.com/en-us/microsoft-cloud/blog/us-government/2026/09/02/microsoft-fabric-in-gcc-high-building-the-data-foundation-for-ai/"
   },
   {
    "symbols": [
     "NVDA"
    ],
    "date": "2026-09-28",
-   "headline": "China Reportedly Weighs Allowing ByteDance and Alibaba to Purchase Nvidia RTX PRO 5500 Chips",
-   "summary": "China's Ministry of Industry and Information Technology has asked major domestic companies including ByteDance and Alibaba to submit procurement plans for Nvidia's RTX PRO 5500 chips and signaled intention to approve purchases.",
-   "type": "macro",
+   "headline": "Nvidia launches Open Agent Safety Platform for AI security; partners with Arm and Intel",
+   "summary": "<cite index=\"28-1,28-2\">NVIDIA Open Agent Safety Platform consists of NVIDIA OpenShell open source software and the NVIDIA Sentry reference system design that enables full-stack governance and control across software and hardware, compute and robotics systems that run agents.</cite> <cite index=\"30-1\">Nvidia's Open Agent Safety Platform demonstrates this approach, with Arm-compatible compute running agent workloads and independent Arm-based DPUs helping observe, isolate and protect them.</cite>",
+   "type": "product",
    "tone": "positive",
-   "source_url": "https://www.benzinga.com/markets/tech/26/09/62013860/nvidia-chips-for-alibaba-bytedance-china-reportedly-green-lights-rtx-pro-5500-amid-us-curbs"
+   "source_url": "https://nvidianews.nvidia.com/news/open-agent-safety-platform"
   },
   {
    "symbols": [
-    "U11.SI",
     "D05.SI",
-    "O39.SI"
+    "O39.SI",
+    "U11.SI"
    ],
-   "date": "2026-09-28",
-   "headline": "Singapore Shares End Higher as Bank Counters Rise",
-   "summary": "Singapore's STI index rose 0.3% with bank stocks including UOB, DBS and OCBC outperforming the broader market.",
+   "date": "2026-09-16",
+   "headline": "Fed rate hike benefits Singapore banks; DBS, OCBC, UOB among biggest winners",
+   "summary": "<cite index=\"23-3,23-4,23-5\">On 16 September 2026, the US Federal Reserve raised interest rates by 25 basis points to a 3.75%–4.00% target range — its first hike since 2023. While Wall Street retreated, Singapore's Straits Times Index rose 0.5%. The reason: DBS, OCBC, and UOB — which together make up roughly 40–54% of the STI — are among the biggest beneficiaries of rising rates.</cite>",
+   "type": "macro",
+   "tone": "positive",
+   "source_url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/"
+  },
+  {
+   "symbols": [
+    "ES3.SI",
+    "D05.SI"
+   ],
+   "date": "2026-09-27",
+   "headline": "Singapore shares end higher as bank counters rise; STI up 0.3%",
+   "summary": "Singapore's Straits Times Index rose 0.3% with banking stocks leading gains, reflecting positive sentiment following Fed rate developments and continued wealth management momentum in the sector.",
    "type": "macro",
    "tone": "positive",
    "source_url": "https://www.businesstimes.com.sg/companies-markets/capital-markets-currencies/singapore-shares-end-higher-bank-counters-rise-sti-0-3"
+  },
+  {
+   "symbols": [
+    "S68.SI"
+   ],
+   "date": "2026-09-19",
+   "headline": "HK-listed engineering firm Metasurface files for dual primary listing on Catalist",
+   "summary": "Hong Kong-listed Metasurface has filed for a dual primary listing on the SGX Catalist, signaling continued international interest in Singapore's growth and innovation-focused exchange platform.",
+   "type": "deal",
+   "tone": "positive",
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/hk-listed-engineering-firm-metasurface-files-dual-primary-listing-catalist"
+  },
+  {
+   "symbols": [
+    "BN4.SI"
+   ],
+   "date": "2026-09-25",
+   "headline": "Keppel and StarHub in discussions on potential M1 deal",
+   "summary": "Keppel and StarHub are in discussions regarding a potential merger deal involving M1, representing significant telecom consolidation activity in Singapore's market.",
+   "type": "deal",
+   "tone": "mixed",
+   "source_url": "https://www.straitstimes.com/business/companies-markets/keppel-starhub-discuss-potential-m1-deal-grab-execs-buy-shares-after-stock-falls-markets-this-week"
   }
  ],
  "sources": [
   {
-   "url": "https://www.macrumors.com/guide/lawsuit/",
-   "title": "Apple Lawsuits on MacRumors",
-   "age": "July 3, 2026"
+   "url": "https://finance.yahoo.com/technology/articles/apple-faces-5-7-billion-170453571.html",
+   "title": "Apple Faces $5.7 Billion Jury Verdict Over Haptic Engine Patent Dispute",
+   "age": "19 hours ago"
   },
   {
-   "url": "https://developer.apple.com/news/",
-   "title": "Latest News - Apple Developer",
-   "age": "2 weeks ago"
+   "url": "https://www.engadget.com/2269826/apple-hit-with-a-57-billion-verdict-for-alleged-patent-infringement/",
+   "title": "Apple hit with a $5.7 billion verdict for alleged patent infringement - Engadget",
+   "age": "3 days ago"
   },
   {
-   "url": "https://www.macrumors.com/2026/09/25/apple-pay-antitrust-lawsuit-advances/",
-   "title": "Banks and Credit Unions to Team Up Against Apple Pay Fees - MacRumors",
+   "url": "https://www.pymnts.com/apple/2026/apple-ordered-to-pay-5-7-billion-in-haptic-patent-lawsuit/",
+   "title": "Apple Ordered to Pay $5.7 Billion in Haptic Patent Lawsuit | PYMNTS.com",
    "age": "2 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Epic_Games_v._Apple",
-   "title": "Epic Games v. Apple",
-   "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Ashley_Gj%C3%B8vik",
-   "title": "Ashley Gj%C3%B8vik",
-   "age": null
-  },
-  {
-   "url": "https://www.aljazeera.com/economy/2026/9/28/apple-ordered-to-pay-5-7bn-in-patent-infringement-case",
-   "title": "Apple ordered to pay $5.7bn in patent infringement case | Business and Economy News | Al Jazeera",
-   "age": "4 hours ago"
   },
   {
    "url": "https://www.cnbc.com/2026/09/26/apple-taction-technology-patent-infringement-verdict.html",
@@ -118,282 +126,292 @@
    "age": "2 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Batterygate",
-   "title": "Batterygate",
-   "age": null
+   "url": "https://www.claimsjournal.com/news/national/2026/09/28/340403.htm",
+   "title": "Jury Rules Apple Owes Record $5.7 Billion in Haptic Technology Patent Case",
+   "age": "1 day ago"
   },
   {
-   "url": "https://clarksonlawfirm.com/lp/apple-intelligence-false-advertising/",
-   "title": "Apple Intelligence AI Class Action Lawsuit - Clarkson Law Firm",
-   "age": "4 days ago"
+   "url": "https://qz.com/apple-taction-haptic-patent-verdict-5-billion-092826",
+   "title": "Apple hit with $5.7 billion jury verdict over haptic patents",
+   "age": "1 day ago"
   },
   {
-   "url": "https://www.cityam.com/nvidia-launches-ai-agent-safeguards-alongside-record-buyback/",
-   "title": "Nvidia launches AI agent safeguards alongside record buyback",
-   "age": "8 hours ago"
+   "url": "https://news.bloomberglaw.com/ip-law/apple-owes-5-7-billion-to-litigation-funded-firm-in-patent-case",
+   "title": "Apple Owes $5.7 Billion for Infringement of Haptics Patents (2)",
+   "age": "3 days ago"
   },
   {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-upsizes-share-buyback-program-124458222.html",
-   "title": "NVIDIA Upsizes Share Buyback Program to $235B amid AI Safety Tool Release",
-   "age": "11 hours ago"
-  },
-  {
-   "url": "https://www.inkl.com/news/nvidia-unveils-security-platform-to-rein-in-ai-agents-and-150bn-stock-buyback",
-   "title": "Nvidia unveils security platform to rein in AI agents and $150bn stock buyback",
+   "url": "https://www.aljazeera.com/economy/2026/9/28/apple-ordered-to-pay-5-7bn-in-patent-infringement-case",
+   "title": "Apple ordered to pay $5.7bn in iPhone patent infringement case | Business and Economy News | Al Jazeera",
    "age": "9 hours ago"
   },
   {
-   "url": "https://careeraheadonline.com/nvidia-launches-ai-security-platform-and-150bn-buyback-plan",
-   "title": "Nvidia Launches AI Security Platform and $150bn Buyback Plan",
-   "age": "8 hours ago"
+   "url": "https://www.whalesbook.com/news/English/technology/Apple-Ordered-to-Pay-dollar57-Billion-in-Taction-Patent-Case/6ab9197e5aacb956d081cc5e",
+   "title": "Apple Ordered to Pay $5.7 Billion in Taction Patent Case | Whalesbook",
+   "age": "2 days ago"
   },
   {
-   "url": "https://bitcoinethereumnews.com/tech/nvidia-upsizes-share-buyback-program-to-235b-amid-ai-safety-tool-release/",
-   "title": "NVIDIA Upsizes Share Buyback Program to $235B amid AI Safety Tool Release",
-   "age": "11 hours ago"
-  },
-  {
-   "url": "https://britbrief.co.uk/business/tech/nvidia-unveils-ai-agent-security-platform-and-150bn-buyback.html",
-   "title": "Nvidia unveils AI agent security platform and $150bn buyback - Brit Brief",
-   "age": "9 hours ago"
-  },
-  {
-   "url": "https://www.ibtimes.com.au/nvidia-shares-rise-buyback-ai-safety-platform-1875992",
-   "title": "Nvidia Stock Climbs 2.8% After Record $150 Billion Buyback Boost and Launch of AI Agent Safety Platform",
-   "age": "10 hours ago"
-  },
-  {
-   "url": "https://www.newsbeep.com/au/908939/",
-   "title": "Nvidia unveils security platform to rein in AI agents and $150bn stock buyback | Nvidia - Australia News Beep | NewsBeep.com",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://www.barchart.com/story/news/28369858/nvidia-approves-50-billion-stock-buyback-time-to-buy",
-   "title": "nvidia approves 50 billion stock buyback time to buy",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000048/goog-20260331.htm",
+   "title": "Alphabet Inc. - Form 10-Q - FY2026",
    "age": null
   },
   {
-   "url": "https://www.gurufocus.com/news/9099976/microsoft-stock-drops-22-as-ai-adoption-gap-reaches-126-points",
-   "title": "Microsoft Stock Drops 2.2% as AI Adoption Gap Reaches 12.6 Points",
+   "url": "https://www.brecorder.com/news/40441770/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals - Markets - Business Recorder",
    "age": "6 hours ago"
   },
   {
-   "url": "https://www.tradingview.com/news/gurufocus:ed51a8b74094b:0-microsoft-stock-drops-2-2-as-ai-adoption-gap-reaches-12-6-points/",
-   "title": "Microsoft Stock Drops 2.2% as AI Adoption Gap Reaches 12.6 Points — TradingView News",
-   "age": "5 hours ago"
+   "url": "https://www.affiversemedia.com/google-appeals-eu-search-data-ai-rivals/",
+   "title": "Google Appeals EU Search-Data Order for AI Rivals",
+   "age": "3 hours ago"
   },
   {
-   "url": "https://www.investing.com/analysis/microsoft-stock-discount-may-be-ending-as-ai-catalysts-build-200680936",
-   "title": "Microsoft Stock Discount May Be Ending as AI Catalysts Build | Investing.com",
-   "age": "May 26, 2026"
+   "url": "https://1027wbow.com/2026/09/29/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals/",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals | 102.7 WBOW | The Valley's Greatest Hits | Terre Haute, IN",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://www.indmoney.com/blog/us-stocks/why-microsoft-stock-is-falling-ai-capex-openai-risk-analysis",
-   "title": "Why Microsoft Stock Is Falling: AI Capex and OpenAI Risk",
-   "age": "June 23, 2026"
+   "url": "https://www.globalbankingandfinance.com/google-challenges-eu-orders-open-up-ai-search-engine-rivals/",
+   "title": "Google Appeals EU Orders on AI & Search Data Under Digital Markets Act",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://www.gurufocus.com/news/9079636/msft-looks-146-undervalued-on-gf-value-amid-ai-caution",
-   "title": "MSFT Looks 14.6% Undervalued on GF Value™ Amid AI Caution",
-   "age": "2 weeks ago"
+   "url": "https://www.933thedrive.com/2026/09/29/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals/",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals | 93.3 The Drive",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://www.mediapost.com/publications/article/418164/microsoft-tracks-ai-adoption-us-stalls.html",
-   "title": "Microsoft Tracks AI Adoption, U.S. Stalls 09/22/2026",
-   "age": null
+   "url": "https://thedailyguardian.com/business/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals-4-761299/",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals - The Daily Guardian",
+   "age": "7 hours ago"
   },
   {
-   "url": "https://www.forbes.com/sites/investor-hub/article/microsoft-msft-stock-outlook-2026/",
-   "title": "Microsoft (MSFT) Stock Outlook for 2026 | September Edition",
-   "age": "July 8, 2026"
+   "url": "https://brusselsmorning.com/google-eu-dma-challenge-ai-search/104364/",
+   "title": "Google EU DMA Challenge Sparks Major Legal Dispute",
+   "age": "4 hours ago"
   },
   {
-   "url": "https://mindcron.com/ai-stocks-buy-after-microsoft-pullback-2026/",
-   "title": "AI Boom Pushes These 2 Mega Cap Stocks Ahead After Microsoft Pullback",
-   "age": "March 16, 2026"
+   "url": "https://finwire.io/news/stock-markets-news/google-challenges-eu-orders-to-open-up-to-ai-search-engine-rivals",
+   "title": "Google challenges EU orders to open up to AI, search-engine rivals | Stock Markets News | finwire.io",
+   "age": "8 hours ago"
   },
   {
-   "url": "https://www.mexc.com/news/732060",
-   "title": "www.mexc.com",
-   "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Tesla_Cybercab",
-   "title": "Tesla Cybercab",
-   "age": null
-  },
-  {
-   "url": "https://www.claimsjournal.com/news/national/2026/09/08/339985.htm",
-   "title": "Tesla’s Rollout of Cybercab Is Marred by Regulatory Probe",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://abcnews.com/Business/feds-launch-probe-teslas-deployment-cybercab-vehicles-brakes/story?id=136202521",
-   "title": "Feds launch probe into Tesla's deployment of Cybercab vehicles with no brakes and steering wheels - ABC News",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://techcrunch.com/2026/09/04/feds-launch-investigation-into-teslas-cybercab-deployment/",
-   "title": "Feds launch investigation into Tesla's Cybercab deployment | TechCrunch",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Tesla_Robotaxi",
-   "title": "Tesla Robotaxi",
-   "age": null
-  },
-  {
-   "url": "https://www.tesery.com/blogs/news/us-regulators-tesla-cybercab-certification-questions",
-   "title": "US Regulators Order Tesla to Answer Cybercab Certification Questions",
-   "age": "2 weeks ago"
-  },
-  {
-   "url": "https://tslna.com/en/tesla-cybercab-guide-2026/",
-   "title": "Tesla Cybercab (Sept 2026 Update): Austin Rides, Specs, NHTSA Special Order & Can You Buy One? - Tesla North America Guide",
-   "age": "6 days ago"
-  },
-  {
-   "url": "https://finance.biggo.com/news/2c378d26fac7193c",
-   "title": "Tesla Has Until September 30 to Convince NHTSA Its Steering-Wheel-Free Cybercab Is Legal — and the Stakes Are a 2,500-Unit Cap — BigGo Finance",
+   "url": "https://www.asiaone.com/money/best-bank-offers-singapore-september-2026-dbs-half-priced-holidays-uob-save-and-harvest-and",
+   "title": "Best bank offers in Singapore (September 2026): DBS Half-priced Holidays, UOB Save and Harvest, and more, Money News - AsiaOne",
    "age": "1 week ago"
   },
   {
-   "url": "https://www.thetechedvocate.org/unprecedented-showdown-teslas-cybercab-faces-make-or-break-deadline-for-nhtsa-approval/",
-   "title": "Thetechedvocate",
-   "age": "1 week ago"
+   "url": "https://www.stashaway.sg/r/ocbc-dbs-uob-singapore-bank-stock",
+   "title": "OCBC vs DBS vs UOB Singapore's Leading Bank Stocks for 2026 | StashAway Singapore",
+   "age": "2 weeks ago"
   },
   {
-   "url": "https://finance.yahoo.com/news/where-tesla-1-130500121.html",
-   "title": "Where Will Tesla Be in 1 Year?",
+   "url": "https://www.stashaway.sg/r/dbs-ocbc-uob-singapore-banks-investment-outlook",
+   "title": "DBS, OCBC & UOB Outlook: Dividends, Earnings, Yields, and Valuations of Singapore’s Big-Three Banks [2026 Guide] | StashAway Singapore",
+   "age": "January 14, 2026"
+  },
+  {
+   "url": "https://www.sgx.com/research-education/market-updates/20250205-upcoming-earnings-reports-dbs-ocbc-and-uob-focus",
+   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus - Singapore Exchange (SGX)",
    "age": null
   },
   {
-   "url": "https://www.benzinga.com/markets/tech/26/09/62013860/nvidia-chips-for-alibaba-bytedance-china-reportedly-green-lights-rtx-pro-5500-amid-us-curbs",
-   "title": "Nvidia Chips for Alibaba, ByteDance? China Reportedly Green Lights RTX PRO 5500 Amid US Curbs (UPDATED) - - Benzinga",
-   "age": "17 hours ago"
+   "url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
+   "title": "Singapore Banks After the Fed Rate Hike: DBS, OCBC & UOB in Q4 2026",
+   "age": "2 weeks ago"
   },
   {
-   "url": "https://www.tradingview.com/news/reuters.com,2026:newsml_FWN45I0BD:0-china-weighs-allowing-purchases-of-new-nvidia-chips-by-bytedance-alibaba-the-information/",
-   "title": "China Weighs Allowing Purchases Of New Nvidia Chips By Bytedance, Alibaba - The Information — TradingView News",
+   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-2026-outlook",
+   "title": "Singapore banks 2026 outlook: DBS OCBC vs UOB",
    "age": null
   },
   {
-   "url": "https://finance.yahoo.com/technology/articles/china-weighs-allowing-bytedance-alibaba-152402813.html",
-   "title": "China weighs allowing ByteDance, Alibaba to buy new Nvidia chips, The Information reports",
+   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-performance-2026",
+   "title": "Singapore Banks Performance 2026 Analysis",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/2516570891",
+   "title": "Is It Still A Good Time to Buy Singapore Banks?",
+   "age": null
+  },
+  {
+   "url": "https://www.statista.com/statistics/1347156/generative-ai-market-size",
+   "title": "generative ai market size",
+   "age": null
+  },
+  {
+   "url": "https://nvidianews.nvidia.com/news/open-agent-safety-platform",
+   "title": "NVIDIA Launches Open Agent Safety Platform to Secure Agents From Testing to Deployment | NVIDIA Newsroom",
+   "age": "14 hours ago"
+  },
+  {
+   "url": "https://blog.rankiteo.com/nviamd1789014785-nvidia-amd-vulnerability-september-2026/",
+   "title": "Nvidia and AMD: Chipmaker Patch Tuesday: Nvidia, AMD, Arm Issue Security Advisories",
+   "age": "3 weeks ago"
+  },
+  {
+   "url": "https://newsroom.arm.com/blog/trusted-compute-foundation-agentic-ai",
+   "title": "Arm and NVIDIA: Building the trusted compute foundation for the agentic AI era - Arm Newsroom",
    "age": "1 day ago"
   },
   {
-   "url": "https://stocktwits.com/news-articles/markets/equity/nvda-stock-in-focus-china-reportedly-weighs-letting-byte-dance-alibaba-buy-some-nvidia-ai-chips/cZMSLlMRBfi",
-   "title": "NVDA Stock In Focus: China Reportedly Weighs Letting ByteDance, Alibaba Buy Some Nvidia AI Chips",
-   "age": "1 day ago"
+   "url": "https://www.gurufocus.com/news/9100855/nvidia-launches-ai-security-tools-amidst-industry-concerns",
+   "title": "NVIDIA Launches AI Security Tools Amidst Industry Concerns",
+   "age": "10 hours ago"
   },
   {
-   "url": "https://www.aol.com/articles/nvidia-chips-alibaba-bytedance-china-084222000.html",
-   "title": "Nvidia Chips for Alibaba, ByteDance? China Reportedly Green Lights RTX PRO 5500 Amid US Curbs (UPDATED) - AOL",
-   "age": "15 hours ago"
+   "url": "https://tech-insider.org/nvidia-two-layer-ai-agent-safety-silicon-2026/",
+   "title": "Nvidia Splits AI Agent Safety Into 2 Silicon Layers",
+   "age": "2 hours ago"
   },
   {
-   "url": "https://wccftech.com/china-weighs-reversing-its-own-nvidia-ban-may-let-alibaba-bytedance-others-buy-200000-h200-chips/",
-   "title": "China Weighs Reversing Its Own NVIDIA Ban, May Let Alibaba, ByteDance & Others Buy 200,000 H200 Chips",
-   "age": "July 8, 2026"
-  },
-  {
-   "url": "https://finance.biggo.com/news/8ad57c57-7e1f-4baf-9a44-1de3c9641b06",
-   "title": "China Reportedly Eases Chip Restrictions, May Allow ByteDance and Alibaba to Purchase Nvidia High-End Chips — BigGo Finance",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://www.barchart.com/story/news/34093028/china-orders-tech-giants-to-halt-purchases-of-nvidia-chips",
-   "title": "china orders tech giants to halt purchases of nvidia chips",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
+   "title": "NVIDIA CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.malaymail.com/news/money/2025/09/17/china-orders-tech-firms-to-halt-nvidia-ai-chip-buys-ft-reports/191467",
-   "title": "www.malaymail.com",
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+   "title": "NVIDIA CORP - Form 10-K - FY2026",
    "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/2026_in_technology_and_computing",
+   "title": "2026 in technology and computing",
+   "age": null
+  },
+  {
+   "url": "https://www.securityweek.com/chipmaker-patch-tuesday-nvidia-amd-arm-issue-security-advisories/",
+   "title": "Chipmaker Patch Tuesday: Nvidia, AMD, Arm Issue Security Advisories - SecurityWeek",
+   "age": "3 weeks ago"
+  },
+  {
+   "url": "https://www.microsoft.com/en-us/microsoft-cloud/blog/us-government/2026/09/02/microsoft-fabric-in-gcc-high-building-the-data-foundation-for-ai/",
+   "title": "Microsoft Fabric in GCC High: Building the data foundation for AI | The Microsoft Cloud Blog",
+   "age": "1 month ago"
+  },
+  {
+   "url": "https://azure.microsoft.com/en-us/blog/fabcon-and-sqlcon-2026-in-barcelona-building-the-data-foundation-for-microsoft-copilot-and-agents/",
+   "title": "FabCon and SQLCon 2026: Explore Microsoft Fabric and SQL innovations | Microsoft Azure Blog",
+   "age": "4 hours ago"
+  },
+  {
+   "url": "https://www.microsoft.com/en-us/microsoft-fabric/blog/content-type/events/",
+   "title": "Data Analytics Events | Microsoft Fabric Blog",
+   "age": null
+  },
+  {
+   "url": "https://martechseries.com/analytics/data-management-platforms/daivio-launches-ai-powered-data-analysis-workload-for-microsoft-fabric/",
+   "title": "Daivio Launches AI-Powered Data Analysis Workload for Microsoft Fabric",
+   "age": "3 hours ago"
+  },
+  {
+   "url": "https://www.manilatimes.net/2026/09/29/tmt-newswire/globenewswire/daivio-launches-ai-powered-data-analysis-workload-for-microsoft-fabric/2434737",
+   "title": "Daivio Launches AI-Powered Data Analysis Workload for Microsoft Fabric | The Manila Times",
+   "age": "6 hours ago"
+  },
+  {
+   "url": "https://www.globenewswire.com/news-release/2026/09/29/3370414/0/en/daivio-launches-ai-powered-data-analysis-workload-for-microsoft-fabric.html",
+   "title": "Daivio Launches AI-Powered Data Analysis Workload for Microsoft Fabric",
+   "age": "6 hours ago"
+  },
+  {
+   "url": "https://www.globenewswire.com/news-release/2026/09/29/3370412/0/es/daivio-lanza-una-soluci%C3%B3n-de-an%C3%A1lisis-de-datos-basada-en-ia-para-microsoft-fabric.html",
+   "title": "Daivio lanza una solución de análisis de datos basada en IA para Microsoft Fabric",
+   "age": "6 hours ago"
+  },
+  {
+   "url": "https://azure.microsoft.com/en-us/blog/introducing-microsoft-fabric-data-analytics-for-the-era-of-ai/",
+   "title": "Introducing Microsoft Fabric: The data platform for the era of AI | Microsoft Azure Blog | Microsoft Azure",
+   "age": "June 11, 2026"
+  },
+  {
+   "url": "https://imanagementpro.com/en/microsoft-ai/",
+   "title": "Microsoft AI in Data Analytics: Fabric, Copilot Updates | IMP",
+   "age": "March 17, 2026"
   }
  ],
  "leads": [
   {
    "symbols": [
-    "AAPL"
+    "MSFT"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T19:26:53Z",
-   "headline": "Apple Stock Edges Higher Although Two Legal Bills Stack Up",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-stock-edges-higher-although-192653726.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T19:24:07Z",
-   "headline": "Nvidia unveils security platform to rein in AI agents and $150bn stock buyback",
-   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-unveils-security-platform-rein-153257645.html"
+   "pubDate": "2026-09-29T07:00:00Z",
+   "headline": "Daivio Launches AI-Powered Data Analysis Workload for Microsoft Fabric",
+   "url": "https://finance.yahoo.com/technology/ai/articles/daivio-launches-ai-powered-data-070000546.html"
   },
   {
    "symbols": [
     "MSFT"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T19:23:42Z",
-   "headline": "Microsoft Stock Drops 2.2% as AI Adoption Gap Reaches 12.6 Points",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/microsoft-stock-drops-2-2-192342013.html"
+   "pubDate": "2026-09-29T07:00:00Z",
+   "headline": "Atlan Brings Governed Context to Microsoft Fabric and OneLake",
+   "url": "https://finance.yahoo.com/technology/ai/articles/atlan-brings-governed-context-microsoft-070000179.html"
   },
   {
    "symbols": [
-    "TSLA"
+    "GOOGL"
    ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T19:22:09Z",
-   "headline": "Tesla Stock Drops Over 3% Before Cybercab's Federal Answers Come Due",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-stock-drops-over-3-192209629.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T19:21:21Z",
-   "headline": "Stock Market Today: Dow Off Lows After Iran Report; Leisure Play Tests Entry, MongoDB Dives (Live Coverage)",
-   "url": "https://finance.yahoo.com/m/6b34a52f-8642-3ca8-8589-c9e25040f485/stock-market-today%3A-dow-off.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T19:21:15Z",
-   "headline": "China Weighs Letting ByteDance and Alibaba Buy New Nvidia (NVDA) Chips",
-   "url": "https://finance.yahoo.com/technology/articles/china-weighs-letting-bytedance-alibaba-192115872.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T19:15:37Z",
-   "headline": "Nvidia Stocks Jump Over 3% as Agent Safety Moves Into Silicon",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/nvidia-stocks-jump-over-3-191537768.html"
+   "source": "channelnewsasia.com",
+   "pubDate": "2026-09-29T06:53:15Z",
+   "headline": "EU should use Google fines to cut member state contributions to budget, France says",
+   "url": "https://www.channelnewsasia.com/business/eu-should-use-google-fines-cut-member-state-contributions-budget-france-says-6417816"
   },
   {
    "symbols": [
     "GOOGL"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T19:07:09Z",
-   "headline": "Marvell Technology (MRVL) Starts Custom AI Chip Shipments And Eyes Higher Forecasts",
-   "url": "https://finance.yahoo.com/technology/ai/articles/marvell-technology-mrvl-starts-custom-190709329.html"
+   "pubDate": "2026-09-29T06:23:00Z",
+   "headline": "The Zacks Analyst Blog Highlights Alphabet, Mastercard, AbbVie, Perma-Pipe and ImmuCell",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-analyst-blog-highlights-alphabet-062300651.html"
+  },
+  {
+   "symbols": [
+    "AAPL"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-09-29T06:12:06Z",
+   "headline": "What Does Apple (AAPL) Appeal Mean After A $5.7 Billion Patent Verdict?",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/does-apple-aapl-appeal-mean-061206860.html"
+  },
+  {
+   "symbols": [
+    "BRK-B"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-09-29T06:10:11Z",
+   "headline": "Berkshire Hathaway (BRK.B) Stock Still Looks Cheap After An 84% Run",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/berkshire-hathaway-brk-b-stock-061011356.html"
   },
   {
    "symbols": [
     "NVDA"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-09-28T19:04:31Z",
-   "headline": "Nvidia Sends Wake-Up Call on AI Safety",
-   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-sends-wake-call-ai-190431133.html"
+   "pubDate": "2026-09-29T06:09:35Z",
+   "headline": "Is Arm (ARM) Quietly Becoming the Linchpin of Nvidia’s AI Security and Compute Strategy?",
+   "url": "https://finance.yahoo.com/technology/ai/articles/arm-arm-quietly-becoming-linchpin-060935833.html"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-09-29T05:49:51Z",
+   "headline": "Google challenges EU orders to open up to AI, search engine rivals",
+   "url": "https://www.businesstimes.com.sg/companies-markets/google-challenges-eu-orders-open-ai-search-engine-rivals"
+  },
+  {
+   "symbols": [
+    "S68.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-09-29T03:14:22Z",
+   "headline": "HK-listed engineering firm Metasurface files for dual primary listing on Catalist",
+   "url": "https://www.businesstimes.com.sg/companies-markets/hk-listed-engineering-firm-metasurface-files-dual-primary-listing-catalist"
   },
   {
    "symbols": [
@@ -453,12 +471,12 @@
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 38296,
-  "output": 2130,
+  "input": 39099,
+  "output": 2364,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.0989
+  "costUsd": 0.1009
  },
- "createdAt": "2026-09-29T00:35:14.409Z"
+ "createdAt": "2026-09-29T13:00:58.025Z"
 }
