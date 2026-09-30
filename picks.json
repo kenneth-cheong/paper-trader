@@ -1,112 +1,302 @@
 {
- "market_summary": "Global markets are digesting a hawkish surprise: the Fed hiked 25bp to 3.75%-4.00% on Sept 16, ending a multi-year easing cycle and reversing the NIM-compression narrative for Singapore banks. Big US tech is mixed — Meta and Microsoft are getting analyst upgrades on AI monetization while Tesla sold off sharply (-5.2%) even on a positive SEC ruling, suggesting the stock is trading on negative sentiment/technical momentum rather than news. SGX financials rallied hard over the past year (DBS +55%, OCBC +97%) and are now trading near consensus targets, leaving less obvious upside, while Singtel has lagged badly (-13% 6m) despite an unusually bullish analyst base (13 buy/2 hold/0 sell, 24% implied upside). Broad indices (SPY/QQQ) are only modestly softer, so this looks like stock-specific rotation rather than a market-wide risk-off move.",
+ "market_summary": "Markets remain split between AI-driven optimism and mounting competitive/regulatory risk. Nvidia's Sept 28 Open Agent Safety Platform launch is a positive but is being offset by fresh (Sept 30) news that DeepSeek is partnering with Huawei to build CUDA alternatives for Ascend chips, a direct long-term threat to Nvidia's software moat. Apple's iPhone 18 Pro is showing strong China demand (12% YoY, 33% share) even as a UK marketplace class-action against Apple/Amazon adds legal overhang. In Singapore, banks have run hard on rate-hike optimism (STI +24.6% YTD) and now look stretched — DBS/OCBC/UOB are all red today after extended multi-month gains — while REITs and industrials with heavy analyst buy ratings (Keppel, CICT) look comparatively less extended.",
  "picks": [
   {
-   "symbol": "MSFT",
+   "symbol": "BN4.SI",
    "stance": "long",
-   "conviction": "high",
+   "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "Microsoft just got a fresh analyst upgrade (Stifel Hold→Buy, target raised to 575) and carries an almost unanimous buy rating (53 buy/2 hold/0 sell) with 13.4% implied upside to consensus target. The stock's 3m/6m returns (+38%/+43%) show strong AI-driven momentum, and today's -1.4% dip looks like broad market softness rather than stock-specific bad news, offering a better entry.",
-   "news": "Stifel upgraded MSFT to Buy with a $575 target on 2026-09-23 (+2.2% since); no negative company-specific news has emerged since.",
-   "risks": "A broader tech selloff (as hinted by today's -0.9% SPY/QQQ move) could drag MSFT down regardless of company fundamentals; also watch for any AI capex spending concerns denting margins.",
+   "thesis": "Keppel has pulled back modestly (-2.5% 1m, -1.7% today) despite a heavily bullish analyst base (12 buy/1 hold/2 sell) and 13.9% implied upside to consensus target. No negative catalyst has emerged; the dip looks like broader SGX profit-taking rather than a company-specific issue, offering a re-entry point.",
+   "news": "No company-specific news in the past 10 days; SG financials/industrials have been supported by the broader rate-hike rally narrative (background, SGX/STI item, Sept 29).",
+   "risks": "If the SGX-wide pullback (also seen in DBS/OCBC/UOB/SGX today) is the start of a deeper index correction, Keppel with its higher beta (1.13) and volatility (24.2%) could fall further before recovering.",
    "source_urls": [
-    "https://www.minichart.com.sg/2026/09/23/jefferies-starts-singapore-banks-with-buy-on-dbs-and-uob-hold-on-ocbc/"
+    "https://www.straitstimes.com/business/sgx-ceo-loh-boon-chyes-pay-rises-7-to-8-37m-as-exchange-delivers-standout-year"
    ],
-   "priceAtPick": 508.96
+   "priceAtPick": 11.28
+  },
+  {
+   "symbol": "C38U.SI",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "CICT shows the most bullish analyst skew on the watchlist (13 buy/3 hold/0 sell, 20.3% implied upside) and elevated relative volume (2.1x 20-day average) suggests accumulation even as price sits 12% below its 52w high and below both MAs. This combination of heavy buy consensus plus unusual volume on a laggard REIT is a reasonable contrarian long.",
+   "news": "No direct news catalyst found; this call rests on the analyst consensus and volume signal in the price data rather than a headline.",
+   "risks": "Singapore REITs are rate-sensitive; if the rate-hike narrative driving bank strength persists, higher-for-longer rates could keep pressuring REIT valuations regardless of analyst targets.",
+   "source_urls": [
+    "https://www.straitstimes.com/business/sgx-ceo-loh-boon-chyes-pay-rises-7-to-8-37m-as-exchange-delivers-standout-year"
+   ],
+   "priceAtPick": 2.23
+  },
+  {
+   "symbol": "AAPL",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "Apple sold off -2.7% today despite genuinely strong iPhone 18 Pro China launch data (12% YoY unit growth, 33% share) reported the same day — the drop looks driven by the UK class-action headline (Sept 28) rather than fundamentals. The China sales strength is the more durable, revenue-relevant data point for the next few quarters.",
+   "news": "iPhone 18 Pro China launch-week sales +12% YoY, 33% share (Yahoo Finance, Sept 30); UK Competition Appeal Tribunal allowed a £289-306m class action against Apple/Amazon to proceed (Yahoo Finance, Sept 28).",
+   "risks": "Consensus analyst target is essentially flat to current price (-0.4% implied), so this is a tactical bounce trade, not a re-rating call; further negative legal/regulatory headlines could keep sentiment weak.",
+   "source_urls": [
+    "https://finance.yahoo.com/markets/stocks/articles/apple-iphone-18-pro-sales-054440924.html",
+    "https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-apple-aapl-must-060818438.html"
+   ],
+   "priceAtPick": 329.4
+  },
+  {
+   "symbol": "META",
+   "stance": "long",
+   "conviction": "low",
+   "horizon": "weeks",
+   "thesis": "Meta has the strongest price momentum on the watchlist (+27.8% 1m, +3.2% today, vs MA50 +19.4%) with a large buy-heavy analyst base (54 buy/7 hold/1 sell) and 7.5% remaining upside to target even after the run. This is a momentum continuation trade in the absence of contrary news.",
+   "news": "No specific Meta headline surfaced in this news cycle; the move appears to be part of the broader AI-stock volatility described in the market summary rather than a discrete catalyst.",
+   "risks": "With no fresh news backing the rally and volatility at 41.8%, a sharp reversal is plausible if AI-sector sentiment turns (as it partly has for Nvidia on the DeepSeek/Huawei news); this is a lower-conviction, news-thin call.",
+   "source_urls": [
+    "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-ships-ai-safety-063441658.html"
+   ],
+   "priceAtPick": 738.79
+  },
+  {
+   "symbol": "O39.SI",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "OCBC is up 94.6% over the past year and 30.5% above its 200-day average, among the most extended of the SGX banks, yet its consensus analyst target (S$31.53) sits slightly below the current price (S$31.99), implying -1.4% expected return. Combined with today's -0.5% decline and a broader SG bank pullback, this looks like the most stretched name to fade within the rate-hike rally.",
+   "news": "STI hit a record high in early September on bank-rally strength tied to September rate-hike prospects (Straits Times, Sept 29, background); no new positive catalyst since.",
+   "risks": "If the SG rate-hike/bank-rally narrative continues and OCBC's upcoming results beat expectations, the stock could keep grinding higher regardless of the stretched technical picture.",
+   "source_urls": [
+    "https://www.straitstimes.com/business/sgx-ceo-loh-boon-chyes-pay-rises-7-to-8-37m-as-exchange-delivers-standout-year"
+   ],
+   "priceAtPick": 31.99
   },
   {
    "symbol": "NVDA",
-   "stance": "long",
-   "conviction": "high",
-   "horizon": "months",
-   "thesis": "Nvidia has the widest analyst upside gap on the whole watchlist (44.2% to consensus target, 58 buy/2 hold/1 sell) after a blowout Q2 FY27 print (revenue +106% YoY, 75% gross margin) and the $12.9B Hugging Face acquisition strengthening its AI ecosystem position. Price is only 3.6% off 52-week highs and up 13.8% vs its 200-day average, showing the AI infrastructure demand story remains intact even after profit-taking over the past month (-0.3% 1m).",
-   "news": "Q2 FY2027 earnings beat with $96.2B revenue (Aug 26, background) and announced Hugging Face acquisition for $12.9B (Aug 26, background) continue to underpin the bull case; no negative catalysts have surfaced since.",
-   "risks": "Valuation is already elevated and any AI capex slowdown signal from hyperscalers, export-control news on China chip sales, or a broader Nasdaq de-rating could hit NVDA harder given its 1.59 beta and 37.7% annualized volatility.",
-   "source_urls": [
-    "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
-    "https://www.moomoo.com/ca/articles/nvidia-stock-earnings"
-   ],
-   "priceAtPick": 227.21
-  },
-  {
-   "symbol": "D05.SI",
-   "stance": "long",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "DBS just picked up a fresh Buy initiation from Jefferies (Sept 22-23) citing scope for earnings/dividends to compound, and the Sept 16 Fed hike to 3.75-4.00% directly supports SGX bank net interest margins after years of rate-cut headwinds. Analyst base is split (8 buy/8 hold/1 sell) but the fresh institutional endorsement plus a sector-wide rate tailwind favors continued strength even though the stock trades near its 52-week high.",
-   "news": "Jefferies initiated coverage with Buy on DBS (2026-09-22) and the Fed's 25bp hike to 3.75-4.00% (2026-09-16) is seen easing years of NIM compression for Singapore banks.",
-   "risks": "Stock is only -0.3% below its 52-week high and consensus target implies essentially no further upside (-0.3%), so much of the good news may already be priced in; any dovish Fed pivot or credit-quality scare would remove the tailwind.",
-   "source_urls": [
-    "https://www.minichart.com.sg/2026/09/23/jefferies-starts-singapore-banks-with-buy-on-dbs-and-uob-hold-on-ocbc/",
-    "https://growbeansprout.com/dbs-ocbc-uob-higher-rates-sep-2026"
-   ],
-   "priceAtPick": 78.38
-  },
-  {
-   "symbol": "Z74.SI",
-   "stance": "long",
-   "conviction": "medium",
-   "horizon": "months",
-   "thesis": "Singtel has sold off hard (-5.7% 1m, -13.4% 6m, -17.9% from 52-week high) even though the analyst base is overwhelmingly bullish (13 buy/2 hold/0 sell) with a 24.3% implied upside to consensus target — one of the widest gaps on the watchlist. With no negative company-specific news identified in this period, the disconnect between deteriorating price action and analyst confidence looks like a potential mean-reversion long, though the news flow is thin so this is more a valuation/technical call than an event-driven one.",
-   "news": "No fresh Singtel-specific catalyst was found in this news cycle; the case rests on the stark gap between recent price weakness and strongly bullish analyst target/rating consensus.",
-   "risks": "News is thin — if the price weakness reflects an unannounced fundamental issue (e.g., regional telco competition, currency drag from regional associates), the analyst targets could be stale and the stock could keep falling; wait for confirmation via volume or a re-rating before sizing up.",
-   "source_urls": [
-    "https://www.straitstimes.com/business/stamford-land-wins-1-9m-claim-against-uob-over-rights-issue-after-bank-found-grossly-negligent"
-   ],
-   "priceAtPick": 4.28
-  },
-  {
-   "symbol": "U11.SI",
    "stance": "short",
    "conviction": "low",
    "horizon": "weeks",
-   "thesis": "UOB was just found 'grossly negligent' by the courts and ordered to pay S$1.9m over its handling of a Stamford Land rights issue (Sept 29) — reputationally negative for a bank whose stock already trades essentially at its consensus target (-0.1% implied upside) with a lukewarm analyst mix (3 buy/11 hold/2 sell). Combined with elevated relative volume (1.67x 20-day average) suggesting the market is actively reacting, near-term downside risk looks higher than upside.",
-   "news": "UOB ordered to pay S$1.9m after being found 'grossly negligent' in advising on a rights issue for Stamford Land (2026-09-29).",
-   "risks": "The monetary amount (S$1.9m) is immaterial to UOB's earnings, so the negative headline may fade quickly with no lasting price impact; the broader rate-hike tailwind for bank NIMs (Sept 16 Fed hike) could offset any reputational drag.",
+   "thesis": "Today's news that DeepSeek is partnering with Huawei to build TileLang, a CUDA alternative for Ascend chips, is a fresh and structurally important threat to Nvidia's software moat in China, even as the positive Open Agent Safety Platform launch (Sept 28) gets more headline attention. The stock is only down 0.7% today, suggesting the market has not yet fully digested the competitive risk, which could weigh over coming weeks even as Nvidia's near-term US demand story stays intact.",
+   "news": "DeepSeek partners with Huawei on chip programming tools (TileLang) to reduce reliance on Nvidia, reported Sept 30, Straits Times; Nvidia Open Agent Safety Platform launched with 100+ partners, Sept 28, Yahoo Finance.",
+   "risks": "Nvidia's near-term revenue is overwhelmingly non-China and driven by hyperscaler AI capex, so this China-specific software threat may take years to materially dent earnings; consensus analyst target implies 44% upside, and any strong earnings beat would overwhelm this thesis quickly.",
    "source_urls": [
-    "https://www.straitstimes.com/business/stamford-land-wins-1-9m-claim-against-uob-over-rights-issue-after-bank-found-grossly-negligent"
+    "https://www.straitstimes.com/business/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia",
+    "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-ships-ai-safety-063441658.html"
    ],
-   "priceAtPick": 43.32
-  },
-  {
-   "symbol": "TSLA",
-   "stance": "short",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "Tesla fell 5.2% today even after a positive SEC no-action letter approving its retail shareholder voting program — a sign the stock is trading on negative underlying sentiment/technicals rather than news flow. It's down 20.4% over the past year, 28% off its 52-week high, and analyst opinion is deeply split (19 buy/20 hold/4 sell), with high volatility (46.5% annualized) and the highest beta on the watchlist (1.82), making it vulnerable to further downside in any risk-off tape.",
-   "news": "SEC issued a no-action letter approving Tesla's Issuer Voluntary Retail Voting Program (2026-09-29), yet the stock still dropped 5.2% same day, underscoring negative momentum overriding good news.",
-   "risks": "Tesla is a high-beta, headline-driven stock; a delivery beat, FSD/robotaxi update, or short squeeze could reverse the move quickly, and today's drop could simply be a one-day overreaction to broader tech weakness rather than a durable trend.",
-   "source_urls": [
-    "https://www.sec.gov/rules-regulations/no-action-interpretive-exemptive-letters/division-corporation-finance-no-action/tesla-inc-092926"
-   ],
-   "priceAtPick": 352.84
+   "priceAtPick": 227.21
   }
  ],
  "sources": [
   {
-   "url": "https://www.asiaone.com/money/best-bank-offers-singapore-september-2026-dbs-half-priced-holidays-uob-save-and-harvest-and",
-   "title": "Best bank offers in Singapore (September 2026): DBS Half-priced Holidays, UOB Save and Harvest, and more, Money News - AsiaOne",
+   "url": "https://tech.yahoo.com/ai/articles/nvidia-launches-safety-platform-says-101552564.html",
+   "title": "Nvidia Launches New Safety Platform—Says It Can Prevent AI Agents From Going Rogue",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-ships-ai-safety-063441658.html",
+   "title": "Nvidia (NVDA) Ships an AI Safety Platform After Huang Called Rival Warnings Odd",
+   "age": "6 hours ago"
+  },
+  {
+   "url": "https://www.cnn.com/2026/09/28/business/nvidia-ai-safety-system",
+   "title": "Nvidia launches new tool to keep AI agents from going rogue | CNN Business",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/article/nvidia-launches-ai-safety-platform-after-jensen-huang-calls-anthropic-openai-warnings-odd-103135599.html",
+   "title": "Nvidia launches AI safety platform after Jensen Huang calls Anthropic, OpenAI warnings 'odd'",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.pymnts.com/cybersecurity/2026/nvidia-says-new-safety-platform-would-have-halted-hugging-face-hack/",
+   "title": "Nvidia Says New Safety Platform Would Have Stopped Hugging Face Hack | PYMNTS.com",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/09/28/nvidia-releases.html",
+   "title": "Nvidia Open Agent Safety Platform to stop AI agents from breaking out",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://techcrunch.com/2026/09/28/nvidia-launches-new-platform-for-reining-in-rogue-ai-agents/",
+   "title": "Nvidia launches new platform for reining in rogue AI agents | TechCrunch",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://nvidianews.nvidia.com/news/open-agent-safety-platform",
+   "title": "NVIDIA Launches Open Agent Safety Platform to Secure Agents From Testing to Deployment | NVIDIA Newsroom",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://americanbazaaronline.com/2026/09/28/nvidia-unveils-ai-agent-safety-platform-to-prevent-models-488941/",
+   "title": "Nvidia unveils AI agent safety platform to prevent models from breaking containment",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://townhall.com/news/dmitri-bolt/2026/09/28/nvidia-launches-new-tool-to-stop-ai-from-going-rogue-n2683703",
+   "title": "NVIDIA Just Launched a Market-Based Answer to ‘Rogue’ AI",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.investing.com/news/stock-market-news/deepseek-partners-with-huawei-on-chip-programming-tools-amid-pivot-from-nvidia-4924086",
+   "title": "DeepSeek ties up with Huawei on chip programming tools amid pivot from Nvidia By Investing.com",
+   "age": "7 hours ago"
+  },
+  {
+   "url": "https://money.usnews.com/investing/news/articles/2026-09-29/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia",
+   "title": "DeepSeek Partners With Huawei to Develop Chip Programming Tools, Reducing Reliance on Nvidia",
+   "age": "10 hours ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/ai/articles/deepseek-ties-huawei-chip-programming-060332061.html",
+   "title": "DeepSeek ties up with Huawei on chip programming tools amid pivot from Nvidia",
+   "age": "7 hours ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/ai/articles/deepseek-unveils-huawei-ai-chip-050726297.html",
+   "title": "DeepSeek Unveils Huawei AI Chip Tools That May Replace Nvidia’s",
+   "age": "8 hours ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-09-30/deepseek-unveils-huawei-ai-chip-tools-that-may-replace-nvidia-s",
+   "title": "DeepSeek Unveils Huawei AI Chip Tools That May Replace Nvidia’s - Bloomberg",
+   "age": "8 hours ago"
+  },
+  {
+   "url": "https://www.cxodigitalpulse.com/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia/",
+   "title": "DeepSeek Partners With Huawei to Develop Chip Programming Tools, Reducing Reliance on Nvidia - CXO Digitalpulse",
+   "age": "7 hours ago"
+  },
+  {
+   "url": "https://invezz.com/news/2026/09/30/deepseek-partners-with-huawei-on-chip-tools-to-cut-reliance-on-nvidia/",
+   "title": "DeepSeek, Huawei team up on chip tools to cut Nvidia reliance",
+   "age": "2 hours ago"
+  },
+  {
+   "url": "https://parameter.io/deepseek-unveils-huawei-powered-ai-chip-toolkit-in-major-nvidia-nvda-alternative-push/",
+   "title": "DeepSeek Unveils Huawei-Powered AI Chip Toolkit in Major Nvidia (NVDA) Alternative Push - Parameter",
+   "age": "4 hours ago"
+  },
+  {
+   "url": "https://www.thenews.com.pk/latest/1418156-deepseek-partners-with-huawei-to-build-ai-chip-programming-tools-cutting-nvidia-reliance",
+   "title": "DeepSeek partners with Huawei to build AI chip programming tools, cutting Nvidia reliance | Technology | thenews.com.pk",
+   "age": "8 hours ago"
+  },
+  {
+   "url": "https://www.scmp.com/tech/big-tech/article/3369323/apple-leads-china-smartphone-sales-after-launch-iphone-18-pro-can-momentum-last",
+   "title": "Apple leads China smartphone sales after launch of iPhone 18 Pro. Can the momentum last? | South China Morning Post",
+   "age": "4 hours ago"
+  },
+  {
+   "url": "https://www.benzinga.com/markets/tech/26/09/62074286/is-apples-strategy-paying-off-strong-iphone-18-pro-china-demand-sparks-revenue-upside",
+   "title": "Is Apple's Strategy Paying Off? Strong iPhone 18 Pro China Demand Sparks Revenue Upside - Apple (NASDAQ:A - Benzinga",
+   "age": "1 hour ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/IPhone_Air",
+   "title": "IPhone Air",
+   "age": null
+  },
+  {
+   "url": "https://www.intomobile.com/2026/09/28/iphone-18-pro-sells-1-3-million-units-in-china-in-its-first-week/",
+   "title": "iPhone 18 Pro sells 1.3 million units in China in its first week - IntoMobile",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://ca.investing.com/news/stock-market-news/apple-iphone-18-pro-sales-rise-12-in-china-launch-week--counterpoint-4859144",
+   "title": "Apple iPhone 18 Pro sales rise 12% in China launch week - Counterpoint By Investing.com",
+   "age": "8 hours ago"
+  },
+  {
+   "url": "https://www.tradingpedia.com/2026/09/30/apple-leads-china-market-as-iphone-18-pro-sales-jump-12/",
+   "title": "Apple Leads China Market as iPhone 18 Pro Sales Jump 12%",
+   "age": "4 hours ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/IPhone_XR",
+   "title": "IPhone XR",
+   "age": null
+  },
+  {
+   "url": "https://mobidevices.com/en/iphone-18-pro-max-china-sales",
+   "title": "iPhone 18 Pro and Pro Max sales in China reached 1.3 million in the first week",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.inspire2rise.com/apple-iphone-18-pro-dominates-china.html",
+   "title": "iPhone 18 Pro Dominates China: Apple Bounces Back With Huge Sales",
+   "age": "8 hours ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-apple-aapl-must-060818438.html",
+   "title": "Amazon (AMZN) and Apple (AAPL) Must Face a UK Class Action Over Marketplace Sales",
+   "age": "7 hours ago"
+  },
+  {
+   "url": "https://www.investing.com/news/stock-market-news/apple-amazon-face-uk-consumer-class-action-over-2018-sales-deal-93CH-4919876",
+   "title": "Apple, Amazon face UK consumer class action over 2018 sales deal By Investing.com",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.lawyer-monthly.com/2026/09/apple-and-amazon-face-revived-uk-consumer-claim-over-product-sales/",
+   "title": "Apple and Amazon Face Revived UK Consumer Claim Over Product Sales",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-amazon-face-uk-consumer-103044833.html",
+   "title": "Apple and Amazon Face UK Consumer Lawsuit Over Marketplace Sales",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://9to5mac.com/2026/09/28/apple-and-amazon-face-renewed-uk-antitrust-lawsuit/",
+   "title": "Apple and Amazon face renewed UK antitrust lawsuit - 9to5Mac",
+   "age": "1 day ago"
+  },
+  {
+   "url": "https://www.insidermonkey.com/news/amazon-amzn-and-apple-aapl-must-face-a-uk-class-action-over-marketplace-sales-1846409/",
+   "title": "Amazon (AMZN) and Apple (AAPL) Must Face a UK Class Action Over Marketplace Sales - Insider Monkey",
+   "age": "7 hours ago"
+  },
+  {
+   "url": "https://applemagazine.com/apple-amazon-lawsuit-uk-marketplace/",
+   "title": "Apple Amazon Lawsuit Revived in UK Over Marketplace Restrictions - AppleMagazine",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.globalbankingandfinance.com/apple-amazon-face-revived-uk-consumer-lawsuit-over-product/",
+   "title": "Apple, Amazon Face Revived UK Consumer Lawsuit on Marketplace Sales",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://finwire.io/news/stock-markets-news/apple-amazon-face-uk-consumer-class-action-over-2018-sales-deal",
+   "title": "Apple, Amazon face UK consumer class action over 2018 sales deal | Stock Markets News | finwire.io",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://thesmartinvestor.com.sg/we-analysed-singapores-3-big-banks-heres-which-one-looks-strongest/",
+   "title": "DBS vs OCBC vs UOB: Which Singapore Bank Looks Strongest?",
    "age": "1 week ago"
+  },
+  {
+   "url": "https://www.stashaway.sg/r/dbs-ocbc-uob-singapore-banks-investment-outlook",
+   "title": "DBS, OCBC & UOB Outlook: Dividends, Earnings, Yields, and Valuations of Singapore’s Big-Three Banks [2026 Guide] | StashAway Singapore",
+   "age": "January 14, 2026"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
+   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
+   "age": "August 5, 2026"
   },
   {
    "url": "https://growbeansprout.com/dbs-ocbc-uob-higher-rates-sep-2026",
    "title": "Fed hikes rates again: What higher interest rates mean for DBS, OCBC and UOB - Growbeansprout.com",
-   "age": "5 days ago"
+   "age": "1 week ago"
   },
   {
-   "url": "https://www.stashaway.sg/r/ocbc-dbs-uob-singapore-bank-stock",
-   "title": "OCBC vs DBS vs UOB Singapore's Leading Bank Stocks for 2026 | StashAway Singapore",
+   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-bank-pays-060000874.html",
+   "title": "S$10,000 in DBS, OCBC or UOB: Which Bank Pays the Most Dividends?",
    "age": "2 weeks ago"
   },
   {
-   "url": "https://www.minichart.com.sg/2026/09/23/jefferies-starts-singapore-banks-with-buy-on-dbs-and-uob-hold-on-ocbc/",
-   "title": "Jefferies Starts Singapore Banks With Buy on DBS and UOB, Hold on OCBC – Minichart",
+   "url": "https://www.sgx.com/research-education/market-updates/20250205-upcoming-earnings-reports-dbs-ocbc-and-uob-focus",
+   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus - Singapore Exchange (SGX)",
    "age": null
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
-   "title": "Singapore Banks After the Fed Rate Hike: DBS, OCBC & UOB in Q4 2026",
-   "age": "2 weeks ago"
   },
   {
    "url": "https://thekopinotes.com/articles/news/dbs-ocbc-uob-q2-2026-results/",
@@ -114,210 +304,25 @@
    "age": "August 11, 2026"
   },
   {
-   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-2026-outlook",
-   "title": "Singapore banks 2026 outlook: DBS OCBC vs UOB",
-   "age": null
-  },
-  {
-   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-performance-2026",
-   "title": "Singapore Banks Performance 2026 Analysis",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hans/news/2516570891",
-   "title": "Is It Still A Good Time to Buy Singapore Banks?",
-   "age": null
-  },
-  {
-   "url": "https://www.google.com/finance/quote/Z74:SGX",
-   "title": "Singapore Telecommunications Ltd (Z74) Stock Price & News - Google Finance",
-   "age": "August 7, 2026"
-  },
-  {
-   "url": "https://growbeansprout.com/weekly-market-review-3-aug-2026",
-   "title": "SIA and Keppel in focus: Weekly Review with SIAS - Growbeansprout.com",
-   "age": "August 3, 2026"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/quote/C6L.SI/",
-   "title": "Singapore Airlines Limited (C6L.SI) stock price, news, quote and history - Yahoo Finance",
-   "age": "August 5, 2026"
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/newsalert-listing/",
-   "title": "Newsalert Listing | Singapore Airlines",
-   "age": null
-  },
-  {
-   "url": "https://sg.headtopics.com/news/singapore-corporate-awards-2026-keppel-singtel-and-others-88002512",
-   "title": "Singapore Corporate Awards 2026: Keppel, Singtel and Others Take Home Golden Governance Titles | Business & Finance",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://www.itiger.com/news/1157251114",
-   "title": "SG Morning Call | Singapore Stocks Open Lower on Monday; Singtel Sees $2.3B Impairment Hit, Net Loss in 2024 H2",
-   "age": null
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/at/media-centre/press-release",
-   "title": "Featured News Release",
-   "age": null
-  },
-  {
-   "url": "https://agent360.singaporeair.com/content/dam/agent360/web-assets/pdf/local/de/2025_05_SQ_Hot_News_DACH2.pdf",
-   "title": "2025 05 SQ Hot News DACH2",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hant/news/1110203256",
-   "title": "SG Morning Call | Singapore Stocks Open Higher; Singtel Gains 1%; NIO Drops 2%",
-   "age": null
-  },
-  {
-   "url": "https://www.macrumors.com/2026/08/04/apple-september-2026-announcements/",
-   "title": "Everything Apple Is Expected to Announce in September - MacRumors",
-   "age": "August 4, 2026"
-  },
-  {
-   "url": "https://www.digitaltrends.com/phones/apples-september-2026-event-everything-we-know-about-the-iphone-18-pro-and-iphone-ultra-launch-event/",
-   "title": "Apple’s September 2026 event: Everything we know about the iPhone 18 Pro and the foldable iPhone Duo - Digital Trends",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Apple_A18",
-   "title": "Apple A18",
-   "age": null
-  },
-  {
-   "url": "https://www.cnbc.com/2026/09/09/apple-event-today-live-updates.html",
-   "title": "Apple event 2026: Folding iPhone Duo, iPhone 18 Pro, added AI features and more",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://www.apple.com/newsroom/2026/06/apple-intelligence-brings-powerful-ai-capabilities-into-everyday-experiences/",
-   "title": "Apple Intelligence brings powerful AI capabilities into everyday experiences - Apple",
-   "age": "August 19, 2026"
-  },
-  {
-   "url": "https://www.netnewsledger.com/2026/09/14/apple-september-2026-update-siri-ai-arrives-as-iphone-18-pro-and-foldable-iphone-duo-lead-new-lineup/",
-   "title": "NetNewsLedger - Apple September 2026 Update: Siri AI Arrives as iPhone 18 Pro and Foldable iPhone Duo Lead New Lineup",
+   "url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
+   "title": "Singapore Banks After the Fed Rate Hike: DBS, OCBC & UOB in Q4 2026",
    "age": "2 weeks ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/IPhone_16_Pro",
-   "title": "IPhone 16 Pro",
+   "url": "https://www.itiger.com/hant/news/1189208007",
+   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
    "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/IOS_18",
-   "title": "IOS 18",
-   "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/List_of_iPhone_models",
-   "title": "List of iPhone models",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
-   "title": "NVIDIA CORP - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000019/q4fy26pr.htm",
-   "title": "NVIDIA CORP - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.moomoo.com/ca/articles/nvidia-stock-earnings",
-   "title": "Nvidia (NVDA) Earnings: What to Expect This Quarter",
-   "age": "3 weeks ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000051/q1fy27pr.htm",
-   "title": "NVIDIA CORP - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.cnbc.com/2026/08/26/nvidia-nvda-earnings-report-q2-2027-live-updates.html",
-   "title": "Nvidia earnings takeaways: Huang forecasts 70% fiscal 2028 revenue growth, far above estimates",
-   "age": "August 26, 2026"
-  },
-  {
-   "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026",
-   "title": "NVIDIA Announces Financial Results for Fourth Quarter and Fiscal 2026 | NVIDIA Newsroom",
-   "age": null
-  },
-  {
-   "url": "https://www.investing.com/equities/nvidia-corp-earnings",
-   "title": "NVIDIA (NVDA) Earnings Date & Report - Investing.com",
-   "age": "August 27, 2026"
-  },
-  {
-   "url": "https://seekingalpha.com/symbol/NVDA/earnings",
-   "title": "NVIDIA Corporation (NVDA) Earnings Dates & Report | Seeking Alpha",
-   "age": "August 27, 2026"
-  },
-  {
-   "url": "https://investor.nvidia.com/financial-info/financial-reports/default.aspx",
-   "title": "NVIDIA Corporation - Financial Reports",
-   "age": "August 28, 2026"
-  },
-  {
-   "url": "https://www.sullcrom.com/insights/memo/2026/September/SEC-Issues-Broad-Relief-Retail-Voting-Programs",
-   "title": "SEC Issues Broad Relief for Retail Voting Programs Under Tesla No-Action Letter | Sullivan & Cromwell LLP",
-   "age": null
-  },
-  {
-   "url": "https://news.bloomberglaw.com/esg/sec-uses-tesla-to-craft-template-for-shareholder-voting-programs",
-   "title": "SEC Uses Tesla to Craft Template for Shareholder Voting Programs",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/sec-staff-green-lights-tesla-184653857.html",
-   "title": "SEC Staff Green-Lights Tesla Program Letting Retail Shareholders Auto-Vote With The Board: Robinhood CEO Cheers",
-   "age": "6 hours ago"
-  },
-  {
-   "url": "https://electrek.co/2026/09/29/tesla-sec-retail-auto-vote-board-spacex-merger/",
-   "title": "Tesla (TSLA) wins SEC OK to auto-vote retail shares with board ahead of SpaceX merger | Electrek",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.sec.gov/rules-regulations/no-action-interpretive-exemptive-letters/division-corporation-finance-no-action/tesla-inc-092926",
-   "title": "SEC.gov | Tesla, Inc.",
-   "age": null
-  },
-  {
-   "url": "https://driveteslacanada.ca/news/tesla-sec-retail-shareholder-voting-program/",
-   "title": "Tesla gets SEC clearance for new retail shareholder voting program - Drive Tesla",
-   "age": "2 hours ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001318605/000110465926106432/tm2625055d1_4seq1.xml",
-   "title": "Tesla, Inc. - Form 4 - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.digitaltoday.co.kr/en/view/108717/us-sec-approves-tesla-retail-shareholder-auto-voting-could-it-affect-a-spacex-merger",
-   "title": "U.S. SEC approves Tesla retail shareholder auto-voting, could it affect a SpaceX merger",
-   "age": "2 hours ago"
-  },
-  {
-   "url": "https://www.gncrypto.news/news/sec-approves-tesla-retail-voting-system/",
-   "title": "SEC Approves Tesla Retail Voting System for Shareholders",
-   "age": "7 hours ago"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 49854,
-  "output": 7184,
+  "input": 48754,
+  "output": 6004,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.169
+  "costUsd": 0.1584
  },
- "createdAt": "2026-09-30T01:00:56.859Z"
+ "createdAt": "2026-09-30T12:54:27.014Z"
 }
