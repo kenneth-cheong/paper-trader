@@ -1,379 +1,499 @@
 {
- "market_summary": "US stock markets are being driven by AI semiconductor developments and regulatory scrutiny. Nvidia released its Open Agent Safety Platform on Sept 28 to address AI safety concerns, while DeepSeek's partnership with Huawei to develop alternative AI chip programming tools signals intensifying competition for Nvidia's dominance. Apple's iPhone 18 Pro posted strong 12% YoY sales growth in China's launch week, capturing 33% smartphone market share despite price increases. Amazon and Apple face a UK class action lawsuit over marketplace restrictions. US equities and tech stocks remain volatile amid these competing pressures. Singapore's financial stocks are performing well, with STI up 24.6% YTD driven by bank rallies following September rate hike prospects. SGX CEO compensation increased 7.1% to S$8.37 million in FY2026 amid a standout year for the exchange.",
+ "market_summary": "<cite index=\"3-10\">The STI has surged 24.6% year-to-date, driven overwhelmingly by DBS, OCBC, and UOB.",
  "items": [
   {
    "symbols": [
-    "NVDA"
+    "D05.SI",
+    "O39.SI",
+    "U11.SI"
+   ],
+   "date": "2026-09-19",
+   "headline": "Singapore banks' NIM compression offset by wealth management strength",
+   "summary": "<cite index=",
+   "type": "other",
+   "tone": "positive",
+   "source_url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/"
+  },
+  {
+   "symbols": [
+    "BN4.SI"
    ],
    "date": "2026-09-28",
-   "headline": "Nvidia launches Open Agent Safety Platform with 100+ industry partners",
-   "summary": "<cite index=\"2-1\">Nvidia released the Open Agent Safety Platform on September 28, a set of tools meant to stop AI agents from causing security problems when they act on their own.</cite> <cite index=\"3-5\">The platform was introduced with over 100 industry partners.</cite>",
-   "type": "product",
+   "headline": "Keppel prices CNH1 billion five-year offshore renminbi bond at 1.95% coupon",
+   "summary": "<cite index=",
+   "type": "deal",
    "tone": "positive",
-   "source_url": "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-ships-ai-safety-063441658.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "date": "2026-09-30",
-   "headline": "DeepSeek partners with Huawei to develop alternative chip programming tools, reducing reliance on Nvidia",
-   "summary": "<cite index=\"11-1\">DeepSeek partnered with Huawei Technologies to develop programming tools for Huawei's Ascend chips, amid a growing push among Chinese tech firms to seek alternatives to Nvidia.</cite> <cite index=\"14-3\">The tools include TileLang, China's answer to Nvidia's CUDA.</cite>",
-   "type": "product",
-   "tone": "negative",
-   "source_url": "https://www.straitstimes.com/business/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia"
-  },
-  {
-   "symbols": [
-    "AAPL"
-   ],
-   "date": "2026-09-30",
-   "headline": "iPhone 18 Pro sales rise 12% YoY in China launch week; Apple captures 33% market share",
-   "summary": "<cite index=\"20-4\">Sales of the new iPhone 18 Pro models in their first three days after launching on September 18 were 12 per cent higher than sales of the iPhone 17 Pro line-up during its entire first week last year.</cite> <cite index=\"20-5\">Apple captured 33 per cent of the market in the week of September 14 to 20.</cite>",
-   "type": "product",
-   "tone": "positive",
-   "source_url": "https://finance.yahoo.com/markets/stocks/articles/apple-iphone-18-pro-sales-054440924.html"
-  },
-  {
-   "symbols": [
-    "AAPL",
-    "AMZN"
-   ],
-   "date": "2026-09-28",
-   "headline": "UK tribunal allows class action suit against Amazon and Apple to proceed on marketplace restrictions",
-   "summary": "<cite index=\"29-1\">Amazon and Apple were told on September 28 that part of a consumer class action against them can proceed, after a ruling by Britain's Competition Appeal Tribunal.</cite> <cite index=\"29-2\">The surviving portion of the claim is valued at between £289 million and £306 million, including interest.</cite>",
-   "type": "legal",
-   "tone": "negative",
-   "source_url": "https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-apple-aapl-must-060818438.html"
+   "source_url": "https://dealroom.co/news/157331-keppel-prices-150-million-offshore-renminbi-bond-at-1-95/"
   },
   {
    "symbols": [
     "S68.SI"
    ],
-   "date": "2026-09-29",
-   "headline": "SGX CEO Loh Boon Chye's pay rises 7.1% to S$8.37 million in FY2026",
-   "summary": "<cite index=\"45-10\">The STI hit a record 5,801.96 in early September, with DBS, OCBC, and UOB posting weekly gains of 3–4% as markets priced in the hike.</cite> SGX's CEO compensation rose as the exchange delivered strong results.",
+   "date": "2026-09-27",
+   "headline": "SGX CEO Loh Boon Chye's FY2026 pay rises 7.1% to S$8.37 million",
+   "summary": "<cite index=",
    "type": "management",
    "tone": "positive",
-   "source_url": "https://www.straitstimes.com/business/sgx-ceo-loh-boon-chyes-pay-rises-7-to-8-37m-as-exchange-delivers-standout-year"
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/sgx-ceo-loh-boon-chyes-fy2026-pay-rises-7-1-s8-37-million"
   },
   {
    "symbols": [
-    "U11.SI"
+    "C38U.SI"
    ],
-   "date": "2026-09-28",
-   "headline": "UOB loses $1.9 million claim against Stamford Land over rights issue",
-   "summary": "Stamford Land won a $1.9 million claim against UOB over rights issue, after the bank was found grossly negligent.",
-   "type": "legal",
-   "tone": "negative",
-   "source_url": "https://www.straitstimes.com/business/stamford-land-wins-1-9m-claim-against-uob-over-rights-issue-after-bank-found-grossly-negligent"
+   "date": "2026-09-30",
+   "headline": "CICT manager appoints Jennifer Li as new non-executive independent director",
+   "summary": "<cite index=",
+   "type": "management",
+   "tone": "positive",
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/cicts-manager-appoints-jennifer-li-new-non-executive-independent-director"
+  },
+  {
+   "symbols": [
+    "Y92.SI"
+   ],
+   "date": "2026-03-31",
+   "headline": "Thai Beverage 1HFY2026 earnings lower on impairment, spirits growth offsets weak beer sales",
+   "summary": "<cite index=",
+   "type": "earnings",
+   "tone": "mixed",
+   "source_url": "https://sg.finance.yahoo.com/news/thai-beverages-1hfy2026-earnings-lower-050257644.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "date": "2026-08-28",
+   "headline": "Nvidia reports record Q2 FY2026 revenue of $96.2 billion, beats expectations with 106% YoY growth",
+   "summary": "<cite index=",
+   "type": "earnings",
+   "tone": "positive",
+   "source_url": "https://www.kiplinger.com/investing/live/nvidia-earnings-live-updates-and-commentary-august-2026"
+  },
+  {
+   "symbols": [
+    "MSFT"
+   ],
+   "date": "2026-01-30",
+   "headline": "Microsoft posts strong Q4 FY2026 results with sales up 18% YoY and earnings up 23% YoY, Azure up 40%",
+   "summary": "<cite index=",
+   "type": "earnings",
+   "tone": "positive",
+   "source_url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-130100092.html"
+  },
+  {
+   "symbols": [
+    "AAPL"
+   ],
+   "date": "2026-01-30",
+   "headline": "Apple reports record Q2 FY2026 revenue of $143.8 billion but faces supply chain pressures from AI buildout",
+   "summary": "<cite index=",
+   "type": "earnings",
+   "tone": "mixed",
+   "source_url": "https://valueaddvc.com/big-tech-earnings"
+  },
+  {
+   "symbols": [
+    "TSLA"
+   ],
+   "date": "2026-10-01",
+   "headline": "Tesla September performance: automaker stock performance compared to Ford and General Motors",
+   "summary": "Tesla performance in September stock market competition.",
+   "type": "other",
+   "tone": "mixed",
+   "source_url": "https://247wallst.com/investing/2026/09/30/which-automaker-stock-dominated-in-september-tesla-ford-or-general-motors/"
+  },
+  {
+   "symbols": [
+    "META"
+   ],
+   "date": "2026-06-29",
+   "headline": "Meta stock jumps 6% on plans to build cloud computing business rival to AWS, Azure, and Google Cloud",
+   "summary": "<cite index=",
+   "type": "product",
+   "tone": "positive",
+   "source_url": "https://finance.yahoo.com/technology/live/tech-stocks-today-meta-stock-jumps-on-cloud-computing-plans-to-rival-amazon-microsoft-151053436.html"
+  },
+  {
+   "symbols": [
+    "AMZN"
+   ],
+   "date": "2026-09-30",
+   "headline": "Amazon AI capex increase to $125 billion in 2026 signals strong cloud infrastructure demand",
+   "summary": "<cite index=",
+   "type": "guidance",
+   "tone": "positive",
+   "source_url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "date": "2026-07-30",
+   "headline": "Alphabet reports Q2 FY2026 revenue of nearly $120 billion, up 24% YoY with next earnings in late October",
+   "summary": "<cite index=",
+   "type": "earnings",
+   "tone": "positive",
+   "source_url": "https://www.fool.com/investing/stock-market/upcoming-earnings-reports/"
+  },
+  {
+   "symbols": [
+    "C6L.SI"
+   ],
+   "date": "2026-09-30",
+   "headline": "Singapore Airlines launches seasonal sale with fares from S$198, extending network to Madrid and Western Sydney",
+   "summary": "<cite index=",
+   "type": "other",
+   "tone": "positive",
+   "source_url": "https://www.greatdeals.com.sg/2026/09/29/singapore-airlines-flight-deals-october-2026"
+  },
+  {
+   "symbols": [
+    "ES3.SI"
+   ],
+   "date": "2026-09-30",
+   "headline": "STI benchmark drives Singapore market gains as banking stocks lead performance in 2026",
+   "summary": "<cite index=",
+   "type": "other",
+   "tone": "positive",
+   "source_url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html"
+  },
+  {
+   "symbols": [
+    "SPY",
+    "QQQ"
+   ],
+   "date": "2026-09-30",
+   "headline": "S&P 500 and Nasdaq close September strong as tech earnings season winds down",
+   "summary": "Major US indices finish September on positive momentum ahead of Q4 earnings reports.",
+   "type": "macro",
+   "tone": "positive",
+   "source_url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html"
   }
  ],
  "sources": [
   {
-   "url": "https://tech.yahoo.com/ai/articles/nvidia-launches-safety-platform-says-101552564.html",
-   "title": "Nvidia Launches New Safety Platform—Says It Can Prevent AI Agents From Going Rogue",
-   "age": "2 days ago"
+   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html",
+   "title": "DBS, OCBC and UOB Beat the STI in 1H 2026: Here’s What Drove the Rally",
+   "age": "83 days ago"
   },
   {
-   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-ships-ai-safety-063441658.html",
-   "title": "Nvidia (NVDA) Ships an AI Safety Platform After Huang Called Rival Warnings Odd",
-   "age": "6 hours ago"
-  },
-  {
-   "url": "https://www.cnn.com/2026/09/28/business/nvidia-ai-safety-system",
-   "title": "Nvidia launches new tool to keep AI agents from going rogue | CNN Business",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/article/nvidia-launches-ai-safety-platform-after-jensen-huang-calls-anthropic-openai-warnings-odd-103135599.html",
-   "title": "Nvidia launches AI safety platform after Jensen Huang calls Anthropic, OpenAI warnings 'odd'",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.pymnts.com/cybersecurity/2026/nvidia-says-new-safety-platform-would-have-halted-hugging-face-hack/",
-   "title": "Nvidia Says New Safety Platform Would Have Stopped Hugging Face Hack | PYMNTS.com",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/09/28/nvidia-releases.html",
-   "title": "Nvidia Open Agent Safety Platform to stop AI agents from breaking out",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://techcrunch.com/2026/09/28/nvidia-launches-new-platform-for-reining-in-rogue-ai-agents/",
-   "title": "Nvidia launches new platform for reining in rogue AI agents | TechCrunch",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://nvidianews.nvidia.com/news/open-agent-safety-platform",
-   "title": "NVIDIA Launches Open Agent Safety Platform to Secure Agents From Testing to Deployment | NVIDIA Newsroom",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://americanbazaaronline.com/2026/09/28/nvidia-unveils-ai-agent-safety-platform-to-prevent-models-488941/",
-   "title": "Nvidia unveils AI agent safety platform to prevent models from breaking containment",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://townhall.com/news/dmitri-bolt/2026/09/28/nvidia-launches-new-tool-to-stop-ai-from-going-rogue-n2683703",
-   "title": "NVIDIA Just Launched a Market-Based Answer to ‘Rogue’ AI",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.investing.com/news/stock-market-news/deepseek-partners-with-huawei-on-chip-programming-tools-amid-pivot-from-nvidia-4924086",
-   "title": "DeepSeek ties up with Huawei on chip programming tools amid pivot from Nvidia By Investing.com",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://money.usnews.com/investing/news/articles/2026-09-29/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia",
-   "title": "DeepSeek Partners With Huawei to Develop Chip Programming Tools, Reducing Reliance on Nvidia",
-   "age": "10 hours ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/ai/articles/deepseek-ties-huawei-chip-programming-060332061.html",
-   "title": "DeepSeek ties up with Huawei on chip programming tools amid pivot from Nvidia",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/ai/articles/deepseek-unveils-huawei-ai-chip-050726297.html",
-   "title": "DeepSeek Unveils Huawei AI Chip Tools That May Replace Nvidia’s",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.bloomberg.com/news/articles/2026-09-30/deepseek-unveils-huawei-ai-chip-tools-that-may-replace-nvidia-s",
-   "title": "DeepSeek Unveils Huawei AI Chip Tools That May Replace Nvidia’s - Bloomberg",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.cxodigitalpulse.com/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia/",
-   "title": "DeepSeek Partners With Huawei to Develop Chip Programming Tools, Reducing Reliance on Nvidia - CXO Digitalpulse",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://invezz.com/news/2026/09/30/deepseek-partners-with-huawei-on-chip-tools-to-cut-reliance-on-nvidia/",
-   "title": "DeepSeek, Huawei team up on chip tools to cut Nvidia reliance",
-   "age": "2 hours ago"
-  },
-  {
-   "url": "https://parameter.io/deepseek-unveils-huawei-powered-ai-chip-toolkit-in-major-nvidia-nvda-alternative-push/",
-   "title": "DeepSeek Unveils Huawei-Powered AI Chip Toolkit in Major Nvidia (NVDA) Alternative Push - Parameter",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://www.thenews.com.pk/latest/1418156-deepseek-partners-with-huawei-to-build-ai-chip-programming-tools-cutting-nvidia-reliance",
-   "title": "DeepSeek partners with Huawei to build AI chip programming tools, cutting Nvidia reliance | Technology | thenews.com.pk",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.scmp.com/tech/big-tech/article/3369323/apple-leads-china-smartphone-sales-after-launch-iphone-18-pro-can-momentum-last",
-   "title": "Apple leads China smartphone sales after launch of iPhone 18 Pro. Can the momentum last? | South China Morning Post",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://www.benzinga.com/markets/tech/26/09/62074286/is-apples-strategy-paying-off-strong-iphone-18-pro-china-demand-sparks-revenue-upside",
-   "title": "Is Apple's Strategy Paying Off? Strong iPhone 18 Pro China Demand Sparks Revenue Upside - Apple (NASDAQ:A - Benzinga",
-   "age": "1 hour ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/IPhone_Air",
-   "title": "IPhone Air",
-   "age": null
-  },
-  {
-   "url": "https://www.intomobile.com/2026/09/28/iphone-18-pro-sells-1-3-million-units-in-china-in-its-first-week/",
-   "title": "iPhone 18 Pro sells 1.3 million units in China in its first week - IntoMobile",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://ca.investing.com/news/stock-market-news/apple-iphone-18-pro-sales-rise-12-in-china-launch-week--counterpoint-4859144",
-   "title": "Apple iPhone 18 Pro sales rise 12% in China launch week - Counterpoint By Investing.com",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.tradingpedia.com/2026/09/30/apple-leads-china-market-as-iphone-18-pro-sales-jump-12/",
-   "title": "Apple Leads China Market as iPhone 18 Pro Sales Jump 12%",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/IPhone_XR",
-   "title": "IPhone XR",
-   "age": null
-  },
-  {
-   "url": "https://mobidevices.com/en/iphone-18-pro-max-china-sales",
-   "title": "iPhone 18 Pro and Pro Max sales in China reached 1.3 million in the first week",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.inspire2rise.com/apple-iphone-18-pro-dominates-china.html",
-   "title": "iPhone 18 Pro Dominates China: Apple Bounces Back With Huge Sales",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-apple-aapl-must-060818438.html",
-   "title": "Amazon (AMZN) and Apple (AAPL) Must Face a UK Class Action Over Marketplace Sales",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://www.investing.com/news/stock-market-news/apple-amazon-face-uk-consumer-class-action-over-2018-sales-deal-93CH-4919876",
-   "title": "Apple, Amazon face UK consumer class action over 2018 sales deal By Investing.com",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.lawyer-monthly.com/2026/09/apple-and-amazon-face-revived-uk-consumer-claim-over-product-sales/",
-   "title": "Apple and Amazon Face Revived UK Consumer Claim Over Product Sales",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-amazon-face-uk-consumer-103044833.html",
-   "title": "Apple and Amazon Face UK Consumer Lawsuit Over Marketplace Sales",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://9to5mac.com/2026/09/28/apple-and-amazon-face-renewed-uk-antitrust-lawsuit/",
-   "title": "Apple and Amazon face renewed UK antitrust lawsuit - 9to5Mac",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://www.insidermonkey.com/news/amazon-amzn-and-apple-aapl-must-face-a-uk-class-action-over-marketplace-sales-1846409/",
-   "title": "Amazon (AMZN) and Apple (AAPL) Must Face a UK Class Action Over Marketplace Sales - Insider Monkey",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://applemagazine.com/apple-amazon-lawsuit-uk-marketplace/",
-   "title": "Apple Amazon Lawsuit Revived in UK Over Marketplace Restrictions - AppleMagazine",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.globalbankingandfinance.com/apple-amazon-face-revived-uk-consumer-lawsuit-over-product/",
-   "title": "Apple, Amazon Face Revived UK Consumer Lawsuit on Marketplace Sales",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://finwire.io/news/stock-markets-news/apple-amazon-face-uk-consumer-class-action-over-2018-sales-deal",
-   "title": "Apple, Amazon face UK consumer class action over 2018 sales deal | Stock Markets News | finwire.io",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://thesmartinvestor.com.sg/we-analysed-singapores-3-big-banks-heres-which-one-looks-strongest/",
-   "title": "DBS vs OCBC vs UOB: Which Singapore Bank Looks Strongest?",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://www.stashaway.sg/r/dbs-ocbc-uob-singapore-banks-investment-outlook",
-   "title": "DBS, OCBC & UOB Outlook: Dividends, Earnings, Yields, and Valuations of Singapore’s Big-Three Banks [2026 Guide] | StashAway Singapore",
-   "age": "January 14, 2026"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
-   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
-   "age": "August 5, 2026"
-  },
-  {
-   "url": "https://growbeansprout.com/dbs-ocbc-uob-higher-rates-sep-2026",
-   "title": "Fed hikes rates again: What higher interest rates mean for DBS, OCBC and UOB - Growbeansprout.com",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-bank-pays-060000874.html",
-   "title": "S$10,000 in DBS, OCBC or UOB: Which Bank Pays the Most Dividends?",
-   "age": "2 weeks ago"
-  },
-  {
-   "url": "https://www.sgx.com/research-education/market-updates/20250205-upcoming-earnings-reports-dbs-ocbc-and-uob-focus",
-   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus - Singapore Exchange (SGX)",
-   "age": null
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/dbs-ocbc-uob-q2-2026-results/",
-   "title": "DBS, OCBC, UOB Q2 2026 Results: Record Profits (2026)",
-   "age": "August 11, 2026"
+   "url": "https://drwealth.com/why-is-ocbc-stock-beating-dbs-and-uob-in-2026/",
+   "title": "Why Is OCBC Stock Beating DBS and UOB in 2026?",
+   "age": "140 days ago"
   },
   {
    "url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
    "title": "Singapore Banks After the Fed Rate Hike: DBS, OCBC & UOB in Q4 2026",
-   "age": "2 weeks ago"
+   "age": "12 days ago"
   },
   {
-   "url": "https://www.itiger.com/hant/news/1189208007",
+   "url": "https://www.easyglobalbanking.com/singapore-banking/dbs-vs-ocbc-vs-uob-2026-results/",
+   "title": "DBS vs OCBC vs UOB: Best Bank for Clients in 2026?",
+   "age": "40 days ago"
+  },
+  {
+   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-performance-2026",
+   "title": "Singapore Banks Performance 2026 Analysis",
+   "age": null
+  },
+  {
+   "url": "https://fortune.com/asia/2025/08/07/dbs-uob-ocbc-earnings-singapore-banks-tariffs-interest-rates",
+   "title": "dbs uob ocbc earnings singapore banks tariffs interest rates",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/news/1171937414",
+   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/1189208007",
    "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hant/news/1171937414",
+   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
+   "age": null
+  },
+  {
+   "url": "https://mainlymiles.com/2026/01/23/singapore-airlines-announces-schedule-through-to-october-2026/",
+   "title": "Singapore Airlines announces schedule through to October 2026 - Mainly Miles",
+   "age": "235 days ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2025/08/29/singapore-airlines-announces-schedule-through-to-march-2026/",
+   "title": "Singapore Airlines announces schedule through to March 2026 - Mainly Miles",
+   "age": "313 days ago"
+  },
+  {
+   "url": "https://www.aviation24.be/category/airlines/singapore-airlines/",
+   "title": "Singapore Airlines News Room - Latest news and breaking stories - Aviation24.be",
+   "age": "145 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/press-release/",
+   "title": "News releases",
+   "age": "524 days ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/",
+   "title": "Singapore Airlines announces schedule through to March 2027 - Mainly Miles",
+   "age": "9 days ago"
+  },
+  {
+   "url": "https://blog.wego.com/singapore-airlines-flight-status-2026/",
+   "title": "Singapore Airlines Flight Status (September 2026): Routes, Schedule, and Flights Resumption - Wego Travel Blog",
+   "age": "23 days ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2026/01/25/singapore-airlines-business-class-seat-types-by-route-to-october-2026/",
+   "title": "Singapore Airlines Business Class seat types by route to October 2026 - Mainly Miles",
+   "age": "37 days ago"
+  },
+  {
+   "url": "https://www.greatdeals.com.sg/2026/09/29/singapore-airlines-flight-deals-october-2026",
+   "title": "Singapore Airlines Launches Flight Deals From SGD198 to Asia, Australia and Europe, Book by October 7",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://aviationa2z.com/index.php/2026/09/21/singapore-airlines-adds-new-routes-as-europe-capacity-surges/",
+   "title": "Singapore Airlines Adds New Routes as Europe Capacity Surges - Aviation A2Z",
+   "age": "10 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/at/media-centre/press-release",
+   "title": "Featured News Release",
+   "age": null
+  },
+  {
+   "url": "https://dealroom.co/news/157331-keppel-prices-150-million-offshore-renminbi-bond-at-1-95/",
+   "title": "Keppel prices $150 million offshore renminbi bond at 1.95%",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.keppel.com/investor-relations/",
+   "title": "Investor Relations - Keppel - Global asset manager and operator creating solutions for a sustainable future",
+   "age": "75 days ago"
+  },
+  {
+   "url": "https://thestrategystory.com/blog/keppel-swot-analysis-2026",
+   "title": "Keppel SWOT Analysis in 2026 - The Strategy Story",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/thai-beverages-1hfy2026-earnings-lower-050257644.html",
+   "title": "Thai Beverage's 1HFY2026 earnings lower on impairment",
+   "age": "139 days ago"
+  },
+  {
+   "url": "https://drwealth.com/cdl-finally-has-a-plan-to-unlock-value-so-why-did-the-stock-fall-8",
+   "title": "CDL Finally Has a Plan to Unlock Value. So Why Did the Stock Fall 8%?",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/news/company-announcements/thaibev-announces-2024-shareholders-meeting",
+   "title": "thaibev announces 2024 shareholders meeting",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/news/company-announcements/thaibev-announces-shareholder-dialogue-session",
+   "title": "thaibev announces shareholder dialogue session",
+   "age": null
+  },
+  {
+   "url": "https://pl.tradingview.com/news/urn:summary_document_transcript:quartr.com:2342009:0-thai-beverage-public-company-revenue-and-profit-fell-but-beer-profits-surged-2026-outlook-benefits-from-lower-input-costs",
+   "title": "urn:summary document transcript:quartr.com:2342009:0 thai beverage public company revenue and profit fell but beer profits surged 2026 outlook benefits from lower input costs",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/news/global-markets/sgx-shares-capitalland-and-thai-beverage-price-targets",
+   "title": "sgx shares capitalland and thai beverage price targets",
+   "age": null
+  },
+  {
+   "url": "https://be.marketscreener.com/koers/aandeel/THAI-BEVERAGE-6498120/nieuws-andere-talen/",
+   "title": "Andere talen Thai Beverage",
+   "age": null
+  },
+  {
+   "url": "https://www.fool.com/investing/stock-market/upcoming-earnings-reports/",
+   "title": "Earnings Reports of Top Companies: Revenue, Profits & Forecasts",
+   "age": "20 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-130100092.html",
+   "title": "Zacks Investment Ideas feature highlights: Microsoft, NVIDIA and Apple",
+   "age": "9 days ago"
+  },
+  {
+   "url": "https://www.kiplinger.com/investing/live/nvidia-earnings-live-updates-and-commentary-august-2026",
+   "title": "Nvidia Earnings: Updates and Commentary August 2026",
+   "age": "34 days ago"
+  },
+  {
+   "url": "https://www.startuphub.ai/ai-news/artificial-intelligence/2026/nvidia-earnings-preview-apple-s-ai-macs-openai-s-chip-ambitions",
+   "title": "Nvidia Earnings Preview, Apple's AI Macs & OpenAI's…",
+   "age": "36 days ago"
+  },
+  {
+   "url": "https://www.alpha-sense.com/earnings/nvda/",
+   "title": "NVIDIA Corp Earnings - Analysis & Highlights for Q2 2026",
+   "age": "314 days ago"
+  },
+  {
+   "url": "https://valueaddvc.com/big-tech-earnings",
+   "title": "Big Tech Earnings Q2 2026: Apple $143B, Nvidia $81B",
+   "age": "19 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/live/tech-stocks-today-big-tech-earnings-134611080.html",
+   "title": "Tech stocks today: Amazon beats, Apple sinks",
+   "age": "61 days ago"
+  },
+  {
+   "url": "https://investor.nvidia.com/financial-info/financial-reports",
+   "title": "Quarterly Results",
+   "age": null
+  },
+  {
+   "url": "https://www.fxstreet.com/news/microsoft-apple-remain-only-3-trillion-companies-as-nvidia-earnings-push-it-below-threshold-202408291617",
+   "title": "microsoft apple remain only 3 trillion companies as nvidia earnings push it below threshold 202408291617",
+   "age": null
+  },
+  {
+   "url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html",
+   "title": "Big Tech earnings: Meta, Apple, Tesla, Microsoft AI spend in focus",
+   "age": "246 days ago"
+  },
+  {
+   "url": "https://fortune.com/2026/01/11/magnificent-7-stock-market-dominance-cracking-nvidia-microsoft-apple-meta-alphabet-amazon-tesla/",
+   "title": "Magnificent 7’s stock market dominance shows signs of cracking",
+   "age": "262 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/news/prediction-1-unstoppable-stock-join-085000891.html",
+   "title": "Prediction: 1 Unstoppable Stock Will Join Nvidia, Apple, Microsoft, Amazon, Alphabet, and Meta in the $1 Trillion Club In 2026",
+   "age": "341 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/live/tech-stocks-today-meta-stock-jumps-on-cloud-computing-plans-to-rival-amazon-microsoft-151053436.html",
+   "title": "Tech stocks today: Meta stock jumps on cloud computing plans to rival Amazon, Microsoft",
+   "age": "91 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/options/articles/meta-underperforming-every-trillion-dollar-131439350.html",
+   "title": "Meta Is Underperforming Every Trillion-Dollar Stock but Tesla. This Trade Pays You While Wall Street Waits It Out.",
+   "age": "23 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/news/mega-cap-tech-stocks-buy-184500822.html",
+   "title": "Mega-Cap Tech Stocks to Buy for AI Growth: AMZN and META",
+   "age": "705 days ago"
+  },
+  {
+   "url": "https://www.nasdaq.com/articles/should-you-buy-tesla-stock-heading-2026-answer-might-surprise-you",
+   "title": "Should You Buy Tesla Stock Heading Into 2026? The Answer Might Surprise You.",
+   "age": "302 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/quote/AMZN/",
+   "title": "Amazon.com, Inc. (AMZN) Stock Price, News, Quote & History - Yahoo Finance",
+   "age": "7 days ago"
+  },
+  {
+   "url": "https://uk.finance.yahoo.com/news/microsoft-alphabet-meta-apple-amazon-shell-stocks-to-watch-135508016.html",
+   "title": "Stocks to watch this week: Microsoft, Alphabet, Meta, Apple, Amazon and Shell",
+   "age": "341 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/news/cathie-woods-ark-invest-ups-amazon-and-meta-stakes-dumps-tesla",
+   "title": "cathie woods ark invest ups amazon and meta stakes dumps tesla",
    "age": null
   }
  ],
  "leads": [
   {
    "symbols": [
-    "MSFT"
+    "TSLA"
    ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-30T07:00:00Z",
-   "headline": "Semarchy Publishes Intelligent Data Products and Semantic Context to Microsoft Fabric",
-   "url": "https://finance.yahoo.com/technology/ai/articles/semarchy-publishes-intelligent-data-products-070000391.html"
-  },
-  {
-   "symbols": [
-    "MSFT"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-30T06:50:00Z",
-   "headline": "Cygnet.One and The Unlimited Modernize Core Insurance Platform on Microsoft Azure",
-   "url": "https://finance.yahoo.com/technology/articles/cygnet-one-unlimited-modernize-core-065000966.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-30T06:34:41Z",
-   "headline": "Nvidia (NVDA) Ships an AI Safety Platform After Huang Called Rival Warnings Odd",
-   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-ships-ai-safety-063441658.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-09-30T06:25:00Z",
-   "headline": "DeepSeek partners with Huawei to develop chip programming tools, reducing reliance on Nvidia",
-   "url": "https://www.straitstimes.com/business/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia"
-  },
-  {
-   "symbols": [
-    "AAPL",
-    "AMZN"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-30T06:08:18Z",
-   "headline": "Amazon (AMZN) and Apple (AAPL) Must Face a UK Class Action Over Marketplace Sales",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-apple-aapl-must-060818438.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-30T06:03:32Z",
-   "headline": "DeepSeek ties up with Huawei on chip programming tools amid pivot from Nvidia",
-   "url": "https://finance.yahoo.com/technology/ai/articles/deepseek-ties-huawei-chip-programming-060332061.html"
+   "source": "fool.com",
+   "pubDate": "2026-09-30T19:03:00Z",
+   "headline": "3 Robotics Stocks to Buy That Aren't Tesla",
+   "url": "https://www.fool.com/investing/2026/09/30/3-robotics-stocks-to-buy-that-arent-tesla/"
   },
   {
    "symbols": [
     "TSLA"
    ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-09-30T05:46:00Z",
-   "headline": "Zacks Investment Ideas feature highlights: Tesla",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-054600634.html"
+   "source": "247wallst.com",
+   "pubDate": "2026-09-30T18:53:28Z",
+   "headline": "Which Automaker Stock Dominated in September: Tesla, Ford, or General Motors?",
+   "url": "https://247wallst.com/investing/2026/09/30/which-automaker-stock-dominated-in-september-tesla-ford-or-general-motors/"
   },
   {
    "symbols": [
     "AAPL"
    ],
+   "source": "trefis.com",
+   "pubDate": "2026-09-30T18:51:54Z",
+   "headline": "What Is The Case For Waiting On Qualcomm Stock?",
+   "url": "https://www.trefis.com/articles/617167/what-is-the-case-for-waiting-on-qualcomm-stock/2026-09-30"
+  },
+  {
+   "symbols": [
+    "AAPL",
+    "NVDA"
+   ],
+   "source": "thestreet.com",
+   "pubDate": "2026-09-30T18:17:00Z",
+   "headline": "TSMC's next move could ripple far beyond Apple, Nvidia",
+   "url": "https://www.thestreet.com/technology/beyond-nvidia-tsmc-expansion-benefits-chip-toolmakers-amat-lrcx"
+  },
+  {
+   "symbols": [
+    "AMZN"
+   ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-09-30T05:44:40Z",
-   "headline": "Apple iPhone 18 Pro sales rise 12% in China launch week - Counterpoint",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-iphone-18-pro-sales-054440924.html"
+   "pubDate": "2026-09-30T18:12:09Z",
+   "headline": "What Target (TGT)'s Holiday Price Cuts and Premium Brand Push Mean For Shareholders",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/target-tgt-holiday-price-cuts-181209917.html"
+  },
+  {
+   "symbols": [
+    "META"
+   ],
+   "source": "247wallst.com",
+   "pubDate": "2026-09-30T18:12:02Z",
+   "headline": "Unity Software Surges 5% as Traders Weigh Meta Platforms VR Glasses Support; Adobe Rises 3%, Intuit Adds 2%",
+   "url": "https://247wallst.com/investing/2026/09/30/unity-software-surges-5-as-traders-weigh-meta-platforms-vr-glasses-support-adobe-rises-3-intuit-adds-2/"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "source": "bisnow.com",
+   "pubDate": "2026-09-30T18:08:17Z",
+   "headline": "Morningstar To Relocate Global HQ To Renovated Thompson Center",
+   "url": "https://www.bisnow.com/news/chicago/office/morningstar-to-relocate-global-hq-to-renovated-thompson-center"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "fool.com",
+   "pubDate": "2026-09-30T18:03:00Z",
+   "headline": "This AI Stock May Be the Biggest Winner as Enterprise AI Takes Off",
+   "url": "https://www.fool.com/investing/2026/09/30/this-ai-stock-may-be-the-biggest-winner-as-enterpr/"
+  },
+  {
+   "symbols": [
+    "C38U.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-09-30T10:43:07Z",
+   "headline": "CICT’s manager appoints Jennifer Li as new non-executive independent director",
+   "url": "https://www.businesstimes.com.sg/companies-markets/cicts-manager-appoints-jennifer-li-new-non-executive-independent-director"
   },
   {
    "symbols": [
@@ -428,27 +548,17 @@
    "pubDate": "2026-09-29T09:26:04Z",
    "headline": "Number of listed companies an ‘outdated metric’ of Singapore market’s success: SGX chairman",
    "url": "https://www.businesstimes.com.sg/companies-markets/number-listed-companies-outdated-metric-singapore-markets-success-sgx-chairman"
-  },
-  {
-   "symbols": [
-    "U11.SI",
-    "S68.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-09-29T08:35:00Z",
-   "headline": "Stamford Land wins $1.9m claim against UOB over rights issue after bank found grossly negligent",
-   "url": "https://www.straitstimes.com/business/stamford-land-wins-1-9m-claim-against-uob-over-rights-issue-after-bank-found-grossly-negligent"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 39712,
-  "output": 1885,
+  "input": 38677,
+  "output": 2196,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.0991
+  "costUsd": 0.0997
  },
- "createdAt": "2026-09-30T12:54:27.014Z"
+ "createdAt": "2026-10-01T00:25:04.830Z"
 }

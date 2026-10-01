@@ -1,328 +1,377 @@
 {
- "market_summary": "Markets remain split between AI-driven optimism and mounting competitive/regulatory risk. Nvidia's Sept 28 Open Agent Safety Platform launch is a positive but is being offset by fresh (Sept 30) news that DeepSeek is partnering with Huawei to build CUDA alternatives for Ascend chips, a direct long-term threat to Nvidia's software moat. Apple's iPhone 18 Pro is showing strong China demand (12% YoY, 33% share) even as a UK marketplace class-action against Apple/Amazon adds legal overhang. In Singapore, banks have run hard on rate-hike optimism (STI +24.6% YTD) and now look stretched — DBS/OCBC/UOB are all red today after extended multi-month gains — while REITs and industrials with heavy analyst buy ratings (Keppel, CICT) look comparatively less extended.",
+ "market_summary": "US indices closed September near highs on continued AI capex optimism (Amazon guiding $125B 2026 capex) while mega-cap tech leads momentum, with Meta up 25%+ in a month on cloud ambitions. In Singapore, the STI is up 24.6% YTD almost entirely on the back of DBS/OCBC/UOB bank re-rating, leaving banks richly valued near 52-week highs even as NIM compression bites. Rate-sensitive and laggard SGX names (Singtel, CICT, Keppel) trade well below highs despite decent fundamentals, while SGX itself and Tesla show clear negative momentum. Overall risk appetite looks intact but increasingly concentrated in a narrow set of winners, raising mean-reversion risk both ways.",
  "picks": [
+  {
+   "symbol": "META",
+   "stance": "long",
+   "conviction": "high",
+   "horizon": "weeks",
+   "thesis": "Meta has the strongest price momentum on the watchlist (+25.5% 1m, +28.7% 3m) and trades 17% above its 50-day average, with analyst coverage still overwhelmingly bullish (54 buy vs 1 sell) and a consensus target implying further upside. The market is rewarding its pivot into cloud infrastructure as a genuine AWS/Azure competitor.",
+   "news": "Background item (94 days old) on Meta's cloud computing push remains the fundamental driver of the current re-rating, though no fresh catalyst this week — momentum and analyst sentiment are the near-term drivers.",
+   "risks": "Stock is up sharply and extended vs MA50; any disappointment on capex ROI or a broader tech pullback (QQQ reversal) could trigger a fast mean-reversion given 41.8% annualized volatility.",
+   "source_urls": [
+    "https://finance.yahoo.com/technology/live/tech-stocks-today-meta-stock-jumps-on-cloud-computing-plans-to-rival-amazon-microsoft-151053436.html"
+   ],
+   "priceAtPick": 725.18
+  },
+  {
+   "symbol": "NVDA",
+   "stance": "long",
+   "conviction": "high",
+   "horizon": "months",
+   "thesis": "Record Q2 FY2026 revenue (+106% YoY) and continued hyperscaler capex commitments (Amazon's $125B 2026 AI capex guide, 1-Oct-26) support the AI infrastructure buildout that Nvidia sits at the center of. Analyst consensus is overwhelmingly bullish (58 buy/2 hold/1 sell) with a target implying 43.5% upside, among the largest gaps on the watchlist.",
+   "news": "Amazon's Sep 30, 2026 capex guidance reinforces continued AI infrastructure demand that benefits Nvidia; Nvidia's own record Q2 FY2026 earnings (Aug 28, 2026) remain the fundamental backdrop.",
+   "risks": "High beta (1.59) and 37.7% volatility mean sharp drawdowns are possible on any AI capex digestion narrative or export-control headlines; stock already up 38% over 6 months.",
+   "source_urls": [
+    "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html",
+    "https://www.kiplinger.com/investing/live/nvidia-earnings-live-updates-and-commentary-august-2026"
+   ],
+   "priceAtPick": 228.38
+  },
+  {
+   "symbol": "AMZN",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "months",
+   "thesis": "Amazon just guided AI capex up to $125B for 2026, signaling confidence in cloud/AI demand, yet the stock is down 6.5% over the past month and 12.3% from its 52-week high — a disconnect that analysts (57 buy/2 hold/0 sell, 32% implied upside) suggest is a buying opportunity rather than a fundamental problem.",
+   "news": "Sep 30, 2026: Amazon raises 2026 AI capex guidance to $125B, described as signaling strong cloud infrastructure demand.",
+   "risks": "Elevated capex could pressure near-term margins and free cash flow; if cloud growth doesn't keep pace, the market may punish the spending rather than reward it.",
+   "source_urls": [
+    "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html"
+   ],
+   "priceAtPick": 249.15
+  },
+  {
+   "symbol": "Z74.SI",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "months",
+   "thesis": "Singtel is the most oversold large-cap on the SG watchlist, down 18.4% from its 52-week high and -15.5% over 6 months, yet analysts are near-unanimously bullish (13 buy/2 hold/0 sell) with consensus target implying 25% upside — one of the largest gaps on the list. A seasonal fare sale and network expansion (Madrid, Western Sydney) show continued commercial momentum in the regional aviation/telco ecosystem it's tied to via associates.",
+   "news": "Sep 30, 2026: SIA (associate-linked sentiment) launches seasonal sale extending network, a positive read-through for regional travel/telco demand Singtel is exposed to via its associates.",
+   "risks": "Telco sector faces structural pricing pressure; if the current -3.9% MA50 trend deepens on weak earnings from regional associates, the oversold condition could persist longer than expected.",
+   "source_urls": [
+    "https://www.greatdeals.com.sg/2026/09/29/singapore-airlines-flight-deals-october-2026"
+   ],
+   "priceAtPick": 4.25
+  },
   {
    "symbol": "BN4.SI",
    "stance": "long",
    "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "Keppel has pulled back modestly (-2.5% 1m, -1.7% today) despite a heavily bullish analyst base (12 buy/1 hold/2 sell) and 13.9% implied upside to consensus target. No negative catalyst has emerged; the dip looks like broader SGX profit-taking rather than a company-specific issue, offering a re-entry point.",
-   "news": "No company-specific news in the past 10 days; SG financials/industrials have been supported by the broader rate-hike rally narrative (background, SGX/STI item, Sept 29).",
-   "risks": "If the SGX-wide pullback (also seen in DBS/OCBC/UOB/SGX today) is the start of a deeper index correction, Keppel with its higher beta (1.13) and volatility (24.2%) could fall further before recovering.",
+   "thesis": "Keppel just priced a CNH1bn 5-year offshore renminbi bond at a tight 1.95% coupon (Sep 28, 2026), reflecting strong investor confidence and cheap funding access. Analysts are heavily bullish (12 buy/1 hold/2 sell) with 13.9% implied upside, while the stock is down modestly over 1-3 months, offering an entry point.",
+   "news": "Sep 28, 2026: Keppel prices CNH1bn 5-year offshore RMB bond at 1.95% coupon, a sign of strong credit demand and funding flexibility.",
+   "risks": "Elevated volatility (24.2% annualized) and beta of 1.13 mean the stock is sensitive to broader risk-off moves; the bond deal itself is a financing event, not a fundamental earnings catalyst.",
    "source_urls": [
-    "https://www.straitstimes.com/business/sgx-ceo-loh-boon-chyes-pay-rises-7-to-8-37m-as-exchange-delivers-standout-year"
+    "https://dealroom.co/news/157331-keppel-prices-150-million-offshore-renminbi-bond-at-1-95/"
    ],
    "priceAtPick": 11.28
   },
   {
    "symbol": "C38U.SI",
    "stance": "long",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "CICT shows the most bullish analyst skew on the watchlist (13 buy/3 hold/0 sell, 20.3% implied upside) and elevated relative volume (2.1x 20-day average) suggests accumulation even as price sits 12% below its 52w high and below both MAs. This combination of heavy buy consensus plus unusual volume on a laggard REIT is a reasonable contrarian long.",
-   "news": "No direct news catalyst found; this call rests on the analyst consensus and volume signal in the price data rather than a headline.",
-   "risks": "Singapore REITs are rate-sensitive; if the rate-hike narrative driving bank strength persists, higher-for-longer rates could keep pressuring REIT valuations regardless of analyst targets.",
-   "source_urls": [
-    "https://www.straitstimes.com/business/sgx-ceo-loh-boon-chyes-pay-rises-7-to-8-37m-as-exchange-delivers-standout-year"
-   ],
-   "priceAtPick": 2.23
-  },
-  {
-   "symbol": "AAPL",
-   "stance": "long",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "Apple sold off -2.7% today despite genuinely strong iPhone 18 Pro China launch data (12% YoY unit growth, 33% share) reported the same day — the drop looks driven by the UK class-action headline (Sept 28) rather than fundamentals. The China sales strength is the more durable, revenue-relevant data point for the next few quarters.",
-   "news": "iPhone 18 Pro China launch-week sales +12% YoY, 33% share (Yahoo Finance, Sept 30); UK Competition Appeal Tribunal allowed a £289-306m class action against Apple/Amazon to proceed (Yahoo Finance, Sept 28).",
-   "risks": "Consensus analyst target is essentially flat to current price (-0.4% implied), so this is a tactical bounce trade, not a re-rating call; further negative legal/regulatory headlines could keep sentiment weak.",
-   "source_urls": [
-    "https://finance.yahoo.com/markets/stocks/articles/apple-iphone-18-pro-sales-054440924.html",
-    "https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-apple-aapl-must-060818438.html"
-   ],
-   "priceAtPick": 329.4
-  },
-  {
-   "symbol": "META",
-   "stance": "long",
    "conviction": "low",
    "horizon": "weeks",
-   "thesis": "Meta has the strongest price momentum on the watchlist (+27.8% 1m, +3.2% today, vs MA50 +19.4%) with a large buy-heavy analyst base (54 buy/7 hold/1 sell) and 7.5% remaining upside to target even after the run. This is a momentum continuation trade in the absence of contrary news.",
-   "news": "No specific Meta headline surfaced in this news cycle; the move appears to be part of the broader AI-stock volatility described in the market summary rather than a discrete catalyst.",
-   "risks": "With no fresh news backing the rally and volatility at 41.8%, a sharp reversal is plausible if AI-sector sentiment turns (as it partly has for Nvidia on the DeepSeek/Huawei news); this is a lower-conviction, news-thin call.",
+   "thesis": "CICT shows unusually high relative volume (2.1x 20-day average) alongside a new independent director appointment, and trades 12.2% below its 52-week high with 13 buy/3 hold/0 sell ratings and 20% implied upside — suggesting accumulation despite recent weakness.",
+   "news": "Sep 30, 2026: CICT's manager appoints Jennifer Li as new non-executive independent director, a routine but stabilizing governance update.",
+   "risks": "REITs remain rate-sensitive; the governance news is not a strong fundamental catalyst, and continued softness (-5.1% 1m) could persist if rates stay elevated.",
    "source_urls": [
-    "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-ships-ai-safety-063441658.html"
+    "https://www.businesstimes.com.sg/companies-markets/cicts-manager-appoints-jennifer-li-new-non-executive-independent-director"
    ],
-   "priceAtPick": 738.79
+   "priceAtPick": 2.23
   },
   {
    "symbol": "O39.SI",
    "stance": "short",
    "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "OCBC is up 94.6% over the past year and 30.5% above its 200-day average, among the most extended of the SGX banks, yet its consensus analyst target (S$31.53) sits slightly below the current price (S$31.99), implying -1.4% expected return. Combined with today's -0.5% decline and a broader SG bank pullback, this looks like the most stretched name to fade within the rate-hike rally.",
-   "news": "STI hit a record high in early September on bank-rally strength tied to September rate-hike prospects (Straits Times, Sept 29, background); no new positive catalyst since.",
-   "risks": "If the SG rate-hike/bank-rally narrative continues and OCBC's upcoming results beat expectations, the stock could keep grinding higher regardless of the stretched technical picture.",
+   "thesis": "OCBC has rallied 94.6% over the past year and sits near its 52-week high, but consensus analyst target is actually below the current price (-1.4% implied downside) and ratings are split (8 buy/7 hold/2 sell) even as NIM compression is flagged as an ongoing headwind only partly offset by wealth management strength.",
+   "news": "Sep 19, 2026: Singapore banks' NIM compression is being offset by wealth management strength, but the offset is only partial, and OCBC's valuation now looks stretched relative to peers.",
+   "risks": "STI bank rally has been persistent all year; any further rate cuts or wealth management beat could keep pushing the stock higher despite stretched valuation.",
    "source_urls": [
-    "https://www.straitstimes.com/business/sgx-ceo-loh-boon-chyes-pay-rises-7-to-8-37m-as-exchange-delivers-standout-year"
+    "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
+    "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html"
    ],
    "priceAtPick": 31.99
   },
   {
-   "symbol": "NVDA",
+   "symbol": "S68.SI",
    "stance": "short",
    "conviction": "low",
    "horizon": "weeks",
-   "thesis": "Today's news that DeepSeek is partnering with Huawei to build TileLang, a CUDA alternative for Ascend chips, is a fresh and structurally important threat to Nvidia's software moat in China, even as the positive Open Agent Safety Platform launch (Sept 28) gets more headline attention. The stock is only down 0.7% today, suggesting the market has not yet fully digested the competitive risk, which could weigh over coming weeks even as Nvidia's near-term US demand story stays intact.",
-   "news": "DeepSeek partners with Huawei on chip programming tools (TileLang) to reduce reliance on Nvidia, reported Sept 30, Straits Times; Nvidia Open Agent Safety Platform launched with 100+ partners, Sept 28, Yahoo Finance.",
-   "risks": "Nvidia's near-term revenue is overwhelmingly non-China and driven by hyperscaler AI capex, so this China-specific software threat may take years to materially dent earnings; consensus analyst target implies 44% upside, and any strong earnings beat would overwhelm this thesis quickly.",
+   "thesis": "SGX is down 9.4% over the past month and trading 6.4% below its 50-day average despite a still-strong 1-year return, suggesting momentum has turned negative even as the CEO's pay package rose 7.1% — an optics headwind amid underperformance.",
+   "news": "Sep 27, 2026: SGX CEO Loh Boon Chye's FY2026 pay rises 7.1% to S$8.37 million, drawing attention at a time the stock is underperforming the broader STI rally.",
+   "risks": "SGX benefits structurally from higher trading volumes during volatile markets; a pickup in regional trading activity could quickly reverse the recent weakness.",
    "source_urls": [
-    "https://www.straitstimes.com/business/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia",
-    "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-ships-ai-safety-063441658.html"
+    "https://www.businesstimes.com.sg/companies-markets/sgx-ceo-loh-boon-chyes-fy2026-pay-rises-7-1-s8-37-million"
    ],
-   "priceAtPick": 227.21
+   "priceAtPick": 22.61
+  },
+  {
+   "symbol": "TSLA",
+   "stance": "short",
+   "conviction": "low",
+   "horizon": "weeks",
+   "thesis": "Tesla is down 15.6% over 3 months and 27.6% from its 52-week high, with analyst ratings split nearly evenly (19 buy/20 hold/4 sell) and high volatility (46.4% annualized) reflecting genuine uncertainty about competitive positioning versus Ford and GM heading into Q4.",
+   "news": "Oct 1, 2026: September automaker performance comparison piece frames Tesla against Ford/GM with mixed tone, reflecting ongoing competitive pressure narrative.",
+   "risks": "Tesla is prone to sharp short squeezes on delivery beats or AI/robotaxi headlines; high beta (1.82) means this short can move against the thesis quickly.",
+   "source_urls": [
+    "https://247wallst.com/investing/2026/09/30/which-automaker-stock-dominated-in-september-tesla-ford-or-general-motors/"
+   ],
+   "priceAtPick": 354.81
   }
  ],
  "sources": [
   {
-   "url": "https://tech.yahoo.com/ai/articles/nvidia-launches-safety-platform-says-101552564.html",
-   "title": "Nvidia Launches New Safety Platform—Says It Can Prevent AI Agents From Going Rogue",
-   "age": "2 days ago"
+   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html",
+   "title": "DBS, OCBC and UOB Beat the STI in 1H 2026: Here’s What Drove the Rally",
+   "age": "83 days ago"
   },
   {
-   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-ships-ai-safety-063441658.html",
-   "title": "Nvidia (NVDA) Ships an AI Safety Platform After Huang Called Rival Warnings Odd",
-   "age": "6 hours ago"
-  },
-  {
-   "url": "https://www.cnn.com/2026/09/28/business/nvidia-ai-safety-system",
-   "title": "Nvidia launches new tool to keep AI agents from going rogue | CNN Business",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/article/nvidia-launches-ai-safety-platform-after-jensen-huang-calls-anthropic-openai-warnings-odd-103135599.html",
-   "title": "Nvidia launches AI safety platform after Jensen Huang calls Anthropic, OpenAI warnings 'odd'",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.pymnts.com/cybersecurity/2026/nvidia-says-new-safety-platform-would-have-halted-hugging-face-hack/",
-   "title": "Nvidia Says New Safety Platform Would Have Stopped Hugging Face Hack | PYMNTS.com",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/09/28/nvidia-releases.html",
-   "title": "Nvidia Open Agent Safety Platform to stop AI agents from breaking out",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://techcrunch.com/2026/09/28/nvidia-launches-new-platform-for-reining-in-rogue-ai-agents/",
-   "title": "Nvidia launches new platform for reining in rogue AI agents | TechCrunch",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://nvidianews.nvidia.com/news/open-agent-safety-platform",
-   "title": "NVIDIA Launches Open Agent Safety Platform to Secure Agents From Testing to Deployment | NVIDIA Newsroom",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://americanbazaaronline.com/2026/09/28/nvidia-unveils-ai-agent-safety-platform-to-prevent-models-488941/",
-   "title": "Nvidia unveils AI agent safety platform to prevent models from breaking containment",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://townhall.com/news/dmitri-bolt/2026/09/28/nvidia-launches-new-tool-to-stop-ai-from-going-rogue-n2683703",
-   "title": "NVIDIA Just Launched a Market-Based Answer to ‘Rogue’ AI",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.investing.com/news/stock-market-news/deepseek-partners-with-huawei-on-chip-programming-tools-amid-pivot-from-nvidia-4924086",
-   "title": "DeepSeek ties up with Huawei on chip programming tools amid pivot from Nvidia By Investing.com",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://money.usnews.com/investing/news/articles/2026-09-29/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia",
-   "title": "DeepSeek Partners With Huawei to Develop Chip Programming Tools, Reducing Reliance on Nvidia",
-   "age": "10 hours ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/ai/articles/deepseek-ties-huawei-chip-programming-060332061.html",
-   "title": "DeepSeek ties up with Huawei on chip programming tools amid pivot from Nvidia",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/ai/articles/deepseek-unveils-huawei-ai-chip-050726297.html",
-   "title": "DeepSeek Unveils Huawei AI Chip Tools That May Replace Nvidia’s",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.bloomberg.com/news/articles/2026-09-30/deepseek-unveils-huawei-ai-chip-tools-that-may-replace-nvidia-s",
-   "title": "DeepSeek Unveils Huawei AI Chip Tools That May Replace Nvidia’s - Bloomberg",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.cxodigitalpulse.com/deepseek-partners-with-huawei-to-develop-chip-programming-tools-reducing-reliance-on-nvidia/",
-   "title": "DeepSeek Partners With Huawei to Develop Chip Programming Tools, Reducing Reliance on Nvidia - CXO Digitalpulse",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://invezz.com/news/2026/09/30/deepseek-partners-with-huawei-on-chip-tools-to-cut-reliance-on-nvidia/",
-   "title": "DeepSeek, Huawei team up on chip tools to cut Nvidia reliance",
-   "age": "2 hours ago"
-  },
-  {
-   "url": "https://parameter.io/deepseek-unveils-huawei-powered-ai-chip-toolkit-in-major-nvidia-nvda-alternative-push/",
-   "title": "DeepSeek Unveils Huawei-Powered AI Chip Toolkit in Major Nvidia (NVDA) Alternative Push - Parameter",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://www.thenews.com.pk/latest/1418156-deepseek-partners-with-huawei-to-build-ai-chip-programming-tools-cutting-nvidia-reliance",
-   "title": "DeepSeek partners with Huawei to build AI chip programming tools, cutting Nvidia reliance | Technology | thenews.com.pk",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.scmp.com/tech/big-tech/article/3369323/apple-leads-china-smartphone-sales-after-launch-iphone-18-pro-can-momentum-last",
-   "title": "Apple leads China smartphone sales after launch of iPhone 18 Pro. Can the momentum last? | South China Morning Post",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://www.benzinga.com/markets/tech/26/09/62074286/is-apples-strategy-paying-off-strong-iphone-18-pro-china-demand-sparks-revenue-upside",
-   "title": "Is Apple's Strategy Paying Off? Strong iPhone 18 Pro China Demand Sparks Revenue Upside - Apple (NASDAQ:A - Benzinga",
-   "age": "1 hour ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/IPhone_Air",
-   "title": "IPhone Air",
-   "age": null
-  },
-  {
-   "url": "https://www.intomobile.com/2026/09/28/iphone-18-pro-sells-1-3-million-units-in-china-in-its-first-week/",
-   "title": "iPhone 18 Pro sells 1.3 million units in China in its first week - IntoMobile",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://ca.investing.com/news/stock-market-news/apple-iphone-18-pro-sales-rise-12-in-china-launch-week--counterpoint-4859144",
-   "title": "Apple iPhone 18 Pro sales rise 12% in China launch week - Counterpoint By Investing.com",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://www.tradingpedia.com/2026/09/30/apple-leads-china-market-as-iphone-18-pro-sales-jump-12/",
-   "title": "Apple Leads China Market as iPhone 18 Pro Sales Jump 12%",
-   "age": "4 hours ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/IPhone_XR",
-   "title": "IPhone XR",
-   "age": null
-  },
-  {
-   "url": "https://mobidevices.com/en/iphone-18-pro-max-china-sales",
-   "title": "iPhone 18 Pro and Pro Max sales in China reached 1.3 million in the first week",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.inspire2rise.com/apple-iphone-18-pro-dominates-china.html",
-   "title": "iPhone 18 Pro Dominates China: Apple Bounces Back With Huge Sales",
-   "age": "8 hours ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/amazon-amzn-apple-aapl-must-060818438.html",
-   "title": "Amazon (AMZN) and Apple (AAPL) Must Face a UK Class Action Over Marketplace Sales",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://www.investing.com/news/stock-market-news/apple-amazon-face-uk-consumer-class-action-over-2018-sales-deal-93CH-4919876",
-   "title": "Apple, Amazon face UK consumer class action over 2018 sales deal By Investing.com",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.lawyer-monthly.com/2026/09/apple-and-amazon-face-revived-uk-consumer-claim-over-product-sales/",
-   "title": "Apple and Amazon Face Revived UK Consumer Claim Over Product Sales",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-amazon-face-uk-consumer-103044833.html",
-   "title": "Apple and Amazon Face UK Consumer Lawsuit Over Marketplace Sales",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://9to5mac.com/2026/09/28/apple-and-amazon-face-renewed-uk-antitrust-lawsuit/",
-   "title": "Apple and Amazon face renewed UK antitrust lawsuit - 9to5Mac",
-   "age": "1 day ago"
-  },
-  {
-   "url": "https://www.insidermonkey.com/news/amazon-amzn-and-apple-aapl-must-face-a-uk-class-action-over-marketplace-sales-1846409/",
-   "title": "Amazon (AMZN) and Apple (AAPL) Must Face a UK Class Action Over Marketplace Sales - Insider Monkey",
-   "age": "7 hours ago"
-  },
-  {
-   "url": "https://applemagazine.com/apple-amazon-lawsuit-uk-marketplace/",
-   "title": "Apple Amazon Lawsuit Revived in UK Over Marketplace Restrictions - AppleMagazine",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.globalbankingandfinance.com/apple-amazon-face-revived-uk-consumer-lawsuit-over-product/",
-   "title": "Apple, Amazon Face Revived UK Consumer Lawsuit on Marketplace Sales",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://finwire.io/news/stock-markets-news/apple-amazon-face-uk-consumer-class-action-over-2018-sales-deal",
-   "title": "Apple, Amazon face UK consumer class action over 2018 sales deal | Stock Markets News | finwire.io",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://thesmartinvestor.com.sg/we-analysed-singapores-3-big-banks-heres-which-one-looks-strongest/",
-   "title": "DBS vs OCBC vs UOB: Which Singapore Bank Looks Strongest?",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://www.stashaway.sg/r/dbs-ocbc-uob-singapore-banks-investment-outlook",
-   "title": "DBS, OCBC & UOB Outlook: Dividends, Earnings, Yields, and Valuations of Singapore’s Big-Three Banks [2026 Guide] | StashAway Singapore",
-   "age": "January 14, 2026"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
-   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
-   "age": "August 5, 2026"
-  },
-  {
-   "url": "https://growbeansprout.com/dbs-ocbc-uob-higher-rates-sep-2026",
-   "title": "Fed hikes rates again: What higher interest rates mean for DBS, OCBC and UOB - Growbeansprout.com",
-   "age": "1 week ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-bank-pays-060000874.html",
-   "title": "S$10,000 in DBS, OCBC or UOB: Which Bank Pays the Most Dividends?",
-   "age": "2 weeks ago"
-  },
-  {
-   "url": "https://www.sgx.com/research-education/market-updates/20250205-upcoming-earnings-reports-dbs-ocbc-and-uob-focus",
-   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus - Singapore Exchange (SGX)",
-   "age": null
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/dbs-ocbc-uob-q2-2026-results/",
-   "title": "DBS, OCBC, UOB Q2 2026 Results: Record Profits (2026)",
-   "age": "August 11, 2026"
+   "url": "https://drwealth.com/why-is-ocbc-stock-beating-dbs-and-uob-in-2026/",
+   "title": "Why Is OCBC Stock Beating DBS and UOB in 2026?",
+   "age": "140 days ago"
   },
   {
    "url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
    "title": "Singapore Banks After the Fed Rate Hike: DBS, OCBC & UOB in Q4 2026",
-   "age": "2 weeks ago"
+   "age": "12 days ago"
   },
   {
-   "url": "https://www.itiger.com/hant/news/1189208007",
+   "url": "https://www.easyglobalbanking.com/singapore-banking/dbs-vs-ocbc-vs-uob-2026-results/",
+   "title": "DBS vs OCBC vs UOB: Best Bank for Clients in 2026?",
+   "age": "40 days ago"
+  },
+  {
+   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-performance-2026",
+   "title": "Singapore Banks Performance 2026 Analysis",
+   "age": null
+  },
+  {
+   "url": "https://fortune.com/asia/2025/08/07/dbs-uob-ocbc-earnings-singapore-banks-tariffs-interest-rates",
+   "title": "dbs uob ocbc earnings singapore banks tariffs interest rates",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/news/1171937414",
+   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/1189208007",
    "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hant/news/1171937414",
+   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
+   "age": null
+  },
+  {
+   "url": "https://mainlymiles.com/2026/01/23/singapore-airlines-announces-schedule-through-to-october-2026/",
+   "title": "Singapore Airlines announces schedule through to October 2026 - Mainly Miles",
+   "age": "235 days ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2025/08/29/singapore-airlines-announces-schedule-through-to-march-2026/",
+   "title": "Singapore Airlines announces schedule through to March 2026 - Mainly Miles",
+   "age": "313 days ago"
+  },
+  {
+   "url": "https://www.aviation24.be/category/airlines/singapore-airlines/",
+   "title": "Singapore Airlines News Room - Latest news and breaking stories - Aviation24.be",
+   "age": "145 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/press-release/",
+   "title": "News releases",
+   "age": "524 days ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/",
+   "title": "Singapore Airlines announces schedule through to March 2027 - Mainly Miles",
+   "age": "9 days ago"
+  },
+  {
+   "url": "https://blog.wego.com/singapore-airlines-flight-status-2026/",
+   "title": "Singapore Airlines Flight Status (September 2026): Routes, Schedule, and Flights Resumption - Wego Travel Blog",
+   "age": "23 days ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2026/01/25/singapore-airlines-business-class-seat-types-by-route-to-october-2026/",
+   "title": "Singapore Airlines Business Class seat types by route to October 2026 - Mainly Miles",
+   "age": "37 days ago"
+  },
+  {
+   "url": "https://www.greatdeals.com.sg/2026/09/29/singapore-airlines-flight-deals-october-2026",
+   "title": "Singapore Airlines Launches Flight Deals From SGD198 to Asia, Australia and Europe, Book by October 7",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://aviationa2z.com/index.php/2026/09/21/singapore-airlines-adds-new-routes-as-europe-capacity-surges/",
+   "title": "Singapore Airlines Adds New Routes as Europe Capacity Surges - Aviation A2Z",
+   "age": "10 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/at/media-centre/press-release",
+   "title": "Featured News Release",
+   "age": null
+  },
+  {
+   "url": "https://dealroom.co/news/157331-keppel-prices-150-million-offshore-renminbi-bond-at-1-95/",
+   "title": "Keppel prices $150 million offshore renminbi bond at 1.95%",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.keppel.com/investor-relations/",
+   "title": "Investor Relations - Keppel - Global asset manager and operator creating solutions for a sustainable future",
+   "age": "75 days ago"
+  },
+  {
+   "url": "https://thestrategystory.com/blog/keppel-swot-analysis-2026",
+   "title": "Keppel SWOT Analysis in 2026 - The Strategy Story",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/thai-beverages-1hfy2026-earnings-lower-050257644.html",
+   "title": "Thai Beverage's 1HFY2026 earnings lower on impairment",
+   "age": "139 days ago"
+  },
+  {
+   "url": "https://drwealth.com/cdl-finally-has-a-plan-to-unlock-value-so-why-did-the-stock-fall-8",
+   "title": "CDL Finally Has a Plan to Unlock Value. So Why Did the Stock Fall 8%?",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/news/company-announcements/thaibev-announces-2024-shareholders-meeting",
+   "title": "thaibev announces 2024 shareholders meeting",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/news/company-announcements/thaibev-announces-shareholder-dialogue-session",
+   "title": "thaibev announces shareholder dialogue session",
+   "age": null
+  },
+  {
+   "url": "https://pl.tradingview.com/news/urn:summary_document_transcript:quartr.com:2342009:0-thai-beverage-public-company-revenue-and-profit-fell-but-beer-profits-surged-2026-outlook-benefits-from-lower-input-costs",
+   "title": "urn:summary document transcript:quartr.com:2342009:0 thai beverage public company revenue and profit fell but beer profits surged 2026 outlook benefits from lower input costs",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/news/global-markets/sgx-shares-capitalland-and-thai-beverage-price-targets",
+   "title": "sgx shares capitalland and thai beverage price targets",
+   "age": null
+  },
+  {
+   "url": "https://be.marketscreener.com/koers/aandeel/THAI-BEVERAGE-6498120/nieuws-andere-talen/",
+   "title": "Andere talen Thai Beverage",
+   "age": null
+  },
+  {
+   "url": "https://www.fool.com/investing/stock-market/upcoming-earnings-reports/",
+   "title": "Earnings Reports of Top Companies: Revenue, Profits & Forecasts",
+   "age": "20 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-130100092.html",
+   "title": "Zacks Investment Ideas feature highlights: Microsoft, NVIDIA and Apple",
+   "age": "9 days ago"
+  },
+  {
+   "url": "https://www.kiplinger.com/investing/live/nvidia-earnings-live-updates-and-commentary-august-2026",
+   "title": "Nvidia Earnings: Updates and Commentary August 2026",
+   "age": "34 days ago"
+  },
+  {
+   "url": "https://www.startuphub.ai/ai-news/artificial-intelligence/2026/nvidia-earnings-preview-apple-s-ai-macs-openai-s-chip-ambitions",
+   "title": "Nvidia Earnings Preview, Apple's AI Macs & OpenAI's…",
+   "age": "36 days ago"
+  },
+  {
+   "url": "https://www.alpha-sense.com/earnings/nvda/",
+   "title": "NVIDIA Corp Earnings - Analysis & Highlights for Q2 2026",
+   "age": "314 days ago"
+  },
+  {
+   "url": "https://valueaddvc.com/big-tech-earnings",
+   "title": "Big Tech Earnings Q2 2026: Apple $143B, Nvidia $81B",
+   "age": "19 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/live/tech-stocks-today-big-tech-earnings-134611080.html",
+   "title": "Tech stocks today: Amazon beats, Apple sinks",
+   "age": "61 days ago"
+  },
+  {
+   "url": "https://investor.nvidia.com/financial-info/financial-reports",
+   "title": "Quarterly Results",
+   "age": null
+  },
+  {
+   "url": "https://www.fxstreet.com/news/microsoft-apple-remain-only-3-trillion-companies-as-nvidia-earnings-push-it-below-threshold-202408291617",
+   "title": "microsoft apple remain only 3 trillion companies as nvidia earnings push it below threshold 202408291617",
+   "age": null
+  },
+  {
+   "url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html",
+   "title": "Big Tech earnings: Meta, Apple, Tesla, Microsoft AI spend in focus",
+   "age": "246 days ago"
+  },
+  {
+   "url": "https://fortune.com/2026/01/11/magnificent-7-stock-market-dominance-cracking-nvidia-microsoft-apple-meta-alphabet-amazon-tesla/",
+   "title": "Magnificent 7’s stock market dominance shows signs of cracking",
+   "age": "262 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/news/prediction-1-unstoppable-stock-join-085000891.html",
+   "title": "Prediction: 1 Unstoppable Stock Will Join Nvidia, Apple, Microsoft, Amazon, Alphabet, and Meta in the $1 Trillion Club In 2026",
+   "age": "341 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/live/tech-stocks-today-meta-stock-jumps-on-cloud-computing-plans-to-rival-amazon-microsoft-151053436.html",
+   "title": "Tech stocks today: Meta stock jumps on cloud computing plans to rival Amazon, Microsoft",
+   "age": "91 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/options/articles/meta-underperforming-every-trillion-dollar-131439350.html",
+   "title": "Meta Is Underperforming Every Trillion-Dollar Stock but Tesla. This Trade Pays You While Wall Street Waits It Out.",
+   "age": "23 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/news/mega-cap-tech-stocks-buy-184500822.html",
+   "title": "Mega-Cap Tech Stocks to Buy for AI Growth: AMZN and META",
+   "age": "705 days ago"
+  },
+  {
+   "url": "https://www.nasdaq.com/articles/should-you-buy-tesla-stock-heading-2026-answer-might-surprise-you",
+   "title": "Should You Buy Tesla Stock Heading Into 2026? The Answer Might Surprise You.",
+   "age": "302 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/quote/AMZN/",
+   "title": "Amazon.com, Inc. (AMZN) Stock Price, News, Quote & History - Yahoo Finance",
+   "age": "7 days ago"
+  },
+  {
+   "url": "https://uk.finance.yahoo.com/news/microsoft-alphabet-meta-apple-amazon-shell-stocks-to-watch-135508016.html",
+   "title": "Stocks to watch this week: Microsoft, Alphabet, Meta, Apple, Amazon and Shell",
+   "age": "341 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/news/cathie-woods-ark-invest-ups-amazon-and-meta-stakes-dumps-tesla",
+   "title": "cathie woods ark invest ups amazon and meta stakes dumps tesla",
    "age": null
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 48754,
-  "output": 6004,
+  "input": 48205,
+  "output": 6443,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1584
+  "costUsd": 0.1612
  },
- "createdAt": "2026-09-30T12:54:27.014Z"
+ "createdAt": "2026-10-01T00:25:04.830Z"
 }
