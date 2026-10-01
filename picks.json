@@ -1,317 +1,326 @@
 {
- "market_summary": "Markets are being shaped by AI-infrastructure capex deals (Amazon-Constellation nuclear PPA), a reminder that Big Tech's aggressive tax engineering around AI data centers is drawing regulatory scrutiny (Meta/IRS), and a geopolitical overhang on Gulf-region air travel pressuring Singapore Airlines/Scoot through December. SGX banks remain near 52-week highs after a strong 1-year run, leaving little room for further re-rating per analyst targets, while Singtel and Keppel screen cheap relative to consensus targets despite soft recent momentum. US megacap tech continues to re-rate on AI capex optimism (NVDA, AMZN, MSFT), though some names (AAPL, META) face idiosyncratic headline risk that could cause near-term pullbacks even as the broader trend stays up.",
+ "market_summary": "US large-cap tech continues to grind higher on AI optimism (Gemini 4 Argon launch, broad Nasdaq strength) even as legal and governance overhangs build—Alphabet faces a fresh $3.2B ad-tech damages ruling and Microsoft is seeing senior executive churn amid its AI reorg. Tesla remains the standout underperformer, down ~20-25% YTD as the pure-play EV trade continues to de-rate versus legacy autos and the broader tape. Berkshire's leadership transition (Buffett to chairman emeritus) is more symbolic than fundamental for now, with the stock already flat/range-bound. In Singapore, banks (DBS/OCBC/UOB) have had a strong run and sit near 52-week highs with limited analyst upside left, while SGX and some REITs/telcos have pulled back from highs, creating a more mixed, value-vs-momentum picture locally.",
  "picks": [
   {
-   "symbol": "AMZN",
+   "symbol": "NVDA",
    "stance": "long",
    "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Amazon just signed a 20-year, $3B nuclear power deal with Constellation Energy to secure 690MW for AI data centers, directly addressing the power-constraint bottleneck that has worried investors about AWS/AI capacity growth. Stock is down 4.1% over 1 month and 12.3% off its 52w high, giving room to re-rate on this positive, concrete infrastructure commitment. Analyst consensus is overwhelmingly bullish (57 buy/2 hold) with 32% implied upside to target.",
-   "news": "Amazon signed a 20-year nuclear PPA with Constellation Energy for 690MW, enabling $3B of new capacity investment at Calvert Cliffs (2026-10-01).",
-   "risks": "If AI capex spending continues to compress margins without clear revenue payoff, or if broader tech multiples de-rate on rate worries, the stock could stay range-bound despite positive news. Deal benefits are multi-year, not immediate earnings drivers.",
+   "thesis": "Nvidia remains the single best-positioned name on persistent AI capex momentum: price is up ~18.5% over 3 months and only 2% off its 52-week high, with 58 of 61 analysts rating it buy and consensus target implying ~42% upside. The broader AI-agent narrative (per market summary) and new flagship model launches from competitors like Google only reinforce demand for Nvidia's compute layer rather than threaten it.",
+   "news": "Market attention has turned to personal AI agents as the next frontier, with investor focus shifting beyond language model capabilities (background, as of overall market summary); Google unveiled Gemini 4 Argon on 2026-10-01, underscoring continued AI arms-race capex that benefits GPU suppliers.",
+   "risks": "Any signs of AI capex digestion, margin compression from custom silicon competition (Google TPUs, custom ASICs), or a broad tech multiple de-rating would hit this high-beta (1.59) name hardest.",
    "source_urls": [
-    "https://www.world-nuclear-news.org/articles/constellation-amazon-agree-nuclear-focused-power-purchase-deal"
+    "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/"
    ],
-   "priceAtPick": 249.15
+   "priceAtPick": 230.86
   },
   {
-   "symbol": "META",
-   "stance": "short",
+   "symbol": "MSFT",
+   "stance": "long",
    "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "Meta fell 1.8% today on news the IRS is challenging $355M in research tax credits tied to Zuckerberg's stock options, and scrutiny is widening given research credits ballooned from $700M (2023) to $3.9B (2025) via aggressive classification of AI data centers as 'pilot experiments.' The stock is also extended, up 26.7% in a month and 16.8% above its 50-day MA, making it vulnerable to a pullback on tax/legal overhang even though analysts remain broadly bullish longer-term.",
-   "news": "IRS seeking to claw back $355M in R&D tax credits from Meta's 2012-13 Zuckerberg stock-option compensation, with total research credits surging to $3.9B in 2025, raising scrutiny (2026-09-30).",
-   "risks": "Tax disputes of this nature often take years to resolve and may have limited near-term earnings impact; if Meta's AI products (ad targeting, Llama monetization) deliver strong Q4 results, the stock could resume its rally regardless of the IRS headline.",
+   "horizon": "months",
+   "thesis": "Microsoft has strong momentum (+31% over 3 months, +5.7% vs 50-day MA) and a very bullish analyst base (53 buy/2 hold/0 sell) with ~13% implied upside to consensus target. A recent Stifel upgrade (Hold→Buy, target raised to 575) on 2026-09-23 adds a fresh positive catalyst. The LinkedIn/Office chief's planned departure is a modest governance distraction but not a fundamental threat given the company's broader AI-driven reorg narrative.",
+   "news": "Stifel upgraded MSFT from Hold to Buy with target 530→575 on 2026-09-23 (+3.0% since); Ryan Roslansky (LinkedIn/Office chief) announced exit by end of 2026 (2026-10-01), described as a personal relocation issue rather than strategic rupture.",
+   "risks": "Further executive departures during the AI reorg could signal deeper organizational friction; a stretched valuation (32% annualized vol, large 1y max drawdown of 35%) leaves room for a sharp pullback if AI monetization disappoints.",
    "source_urls": [
-    "https://finance.yahoo.com/economy/policy/articles/meta-counted-mark-zuckerberg-4-040500231.html"
+    "https://www.cnbc.com/2026/10/01/linkedin-chief-roslansky-microsoft-exit.html"
    ],
-   "priceAtPick": 725.18
-  },
-  {
-   "symbol": "C6L.SI",
-   "stance": "short",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "Singapore Airlines and Scoot have now extended Dubai/Jeddah flight cancellations to December 2 due to Middle East geopolitical tensions, a direct and recurring hit to route revenue and load factors during what is normally a peak travel season. The stock is already down 12.5% over 3 months, 14.9% below its 52w high, with negative momentum vs both MAs, and analyst sentiment is lukewarm (only 1 buy vs 9 hold/4 sell).",
-   "news": "SIA and Scoot extended Dubai and Jeddah flight cancellations to December 2, 2026 due to ongoing Middle East geopolitical tensions (2026-10-01).",
-   "risks": "A sudden de-escalation in the Middle East or strong peak-season demand on alternative routes could offset the lost capacity; SIA's diversified network and low beta (0.64) also limit downside versus broader market moves.",
-   "source_urls": [
-    "https://www.asiaone.com/singapore/singapore-airlines-dubai-scoot-jeddah-flights-cancelled"
-   ],
-   "priceAtPick": 6.67
+   "priceAtPick": 512.8
   },
   {
    "symbol": "BN4.SI",
    "stance": "long",
    "conviction": "medium",
    "horizon": "months",
-   "thesis": "Keppel has very strong analyst support (12 buy/1 hold/2 sell) with 14.9% implied upside to consensus target, elevated relative volume (2.13x 20-day average) suggesting fresh positioning, yet the stock is down 3% over the past month and roughly flat vs both its 50- and 200-day moving averages — a setup where improving sentiment hasn't yet been reflected in price.",
-   "news": "No company-specific catalyst in the latest news batch; thesis is based on the elevated relative volume and the strong analyst buy skew versus recent soft price action (data as of 2026-10-01).",
-   "risks": "News flow on Keppel is thin right now, so this is a valuation/positioning-based call rather than catalyst-driven; a continuation of the recent downtrend or disappointing restructuring/asset-monetization updates would invalidate the thesis.",
-   "source_urls": [],
+   "thesis": "Keppel has pulled back modestly (-3% 1m, -1.7% vs 50-day MA) despite a strong 1-year return (+24.8%) and a very bullish analyst skew (12 buy/1 hold/2 sell) implying ~15% upside to consensus target. The pullback looks more like consolidation than a trend reversal given elevated relative volume (2.13x) suggesting active repositioning rather than a slow bleed.",
+   "news": "No company-specific news item in this cycle; call is based primarily on price action (recent dip within an up-trending 1y channel) and strong analyst consensus skew.",
+   "risks": "Keppel has the highest volatility (24.2% annualized) and largest 1y max drawdown (22.3%) in the SGX subset, so a China/property or energy-services headwind could extend the current pullback rather than reverse it.",
+   "source_urls": [
+    "https://www.cnbc.com/2026/09/18/buffett-stepping-down-as-berkshire-chairman.html"
+   ],
    "priceAtPick": 11.18
   },
   {
-   "symbol": "Z74.SI",
+   "symbol": "C38U.SI",
    "stance": "long",
    "conviction": "low",
    "horizon": "months",
-   "thesis": "Singtel has the most lopsided analyst skew on the watchlist (13 buy/2 hold/0 sell) with 24.6% implied upside to target, yet the stock has lagged badly — down 18% from its 52-week high and down 4.3% over the past month — creating a value gap versus consensus expectations.",
-   "news": "No fresh company-specific catalyst in the latest news batch; this is a contrarian value/analyst-consensus call given the stock's weak recent momentum (data as of 2026-10-01).",
-   "risks": "Telecom sector headwinds (regional competition, currency exposure from associates like Bharti/Telkomsel) could keep the stock depressed longer than analyst targets suggest; the lack of a positive catalyst means the re-rating could take many months or not materialize.",
-   "source_urls": [],
-   "priceAtPick": 4.27
+   "thesis": "CICT has pulled back across most horizons (-3.8% 1m, -6.2% 3m) and trades 11% below its 52-week high, yet carries the most lopsided bullish analyst base in the SGX set (13 buy/3 hold/0 sell) with ~19% implied upside. As a REIT with low beta (0.6) and modest volatility (14.5%), it offers a defensive income-oriented long if rate expectations stabilize.",
+   "news": "No specific news catalyst identified this cycle; thesis rests on valuation pullback plus very skewed analyst buy ratings.",
+   "risks": "Persistent higher-for-longer rate expectations or weak Singapore retail/office leasing data would keep REIT multiples compressed and could extend the current drawdown.",
+   "source_urls": [
+    "https://www.cnbc.com/2026/09/18/buffett-stepping-down-as-berkshire-chairman.html"
+   ],
+   "priceAtPick": 2.25
   },
   {
-   "symbol": "AAPL",
+   "symbol": "TSLA",
+   "stance": "short",
+   "conviction": "high",
+   "horizon": "weeks",
+   "thesis": "Tesla continues to be the standout underperformer in the EV/auto space, down roughly 20-25% YTD, -10% over 3 months, and trading 10% below its 200-day MA despite a small recent bounce vs the 50-day MA. The stock's extreme beta (1.82) and volatility (46.3%) mean continued EV demand softness or delivery disappointments can drive outsized downside moves; analyst sentiment is split (19 buy/20 hold/4 sell), showing no strong bull conviction to arrest the slide.",
+   "news": "Tesla stock is down ~20-25% YTD, the defining EV underperformance story of 2026, even as legacy automakers and the broad tech tape have moved higher (2026-10-01).",
+   "risks": "A large short-covering rally is common in TSLA on any delivery beat, FSD/robotaxi headline, or Musk-driven catalyst; the stock's history of violent reversals makes this a higher-risk short despite the clear negative trend.",
+   "source_urls": [
+    "https://www.aol.com/articles/tesla-down-20-2026-two-191317000.html"
+   ],
+   "priceAtPick": 354.11
+  },
+  {
+   "symbol": "S68.SI",
    "stance": "short",
    "conviction": "low",
-   "horizon": "days",
-   "thesis": "Apple was conspicuously absent from Trump's White House AI summit where Nvidia, Meta, Google, Microsoft, and OpenAI signed an AI safety accord — a signal that Apple remains on the back foot in the AI race under new CEO John Ternus. The stock trades slightly above its own analyst consensus target (implied upside -1.4%), suggesting limited near-term re-rating room despite still being up 1.1% today.",
-   "news": "Apple was excluded from Trump's Sept 29 White House AI summit; neither Tim Cook nor John Ternus attended while rivals signed an AI safety accord (2026-09-30).",
-   "risks": "Apple's stock reaction to this specific headline has been muted (still up on the day), and strong iPhone/services fundamentals could keep supporting the stock regardless of AI-positioning optics; this is a soft, sentiment-based call with limited conviction.",
+   "horizon": "weeks",
+   "thesis": "Singapore Exchange has seen a sharp 1-month reversal (-9.4%) and now sits 6.3% below its 50-day MA after a strong prior 6-12 month run, suggesting momentum has turned. With flat relative volume (1.01x) the move looks like a genuine derating rather than a liquidity-driven blip, and the risk/reward for chasing the prior uptrend has worsened.",
+   "news": "No specific news catalyst found this cycle for S68.SI; view is based purely on the recent momentum reversal in price stats.",
+   "risks": "SGX is a direct beneficiary of elevated regional trading volumes and volatility; any pickup in market activity (e.g., from AI-driven volatility or index rebalancing flows) could quickly reverse this pullback, and analyst consensus still shows a net buy skew (7 buy/7 hold/2 sell) with 8% implied upside.",
    "source_urls": [
-    "https://www.cnbc.com/2026/09/30/trumps-ai-lunch-included-everyone-but-apple.html"
+    "https://www.cnbc.com/2026/09/18/buffett-stepping-down-as-berkshire-chairman.html"
    ],
-   "priceAtPick": 333.02
+   "priceAtPick": 22.61
   }
  ],
  "sources": [
   {
-   "url": "https://www.world-nuclear-news.org/articles/constellation-amazon-agree-nuclear-focused-power-purchase-deal",
-   "title": "Constellation, Amazon agree nuclear-focused power purchase deal - World Nuclear News",
-   "age": "0 days ago"
+   "url": "https://www.cnbc.com/2026/09/18/buffett-stepping-down-as-berkshire-chairman.html",
+   "title": "Warren Buffett steps down as chairman of Berkshire Hathaway: 'Father Time always wins'",
+   "age": "13 days ago"
   },
   {
-   "url": "https://www.gurufocus.com/news/9104331/constellation-energy-ceg-secures-3-billion-investment-with-amazon-in-20year-nuclear-power-deal",
-   "title": "Constellation Energy (CEG) Secures $3 Billion Investment with Amazon in 20-Year Nuclear Power Deal",
-   "age": "0 days ago"
+   "url": "https://www.aljazeera.com/economy/2026/9/18/warren-buffett-steps-down-as-berkshire-hathaway-chairman",
+   "title": "Warren Buffett steps down as Berkshire Hathaway chairman",
+   "age": "13 days ago"
   },
   {
-   "url": "https://qz.com/amazon-constellation-energy-nuclear-power-deal-maryland-100126",
-   "title": "Amazon signs 20-year nuclear power deal with Constellation Energy",
-   "age": "0 days ago"
+   "url": "https://nebraskapublicmedia.org/en/news/news-articles/warren-buffett-stepping-down-as-chairman-of-berkshire-hathaway/",
+   "title": "Warren Buffett stepping down as chairman of Berkshire Hathaway",
+   "age": "13 days ago"
   },
   {
-   "url": "https://www.bloomberg.com/news/articles/2026-09-30/amazon-nuclear-deal-to-help-expand-constellation-s-maryland-site",
-   "title": "Amazon Strikes 20-Year Nuclear Power Deal With Constellation for Maryland Plant - Bloomberg",
-   "age": "0 days ago"
+   "url": "https://www.washingtonpost.com/business/2026/09/18/warren-buffett-steps-down-chairman-berkshire-hathaway/",
+   "title": "Warren Buffett, legendary investor, steps down as chairman of Berkshire Hathaway - The Washington Post",
+   "age": "13 days ago"
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/1868275/000186827526000029/ceg-20260224991.htm",
-   "title": "Constellation Energy Corp - Form 8-K - FY2026",
+   "url": "https://www.nbcnews.com/business/business-news/warren-buffett-steps-down-chairman-berkshire-hathaway-rcna598503",
+   "title": "Warren Buffett steps down as chairman of Berkshire Hathaway",
+   "age": "13 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/09/19/warren-buffett-takes-next-step-in-plan-to-keep-berkshire-from-straying.html",
+   "title": "Warren Buffett takes next step in plan to keep Berkshire from straying",
+   "age": "12 days ago"
+  },
+  {
+   "url": "https://www.pbs.org/newshour/amp/nation/warren-buffett-will-remain-berkshire-hathaway-chairman-after-greg-abel-takes-over-as-ceo-in-2026",
+   "title": "warren buffett will remain berkshire hathaway chairman after greg abel takes over as ceo in 2026",
    "age": null
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/1868275/000155278126000140/e26004_ceg-def14a.htm",
-   "title": "Constellation Energy Corp - Form DEF 14A - FY2026",
+   "url": "https://techcrunch.com/2025/05/03/warren-buffett-will-step-down-as-berkshire-hathaway-ceo",
+   "title": "warren buffett will step down as berkshire hathaway ceo",
    "age": null
   },
   {
-   "url": "https://baltimoresun.com/2026/09/30/amazon-deal-calvert-cliffs-nuclear",
-   "title": "Amazon deal with Calvert Cliffs would extend nuclear plant’s life, explore new reactors",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001868275/000186827526000097/ceg-20260806991.htm",
-   "title": "Constellation Energy Corp - Form 8-K - FY2026",
+   "url": "https://www.marketbeat.com/articles/warren-buffett-is-making-a-big-change-to-next-years-berkshire-hathaway-annual-meeting-2025-05-19",
+   "title": "Free Trial",
    "age": null
   },
   {
-   "url": "https://www.tradingpedia.com/2026/10/01/constellation-energy-surges-on-long-term-amazon-deal/",
-   "title": "Constellation Energy Surges on Long-Term Amazon Deal",
+   "url": "https://bworldonline.com/technology/2026/10/01/783519/google-announces-gemini-4-flagship-ai-model-after-months-of-delays/",
+   "title": "Google announces Gemini 4 flagship AI model after months of delays - BusinessWorld Online",
    "age": "0 days ago"
   },
   {
-   "url": "https://finance.yahoo.com/economy/policy/articles/meta-counted-mark-zuckerberg-4-040500231.html",
-   "title": "Meta counted Mark Zuckerberg’s $4.1B stock payout as research pay to claim a $355M tax break — and the IRS wants it back",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/economy/policy/articles/meta-used-zuckerbergs-pay-cut-230113248.html",
-   "title": "Meta Used Zuckerberg's Pay to Cut Its Taxes by $355 Million: Could Musk Do It Too?",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://moneywise.com/news/top-stories/meta-mark-zuckerberg-research-tax-credit-irs",
-   "title": "Meta counted Mark Zuckerberg’s $4.1B stock payout as research pay to claim a $355M tax break — and the IRS wants it back",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://moneywise.com/news/top-stories/elizabeth-warren-big-tech-ai-tax-breaks-amazon-google-meta-microsoft",
-   "title": "Elizabeth Warren probes $19B in tax breaks for Amazon, Google, Meta and Microsoft as AI drains $96B in federal revenue",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://unusualwhales.com/news/meta-355m-tax-break-zuckerberg-researcher",
-   "title": "Meta Took $355M Tax Break Calling Zuckerberg a \"Researcher\"",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://phemex.com/news/article/irs-seeks-to-recover-355m-tax-break-from-meta-over-zuckerberg-classification-98379",
-   "title": "IRS Challenges Meta's $355M Tax Break on Zuckerberg Compensa",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://techstartups.com/2026/09/30/meta-classified-zuckerberg-as-a-researcher-to-claim-355-million-tax-break-on-4-1-billion-pay-nyt-reports/",
-   "title": "Meta classified Zuckerberg as a researcher to claim $355 million tax break on $4.1 billion pay, NYT reports - Tech Startups",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://en.coinotag.com/meta-platforms-irs-355-million-zuckerberg-tax-break",
-   "title": "Coinotag",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://wallstreetinsider.org/mark-zuckerberg-could-pay-millions-to-the-irs-on-meta-dividends-he-still-might-be-getting-a-major-break-6d699639/",
-   "title": "Mark Zuckerberg could pay millions to the IRS on Meta dividends. He still might be getting ‘a major break’.",
+   "url": "https://en.wikipedia.org/wiki/Gemini_Robotics",
+   "title": "Gemini Robotics",
    "age": null
   },
   {
-   "url": "https://www.thestandard.com.hk/finance/article/344348/DBS-Group-appoints-Blackstone-Singapore-chair-Gautam-Banerjee-to-boards",
-   "title": "DBS Group appoints Blackstone Singapore chair Gautam Banerjee to boards",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://fintechnews.sg/138326/fintech/dbs-gautam-banerjee-board-appointment/",
-   "title": "Blackstone Singapore Chairman Gautam Banerjee Joins DBS Boards - Fintech Singapore",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.theedgesingapore.com/news/new-appointments/dbs-appoints-blackstone-singapore-chairman-gautam-banerjee-board-directors",
-   "title": "DBS appoints Blackstone Singapore chairman Gautam Banerjee to board of directors",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.newsquawk.com/headlines/pre-market-taiwan-and-singapore-stocks-news-tsmc-2330-tt-is-evaluating-a-potential-investment-in-texas-to-expand-us-chip-production",
-   "title": "PRE-MARKET TAIWAN AND SINGAPORE STOCKS NEWS: TSMC (2330 TT) is evaluating a potential investment in Texas to expand US chip production",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Chandrajit_Banerjee",
-   "title": "Chandrajit Banerjee",
+   "url": "https://en.wikipedia.org/wiki/Google_Gemini",
+   "title": "Google Gemini",
    "age": null
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Vikram_Banerjee",
-   "title": "Vikram Banerjee",
-   "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Gautam_Sanyal",
-   "title": "Gautam Sanyal",
-   "age": null
-  },
-  {
-   "url": "https://singaporeair.com/th_TH/th/about-us/information-for-investors/SIA-Director",
-   "title": "Board of Directors and Corporate Data",
-   "age": null
-  },
-  {
-   "url": "https://www.singaporeair.com/zh_CN/sg/about-us/information-for-investors/SIA-Director",
-   "title": "Board of Directors and Corporate Data",
-   "age": null
-  },
-  {
-   "url": "https://www.asiaone.com/singapore/singapore-airlines-dubai-scoot-jeddah-flights-cancelled",
-   "title": "SIA, Scoot cancel flights to Middle East amid heightened uncertainties, Singapore News - AsiaOne",
+   "url": "https://www.cnbc.com/2026/10/01/google-gemini-4-arrives-as-wall-street-shifts-to-personal-agents.html",
+   "title": "Google unveils latest AI model, but Wall Street wants a breakout personal agent",
    "age": "0 days ago"
   },
   {
-   "url": "https://sg.news.yahoo.com/sia-scoot-extend-middle-east-054419029.html",
-   "title": "SIA, Scoot extend Middle East flight cancellations to December - Yahoo News Singapore",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://travelbizmonitor.com/top-stories/singapore-airlines-extends-middle-east-flight-cancellations/",
-   "title": "Singapore Airlines extends Middle East flight cancellations - TravelBiz Monitor: India travel news, travel trends, tourism",
-   "age": "76 days ago"
-  },
-  {
-   "url": "https://e.vnexpress.net/news/travel/singapore-airlines-scoot-extend-flight-cancellations-amid-escalating-middle-east-conflict-5049498.html",
-   "title": "Singapore Airlines, Scoot extend flight cancellations amid escalating Middle East conflict - VnExpress International",
-   "age": "203 days ago"
-  },
-  {
-   "url": "https://btabloid.com/singapore-airlines-flight-delays",
-   "title": "Singapore Airlines Extends Middle East Flight Suspensions - Business Tabloid",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://nomadlawyer.org/middle-east-aviation-crisis-2026-singapore-airlines-dubai-cancellation",
-   "title": "Middle East Aviation Crisis 2026: Singapore Airlines Cancels Dubai Flights Amid Regional Flight Chaos - Nomad Lawyer",
-   "age": "147 days ago"
-  },
-  {
-   "url": "https://gulfnews.com/business/aviation/singapore-airlines-extends-dubai-flight-cancellations-1.500494403",
-   "title": "Singapore Airlines extends Dubai flight cancellations",
+   "url": "https://en.wikipedia.org/wiki/Apple_Intelligence",
+   "title": "Apple Intelligence",
    "age": null
   },
   {
-   "url": "https://www.malaymail.com/news/singapore/2026/03/06/singapore-airlines-scoot-extend-middle-east-flight-cancellations-to-mid-march-as-iran-war-disrupts-routes/211562",
-   "title": "www.malaymail.com",
+   "url": "https://en.wikipedia.org/wiki/Veo_(text-to-video_model)",
+   "title": "Veo (text-to-video model)",
    "age": null
   },
   {
-   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/newsalert-listing/advisory-on-singapore-airlines-flights-affected-the-geopolitical/",
-   "title": "Advisory on Singapore Airlines flights affected by the geopolitical situation in the Middle East",
+   "url": "https://en.wikipedia.org/wiki/2024_in_artificial_intelligence",
+   "title": "2024 in artificial intelligence",
    "age": null
   },
   {
-   "url": "https://www.cnbc.com/2026/09/30/trumps-ai-lunch-included-everyone-but-apple.html",
-   "title": "Trump’s AI lunch included every major tech company. Except Apple",
+   "url": "https://emergent.sh/news/google-gemini-4-release-date",
+   "title": "Google Gemini 4 Rumored for October 2026 Release",
+   "age": "22 days ago"
+  },
+  {
+   "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
+   "title": "Gemini 4 Argon: our next era of frontier intelligence",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/09/29/tech-white-house-ai-lunch-trump.html",
-   "title": "Trump says he and tech leaders signed AI agreement that is 'morally binding'",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://abcnews.com/Politics/top-ai-leaders-meet-trump-white-house-amid/story?id=136832988",
-   "title": "Trump says AI leaders signed a 'constitution' to police themselves - ABC News",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/09/28/trump-ai-tech-lunch.html",
-   "title": "Zuckerberg, Amodei among tech executives set to meet Trump Tuesday",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/09/25/the-tech-download-trump-xi-ai-talks.html",
-   "title": "Trump and Xi dined with AI's biggest names. Here's what we know about tech talks so far",
-   "age": "5 days ago"
-  },
-  {
-   "url": "https://www.newsy-today.com/apple-excluded-from-trumps-tech-industry-ai-luncheon/",
-   "title": "Apple Excluded from Trump's Tech Industry AI Luncheon - Newsy Today",
+   "url": "https://github.com/matthewnty/Matthew/issues/142",
+   "title": "📈 Daily Stock Digest — 2026-10-01 · Issue #142 · matthewnty/Matthew",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.ico-optics.org/white-house-ai-summit-snubs-apple-amid-tech-giants/",
-   "title": "White House AI Summit Snubs Apple Amid Tech Giants",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000048/goog-20260331.htm",
+   "title": "Alphabet Inc. - Form 10-Q - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://cryptobriefing.com/alphabet-google-publishers-3-billion-damages/",
+   "title": "Alphabet faces over $3.2 billion in damages claims from publishers",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.newsbeep.com/us/866683/",
-   "title": "Trump’s AI lunch included everyone but Apple - United States News Beep",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000071/goog-20260630.htm",
+   "title": "Alphabet Inc. - Form 10-Q - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.fool.com/investing/2026/09/03/opinion-googles-latest-antitrust-ruling-is-a-big-win-for-alphabet-investors/",
+   "title": "Opinion: Google's Latest Antitrust Ruling Is a Big Win for Alphabet Investors",
+   "age": "28 days ago"
+  },
+  {
+   "url": "https://www.fool.com/investing/2026/09/03/google-just-won-the-right-to-keep-its-ad-tech-tools-they-live-in-the-one-business-it-has-that-is-shrinking/",
+   "title": "Google Just Won the Right to Keep Its Ad Tech Tools. They Live in the One Business It Has That Is Shrinking.",
+   "age": "27 days ago"
+  },
+  {
+   "url": "https://verdictwiki.com/google-adtech-antitrust/",
+   "title": "US v. Google Ad Tech (US): Monopoly Ruling & 2026 Remedies…",
+   "age": "11 days ago"
+  },
+  {
+   "url": "https://wealthawesome.com/why-alphabet-stock-is-tanking-today-10012026",
+   "title": "Why Alphabet stock is tanking today",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.newsonair.gov.in/president-trump-hosts-tech-ceos-at-white-house-for-talks-on-ai-u-s-investments",
-   "title": "president trump hosts tech ceos at white house for talks on ai u s investments",
+   "url": "https://techcrunch.com/?p=2450188",
+   "title": "Google logo",
+   "age": null
+  },
+  {
+   "url": "https://seekingalpha.com/news/4073162-google-hit-with-23b-suit-from-europe-media-groups-over-ad-tech",
+   "title": "Google hit with $2.3B suit from Europe media groups over ad tech",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-down-25-2026-does-191506328.html",
+   "title": "Tesla Is Down 25% in 2026: How Does It Compare to EV Competitors Like Rivian, Lucid, and General Motors?",
+   "age": "44 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/04/06/tesla-is-down-sharply-in-2026-jpmorgan-sees-even-more-declines-ahead.html",
+   "title": "Tesla is down sharply in 2026. JPMorgan sees the stock falling another 60%",
+   "age": "178 days ago"
+  },
+  {
+   "url": "https://www.fool.com/investing/2026/08/13/tesla-is-down-26-in-2026-and-trailing-every-magni/",
+   "title": "Tesla Is Down 26% in 2026 and Trailing Every Magnificent Seven Peer. Here's What Could Turn It Around.",
+   "age": "49 days ago"
+  },
+  {
+   "url": "https://cleantechnica.com/2026/07/24/tesla-stock-down-ev-market-share-us-competition/",
+   "title": "Tesla Stocks Down, US Market Share Up: What Is Going On?",
+   "age": "69 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-still-down-17-2026-191515507.html",
+   "title": "Tesla Is Still Down 17% in 2026. Can Wednesday’s Earnings Event Get TSLA Stock Back on Track?",
+   "age": "73 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/07/02/tesla-tsla-q2-2026-vehicle-delivery-production.html",
+   "title": "Tesla stock sinks 7% despite strong deliveries report, posting worst day in nearly a year",
+   "age": "91 days ago"
+  },
+  {
+   "url": "https://www.aol.com/articles/tesla-down-20-2026-two-191317000.html",
+   "title": "Tesla Is Down 20% in 2026. These Two Other EV Makers Are Doing Even Worse. - AOL",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.forbes.com/sites/investor-hub/article/tesla-stock-last-half-2026/",
+   "title": "Tesla (TSLA) Stock Could Sink In The Last Half Of 2026. Here’s Why",
+   "age": "30 days ago"
+  },
+  {
+   "url": "https://www.foreignpolicyjournal.com/2026/06/26/tesla-nasdaq-tsla-stock-price-down-14-in-2026-as-energy-division-emerges-as-key-growth-driver/",
+   "title": "Tesla (NASDAQ: TSLA) Stock Price Down 14% In 2026 As Energy Division Emerges As Key Growth Driver",
+   "age": "97 days ago"
+  },
+  {
+   "url": "https://aiweekly.co/alerts/microsofts-office-and-teams-chief-roslansky-to-exit-end-of-2026",
+   "title": "Microsoft's Office and Teams Chief Roslansky to Exit End of 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://thenextweb.com/news/roslansky-to-leave-microsoft",
+   "title": "LinkedIn’s former chief Ryan Roslansky to leave Microsoft",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://hyper.ai/en/stories/73afe0f784c8cb5e71d1dba9a6c7c80a",
+   "title": "Ryan Roslansky to Step Down as Microsoft's LinkedIn Chief",
+   "age": null
+  },
+  {
+   "url": "https://www.geekwire.com/2026/microsoft-executives-peter-lee-president-of-microsoft-science-and-evp-ryan-roslansky-to-depart/",
+   "title": "Longtime Microsoft research leader Peter Lee and former LinkedIn CEO Ryan Roslansky to depart",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/10/01/linkedin-chief-roslansky-microsoft-exit.html",
+   "title": "Former LinkedIn chief Roslansky to leave Microsoft, following other exec departures",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://blogs.microsoft.com/blog/2026/10/01/microsoft-365-and-linkedin-leadership-update/",
+   "title": "Microsoft 365 and LinkedIn leadership update - The Official Microsoft Blog",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.briefs.co/news/linkedin-boss-ryan-roslansky-to-leave-microsoft-at-end-of-20/",
+   "title": "LinkedIn CEO Ryan Roslansky to exit end of 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://newsable.asianetnews.com/markets/msft-s-linkedin-chief-ryan-roslansky-to-exit-as-ai-leadership-shake-up-continues-articleshow-3xfxwso",
+   "title": "MSFT’s LinkedIn Chief Ryan Roslansky To Exit As AI Leadership Shake-Up Continues",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Ryan_Roslansky",
+   "title": "Ryan Roslansky",
    "age": null
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 46135,
-  "output": 5400,
+  "input": 48264,
+  "output": 4744,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.149
+  "costUsd": 0.1468
  },
- "createdAt": "2026-10-01T13:01:01.266Z"
+ "createdAt": "2026-10-01T23:27:09.647Z"
 }
