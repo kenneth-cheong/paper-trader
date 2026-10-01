@@ -1,490 +1,418 @@
 {
- "market_summary": "<cite index=\"3-10\">The STI has surged 24.6% year-to-date, driven overwhelmingly by DBS, OCBC, and UOB.",
+ "market_summary": "US markets are being driven by major infrastructure and tech deals: Amazon signed a 20-year power purchase agreement with Constellation Energy to add 190 MW of capacity at Calvert Cliffs nuclear plant with USD3 billion in planned investment, lifting CEG stock 3.9%. Meta faces IRS challenges to $355M in research tax credits tied to Mark Zuckerberg's stock options, though the company's overall research credits jumped from $700M in 2023 to $3.9B in 2025. Apple was notably absent from Trump's White House AI summit on Sept 29 where other tech megacaps signed an AI safety accord. In Asia, Singapore Airlines and Scoot extended Middle East flight cancellations to December due to geopolitical tensions. Regional banks and infrastructure firms are navigating complex market conditions with management changes at DBS and ongoing operations challenges.",
  "items": [
   {
    "symbols": [
-    "D05.SI",
-    "O39.SI",
-    "U11.SI"
-   ],
-   "date": "2026-09-19",
-   "headline": "Singapore banks' NIM compression offset by wealth management strength",
-   "summary": "<cite index=",
-   "type": "other",
-   "tone": "positive",
-   "source_url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/"
-  },
-  {
-   "symbols": [
-    "BN4.SI"
-   ],
-   "date": "2026-09-28",
-   "headline": "Keppel prices CNH1 billion five-year offshore renminbi bond at 1.95% coupon",
-   "summary": "<cite index=",
-   "type": "deal",
-   "tone": "positive",
-   "source_url": "https://dealroom.co/news/157331-keppel-prices-150-million-offshore-renminbi-bond-at-1-95/"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "date": "2026-09-27",
-   "headline": "SGX CEO Loh Boon Chye's FY2026 pay rises 7.1% to S$8.37 million",
-   "summary": "<cite index=",
-   "type": "management",
-   "tone": "positive",
-   "source_url": "https://www.businesstimes.com.sg/companies-markets/sgx-ceo-loh-boon-chyes-fy2026-pay-rises-7-1-s8-37-million"
-  },
-  {
-   "symbols": [
-    "C38U.SI"
-   ],
-   "date": "2026-09-30",
-   "headline": "CICT manager appoints Jennifer Li as new non-executive independent director",
-   "summary": "<cite index=",
-   "type": "management",
-   "tone": "positive",
-   "source_url": "https://www.businesstimes.com.sg/companies-markets/cicts-manager-appoints-jennifer-li-new-non-executive-independent-director"
-  },
-  {
-   "symbols": [
-    "Y92.SI"
-   ],
-   "date": "2026-03-31",
-   "headline": "Thai Beverage 1HFY2026 earnings lower on impairment, spirits growth offsets weak beer sales",
-   "summary": "<cite index=",
-   "type": "earnings",
-   "tone": "mixed",
-   "source_url": "https://sg.finance.yahoo.com/news/thai-beverages-1hfy2026-earnings-lower-050257644.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "date": "2026-08-28",
-   "headline": "Nvidia reports record Q2 FY2026 revenue of $96.2 billion, beats expectations with 106% YoY growth",
-   "summary": "<cite index=",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://www.kiplinger.com/investing/live/nvidia-earnings-live-updates-and-commentary-august-2026"
-  },
-  {
-   "symbols": [
-    "MSFT"
-   ],
-   "date": "2026-01-30",
-   "headline": "Microsoft posts strong Q4 FY2026 results with sales up 18% YoY and earnings up 23% YoY, Azure up 40%",
-   "summary": "<cite index=",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-130100092.html"
-  },
-  {
-   "symbols": [
-    "AAPL"
-   ],
-   "date": "2026-01-30",
-   "headline": "Apple reports record Q2 FY2026 revenue of $143.8 billion but faces supply chain pressures from AI buildout",
-   "summary": "<cite index=",
-   "type": "earnings",
-   "tone": "mixed",
-   "source_url": "https://valueaddvc.com/big-tech-earnings"
-  },
-  {
-   "symbols": [
-    "TSLA"
+    "AMZN"
    ],
    "date": "2026-10-01",
-   "headline": "Tesla September performance: automaker stock performance compared to Ford and General Motors",
-   "summary": "Tesla performance in September stock market competition.",
-   "type": "other",
-   "tone": "mixed",
-   "source_url": "https://247wallst.com/investing/2026/09/30/which-automaker-stock-dominated-in-september-tesla-ford-or-general-motors/"
+   "headline": "Amazon Signs 20-Year Nuclear Power Deal with Constellation Energy for $3 Billion Investment",
+   "summary": "Amazon agreed to purchase 690 megawatts of power from Constellation Energy's Calvert Cliffs nuclear plant in Maryland over 20 years, enabling over $3 billion in infrastructure investment to add 190 MW of new capacity between 2030-2032, supporting the company's AI data center expansion.",
+   "type": "deal",
+   "tone": "positive",
+   "source_url": "https://www.world-nuclear-news.org/articles/constellation-amazon-agree-nuclear-focused-power-purchase-deal"
   },
   {
    "symbols": [
     "META"
    ],
-   "date": "2026-06-29",
-   "headline": "Meta stock jumps 6% on plans to build cloud computing business rival to AWS, Azure, and Google Cloud",
-   "summary": "<cite index=",
-   "type": "product",
-   "tone": "positive",
-   "source_url": "https://finance.yahoo.com/technology/live/tech-stocks-today-meta-stock-jumps-on-cloud-computing-plans-to-rival-amazon-microsoft-151053436.html"
+   "date": "2026-09-30",
+   "headline": "Meta Faces IRS Challenge Over $355 Million Zuckerberg Tax Break",
+   "summary": "The IRS is seeking to recover $355 million in research tax credits Meta claimed on Mark Zuckerberg's $4.1 billion stock option compensation in 2012-2013, with Meta and the IRS disagreeing on whether his stock gains qualify as research wages.",
+   "type": "legal",
+   "tone": "negative",
+   "source_url": "https://finance.yahoo.com/economy/policy/articles/meta-counted-mark-zuckerberg-4-040500231.html"
   },
   {
    "symbols": [
-    "AMZN"
+    "META"
    ],
    "date": "2026-09-30",
-   "headline": "Amazon AI capex increase to $125 billion in 2026 signals strong cloud infrastructure demand",
-   "summary": "<cite index=",
-   "type": "guidance",
-   "tone": "positive",
-   "source_url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html"
+   "headline": "Meta's Research Tax Credits Soared from $700M to $3.9B as AI Data Centers Classified as Experiments",
+   "summary": "Meta's research tax credits increased dramatically from $700 million in 2023 to $3.9 billion in 2025, with the company classifying its AI data centers as experimental 'pilot models' for tax purposes, raising scrutiny from tax authorities.",
+   "type": "other",
+   "tone": "mixed",
+   "source_url": null
   },
   {
    "symbols": [
-    "GOOGL"
+    "D05.SI"
    ],
-   "date": "2026-07-30",
-   "headline": "Alphabet reports Q2 FY2026 revenue of nearly $120 billion, up 24% YoY with next earnings in late October",
-   "summary": "<cite index=",
-   "type": "earnings",
+   "date": "2026-10-01",
+   "headline": "Blackstone Singapore Chairman Gautam Banerjee Joins DBS Group Board",
+   "summary": "DBS Group appointed Gautam Banerjee, chairman and senior managing director of Blackstone Singapore, to the boards of DBS Group Holdings and DBS Bank effective October 1, 2026, bringing extensive governance and strategic leadership experience.",
+   "type": "management",
    "tone": "positive",
-   "source_url": "https://www.fool.com/investing/stock-market/upcoming-earnings-reports/"
+   "source_url": "https://www.thestandard.com.hk/finance/article/344348/DBS-Group-appoints-Blackstone-Singapore-chair-Gautam-Banerjee-to-boards"
   },
   {
    "symbols": [
     "C6L.SI"
    ],
-   "date": "2026-09-30",
-   "headline": "Singapore Airlines launches seasonal sale with fares from S$198, extending network to Madrid and Western Sydney",
-   "summary": "<cite index=",
+   "date": "2026-10-01",
+   "headline": "Singapore Airlines and Scoot Extend Middle East Flight Cancellations to December",
+   "summary": "Singapore Airlines extended cancellation of Dubai flights to December 2, while Scoot extended cancellation of Jeddah flights to the same date, citing ongoing geopolitical tensions in the Middle East affecting regional aviation operations.",
    "type": "other",
-   "tone": "positive",
-   "source_url": "https://www.greatdeals.com.sg/2026/09/29/singapore-airlines-flight-deals-october-2026"
+   "tone": "negative",
+   "source_url": "https://www.asiaone.com/singapore/singapore-airlines-dubai-scoot-jeddah-flights-cancelled"
   },
   {
    "symbols": [
-    "ES3.SI"
+    "AAPL"
    ],
    "date": "2026-09-30",
-   "headline": "STI benchmark drives Singapore market gains as banking stocks lead performance in 2026",
-   "summary": "<cite index=",
+   "headline": "Apple Conspicuously Absent from Trump's White House AI Summit",
+   "summary": "Apple was notably excluded from Trump's White House artificial intelligence meeting on September 29 where other tech megacaps including Nvidia, Meta, Google, Microsoft, and OpenAI executives signed an AI safety accord, with neither Tim Cook nor new CEO John Ternus attending.",
    "type": "other",
-   "tone": "positive",
-   "source_url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html"
-  },
-  {
-   "symbols": [
-    "SPY",
-    "QQQ"
-   ],
-   "date": "2026-09-30",
-   "headline": "S&P 500 and Nasdaq close September strong as tech earnings season winds down",
-   "summary": "Major US indices finish September on positive momentum ahead of Q4 earnings reports.",
-   "type": "macro",
-   "tone": "positive",
-   "source_url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html"
+   "tone": "mixed",
+   "source_url": "https://www.cnbc.com/2026/09/30/trumps-ai-lunch-included-everyone-but-apple.html"
   }
  ],
  "sources": [
   {
-   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html",
-   "title": "DBS, OCBC and UOB Beat the STI in 1H 2026: Here’s What Drove the Rally",
-   "age": "83 days ago"
+   "url": "https://www.world-nuclear-news.org/articles/constellation-amazon-agree-nuclear-focused-power-purchase-deal",
+   "title": "Constellation, Amazon agree nuclear-focused power purchase deal - World Nuclear News",
+   "age": "0 days ago"
   },
   {
-   "url": "https://drwealth.com/why-is-ocbc-stock-beating-dbs-and-uob-in-2026/",
-   "title": "Why Is OCBC Stock Beating DBS and UOB in 2026?",
-   "age": "140 days ago"
+   "url": "https://www.gurufocus.com/news/9104331/constellation-energy-ceg-secures-3-billion-investment-with-amazon-in-20year-nuclear-power-deal",
+   "title": "Constellation Energy (CEG) Secures $3 Billion Investment with Amazon in 20-Year Nuclear Power Deal",
+   "age": "0 days ago"
   },
   {
-   "url": "https://thekopinotes.com/articles/news/singapore-banks-dbs-ocbc-uob-fed-rate-hike-q4-2026/",
-   "title": "Singapore Banks After the Fed Rate Hike: DBS, OCBC & UOB in Q4 2026",
-   "age": "12 days ago"
+   "url": "https://qz.com/amazon-constellation-energy-nuclear-power-deal-maryland-100126",
+   "title": "Amazon signs 20-year nuclear power deal with Constellation Energy",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.easyglobalbanking.com/singapore-banking/dbs-vs-ocbc-vs-uob-2026-results/",
-   "title": "DBS vs OCBC vs UOB: Best Bank for Clients in 2026?",
-   "age": "40 days ago"
+   "url": "https://www.bloomberg.com/news/articles/2026-09-30/amazon-nuclear-deal-to-help-expand-constellation-s-maryland-site",
+   "title": "Amazon Strikes 20-Year Nuclear Power Deal With Constellation for Maryland Plant - Bloomberg",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-performance-2026",
-   "title": "Singapore Banks Performance 2026 Analysis",
+   "url": "https://www.sec.gov/Archives/edgar/data/1868275/000186827526000029/ceg-20260224991.htm",
+   "title": "Constellation Energy Corp - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://fortune.com/asia/2025/08/07/dbs-uob-ocbc-earnings-singapore-banks-tariffs-interest-rates",
-   "title": "dbs uob ocbc earnings singapore banks tariffs interest rates",
+   "url": "https://www.sec.gov/Archives/edgar/data/1868275/000155278126000140/e26004_ceg-def14a.htm",
+   "title": "Constellation Energy Corp - Form DEF 14A - FY2026",
    "age": null
   },
   {
-   "url": "https://www.itiger.com/news/1171937414",
-   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
+   "url": "https://baltimoresun.com/2026/09/30/amazon-deal-calvert-cliffs-nuclear",
+   "title": "Amazon deal with Calvert Cliffs would extend nuclear plant’s life, explore new reactors",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001868275/000186827526000097/ceg-20260806991.htm",
+   "title": "Constellation Energy Corp - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.itiger.com/hans/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
+   "url": "https://www.tradingpedia.com/2026/10/01/constellation-energy-surges-on-long-term-amazon-deal/",
+   "title": "Constellation Energy Surges on Long-Term Amazon Deal",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.itiger.com/hant/news/1171937414",
-   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
-   "age": null
+   "url": "https://finance.yahoo.com/economy/policy/articles/meta-counted-mark-zuckerberg-4-040500231.html",
+   "title": "Meta counted Mark Zuckerberg’s $4.1B stock payout as research pay to claim a $355M tax break — and the IRS wants it back",
+   "age": "0 days ago"
   },
   {
-   "url": "https://mainlymiles.com/2026/01/23/singapore-airlines-announces-schedule-through-to-october-2026/",
-   "title": "Singapore Airlines announces schedule through to October 2026 - Mainly Miles",
-   "age": "235 days ago"
+   "url": "https://finance.yahoo.com/economy/policy/articles/meta-used-zuckerbergs-pay-cut-230113248.html",
+   "title": "Meta Used Zuckerberg's Pay to Cut Its Taxes by $355 Million: Could Musk Do It Too?",
+   "age": "0 days ago"
   },
   {
-   "url": "https://mainlymiles.com/2025/08/29/singapore-airlines-announces-schedule-through-to-march-2026/",
-   "title": "Singapore Airlines announces schedule through to March 2026 - Mainly Miles",
-   "age": "313 days ago"
+   "url": "https://moneywise.com/news/top-stories/meta-mark-zuckerberg-research-tax-credit-irs",
+   "title": "Meta counted Mark Zuckerberg’s $4.1B stock payout as research pay to claim a $355M tax break — and the IRS wants it back",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.aviation24.be/category/airlines/singapore-airlines/",
-   "title": "Singapore Airlines News Room - Latest news and breaking stories - Aviation24.be",
-   "age": "145 days ago"
+   "url": "https://moneywise.com/news/top-stories/elizabeth-warren-big-tech-ai-tax-breaks-amazon-google-meta-microsoft",
+   "title": "Elizabeth Warren probes $19B in tax breaks for Amazon, Google, Meta and Microsoft as AI drains $96B in federal revenue",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/press-release/",
-   "title": "News releases",
-   "age": "524 days ago"
+   "url": "https://unusualwhales.com/news/meta-355m-tax-break-zuckerberg-researcher",
+   "title": "Meta Took $355M Tax Break Calling Zuckerberg a \"Researcher\"",
+   "age": "0 days ago"
   },
   {
-   "url": "https://mainlymiles.com/2026/09/20/singapore-airlines-announces-schedule-through-to-march-2027/",
-   "title": "Singapore Airlines announces schedule through to March 2027 - Mainly Miles",
-   "age": "9 days ago"
-  },
-  {
-   "url": "https://blog.wego.com/singapore-airlines-flight-status-2026/",
-   "title": "Singapore Airlines Flight Status (September 2026): Routes, Schedule, and Flights Resumption - Wego Travel Blog",
-   "age": "23 days ago"
-  },
-  {
-   "url": "https://mainlymiles.com/2026/01/25/singapore-airlines-business-class-seat-types-by-route-to-october-2026/",
-   "title": "Singapore Airlines Business Class seat types by route to October 2026 - Mainly Miles",
-   "age": "37 days ago"
-  },
-  {
-   "url": "https://www.greatdeals.com.sg/2026/09/29/singapore-airlines-flight-deals-october-2026",
-   "title": "Singapore Airlines Launches Flight Deals From SGD198 to Asia, Australia and Europe, Book by October 7",
+   "url": "https://phemex.com/news/article/irs-seeks-to-recover-355m-tax-break-from-meta-over-zuckerberg-classification-98379",
+   "title": "IRS Challenges Meta's $355M Tax Break on Zuckerberg Compensa",
    "age": "1 days ago"
   },
   {
-   "url": "https://aviationa2z.com/index.php/2026/09/21/singapore-airlines-adds-new-routes-as-europe-capacity-surges/",
-   "title": "Singapore Airlines Adds New Routes as Europe Capacity Surges - Aviation A2Z",
-   "age": "10 days ago"
+   "url": "https://techstartups.com/2026/09/30/meta-classified-zuckerberg-as-a-researcher-to-claim-355-million-tax-break-on-4-1-billion-pay-nyt-reports/",
+   "title": "Meta classified Zuckerberg as a researcher to claim $355 million tax break on $4.1 billion pay, NYT reports - Tech Startups",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.singaporeair.com/en_UK/at/media-centre/press-release",
-   "title": "Featured News Release",
+   "url": "https://en.coinotag.com/meta-platforms-irs-355-million-zuckerberg-tax-break",
+   "title": "Coinotag",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://wallstreetinsider.org/mark-zuckerberg-could-pay-millions-to-the-irs-on-meta-dividends-he-still-might-be-getting-a-major-break-6d699639/",
+   "title": "Mark Zuckerberg could pay millions to the IRS on Meta dividends. He still might be getting ‘a major break’.",
    "age": null
   },
   {
-   "url": "https://dealroom.co/news/157331-keppel-prices-150-million-offshore-renminbi-bond-at-1-95/",
-   "title": "Keppel prices $150 million offshore renminbi bond at 1.95%",
+   "url": "https://www.thestandard.com.hk/finance/article/344348/DBS-Group-appoints-Blackstone-Singapore-chair-Gautam-Banerjee-to-boards",
+   "title": "DBS Group appoints Blackstone Singapore chair Gautam Banerjee to boards",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://fintechnews.sg/138326/fintech/dbs-gautam-banerjee-board-appointment/",
+   "title": "Blackstone Singapore Chairman Gautam Banerjee Joins DBS Boards - Fintech Singapore",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.theedgesingapore.com/news/new-appointments/dbs-appoints-blackstone-singapore-chairman-gautam-banerjee-board-directors",
+   "title": "DBS appoints Blackstone Singapore chairman Gautam Banerjee to board of directors",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.newsquawk.com/headlines/pre-market-taiwan-and-singapore-stocks-news-tsmc-2330-tt-is-evaluating-a-potential-investment-in-texas-to-expand-us-chip-production",
+   "title": "PRE-MARKET TAIWAN AND SINGAPORE STOCKS NEWS: TSMC (2330 TT) is evaluating a potential investment in Texas to expand US chip production",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Chandrajit_Banerjee",
+   "title": "Chandrajit Banerjee",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Vikram_Banerjee",
+   "title": "Vikram Banerjee",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Gautam_Sanyal",
+   "title": "Gautam Sanyal",
+   "age": null
+  },
+  {
+   "url": "https://singaporeair.com/th_TH/th/about-us/information-for-investors/SIA-Director",
+   "title": "Board of Directors and Corporate Data",
+   "age": null
+  },
+  {
+   "url": "https://www.singaporeair.com/zh_CN/sg/about-us/information-for-investors/SIA-Director",
+   "title": "Board of Directors and Corporate Data",
+   "age": null
+  },
+  {
+   "url": "https://www.asiaone.com/singapore/singapore-airlines-dubai-scoot-jeddah-flights-cancelled",
+   "title": "SIA, Scoot cancel flights to Middle East amid heightened uncertainties, Singapore News - AsiaOne",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://sg.news.yahoo.com/sia-scoot-extend-middle-east-054419029.html",
+   "title": "SIA, Scoot extend Middle East flight cancellations to December - Yahoo News Singapore",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://travelbizmonitor.com/top-stories/singapore-airlines-extends-middle-east-flight-cancellations/",
+   "title": "Singapore Airlines extends Middle East flight cancellations - TravelBiz Monitor: India travel news, travel trends, tourism",
+   "age": "76 days ago"
+  },
+  {
+   "url": "https://e.vnexpress.net/news/travel/singapore-airlines-scoot-extend-flight-cancellations-amid-escalating-middle-east-conflict-5049498.html",
+   "title": "Singapore Airlines, Scoot extend flight cancellations amid escalating Middle East conflict - VnExpress International",
+   "age": "203 days ago"
+  },
+  {
+   "url": "https://btabloid.com/singapore-airlines-flight-delays",
+   "title": "Singapore Airlines Extends Middle East Flight Suspensions - Business Tabloid",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://nomadlawyer.org/middle-east-aviation-crisis-2026-singapore-airlines-dubai-cancellation",
+   "title": "Middle East Aviation Crisis 2026: Singapore Airlines Cancels Dubai Flights Amid Regional Flight Chaos - Nomad Lawyer",
+   "age": "147 days ago"
+  },
+  {
+   "url": "https://gulfnews.com/business/aviation/singapore-airlines-extends-dubai-flight-cancellations-1.500494403",
+   "title": "Singapore Airlines extends Dubai flight cancellations",
+   "age": null
+  },
+  {
+   "url": "https://www.malaymail.com/news/singapore/2026/03/06/singapore-airlines-scoot-extend-middle-east-flight-cancellations-to-mid-march-as-iran-war-disrupts-routes/211562",
+   "title": "www.malaymail.com",
+   "age": null
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/newsalert-listing/advisory-on-singapore-airlines-flights-affected-the-geopolitical/",
+   "title": "Advisory on Singapore Airlines flights affected by the geopolitical situation in the Middle East",
+   "age": null
+  },
+  {
+   "url": "https://www.cnbc.com/2026/09/30/trumps-ai-lunch-included-everyone-but-apple.html",
+   "title": "Trump’s AI lunch included every major tech company. Except Apple",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/09/29/tech-white-house-ai-lunch-trump.html",
+   "title": "Trump says he and tech leaders signed AI agreement that is 'morally binding'",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://abcnews.com/Politics/top-ai-leaders-meet-trump-white-house-amid/story?id=136832988",
+   "title": "Trump says AI leaders signed a 'constitution' to police themselves - ABC News",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/09/28/trump-ai-tech-lunch.html",
+   "title": "Zuckerberg, Amodei among tech executives set to meet Trump Tuesday",
    "age": "2 days ago"
   },
   {
-   "url": "https://www.keppel.com/investor-relations/",
-   "title": "Investor Relations - Keppel - Global asset manager and operator creating solutions for a sustainable future",
-   "age": "75 days ago"
+   "url": "https://www.cnbc.com/2026/09/25/the-tech-download-trump-xi-ai-talks.html",
+   "title": "Trump and Xi dined with AI's biggest names. Here's what we know about tech talks so far",
+   "age": "5 days ago"
   },
   {
-   "url": "https://thestrategystory.com/blog/keppel-swot-analysis-2026",
-   "title": "Keppel SWOT Analysis in 2026 - The Strategy Story",
+   "url": "https://www.newsy-today.com/apple-excluded-from-trumps-tech-industry-ai-luncheon/",
+   "title": "Apple Excluded from Trump's Tech Industry AI Luncheon - Newsy Today",
    "age": "0 days ago"
   },
   {
-   "url": "https://sg.finance.yahoo.com/news/thai-beverages-1hfy2026-earnings-lower-050257644.html",
-   "title": "Thai Beverage's 1HFY2026 earnings lower on impairment",
-   "age": "139 days ago"
-  },
-  {
-   "url": "https://drwealth.com/cdl-finally-has-a-plan-to-unlock-value-so-why-did-the-stock-fall-8",
-   "title": "CDL Finally Has a Plan to Unlock Value. So Why Did the Stock Fall 8%?",
+   "url": "https://www.ico-optics.org/white-house-ai-summit-snubs-apple-amid-tech-giants/",
+   "title": "White House AI Summit Snubs Apple Amid Tech Giants",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.tipranks.com/news/company-announcements/thaibev-announces-2024-shareholders-meeting",
-   "title": "thaibev announces 2024 shareholders meeting",
-   "age": null
+   "url": "https://www.newsbeep.com/us/866683/",
+   "title": "Trump’s AI lunch included everyone but Apple - United States News Beep",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.tipranks.com/news/company-announcements/thaibev-announces-shareholder-dialogue-session",
-   "title": "thaibev announces shareholder dialogue session",
-   "age": null
-  },
-  {
-   "url": "https://pl.tradingview.com/news/urn:summary_document_transcript:quartr.com:2342009:0-thai-beverage-public-company-revenue-and-profit-fell-but-beer-profits-surged-2026-outlook-benefits-from-lower-input-costs",
-   "title": "urn:summary document transcript:quartr.com:2342009:0 thai beverage public company revenue and profit fell but beer profits surged 2026 outlook benefits from lower input costs",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/news/global-markets/sgx-shares-capitalland-and-thai-beverage-price-targets",
-   "title": "sgx shares capitalland and thai beverage price targets",
-   "age": null
-  },
-  {
-   "url": "https://be.marketscreener.com/koers/aandeel/THAI-BEVERAGE-6498120/nieuws-andere-talen/",
-   "title": "Andere talen Thai Beverage",
-   "age": null
-  },
-  {
-   "url": "https://www.fool.com/investing/stock-market/upcoming-earnings-reports/",
-   "title": "Earnings Reports of Top Companies: Revenue, Profits & Forecasts",
-   "age": "20 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/zacks-investment-ideas-feature-highlights-130100092.html",
-   "title": "Zacks Investment Ideas feature highlights: Microsoft, NVIDIA and Apple",
-   "age": "9 days ago"
-  },
-  {
-   "url": "https://www.kiplinger.com/investing/live/nvidia-earnings-live-updates-and-commentary-august-2026",
-   "title": "Nvidia Earnings: Updates and Commentary August 2026",
-   "age": "34 days ago"
-  },
-  {
-   "url": "https://www.startuphub.ai/ai-news/artificial-intelligence/2026/nvidia-earnings-preview-apple-s-ai-macs-openai-s-chip-ambitions",
-   "title": "Nvidia Earnings Preview, Apple's AI Macs & OpenAI's…",
-   "age": "36 days ago"
-  },
-  {
-   "url": "https://www.alpha-sense.com/earnings/nvda/",
-   "title": "NVIDIA Corp Earnings - Analysis & Highlights for Q2 2026",
-   "age": "314 days ago"
-  },
-  {
-   "url": "https://valueaddvc.com/big-tech-earnings",
-   "title": "Big Tech Earnings Q2 2026: Apple $143B, Nvidia $81B",
-   "age": "19 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/live/tech-stocks-today-big-tech-earnings-134611080.html",
-   "title": "Tech stocks today: Amazon beats, Apple sinks",
-   "age": "61 days ago"
-  },
-  {
-   "url": "https://investor.nvidia.com/financial-info/financial-reports",
-   "title": "Quarterly Results",
-   "age": null
-  },
-  {
-   "url": "https://www.fxstreet.com/news/microsoft-apple-remain-only-3-trillion-companies-as-nvidia-earnings-push-it-below-threshold-202408291617",
-   "title": "microsoft apple remain only 3 trillion companies as nvidia earnings push it below threshold 202408291617",
-   "age": null
-  },
-  {
-   "url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html",
-   "title": "Big Tech earnings: Meta, Apple, Tesla, Microsoft AI spend in focus",
-   "age": "246 days ago"
-  },
-  {
-   "url": "https://fortune.com/2026/01/11/magnificent-7-stock-market-dominance-cracking-nvidia-microsoft-apple-meta-alphabet-amazon-tesla/",
-   "title": "Magnificent 7’s stock market dominance shows signs of cracking",
-   "age": "262 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/news/prediction-1-unstoppable-stock-join-085000891.html",
-   "title": "Prediction: 1 Unstoppable Stock Will Join Nvidia, Apple, Microsoft, Amazon, Alphabet, and Meta in the $1 Trillion Club In 2026",
-   "age": "341 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/live/tech-stocks-today-meta-stock-jumps-on-cloud-computing-plans-to-rival-amazon-microsoft-151053436.html",
-   "title": "Tech stocks today: Meta stock jumps on cloud computing plans to rival Amazon, Microsoft",
-   "age": "91 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/options/articles/meta-underperforming-every-trillion-dollar-131439350.html",
-   "title": "Meta Is Underperforming Every Trillion-Dollar Stock but Tesla. This Trade Pays You While Wall Street Waits It Out.",
-   "age": "23 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/news/mega-cap-tech-stocks-buy-184500822.html",
-   "title": "Mega-Cap Tech Stocks to Buy for AI Growth: AMZN and META",
-   "age": "705 days ago"
-  },
-  {
-   "url": "https://www.nasdaq.com/articles/should-you-buy-tesla-stock-heading-2026-answer-might-surprise-you",
-   "title": "Should You Buy Tesla Stock Heading Into 2026? The Answer Might Surprise You.",
-   "age": "302 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/AMZN/",
-   "title": "Amazon.com, Inc. (AMZN) Stock Price, News, Quote & History - Yahoo Finance",
-   "age": "7 days ago"
-  },
-  {
-   "url": "https://uk.finance.yahoo.com/news/microsoft-alphabet-meta-apple-amazon-shell-stocks-to-watch-135508016.html",
-   "title": "Stocks to watch this week: Microsoft, Alphabet, Meta, Apple, Amazon and Shell",
-   "age": "341 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/news/cathie-woods-ark-invest-ups-amazon-and-meta-stakes-dumps-tesla",
-   "title": "cathie woods ark invest ups amazon and meta stakes dumps tesla",
+   "url": "https://www.newsonair.gov.in/president-trump-hosts-tech-ceos-at-white-house-for-talks-on-ai-u-s-investments",
+   "title": "president trump hosts tech ceos at white house for talks on ai u s investments",
    "age": null
   }
  ],
  "leads": [
   {
    "symbols": [
-    "TSLA"
+    "AMZN"
    ],
    "source": "fool.com",
-   "pubDate": "2026-09-30T19:03:00Z",
-   "headline": "3 Robotics Stocks to Buy That Aren't Tesla",
-   "url": "https://www.fool.com/investing/2026/09/30/3-robotics-stocks-to-buy-that-arent-tesla/"
+   "pubDate": "2026-10-01T06:50:00Z",
+   "headline": "Amazon Stock Pays $0 in Dividends. Here's Why Long-Term Investors Should Own It Anyway.",
+   "url": "https://www.fool.com/investing/2026/10/01/amazon-stock-pays-0-in-dividends-heres-why-long-te/"
   },
   {
    "symbols": [
-    "TSLA"
+    "S68.SI"
    ],
-   "source": "247wallst.com",
-   "pubDate": "2026-09-30T18:53:28Z",
-   "headline": "Which Automaker Stock Dominated in September: Tesla, Ford, or General Motors?",
-   "url": "https://247wallst.com/investing/2026/09/30/which-automaker-stock-dominated-in-september-tesla-ford-or-general-motors/"
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-01T05:55:55Z",
+   "headline": "Poor liquidity? Share 3-5 year plan with investors, Koh Boon Hwee urges listco chairs",
+   "url": "https://www.businesstimes.com.sg/companies-markets/poor-liquidity-share-3-5-year-plan-investors-koh-boon-hwee-urges-listco-chairs"
   },
   {
    "symbols": [
-    "AAPL"
+    "C6L.SI"
    ],
-   "source": "trefis.com",
-   "pubDate": "2026-09-30T18:51:54Z",
-   "headline": "What Is The Case For Waiting On Qualcomm Stock?",
-   "url": "https://www.trefis.com/articles/617167/what-is-the-case-for-waiting-on-qualcomm-stock/2026-09-30"
-  },
-  {
-   "symbols": [
-    "AAPL",
-    "NVDA"
-   ],
-   "source": "thestreet.com",
-   "pubDate": "2026-09-30T18:17:00Z",
-   "headline": "TSMC's next move could ripple far beyond Apple, Nvidia",
-   "url": "https://www.thestreet.com/technology/beyond-nvidia-tsmc-expansion-benefits-chip-toolmakers-amat-lrcx"
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-01T05:45:36Z",
+   "headline": "SIA, Scoot extend cancellations of Middle East flights to December",
+   "url": "https://www.businesstimes.com.sg/companies-markets/transport-logistics/sia-scoot-extend-cancellations-middle-east-flights-december"
   },
   {
    "symbols": [
     "AMZN"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-09-30T18:12:09Z",
-   "headline": "What Target (TGT)'s Holiday Price Cuts and Premium Brand Push Mean For Shareholders",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/target-tgt-holiday-price-cuts-181209917.html"
+   "pubDate": "2026-10-01T05:20:03Z",
+   "headline": "Amazon Signs 20-Year Nuclear Power Deal With Constellation, Unlocking $3 Billion Investment to Fuel AI-Induced Electricity Demand",
+   "url": "https://finance.yahoo.com/energy/articles/amazon-signs-20-nuclear-power-052003956.html"
+  },
+  {
+   "symbols": [
+    "TSLA"
+   ],
+   "source": "stocktwits.com",
+   "pubDate": "2026-10-01T04:39:46Z",
+   "headline": "TSLA, SPCX Rise After Cathie Wood Says Musk Is ‘Working All Angles’ With Trump, Xi Amid China Merger Hurdles",
+   "url": "https://stocktwits.com/news-articles/markets/equity/tsla-spcx-cathie-wood-musk-working-all-angles-trump-xi-china-merger-hurdles/cZDisKIRBLv"
   },
   {
    "symbols": [
     "META"
    ],
-   "source": "247wallst.com",
-   "pubDate": "2026-09-30T18:12:02Z",
-   "headline": "Unity Software Surges 5% as Traders Weigh Meta Platforms VR Glasses Support; Adobe Rises 3%, Intuit Adds 2%",
-   "url": "https://247wallst.com/investing/2026/09/30/unity-software-surges-5-as-traders-weigh-meta-platforms-vr-glasses-support-adobe-rises-3-intuit-adds-2/"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-01T04:05:00Z",
+   "headline": "Meta counted Mark Zuckerberg’s $4.1B stock payout as research pay to claim a $355M tax break — and the IRS wants it back",
+   "url": "https://finance.yahoo.com/economy/policy/articles/meta-counted-mark-zuckerberg-4-040500231.html"
   },
   {
    "symbols": [
-    "GOOGL"
+    "META"
    ],
-   "source": "bisnow.com",
-   "pubDate": "2026-09-30T18:08:17Z",
-   "headline": "Morningstar To Relocate Global HQ To Renovated Thompson Center",
-   "url": "https://www.bisnow.com/news/chicago/office/morningstar-to-relocate-global-hq-to-renovated-thompson-center"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-01T03:55:00Z",
+   "headline": "Meta reportedly calls its AI data centers ‘pilot models’ — its research tax credits jumped from $700M to $3.9B",
+   "url": "https://finance.yahoo.com/technology/ai/articles/meta-reportedly-calls-ai-data-035500665.html"
+  },
+  {
+   "symbols": [
+    "AAPL"
+   ],
+   "source": "cnbc.com",
+   "pubDate": "2026-10-01T02:07:06Z",
+   "headline": "Trump’s AI lunch included every major tech company. Except Apple",
+   "url": "https://www.cnbc.com/2026/09/30/trumps-ai-lunch-included-everyone-but-apple.html"
   },
   {
    "symbols": [
     "NVDA"
    ],
-   "source": "fool.com",
-   "pubDate": "2026-09-30T18:03:00Z",
-   "headline": "This AI Stock May Be the Biggest Winner as Enterprise AI Takes Off",
-   "url": "https://www.fool.com/investing/2026/09/30/this-ai-stock-may-be-the-biggest-winner-as-enterpr/"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-01T01:23:37Z",
+   "headline": "Is AI-Driven Edge Security Integration With Nvidia’s Stack Altering The Investment Case For Palo Alto Networks (PANW)?",
+   "url": "https://finance.yahoo.com/technology/ai/articles/ai-driven-edge-security-integration-012337957.html"
+  },
+  {
+   "symbols": [
+    "AMZN"
+   ],
+   "source": "stocktwits.com",
+   "pubDate": "2026-10-01T01:16:26Z",
+   "headline": "CEG Stock Rises Overnight: Constellation Signs 20-Year Nuclear Power Deal With Amazon",
+   "url": "https://stocktwits.com/news-articles/markets/equity/ceg-stock-rises-overnight-constellation-signs-20-year-nuclear-power-deal-with-amazon/cZDiFTxRBLN"
+  },
+  {
+   "symbols": [
+    "D05.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-01T00:41:34Z",
+   "headline": "Stocks to watch: DBS, DFI Retail, Frasers Property, Clint, ESR-Reit, Centurion, Coliwoo",
+   "url": "https://www.businesstimes.com.sg/companies-markets/capital-markets-currencies/stocks-watch-dbs-dfi-retail-frasers-property-clint-esr-reit-centurion-coliwoo"
+  },
+  {
+   "symbols": [
+    "D05.SI",
+    "Z74.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-01T00:17:38Z",
+   "headline": "Blackstone’s Gautam Banerjee joins DBS board",
+   "url": "https://www.businesstimes.com.sg/companies-markets/banking-finance/blackstones-gautam-banerjee-joins-dbs-board"
+  },
+  {
+   "symbols": [
+    "S68.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-09-30T23:00:00Z",
+   "headline": "Beyond paper tigers: Evolving SGX’s regulations to match Asia’s needs",
+   "url": "https://www.businesstimes.com.sg/singapore/bt50/beyond-paper-tigers-evolving-sgxs-regulations-match-asias-needs"
   },
   {
    "symbols": [
@@ -503,62 +431,17 @@
    "pubDate": "2026-09-30T00:51:06Z",
    "headline": "Accrelist says 12 buyers of its MClean stake not acting in concert",
    "url": "https://www.businesstimes.com.sg/companies-markets/accrelist-says-12-buyers-its-mclean-stake-not-acting-concert"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-09-29T14:55:00Z",
-   "headline": "SGX CEO Loh Boon Chye’s pay rises 7% to $8.37m as exchange delivers standout year",
-   "url": "https://www.straitstimes.com/business/sgx-ceo-loh-boon-chyes-pay-rises-7-to-8-37m-as-exchange-delivers-standout-year"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-09-29T11:32:49Z",
-   "headline": "SGX CEO Loh Boon Chye’s FY2026 pay rises 7.1% to S$8.37 million in FY2026",
-   "url": "https://www.businesstimes.com.sg/companies-markets/sgx-ceo-loh-boon-chyes-fy2026-pay-rises-7-1-s8-37-million-fy2026"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-09-29T11:32:49Z",
-   "headline": "SGX CEO Loh Boon Chye’s FY2026 pay rises 7.1% to S$8.37 million",
-   "url": "https://www.businesstimes.com.sg/companies-markets/sgx-ceo-loh-boon-chyes-fy2026-pay-rises-7-1-s8-37-million"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-09-29T09:47:33Z",
-   "headline": "Investors must take risks on young S’pore companies for future economy to thrive: SGX chairman",
-   "url": "https://www.straitstimes.com/business/investors-must-take-risks-on-young-spore-companies-for-future-economy-to-thrive-sgx-chairman"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-09-29T09:26:04Z",
-   "headline": "Number of listed companies an ‘outdated metric’ of Singapore market’s success: SGX chairman",
-   "url": "https://www.businesstimes.com.sg/companies-markets/number-listed-companies-outdated-metric-singapore-markets-success-sgx-chairman"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 38677,
-  "output": 2196,
+  "input": 37248,
+  "output": 1999,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.0997
+  "costUsd": 0.0972
  },
- "createdAt": "2026-10-01T00:25:04.830Z"
+ "createdAt": "2026-10-01T13:01:01.266Z"
 }
