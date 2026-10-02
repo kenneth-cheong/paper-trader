@@ -1,366 +1,402 @@
 {
- "market_summary": "US markets are navigating significant leadership changes and legal challenges to major tech firms. Warren Buffett's stepping down as Berkshire Hathaway chairman ends an era, though the company has said succession planning has been in place. Meanwhile, Alphabet faces a $3.2 billion ad-tech damages lawsuit, and Microsoft is undergoing executive departures as the company reorganizes around AI priorities. Tesla stock remains under pressure, down about 20% year-to-date amid broader weakness in pure-play EV makers. Market attention has turned to personal AI agents as the next frontier, with investor focus shifting beyond language model capabilities.",
+ "market_summary": "US tech stocks and major indices are navigating mixed sentiment driven by AI spending decisions and regulatory risks. Amazon's plan to offload $8 billion in Nvidia chips signals creative financing of massive capex, while Meta faces a potential $35-40 billion penalty from New Mexico over Cambridge Analytica privacy violations—though Meta called the demand \"astronomical.\" Asian markets are watching Singapore banks for currency exposure and DFI Retail's strategic pivot into Starbucks operations, while geopolitical tensions continue disrupting aviation stocks. Macro and sentiment remain fragile amid ongoing Middle East uncertainties.",
  "items": [
   {
    "symbols": [
-    "BRK-B"
+    "AMZN",
+    "NVDA"
    ],
-   "date": "2026-09-18",
-   "headline": "Warren Buffett Steps Down as Berkshire Hathaway Chairman",
-   "summary": "<cite index=\"1-4,1-5,1-6\">Warren Buffett is stepping down as chairman of Berkshire Hathaway, effective immediately, and will become chairman emeritus while his son Howard replaces him as chairman. The legendary investor has led the company since 1965, posting a 19.7% compounded annual return.</cite>",
-   "type": "management",
+   "date": "2026-10-02",
+   "headline": "Amazon seeks to offload $8 billion of Nvidia chips to investors through special-purpose vehicle",
+   "summary": "<cite index=\"2-1,2-3,2-4\">Amazon is seeking to offload about $8 billion of advanced Nvidia chips to external investors via a special purpose vehicle, spinning thousands of Grace Blackwell chips into the vehicle and then leasing the chips back</cite>.",
+   "type": "deal",
    "tone": "mixed",
-   "source_url": "https://www.cnbc.com/2026/09/18/buffett-stepping-down-as-berkshire-chairman.html"
+   "source_url": "https://uk.finance.yahoo.com/news/amazon-seeks-offload-8-bln-045010356.html"
   },
   {
    "symbols": [
-    "GOOGL"
+    "META"
    ],
    "date": "2026-10-01",
-   "headline": "Alphabet Must Face $3.2 Billion Publisher Ad-Tech Damages Lawsuit, Judge Rules",
-   "summary": "<cite index=\"21-6,21-7\">A New York federal judge ruled that USA Today, Daily Mail and approximately 5,000 publishers can pursue over $3.2 billion in damages from Google, with claims centering on allegations that the company monopolized digital advertising technology markets.</cite>",
+   "headline": "New Mexico seeks $35-40 billion penalty against Meta over Cambridge Analytica privacy violations",
+   "summary": "<cite index=\"11-6\">New Mexico asked a judge to order Meta to pay $35-40 billion in penalties after a jury found the company misled consumers about Facebook data privacy</cite>. <cite index=\"11-5\">Meta called the proposed penalty \"astronomical\" and seeks a cap of $3.45 billion</cite>.",
    "type": "legal",
    "tone": "negative",
-   "source_url": "https://cryptobriefing.com/alphabet-google-publishers-3-billion-damages/"
+   "source_url": "https://finance.yahoo.com/markets/stocks/articles/meta-stock-holds-overnight-mexico-054402427.html"
   },
   {
    "symbols": [
-    "GOOGL"
+    "D05.SI",
+    "Z74.SI"
    ],
    "date": "2026-10-01",
-   "headline": "Google Unveils Gemini 4 Argon AI Model",
-   "summary": "<cite index=\"10-3,10-4,10-5\">Alphabet's Google announced a new flagship artificial intelligence model called Argon, which is larger than previous Pro models and described as comparable to frontier models from OpenAI and Anthropic on coding and cybersecurity benchmarks.</cite>",
-   "type": "product",
-   "tone": "positive",
-   "source_url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/"
-  },
-  {
-   "symbols": [
-    "MSFT"
-   ],
-   "date": "2026-10-01",
-   "headline": "Ryan Roslansky, LinkedIn and Office Chief, to Exit Microsoft by End of 2026",
-   "summary": "<cite index=\"42-1,42-3,42-4\">Microsoft executive Ryan Roslansky, who led LinkedIn for six years and took on Office productivity responsibilities last year, will leave at the end of 2026, citing the need to be based in Redmond full-time while his life remains in the San Francisco Bay Area.</cite>",
+   "headline": "Gautam Banerjee, Blackstone Singapore Chairman, appointed to DBS boards",
+   "summary": "<cite index=\"24-1\">DBS Group appointed Gautam Banerjee to the boards of DBS Group Holdings and DBS Bank, effective 1 October 2026</cite>. <cite index=\"24-4,24-5\">Banerjee is chairman and senior managing director of Blackstone Singapore and currently serves on the boards of Singapore Telecommunications and GIC Private Limited</cite>.",
    "type": "management",
-   "tone": "mixed",
-   "source_url": "https://www.cnbc.com/2026/10/01/linkedin-chief-roslansky-microsoft-exit.html"
+   "tone": "positive",
+   "source_url": "https://www.dbs.com/newsroom/DBS_names_Gautam_Banerjee_to_Board_of_Directors"
   },
   {
    "symbols": [
-    "TSLA"
+    "D05.SI"
    ],
    "date": "2026-10-01",
-   "headline": "Tesla Down 20% in 2026 as EV Market Faces Sharp De-Rating",
-   "summary": "<cite index=\"29-8,29-9\">Tesla stock is down 25% year to date, capturing the defining EV story of 2026: a sharp de-rating in the pure-play electric vehicle complex, even as legacy automakers and the broad tech tape have moved higher.</cite>",
+   "headline": "DFI Retail acquires Starbucks licensed operations across 7 Asian markets for $340 million cash plus business",
+   "summary": "<cite index=\"33-3,33-6\">Maxim's Caterers struck a deal to repurchase its shares from DFI Retail for $340 million while DFI takes over operations of more than 1,100 Starbucks outlets across Asia</cite>. <cite index=\"37-3\">The Starbucks business generated nearly $750 million revenue in 2025 with a 7.0% underlying operating margin</cite>.",
+   "type": "deal",
+   "tone": "positive",
+   "source_url": "https://asia.nikkei.com/business/business-deals/jardines-dfi-retail-swaps-maxim-s-stake-for-starbucks-license-and-340m"
+  },
+  {
+   "symbols": [
+    "C6L.SI"
+   ],
+   "date": "2026-10-01",
+   "headline": "Singapore Airlines and Scoot extend Middle East flight cancellations to December 2",
+   "summary": "<cite index=\"40-1,40-3\">SIA extended cancellation of flights between Singapore and Dubai until December 2, while Scoot cancelled flights between Singapore and Jeddah to the same date, citing geopolitical situation in the Middle East</cite>.",
    "type": "other",
    "tone": "negative",
-   "source_url": "https://www.aol.com/articles/tesla-down-20-2026-two-191317000.html"
+   "source_url": "https://www.asiaone.com/singapore/singapore-airlines-dubai-scoot-jeddah-flights-cancelled"
   }
  ],
  "sources": [
   {
-   "url": "https://www.cnbc.com/2026/09/18/buffett-stepping-down-as-berkshire-chairman.html",
-   "title": "Warren Buffett steps down as chairman of Berkshire Hathaway: 'Father Time always wins'",
-   "age": "13 days ago"
+   "url": "https://www.investing.com/news/stock-market-news/amazon-seeks-to-offload-8-billion-of-nvidia-chips-to-investors-ft-reports-4928877",
+   "title": "Amazon seeks to offload $8 billion of Nvidia chips to investors, FT reports By Reuters",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.aljazeera.com/economy/2026/9/18/warren-buffett-steps-down-as-berkshire-hathaway-chairman",
-   "title": "Warren Buffett steps down as Berkshire Hathaway chairman",
-   "age": "13 days ago"
+   "url": "https://uk.finance.yahoo.com/news/amazon-seeks-offload-8-bln-045010356.html",
+   "title": "Amazon seeks to offload $8 bln of Nvidia chips to investors- FT",
+   "age": "0 days ago"
   },
   {
-   "url": "https://nebraskapublicmedia.org/en/news/news-articles/warren-buffett-stepping-down-as-chairman-of-berkshire-hathaway/",
-   "title": "Warren Buffett stepping down as chairman of Berkshire Hathaway",
-   "age": "13 days ago"
+   "url": "https://wmbdradio.com/2026/10/01/amazon-seeks-to-offload-8-billion-of-nvidia-chips-to-investors-ft-reports/",
+   "title": "Amazon seeks to offload $8 billion of Nvidia chips to investors, FT reports",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.washingtonpost.com/business/2026/09/18/warren-buffett-steps-down-chairman-berkshire-hathaway/",
-   "title": "Warren Buffett, legendary investor, steps down as chairman of Berkshire Hathaway - The Washington Post",
-   "age": "13 days ago"
+   "url": "https://www.newsbytesapp.com/news/science/amazon-may-offload-8b-worth-of-nvidia-chips/story",
+   "title": "Amazon plans to offload NVIDIA chips worth $8B",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.nbcnews.com/business/business-news/warren-buffett-steps-down-chairman-berkshire-hathaway-rcna598503",
-   "title": "Warren Buffett steps down as chairman of Berkshire Hathaway",
-   "age": "13 days ago"
+   "url": "https://1027wbow.com/2026/10/02/amazon-seeks-to-offload-8-billion-of-nvidia-chips-to-investors-ft-reports/",
+   "title": "Amazon seeks to offload $8 billion of Nvidia chips to investors, FT reports",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/09/19/warren-buffett-takes-next-step-in-plan-to-keep-berkshire-from-straying.html",
-   "title": "Warren Buffett takes next step in plan to keep Berkshire from straying",
-   "age": "12 days ago"
+   "url": "https://kelo.com/2026/10/01/amazon-seeks-to-offload-8-billion-of-nvidia-chips-to-investors-ft-reports/",
+   "title": "Amazon seeks to offload $8 billion of Nvidia chips to investors, FT reports",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.pbs.org/newshour/amp/nation/warren-buffett-will-remain-berkshire-hathaway-chairman-after-greg-abel-takes-over-as-ceo-in-2026",
-   "title": "warren buffett will remain berkshire hathaway chairman after greg abel takes over as ceo in 2026",
+   "url": "https://rallies.ai/news/amazon-seeks-to-offload-8-billion-of-nvidia-chips-to-investors-reportedly-e4bc0107a7b875ac",
+   "title": "Rallies",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.thenews.com.pk/latest/1418449-amazon-seeks-to-offload-billions-of-nvidia-chips-to-investors-report",
+   "title": "Amazon seeks to offload billions of Nvidia chips to investors: report",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.fool.com/investing/2025/05/26/amazon-just-sent-a-massive-warning-to-nvidia-inves",
+   "title": "amazon just sent a massive warning to nvidia inves",
    "age": null
   },
   {
-   "url": "https://techcrunch.com/2025/05/03/warren-buffett-will-step-down-as-berkshire-hathaway-ceo",
-   "title": "warren buffett will step down as berkshire hathaway ceo",
+   "url": "https://seekingalpha.com/news/4566870",
+   "title": "seekingalpha.com",
    "age": null
   },
   {
-   "url": "https://www.marketbeat.com/articles/warren-buffett-is-making-a-big-change-to-next-years-berkshire-hathaway-annual-meeting-2025-05-19",
-   "title": "Free Trial",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/meta-stock-holds-overnight-mexico-054402427.html",
+   "title": "META Stock Holds Up Overnight: New Mexico Seeks Up To $40B Privacy Penalty In Cambridge Analytica Case",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://seekingalpha.com/news/4649716-new-mexico-reportedly-seeks-up-to-40b-in-penalties-from-meta-over-data-privacy",
+   "title": "New Mexico reportedly seeks up to $40B in penalties from Meta over data privacy (META:NASDAQ)",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.engadget.com/2275451/new-mexico-meta-40-billion-penalties-cambridge-analytica-lawsuit/",
+   "title": "New Mexico wants Meta to pay $40 billion in penalties for Cambridge Analytica scandal - Engadget",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.krqe.com/news/new-mexico/new-mexico-court-to-rule-on-penalties-meta-faces-in-privacy-violation-case/",
+   "title": "New Mexico court to rule on penalties Meta faces in privacy violation case",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.santafenewmexican.com/news/local_news/new-mexico-asks-judge-to-order-meta-to-pay-up-to-40-billion-in-cambridge/article_f0a349e9-9634-4d66-8bd3-1a998e272ea1.html",
+   "title": "New Mexico asks judge to order Meta to pay up to $40 billion in Cambridge Analytica case",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.933thedrive.com/2026/10/01/new-mexico-wants-meta-to-pay-up-to-40-billion-in-penalties-after-data-privacy-trial/",
+   "title": "New Mexico wants Meta to pay up to $40 billion in penalties after data privacy trial",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://valueaddvc.com/pulse/meta-facebook-200b-new-mexico-privacy-verdict-2026",
+   "title": "Meta $200 billion New Mexico privacy verdict explained",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://www.memesita.com/meta-faces-billion-dollar-fines-after-new-mexico-privacy-ruling/",
+   "title": "Meta Faces Billion-Dollar Fines After New Mexico Privacy Ruling - Memesita",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2023-03-01/meta-accused-of-trying-to-extinguish-cambridge-analytica-claims",
+   "title": "Meta’s Record Privacy Settlement Spurs Dispute Over State Claims",
    "age": null
   },
   {
-   "url": "https://bworldonline.com/technology/2026/10/01/783519/google-announces-gemini-4-flagship-ai-model-after-months-of-delays/",
-   "title": "Google announces Gemini 4 flagship AI model after months of delays - BusinessWorld Online",
+   "url": "https://fintechnews.sg/138326/fintech/dbs-gautam-banerjee-board-appointment/",
+   "title": "Blackstone Singapore Chairman Gautam Banerjee Joins DBS Boards - Fintech Singapore",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.thestandard.com.hk/finance/article/344348/DBS-Group-appoints-Blackstone-Singapore-chair-Gautam-Banerjee-to-boards",
+   "title": "DBS Group appoints Blackstone Singapore chair Gautam Banerjee to boards",
    "age": "0 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Gemini_Robotics",
-   "title": "Gemini Robotics",
+   "url": "https://www.theedgesingapore.com/news/new-appointments/dbs-appoints-blackstone-singapore-chairman-gautam-banerjee-board-directors",
+   "title": "DBS appoints Blackstone Singapore chairman Gautam Banerjee to board of directors",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.webull.com/news/15669900151243776",
+   "title": "DBS appoints Blackstone Singapore chair Gautam Banerjee as independent director",
    "age": null
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Google_Gemini",
-   "title": "Google Gemini",
+   "url": "https://www.dbs.com/newsroom/DBS_names_Gautam_Banerjee_to_Board_of_Directors",
+   "title": "DBS names Gautam Banerjee to Board of Directors",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-appoints-gautam-banerjee-while-dbs-group-stock-trades-below-eur/70209408",
+   "title": "DBS Group appoints Gautam Banerjee while DBS Group stock trades below EUR 53.77",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Chandrajit_Banerjee",
+   "title": "Chandrajit Banerjee",
    "age": null
   },
   {
-   "url": "https://www.cnbc.com/2026/10/01/google-gemini-4-arrives-as-wall-street-shifts-to-personal-agents.html",
-   "title": "Google unveils latest AI model, but Wall Street wants a breakout personal agent",
+   "url": "https://www.ad-hoc-news.de/boerse/news/nachboerse/dbs-group-stock-after-hours-at-eur-54-02-plus-0-46-percent-versus-prior-close/70212978",
+   "title": "DBS Group stock after-hours at EUR 54.02: plus 0.46 percent versus prior close",
    "age": "0 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Apple_Intelligence",
-   "title": "Apple Intelligence",
+   "url": "https://en.wikipedia.org/wiki/Millie_Banerjee",
+   "title": "Millie Banerjee",
    "age": null
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Veo_(text-to-video_model)",
-   "title": "Veo (text-to-video model)",
+   "url": "https://en.wikipedia.org/wiki/Gautam_Sanyal",
+   "title": "Gautam Sanyal",
    "age": null
   },
   {
-   "url": "https://en.wikipedia.org/wiki/2024_in_artificial_intelligence",
-   "title": "2024 in artificial intelligence",
+   "url": "https://asia.nikkei.com/business/business-deals/jardines-dfi-retail-swaps-maxim-s-stake-for-starbucks-license-and-340m",
+   "title": "Jardines' DFI Retail swaps Maxim's stake for Starbucks license and $340m - Nikkei Asia",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000829224/000082922426000130/sbux-20260628.htm",
+   "title": "STARBUCKS CORP - Form 10-Q - FY2026",
    "age": null
   },
   {
-   "url": "https://emergent.sh/news/google-gemini-4-release-date",
-   "title": "Google Gemini 4 Rumored for October 2026 Release",
-   "age": "22 days ago"
-  },
-  {
-   "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/gemini-4-argon/",
-   "title": "Gemini 4 Argon: our next era of frontier intelligence",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://github.com/matthewnty/Matthew/issues/142",
-   "title": "📈 Daily Stock Digest — 2026-10-01 · Issue #142 · matthewnty/Matthew",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000048/goog-20260331.htm",
-   "title": "Alphabet Inc. - Form 10-Q - FY2026",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000829224/000082922426000078/sbux-03292026xearningsrele.htm",
+   "title": "STARBUCKS CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://cryptobriefing.com/alphabet-google-publishers-3-billion-damages/",
-   "title": "Alphabet faces over $3.2 billion in damages claims from publishers",
-   "age": "0 days ago"
+   "url": "https://www.scmp.com/business/companies/article/3369371/dfi-retail-sells-stake-maxims-return-starbucks-business-us340m",
+   "title": "DFI Retail sells stake in Maxim’s in return for Starbucks business, US$340m",
+   "age": "1 days ago"
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000071/goog-20260630.htm",
-   "title": "Alphabet Inc. - Form 10-Q - FY2026",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000829224/000082922426000129/sbux-06282026xearningsrele.htm",
+   "title": "STARBUCKS CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.fool.com/investing/2026/09/03/opinion-googles-latest-antitrust-ruling-is-a-big-win-for-alphabet-investors/",
-   "title": "Opinion: Google's Latest Antitrust Ruling Is a Big Win for Alphabet Investors",
-   "age": "28 days ago"
-  },
-  {
-   "url": "https://www.fool.com/investing/2026/09/03/google-just-won-the-right-to-keep-its-ad-tech-tools-they-live-in-the-one-business-it-has-that-is-shrinking/",
-   "title": "Google Just Won the Right to Keep Its Ad Tech Tools. They Live in the One Business It Has That Is Shrinking.",
-   "age": "27 days ago"
-  },
-  {
-   "url": "https://verdictwiki.com/google-adtech-antitrust/",
-   "title": "US v. Google Ad Tech (US): Monopoly Ruling & 2026 Remedies…",
-   "age": "11 days ago"
-  },
-  {
-   "url": "https://wealthawesome.com/why-alphabet-stock-is-tanking-today-10012026",
-   "title": "Why Alphabet stock is tanking today",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://techcrunch.com/?p=2450188",
-   "title": "Google logo",
+   "url": "https://www.sec.gov/Archives/edgar/data/829224/000082922426000010/sbux-12282025xearningsrele.htm",
+   "title": "STARBUCKS CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://seekingalpha.com/news/4073162-google-hit-with-23b-suit-from-europe-media-groups-over-ad-tech",
-   "title": "Google hit with $2.3B suit from Europe media groups over ad tech",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000829224/000082922426000080/sbux-20260329.htm",
+   "title": "STARBUCKS CORP - Form 10-Q - FY2026",
    "age": null
   },
   {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-down-25-2026-does-191506328.html",
-   "title": "Tesla Is Down 25% in 2026: How Does It Compare to EV Competitors Like Rivian, Lucid, and General Motors?",
-   "age": "44 days ago"
+   "url": "https://kalkinemedia.com/uk/news/announcements/jardine-mathesons-dfi-retail-to-acquire-starbucks-licensed-operations-in-seven-asian-markets-for-340-million-in-deal-with-maxims-caterers",
+   "title": "Jardine Matheson’s DFI Retail to Acquire Starbucks Licensed Operations in Seven Asian Markets for $340 Million in Deal with Maxim's Caterers",
+   "age": "1 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/04/06/tesla-is-down-sharply-in-2026-jpmorgan-sees-even-more-declines-ahead.html",
-   "title": "Tesla is down sharply in 2026. JPMorgan sees the stock falling another 60%",
-   "age": "178 days ago"
-  },
-  {
-   "url": "https://www.fool.com/investing/2026/08/13/tesla-is-down-26-in-2026-and-trailing-every-magni/",
-   "title": "Tesla Is Down 26% in 2026 and Trailing Every Magnificent Seven Peer. Here's What Could Turn It Around.",
-   "age": "49 days ago"
-  },
-  {
-   "url": "https://cleantechnica.com/2026/07/24/tesla-stock-down-ev-market-share-us-competition/",
-   "title": "Tesla Stocks Down, US Market Share Up: What Is Going On?",
-   "age": "69 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-still-down-17-2026-191515507.html",
-   "title": "Tesla Is Still Down 17% in 2026. Can Wednesday’s Earnings Event Get TSLA Stock Back on Track?",
-   "age": "73 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/07/02/tesla-tsla-q2-2026-vehicle-delivery-production.html",
-   "title": "Tesla stock sinks 7% despite strong deliveries report, posting worst day in nearly a year",
-   "age": "91 days ago"
-  },
-  {
-   "url": "https://www.aol.com/articles/tesla-down-20-2026-two-191317000.html",
-   "title": "Tesla Is Down 20% in 2026. These Two Other EV Makers Are Doing Even Worse. - AOL",
+   "url": "https://insideretail.asia/2026/10/02/dfi-retail-to-take-over-starbucks-business-from-maxims-in-seven-markets/",
+   "title": "DFI Retail to take over Starbucks business from Maxim’s in seven markets - Inside Retail Asia",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.forbes.com/sites/investor-hub/article/tesla-stock-last-half-2026/",
-   "title": "Tesla (TSLA) Stock Could Sink In The Last Half Of 2026. Here’s Why",
-   "age": "30 days ago"
+   "url": "https://www.asiaone.com/singapore/singapore-airlines-scoot-middle-east-flight-cancellations-15-july",
+   "title": "Singapore Airlines, Scoot cancel Middle East flights after renewed US-Iran hostilities, Singapore News - AsiaOne",
+   "age": "78 days ago"
   },
   {
-   "url": "https://www.foreignpolicyjournal.com/2026/06/26/tesla-nasdaq-tsla-stock-price-down-14-in-2026-as-energy-division-emerges-as-key-growth-driver/",
-   "title": "Tesla (NASDAQ: TSLA) Stock Price Down 14% In 2026 As Energy Division Emerges As Key Growth Driver",
-   "age": "97 days ago"
+   "url": "https://www.asiaone.com/singapore/singapore-airlines-dubai-scoot-jeddah-flights-cancelled",
+   "title": "SIA, Scoot cancel flights to Middle East amid heightened uncertainties, Singapore News - AsiaOne",
+   "age": "1 days ago"
   },
   {
-   "url": "https://aiweekly.co/alerts/microsofts-office-and-teams-chief-roslansky-to-exit-end-of-2026",
-   "title": "Microsoft's Office and Teams Chief Roslansky to Exit End of 2026",
-   "age": "0 days ago"
+   "url": "https://travelbizmonitor.com/top-stories/singapore-airlines-extends-middle-east-flight-cancellations/",
+   "title": "Singapore Airlines extends Middle East flight cancellations - TravelBiz Monitor: India travel news, travel trends, tourism",
+   "age": "77 days ago"
   },
   {
-   "url": "https://thenextweb.com/news/roslansky-to-leave-microsoft",
-   "title": "LinkedIn’s former chief Ryan Roslansky to leave Microsoft",
-   "age": "0 days ago"
+   "url": "https://aviationa2z.com/index.php/2026/10/01/singapore-airlines-cancels-flights-to-dubai/",
+   "title": "Singapore Airlines Cancels Flights to Busiest International Airport in the World - Aviation A2Z",
+   "age": "1 days ago"
   },
   {
-   "url": "https://hyper.ai/en/stories/73afe0f784c8cb5e71d1dba9a6c7c80a",
-   "title": "Ryan Roslansky to Step Down as Microsoft's LinkedIn Chief",
+   "url": "https://e.vnexpress.net/news/news/traffic/which-singapore-airlines-scoot-flights-are-canceled-due-to-middle-east-attacks-5045212.html",
+   "title": "Which Singapore Airlines, Scoot flights are canceled due to Middle East attacks? - VnExpress International",
+   "age": "215 days ago"
+  },
+  {
+   "url": "https://nomadlawyer.org/middle-east-aviation-crisis-2026-singapore-airlines-dubai-cancellation",
+   "title": "Middle East Aviation Crisis 2026: Singapore Airlines Cancels Dubai Flights Amid Regional Flight Chaos - Nomad Lawyer",
+   "age": "148 days ago"
+  },
+  {
+   "url": "https://gulfnews.com/business/aviation/singapore-airlines-extends-dubai-flight-cancellations-1.500494403",
+   "title": "Singapore Airlines extends Dubai flight cancellations",
    "age": null
   },
   {
-   "url": "https://www.geekwire.com/2026/microsoft-executives-peter-lee-president-of-microsoft-science-and-evp-ryan-roslansky-to-depart/",
-   "title": "Longtime Microsoft research leader Peter Lee and former LinkedIn CEO Ryan Roslansky to depart",
-   "age": "0 days ago"
+   "url": "https://www.malaymail.com/news/singapore/2026/03/06/singapore-airlines-scoot-extend-middle-east-flight-cancellations-to-mid-march-as-iran-war-disrupts-routes/211562",
+   "title": "www.malaymail.com",
+   "age": null
   },
   {
-   "url": "https://www.cnbc.com/2026/10/01/linkedin-chief-roslansky-microsoft-exit.html",
-   "title": "Former LinkedIn chief Roslansky to leave Microsoft, following other exec departures",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://blogs.microsoft.com/blog/2026/10/01/microsoft-365-and-linkedin-leadership-update/",
-   "title": "Microsoft 365 and LinkedIn leadership update - The Official Microsoft Blog",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.briefs.co/news/linkedin-boss-ryan-roslansky-to-leave-microsoft-at-end-of-20/",
-   "title": "LinkedIn CEO Ryan Roslansky to exit end of 2026",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://newsable.asianetnews.com/markets/msft-s-linkedin-chief-ryan-roslansky-to-exit-as-ai-leadership-shake-up-continues-articleshow-3xfxwso",
-   "title": "MSFT’s LinkedIn Chief Ryan Roslansky To Exit As AI Leadership Shake-Up Continues",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Ryan_Roslansky",
-   "title": "Ryan Roslansky",
+   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/newsalert-listing/advisory-on-singapore-airlines-flights-affected-the-geopolitical/",
+   "title": "Advisory on Singapore Airlines flights affected by the geopolitical situation in the Middle East",
    "age": null
   }
  ],
  "leads": [
   {
    "symbols": [
-    "TSLA"
+    "NVDA"
    ],
-   "source": "247wallst.com",
-   "pubDate": "2026-10-01T19:13:17Z",
-   "headline": "Tesla Is Down 20% in 2026. These Two Other EV Makers Are Doing Even Worse.",
-   "url": "https://247wallst.com/investing/2026/10/01/tesla-is-down-20-in-2026-these-two-other-ev-makers-are-doing-even-worse/"
+   "source": "stocktwits.com",
+   "pubDate": "2026-10-02T05:44:20Z",
+   "headline": "SPCX Stock Climbs Overnight: Musk Teases ‘Big Deal’ Nvidia AI Milestone — Industry Insider Flags Up To 25% Higher Power",
+   "url": "https://stocktwits.com/news-articles/markets/equity/spcx-stock-musk-big-deal-nvidia-ai-industry-insider-higher-power/cZDjbQERB0H"
+  },
+  {
+   "symbols": [
+    "META"
+   ],
+   "source": "stocktwits.com",
+   "pubDate": "2026-10-02T05:44:02Z",
+   "headline": "META Stock Holds Up Overnight: New Mexico Seeks Up To $40B Privacy Penalty In Cambridge Analytica Case",
+   "url": "https://stocktwits.com/news-articles/markets/equity/meta-stock-holds-up-overnight-new-mexico-seeks-up-to-40-b-privacy-penalty-in-cambridge-analytica-case/cZDjbfwRB0u"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-02T05:42:48Z",
+   "headline": "Here’s Why Investors Keep Buying Nvidia (NVDA)",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/why-investors-keep-buying-nvidia-054248249.html"
+  },
+  {
+   "symbols": [
+    "NVDA",
+    "AMZN"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-02T04:48:47Z",
+   "headline": "Amazon seeks to offload $8 bln of Nvidia chips to investors- FT",
+   "url": "https://finance.yahoo.com/technology/ai/articles/amazon-seeks-offload-8-bln-044847290.html"
+  },
+  {
+   "symbols": [
+    "D05.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-02T04:26:13Z",
+   "headline": "DFI Retail’s Starbucks deal offers ‘earnings stability’ despite near-term hit: analysts",
+   "url": "https://www.businesstimes.com.sg/companies-markets/dfi-retails-starbucks-deal-offers-earnings-stability-despite-near-term-hit-analysts"
+  },
+  {
+   "symbols": [
+    "NVDA",
+    "AMZN"
+   ],
+   "source": "channelnewsasia.com",
+   "pubDate": "2026-10-02T04:12:43Z",
+   "headline": "Amazon seeks to offload $8 billion of Nvidia chips to investors, FT reports",
+   "url": "https://www.channelnewsasia.com/business/amazon-seeks-offload-8-billion-nvidia-chips-investors-ft-reports-6426021"
   },
   {
    "symbols": [
     "NVDA"
    ],
    "source": "fool.com",
-   "pubDate": "2026-10-01T18:50:00Z",
-   "headline": "Should You Buy Nvidia Stock in October? What Its Decade-Low Valuation Signals",
-   "url": "https://www.fool.com/investing/2026/10/01/should-you-buy-nvidia-stock-in-october-what-its-de/"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-10-01T18:40:00Z",
-   "headline": "SCTE TechExpo26 Showcases the Technology Powering the Connected Future",
-   "url": "https://finance.yahoo.com/technology/articles/scte-techexpo26-showcases-technology-powering-184000409.html"
-  },
-  {
-   "symbols": [
-    "BRK-B"
-   ],
-   "source": "fool.com",
-   "pubDate": "2026-10-01T18:35:00Z",
-   "headline": "Warren Buffett Just Stepped Down as Berkshire's Chairman After Delivering a 19.7% Annual Return Over 61 Years. Should Shareholders Be Concerned?",
-   "url": "https://www.fool.com/investing/2026/10/01/warren-buffett-just-stepped-down-as-berkshires-cha/"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "source": "cnbc.com",
-   "pubDate": "2026-10-01T18:29:49Z",
-   "headline": "Google unveils latest AI model, but Wall Street wants a breakout personal agent",
-   "url": "https://www.cnbc.com/2026/10/01/google-gemini-4-arrives-as-wall-street-shifts-to-personal-agents.html"
+   "pubDate": "2026-10-02T03:20:00Z",
+   "headline": "Here's My Top AI Stock to Buy in October",
+   "url": "https://www.fool.com/investing/2026/10/01/heres-my-top-ai-stock-to-buy-in-october/"
   },
   {
    "symbols": [
     "AMZN"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-10-01T18:26:52Z",
-   "headline": "Amazon, Top Warship Builder Added To Goldman's Conviction List",
-   "url": "https://finance.yahoo.com/m/08cb7c46-4dcd-346f-b6ec-913413d38dbe/amazon%2C-top-warship-builder.html"
+   "pubDate": "2026-10-02T03:10:18Z",
+   "headline": "Did Amazon’s AI Chip and Nuclear Power Deals Just Shift Amazon.com's (AMZN) Investment Narrative?",
+   "url": "https://finance.yahoo.com/technology/ai/articles/did-amazon-ai-chip-nuclear-031018695.html"
   },
   {
    "symbols": [
-    "GOOGL"
+    "AMZN"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-10-01T18:26:21Z",
-   "headline": "Alphabet's Google Must Face $3.2 Billion Publisher Ad-Tech Claims, Judge Rules",
-   "url": "https://finance.yahoo.com/media-advertising/articles/alphabet-apos-google-must-face-182621152.html"
+   "pubDate": "2026-10-02T03:03:02Z",
+   "headline": "Synopsys (SNPS) Bags New Multi-Billion Dollar Deals, Shares Spike",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/synopsys-snps-bags-multi-billion-030302988.html"
   },
   {
    "symbols": [
-    "MSFT"
+    "U11.SI"
    ],
-   "source": "stocktwits.com",
-   "pubDate": "2026-10-01T18:15:43Z",
-   "headline": "MSFT’s LinkedIn Chief Ryan Roslansky To Exit As AI Leadership Shake-Up Continues",
-   "url": "https://stocktwits.com/news-articles/markets/equity/msft-linked-in-chief-ryan-roslansky-to-exit-as-ai-leadership-shake-up-continues/cZD0XBSRB0B"
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-02T02:40:02Z",
+   "headline": "Why UOB has the most to gain from stronger Singdollar rates: Macquarie",
+   "url": "https://www.businesstimes.com.sg/companies-markets/banking-finance/why-uob-has-most-gain-stronger-singdollar-rates-macquarie"
+  },
+  {
+   "symbols": [
+    "S68.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-02T00:36:10Z",
+   "headline": "Stock to watch: SGX",
+   "url": "https://www.businesstimes.com.sg/companies-markets/capital-markets-currencies/stock-watch-sgx"
   },
   {
    "symbols": [
@@ -398,44 +434,17 @@
    "pubDate": "2026-10-01T00:17:38Z",
    "headline": "Blackstone’s Gautam Banerjee joins DBS board",
    "url": "https://www.businesstimes.com.sg/companies-markets/banking-finance/blackstones-gautam-banerjee-joins-dbs-board"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-09-30T23:00:00Z",
-   "headline": "Beyond paper tigers: Evolving SGX’s regulations to match Asia’s needs",
-   "url": "https://www.businesstimes.com.sg/singapore/bt50/beyond-paper-tigers-evolving-sgxs-regulations-match-asias-needs"
-  },
-  {
-   "symbols": [
-    "C38U.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-09-30T10:43:07Z",
-   "headline": "CICT’s manager appoints Jennifer Li as new non-executive independent director",
-   "url": "https://www.businesstimes.com.sg/companies-markets/cicts-manager-appoints-jennifer-li-new-non-executive-independent-director"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-09-30T00:51:06Z",
-   "headline": "Accrelist says 12 buyers of its MClean stake not acting in concert",
-   "url": "https://www.businesstimes.com.sg/companies-markets/accrelist-says-12-buyers-its-mclean-stake-not-acting-concert"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 39629,
-  "output": 1511,
+  "input": 37230,
+  "output": 1618,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.0972
+  "costUsd": 0.0953
  },
- "createdAt": "2026-10-01T23:27:09.647Z"
+ "createdAt": "2026-10-02T09:30:45.735Z"
 }
