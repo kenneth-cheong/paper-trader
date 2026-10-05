@@ -1,162 +1,281 @@
 {
- "market_summary": "Markets are in a risk-on mood heading into Q3 earnings season: Tesla's Q3 delivery beat (486,532 vs ~461k expected) sent the stock up 5% on 2-Oct, Nvidia is pushing toward fresh record highs on AI/cloud capex optimism, and Meta is expanding its enterprise AI push (Muse agent, new enterprise platform). US megacaps (MSFT, AMZN, GOOGL) report later in October and analysts expect that to be a catalyst for further S&P 500 gains. In Singapore, the STI has had a soft week (-0.6% Friday) with SGX itself the standout mover — down 7.2% on the day and 16% over the month on unusually heavy volume (4.3x normal), while SIA/Scoot's Middle East flight cancellations have been extended into December, adding to weak travel-sector sentiment.",
+ "market_summary": "US equities are bifurcated: Nasdaq hit a fresh record (+0.5%) on AI-capex strength and cooling Fed-hike odds (18-20% after a soft 29k September jobs print), while the S&P (-0.3%) and Dow (-1.3%) lagged as 10-yr-equivalent yields spiked to a 2002-era high of 5.34% before retreating. That yield spike hit rate-sensitive assets hardest - Singapore's STI fell 1.3% on the week, with property/REITs and SGX itself getting hit. Mega-cap AI names (NVDA, TSLA, MSFT) continue to see strong price momentum and consensus-analyst upgrades, while SGX (the exchange operator) suffered an outsized single-day plunge on very heavy volume that stands out from the rest of the watchlist. Singapore's board-lot reduction (effective today) is a structural retail-access positive for local blue chips but is a slow-burn catalyst, not a near-term price driver.",
  "picks": [
-  {
-   "symbol": "TSLA",
-   "stance": "long",
-   "conviction": "high",
-   "horizon": "weeks",
-   "thesis": "Q3 deliveries beat consensus by ~24.5k units and the stock already popped 5% on the news; momentum plus an upcoming Oct 21 earnings date gives a clear near-term catalyst window. Price is back above its 50-day MA (+7.1%) after a rough 3-month stretch, suggesting a potential trend reversal off depressed levels (still -24% from 52w high).",
-   "news": "Tesla Q3 2026 deliveries of 486,532 vehicles beat expectations by ~24,558 units; shares up 5% on 2-Oct-2026. Energy storage missed forecasts. Earnings scheduled Oct 21.",
-   "risks": "Energy storage miss shows not all segments are strong; stock has very high volatility (46%) and beta (1.83), so gains can reverse quickly; margin/pricing questions remain into the Oct 21 print.",
-   "source_urls": [
-    "https://www.notateslaapp.com/news/4759/tesla-announces-q3-2026-vehicle-deliveries-beating-analyst-estimates",
-    "https://www.cnbc.com/2026/10/02/tesla-tsla-q3-2026-vehicle-delivery-production.html"
-   ],
-   "priceAtPick": 372.465
-  },
   {
    "symbol": "NVDA",
    "stance": "long",
-   "conviction": "medium",
+   "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Nvidia is nearing its first record high since May as AI/cloud capex spending stays strong; analyst consensus sees ~40% upside and sentiment is overwhelmingly bullish (58 buy/2 hold/1 sell). Price is already running above both 50-day (+7.1%) and 200-day (+16.5%) moving averages, indicating a confirmed uptrend ahead of big tech earnings that should reinforce the AI capex narrative.",
-   "news": "2-Oct-2026 Yahoo Finance piece notes Nvidia, TSMC and Broadcom could benefit from strong cloud/AI spending results; stock is approaching a new high not seen since May.",
-   "risks": "High beta (1.59) and rich valuation (any disappointment in upcoming megacap cloud capex commentary could trigger a sharp pullback); stock has already run up materially over 3/6 months, leaving less room for surprise.",
+   "thesis": "Nvidia just printed a fresh all-time high ($237.55 intraday, $5.7T market cap) on continued AI infrastructure capex from hyperscalers. Price is up 23% from July lows, trading 7% above its 50-day MA and only 0.8% off its 52-week high, with 58 of 61 analysts rating it Buy and a consensus target implying ~40% upside. Momentum plus an unusually one-sided analyst base supports continuation into year-end AI capex updates.",
+   "news": "Nvidia hit new intraday ATH ($237.55) and $5.7T market cap on Oct 2, 2026, extending a 23% rally from July lows amid continued hyperscaler AI capex.",
+   "risks": "Any sign of AI capex deceleration from major cloud customers, an export-control shock to China sales, or a broader de-rating of high-multiple tech (as the S&P/Dow divergence from Nasdaq already hints at some rotation away from megacaps) would hit NVDA hardest given its 1.59 beta and 37.6% annualized volatility.",
    "source_urls": [
-    "https://finance.yahoo.com/m/cb4cf838-4ca8-32b7-ba5e-77c9ef384ad0/nvidia-defies-critics%E2%80%94as-its.html"
+    "https://finance.yahoo.com/technology/article/nvidia-stock-hits-new-all-time-high-market-cap-at-57-trillion-141332917.html"
    ],
-   "priceAtPick": 233.86
+   "priceAtPick": 233.95
   },
   {
-   "symbol": "META",
+   "symbol": "TSLA",
    "stance": "long",
    "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "Meta is pushing further into enterprise AI (Muse agent expansion to small businesses, new enterprise platform led by an ex-MongoDB CEO), a concrete monetization angle beyond its core ad business. The stock is up 22.6% in the last month and trading well above both 50-day (+16.3%) and 200-day (+15.7%) averages, showing strong momentum into Q3 earnings season.",
-   "news": "2-Oct-2026: Meta launched an enterprise AI platform and is expanding its Muse AI agent to small businesses with Shopify/Slack/QuickBooks integrations, its clearest commercial AI push yet.",
-   "risks": "Very high volatility (41.8%) and beta (1.3); stock already +26.5% over 6 months so good news may be partly priced in; past AI-team churn (background item) signals execution risk in AI strategy.",
+   "thesis": "Tesla's Q3 deliveries of 486,532 beat consensus by ~5% and put the company on pace for its first annual delivery growth since 2023. The stock jumped 5.5-4.7% on the print and is now 6.6% above its 50-day MA with relative volume at 1.43x, suggesting fresh buying interest after a rough prior quarter (-11.7% 3m, -24.4% off 52w high), giving room for a relief/momentum continuation.",
+   "news": "Tesla delivered 486,532 vehicles in Q3 2026 vs 461,974 consensus (beat by 5.3%), stock up ~5% on Oct 2, 2026; YTD deliveries up ~9% vs 2025.",
+   "risks": "TSLA remains the highest-beta (1.83) and highest-volatility (46.2% annualized) name on the list, with a mixed analyst split (19 buy/20 hold/4 sell) and still down 15% over the past year and 24% off its 52w high - a single soft margin print or price-cut headline could reverse the pop quickly.",
    "source_urls": [
-    "https://wionews.com/world/meta-is-pushing-its-ai-agent-into-small-businesses-and-hired-a-database-veteran-to-run-it-1790805712378"
+    "https://finance.yahoo.com/markets/stocks/articles/tesla-stock-jumps-6-delivery-143224380.html"
    ],
-   "priceAtPick": 726.785
+   "priceAtPick": 370.59
+  },
+  {
+   "symbol": "MSFT",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "months",
+   "thesis": "Microsoft is up 33.8% over 3 months and 6.1% above its 50-day MA, riding the same AI capex wave as Nvidia but with a far more one-sided analyst base (54 buy, 2 hold, 0 sell) and an 11.8% implied upside to consensus target. A recent Stifel upgrade (Hold→Buy, target raised to $575) on Sep 23 adds a fresh positive catalyst, and Microsoft's Azure/AI exposure benefits from the same capex tailwind pushing Nasdaq to records.",
+   "news": "Stifel upgraded MSFT from Hold to Buy with target raised from $530 to $575 on 2026-09-23 (stock +3.9% since); Nasdaq hit a record high on Oct 4, 2026 largely on AI-capex strength that benefits MSFT's cloud/AI business.",
+   "risks": "MSFT has the highest 1-year max drawdown on this list (34.9%) and flat 1-year return (+0.3%), showing it can reprice sharply; a slowdown in enterprise cloud spending or a hawkish Fed surprise (yields already spiked to 5.34% this week) would pressure the stock's rich multiple.",
+   "source_urls": [
+    "https://tradingeconomics.com/united-states/calendar"
+   ],
+   "priceAtPick": 517.53
   },
   {
    "symbol": "S68.SI",
    "stance": "short",
    "conviction": "medium",
-   "horizon": "days",
-   "thesis": "Singapore Exchange fell 7.2% in a single session on 4.3x normal volume, extending a -16% one-month and -13% three-month decline — a sharp, high-volume breakdown that often signals continued near-term weakness or a negative structural development not yet reflected in slower-moving analyst targets (which still imply +16.6% upside). Price is now 12.8% below its 50-day average, confirming a broken short-term trend.",
-   "news": "Price data shows SGX dropped 7.2% on 2-Oct-2026 with rel_volume_20d of 4.35x; no specific company news was found in available sources, but the move is large enough to warrant caution on long exposure.",
-   "risks": "No confirmed news catalyst was found for the drop — it could be a one-off overreaction (e.g., index rebalancing, large block trade) that reverses quickly; analyst consensus remains bullish, so a snap-back rally is a real risk if the move proves technical rather than fundamental.",
+   "horizon": "weeks",
+   "thesis": "Singapore Exchange plunged 7.2% in a single session on 4.35x normal volume, is now down 16% over the past month and 12.8% below its 50-day MA - a sharp technical breakdown distinct from the rest of the SGX watchlist (STI ETF only fell 1.3%). This kind of outsized, high-volume single-stock drop against a broadly calmer index often reflects a stock-specific negative catalyst (e.g., trading-volume/clearing-revenue concerns or index-related flows) that can continue to weigh on sentiment in the near term even though analysts still see ~15% upside to target.",
+   "news": "S68.SI fell 7.2% on Oct 4-5, 2026 with relative volume of 4.35x the 20-day average, amid a broader 1.3% STI decline driven by high US bond yields (growbeansprout.com weekly update, 2026-10-04).",
+   "risks": "If the drop was a one-off overreaction (e.g., to a single data point like softer securities turnover) rather than a structural issue, the stock could snap back quickly, especially given 6 of 16 analysts still rate it Buy with meaningful upside to the $24.12 consensus target.",
    "source_urls": [
-    "https://www.businesstimes.com.sg/companies-markets/singapore-stocks-continue-losing-streak-friday-sti-falls-0-6"
+    "https://growbeansprout.com/weekly-update-4-oct-2026"
    ],
    "priceAtPick": 20.99
   },
   {
-   "symbol": "C6L.SI",
+   "symbol": "C38U.SI",
    "stance": "short",
    "conviction": "low",
    "horizon": "months",
-   "thesis": "Singapore Airlines/Scoot have extended Middle East flight cancellations through December, prolonging a revenue headwind on top of an already weak chart: -13.7% over 3 months, trading below both 50-day and 200-day averages, with 4 of 13 analysts rating it a sell (the most bearish skew on this watchlist).",
-   "news": "24-Sep-2026: SIA and Scoot extended Middle East flight cancellations to December 2026 due to regional tensions.",
-   "risks": "News is over a week old and may already be priced in; any easing of Middle East tensions or strong travel demand into year-end holiday season could quickly reverse the stock's underperformance; low beta (0.64) limits downside speed.",
+   "thesis": "CapitaLand Integrated Commercial Trust is a rate-sensitive S-REIT that is already down 5.1% over the past year and sitting 5.5% below its 200-day MA. With US bond yields spiking to a 2002-high of 5.34% this week and Singapore property/finance names broadly underperforming (City Developments -14.8% on the week), REITs like CICT face continued valuation pressure from higher discount rates even though yields have since retreated somewhat.",
+   "news": "US bond yields spiked to 5.34% (highest since 2002) mid-week before retreating, pressuring Singapore property and rate-sensitive sectors; STI fell 1.3% with property names lagging (growbeansprout.com, 2026-10-04).",
+   "risks": "Conviction is low because yields already retreated from the week's peak, and 13 of 16 analysts still rate CICT a Buy with ~19% upside to target; a sustained decline in yields or a recession-driven Fed cut cycle would be bullish for REITs and invalidate this short.",
    "source_urls": [
-    "https://www.businesstimes.com.sg/companies-markets/transport-logistics/sia-scoot-extend-cancellations-middle-east-flights-december"
+    "https://growbeansprout.com/weekly-update-4-oct-2026"
    ],
-   "priceAtPick": 6.66
+   "priceAtPick": 2.24
   }
  ],
  "sources": [
+  {
+   "url": "https://www.gurufocus.com/news/9107701/tesla-tsla-sees-share-price-increase-amid-mixed-delivery-numbers",
+   "title": "Tesla (TSLA) Sees Share Price Increase Amid Mixed Delivery Numbers",
+   "age": "2 days ago"
+  },
   {
    "url": "https://www.sec.gov/Archives/edgar/data/0001318605/000162828026064366/exhibit991111111.htm",
    "title": "Tesla, Inc. - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026022956/exhibit9911111.htm",
-   "title": "Tesla, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001318605/000162828026046717/exhibit99111111.htm",
-   "title": "Tesla, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.notateslaapp.com/news/4759/tesla-announces-q3-2026-vehicle-deliveries-beating-analyst-estimates",
-   "title": "Tesla Announces Q3 2026 Vehicle Deliveries — Beating Analyst Estimates - Not a Tesla App",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-third-quarter-2026-production-130600521.html",
-   "title": "Tesla Third Quarter 2026 Production, Deliveries & Deployments",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/10/02/tesla-tsla-q3-2026-vehicle-delivery-production.html",
-   "title": "Tesla (TSLA) Q3 2026 vehicle deliveries and production",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001318605/000162828026026673/tsla-20260331.htm",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001318605/000162828026049270/tsla-20260630.htm",
    "title": "Tesla, Inc. - Form 10-Q - FY2026",
    "age": null
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026000016/exhibit9914.htm",
-   "title": "Tesla, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://electrek.co/2026/10/02/tesla-q3-2026-deliveries-486532/",
-   "title": "Tesla (TSLA) Q3 2026 deliveries slip 2% to 486,532, but beat estimates",
+   "url": "https://www.gurufocus.com/news/9108900/tesla-tsla-beats-delivery-expectations-in-q3-2026-amid-shifting-strategic-focus",
+   "title": "Tesla (TSLA) Beats Delivery Expectations in Q3 2026 Amid Shifting Strategic Focus",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.fool.com/investing/2026/10/02/tesla-delivered-486532-vehicles-in-q3-heres-why-the-real-test-could-come-on-oct-21/",
-   "title": "Tesla Delivered 486,532 Vehicles in Q3. Here’s Why the Real Test Could Come on Oct. 21.",
+   "url": "https://www.fool.com/investing/2026/10/04/tesla-is-on-pace-for-its-first-annual-delivery-increase-since-2023-is-the-stock-a-buy/",
+   "title": "Tesla Is on Pace for Its First Annual Delivery Increase Since 2023. Is the Stock a Buy?",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.businesstoday.com.my/2026/10/02/singapore-stocks-rise-0-3-at-open/",
-   "title": "Singapore Stocks Rise 0.3% At Open",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/quotes/.STI",
-   "title": "Check out FTSE STRAITS TIMES IDX's stock price (.STI) in real time",
-   "age": "3357 days ago"
-  },
-  {
-   "url": "https://www.minichart.com.sg/2026/01/13/singapore-stock-market-outlook-2026-bullish-sti-forecast-top-picks-growth-drivers-maybank-research-summary/",
-   "title": "Singapore Stock Market Outlook 2026: Bullish STI Forecast, Top Picks & Growth Drivers",
-   "age": "262 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/singapore-market-wrap-q3-2026/",
-   "title": "Singapore Q3 2026 Market Wrap: STI at 22.9% YTD While S-REITs Slump — What Investors Need to Know - The Kopi Notes",
+   "url": "https://finance.yahoo.com/markets/stocks/article/tesla-stock-rises-as-company-reports-q3-deliveries-that-top-analyst-estimates-145514238.html",
+   "title": "Tesla stock rises as company reports Q3 deliveries that top analyst estimates",
    "age": "2 days ago"
   },
   {
-   "url": "https://www.forecasts.org/stimes.htm",
-   "title": "Straits Times Stock Index STI Forecast",
-   "age": "123 days ago"
+   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-stock-jumps-6-delivery-143224380.html",
+   "title": "Tesla Stock Jumps 6% on Delivery Beat: Will Earnings Back It Up?",
+   "age": "2 days ago"
   },
   {
-   "url": "https://tradingeconomics.com/singapore/stock-market/forecast",
-   "title": "tradingeconomics.com",
+   "url": "https://teslanorth.com/2026/10/02/tesla-q3-2026-deliveries/",
+   "title": "Tesla Q3 2026 Deliveries Beat 461,974 Consensus at 486,532 Vehicles",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/10/02/tesla-tsla-q3-2026-vehicle-delivery-production.html",
+   "title": "Tesla (TSLA) Q3 2026 vehicle deliveries and production",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.gurufocus.com/news/9108430/nvidia-nvda-hits-new-highs-amid-product-launch-and-buyback-announcement",
+   "title": "NVIDIA (NVDA) Hits New Highs Amid Product Launch and Buyback Announcement",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-10-02/nvidia-hits-first-record-since-may-as-value-nears-6-trillion",
+   "title": "Nvidia Shares Hit Record High, Market Value Approaches $6 Trillion - Bloomberg",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.cnn.com/markets/stocks/NVDA",
+   "title": "__symbol__ Stock Quote Price and Forecast",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/article/nvidia-stock-hits-new-all-time-high-market-cap-at-57-trillion-141332917.html",
+   "title": "Nvidia stock hits new all-time high, market cap at $5.7 trillion",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://public.com/stocks/nvda/news",
+   "title": "NVIDIA (NVDA) Latest News & Stock Updates - Page 1",
+   "age": "20 days ago"
+  },
+  {
+   "url": "https://finbold.com/ai-sets-nvidia-stock-price-for-october-1-2026/",
+   "title": "AI sets Nvidia stock price for October 1, 2026",
+   "age": "15 days ago"
+  },
+  {
+   "url": "https://finbold.com/machine-learning-algorithm-sets-nvidia-nvda-stock-price-for-october-31-2026/",
+   "title": "Machine learning algorithm sets Nvidia (NVDA) stock price for October 31, 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finbold.com/machine-learning-algorithm-sets-nvidia-stock-price-for-october-15-2026/",
+   "title": "Machine learning algorithm sets Nvidia stock price for October 15, 2026",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://www.timothysykes.com/news/nvidia-corporation-nvda-news-2026_10_02/",
+   "title": "NVDA Stock Rallies As Massive AI Deals And Record Buyback Fuel Bull Case",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.theregister.com/offbeat/2025/06/12/google-faces-billion-quid-bruising-over-uk-play-store-fees/1183778",
+   "title": "Google faces billion-quid bruising over UK Play Store fees",
+   "age": "479 days ago"
+  },
+  {
+   "url": "https://consumervoice.uk/digital/google-play-1bn-claim-trial-october/",
+   "title": "Google Play Store £1bn compensation claim extended with trial date set for October",
+   "age": "158 days ago"
+  },
+  {
+   "url": "https://consumervoice.uk/action/google-play-store-claim/",
+   "title": "Google Play Store claim: could you get compensation? - Consumer Voice",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://www.lbc.co.uk/article/8111f4a0b9414c0baf862e45515c229d-5HjdjPF_2/",
+   "title": "Google to fight ‘hidden’ app charges claim seeking £1bn damages",
    "age": null
   },
   {
-   "url": "https://tradingeconomics.com/singapore/stock-market",
-   "title": "stock market",
+   "url": "https://www.pocketgamer.biz/google-approves-260m-settlement-with-uk-app-developers/",
+   "title": "Competition Appeal Tribunal approves £260m Google Play settlement with UK app developers",
+   "age": "18 days ago"
+  },
+  {
+   "url": "https://newswav.com/article/google-faces-1-billion-legal-claim-from-uk-consumers-over-play-store-fees-A2610_RKBgyq",
+   "title": "Google faces £1 billion legal claim from UK consumers over Play Store fees - Newswav",
    "age": null
   },
   {
-   "url": "https://tradingeconomics.com/singapore/stock-market/news/519436",
-   "title": "Singapore Stocks Hit Record High",
+   "url": "https://londoncrimenews.co.uk/courts/google-faces-1bn-uk-app-store-charges-trial",
+   "title": "Londoncrimenews",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://uk.topclassactions.com/lawsuit-settlements/lawsuit-news/google-faces-1b-uk-class-action-over-play-store-fees/",
+   "title": "Google faces £1B UK class action over Play Store fees - Top Class Actions United Kingdom",
+   "age": "467 days ago"
+  },
+  {
+   "url": "https://jointheclaim.com/what-the-google-play-store-claim-means-for-uk-users/",
+   "title": "What the Google Play Store claim means for UK users",
+   "age": "145 days ago"
+  },
+  {
+   "url": "https://bloomberg.com/news/articles/2026-10-04/asian-stocks-to-rise-as-hike-bets-ease-oil-climbs-markets-wrap",
+   "title": "Stock Market Today: Dow, S&P Live Updates for October 5 - Bloomberg",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://investinglive.com/news/economic-and-event-calendar-in-asia-monday-october-5-2026-australia-holiday",
+   "title": "Economic and event calendar in Asia Monday, October 5, 2026 - Australia holiday",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.kucoin.com/news/insight/SPX/6ac1847d38a264000792716d",
+   "title": "U.S. Stock Market — #Economic Calendar",
+   "age": null
+  },
+  {
+   "url": "https://tradingeconomics.com/united-states/calendar",
+   "title": "United States Calendar",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://strongbuyanalytics.com/stock-market-outlook",
+   "title": "Stock Market Outlook for Monday, October 05, 2026",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.edwardjones.com/us-en/market-news-insights/stock-market-news/daily-market-recap",
+   "title": "Stock Market News Today",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://tradingkey.com/tools/market-update/us-stock-market-this-week-20261005",
+   "title": "US Stock Market This Week - 2026-10-05 - Tradingkey",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.schwab.com/learn/story/weekly-traders-outlook",
+   "title": "Weekly Trader's Stock Market Outlook",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.business-standard.com/article/news-cm/us-stocks-finish-mixed-120110700441_1.html",
+   "title": "Wednesday, December 17, 2025 | 03:36 AM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://www.poems.com.sg/morning-note/",
+   "title": "Stock Market Today: What You Need to Know",
+   "age": "454 days ago"
+  },
+  {
+   "url": "https://thesmartinvestor.com.sg/sgx-board-lot-reduction-4-stocks-set-to-benefit-in-october-2026/",
+   "title": "SGX Board Lot Reduction: 4 Stocks Set to Benefit in October 2026",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://growbeansprout.com/weekly-update-4-oct-2026",
+   "title": "STI pulls back as bond yields surge: Weekly Market Recap - Growbeansprout.com",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://briefs.co/news/singapore-pilots-firstdate-to-match-young-public-servants-be",
+   "title": "Singapore trials FirstDate matchmaking for civil servants",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tradingview.com/markets/stocks-singapore/",
+   "title": "Singaporean Stock Market — Live Quotes, News, Ideas — TradingView",
+   "age": "91 days ago"
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/1163959708",
+   "title": "www.itiger.com",
    "age": null
   },
   {
@@ -165,155 +284,25 @@
    "age": null
   },
   {
-   "url": "https://www.stashaway.sg/r/ocbc-dbs-uob-singapore-bank-stock",
-   "title": "OCBC vs DBS vs UOB Singapore's Leading Bank Stocks for 2026",
-   "age": "14 days ago"
-  },
-  {
-   "url": "https://growbeansprout.com/insights/savings/singapore-best-fixed-deposit-rate",
-   "title": "Best Fixed Deposit Rates in Singapore [October 2026]: Up to 2.10% p.a. - Growbeansprout.com",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.caproasia.com/2026/10/02/singapore-largest-bank-172-billion-dbs-to-host-new-flagship-conference-on-technology-business-investment-dbs-asia-future-forward-conference-in-singapore-in-2026-october-12-10-26-with-700-dbs/",
-   "title": "Singapore Largest Bank $172 Billion DBS to Host New Flagship Conference on Technology, Business & Investment (DBS Asia Future Forward Conference) in Singapore in 2026 October (12/10/26) with 700+ DBS Corporate & Wealth Clients to Attend, Key Speakers Include Singapore Prime Minister Lawrence Wong, TikTok CEO Shou Chew, Intel CEO Lip-Bu Tan, Broadcom President & CEO Hock Tan, Franklin Templeton CEO Jenny Johnson & Danantara Indonesia Chief Investment Officer Pandu Patria Sjahrir",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html",
-   "title": "DBS, OCBC and UOB Beat the STI in 1H 2026: Here’s What Drove the Rally",
-   "age": "85 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/United_Overseas_Bank",
-   "title": "United Overseas Bank",
+   "url": "https://tradingeconomics.com/singapore/stock-market/news/499724",
+   "title": "Shares in Singapore Hits New Peak in Afternoon Deals",
    "age": null
   },
   {
-   "url": "https://www.dbs.com.sg/treasures-private-client/aics/archive/templatedata/article/generic/data/en/GR/122025/251209_insights_singapore_banks_more_positives_to_come_in_2026.xml",
-   "title": "Singapore Banks: More positives to come in 2026",
-   "age": "297 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Tan_Teck_Long",
-   "title": "Tan Teck Long",
+   "url": "https://www.itiger.com/news/1163959708",
+   "title": "www.itiger.com",
    "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Bank_of_Singapore",
-   "title": "Bank of Singapore",
-   "age": null
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/singapore-fd-rates-october-2026/",
-   "title": "Singapore Fixed Deposit Rates October 2026: Best Banks Compared",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.foxbusiness.com/markets/october-could-be-a-huge-month-for-the-stock-market-heres-why",
-   "title": "Big Tech earnings could fuel a big October move for the stock market",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/01/27/big-tech-earnings-2026-ai-spend.html",
-   "title": "Big Tech earnings: Meta, Apple, Tesla, Microsoft AI spend in focus",
-   "age": "248 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/calendar/earnings?from=2026-10-10&to=2026-11-08",
-   "title": "Company Earnings Calendar - Yahoo Finance",
-   "age": "9 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/sectors/technology/live/tech-stocks-today-nvidia-magnificent-seven-113535737.html",
-   "title": "Tech stocks today: Apple earnings beat, memory crunch, and the Musk Vs. Altman fight continues",
-   "age": "146 days ago"
-  },
-  {
-   "url": "https://valueaddvc.com/big-tech-earnings",
-   "title": "Big Tech Earnings Q2 2026: Apple $143B, Nvidia $81B",
-   "age": "20 days ago"
-  },
-  {
-   "url": "https://valueaddvc.com/blog/big-tech-earnings-q1-2026-apple-microsoft-google-meta-amazon-nvidia-results",
-   "title": "Big Tech Q1 2026 Earnings: Azure +40%, Nvidia $81.6B",
-   "age": "124 days ago"
-  },
-  {
-   "url": "https://news.spreely.com/october-earnings-could-lift-stocks-alphabet-amazon-microsoft-ahead/",
-   "title": "October Earnings Could Lift Stocks, Alphabet Amazon Microsoft Ahead",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.nbcnews.com/business/markets/big-tech-ai-earnings-alphabet-meta-amazon-microsoft-rcna342796",
-   "title": "Big Tech earnings test record stock market rally as AI spending takes center stage",
-   "age": "155 days ago"
-  },
-  {
-   "url": "https://www.fool.com/investing/2025/10/01/3-best-tech-stocks-to-buy-in-october",
-   "title": "3 best tech stocks to buy in october",
-   "age": null
-  },
-  {
-   "url": "https://www.informationweek.com/it-staffing-careers/2026-tech-company-layoffs",
-   "title": "2026 tech company layoffs",
-   "age": "7 days ago"
-  },
-  {
-   "url": "https://www.kore1.com/meta-layoffs-2026/",
-   "title": "Meta Layoffs 2026: Hiring from the 8,000-Role Reset",
-   "age": "64 days ago"
-  },
-  {
-   "url": "https://www.kron4.com/news/technology-ai/meta-layoffs-begin-as-company-cuts-8k-jobs-in-latest-ai-push/",
-   "title": "Meta layoffs begin as company cuts 8K jobs in latest AI push",
-   "age": "135 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Meta_and_unions",
-   "title": "Meta and unions",
-   "age": null
-  },
-  {
-   "url": "https://www.sfchronicle.com/tech/article/meta-layoffs-ai-restructuring-22268601.php",
-   "title": "Meta cuts 8,000 jobs as Mark Zuckerberg bets the company’s future on AI",
-   "age": "135 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/04/24/20k-job-cuts-at-meta-microsoft-raise-concern-of-ai-labor-crisis-.html",
-   "title": "20,000 job cuts at Meta, Microsoft raise concern that AI-driven labor crisis is here",
-   "age": "161 days ago"
-  },
-  {
-   "url": "https://wionews.com/world/meta-is-pushing-its-ai-agent-into-small-businesses-and-hired-a-database-veteran-to-run-it-1790805712378",
-   "title": "Meta is pushing its AI agent into small businesses and hired a database veteran to run it",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://news.crunchbase.com/startups/tech-layoffs/",
-   "title": "Tech Layoffs: US Companies With Job Cuts In 2024, 2025 and 2026",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.foxbusiness.com/fox-news-tech/meta-ai-workforce-restructuring-layoffs",
-   "title": "Meta shifts 7,000 workers into AI roles as layoffs, manager cuts loom",
-   "age": "136 days ago"
-  },
-  {
-   "url": "https://mclellanlawgroup.com/meta-ai-layoffs-2026-what-california-employees-need-to-know-mclellan-law",
-   "title": "Meta AI Layoffs 2026: What California Employees Need to Know",
-   "age": "1 days ago"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 51645,
-  "output": 5156,
+  "input": 46035,
+  "output": 5731,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1521
+  "costUsd": 0.1499
  },
- "createdAt": "2026-10-02T19:30:56.097Z"
+ "createdAt": "2026-10-05T01:01:50.837Z"
 }
