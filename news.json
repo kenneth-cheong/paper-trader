@@ -1,457 +1,404 @@
 {
- "market_summary": "US tech stocks dominated Monday's session with strong analyst upgrades driving momentum. Microsoft received a Buy upgrade from Melius Research targeting $665, supported by Azure growth expectations exceeding 50% by Q4 FY27, while Wells Fargo raised its target to $725. Nvidia hit fresh all-time highs with $150 billion in new share buyback authorization, and Tesla delivered better-than-expected Q3 vehicles of 486,532 units, nearly quadrupling its Cybercab fleet in Texas. Apple unveiled a Siri AI smart home hub launching October 13, competing directly with Amazon and Google. Alphabet's Gemini 4 Argon model launch disappointed some investors as it arrives months late with limited availability. Broader markets focused on AI monetization challenges and capex sustainability as hyperscalers plan $1.3 trillion in data center investments for 2027.",
+ "market_summary": "<cite index=\"29-2,29-3\">US markets closed higher on October 5, with the Nasdaq reaching an intraday record high as a weaker-than-expected September jobs report eased concerns about potential interest rate hikes, reducing expectations for another Fed hike in October.",
  "items": [
   {
-   "symbols": [
-    "MSFT"
-   ],
-   "date": "2026-10-05",
-   "headline": "Melius Research upgrades Microsoft to Buy with $665 price target on AI security demand",
-   "summary": "<cite index=\"6-3,6-4\">Melius expects Azure to grow more than 50% by Q4 FY27, with enterprises choosing to spend on secure systems that can route AI models.</cite> <cite index=\"6-1\">Melius raised fiscal 2027 earnings estimates by 2% and fiscal 2028 by 4%.</cite>",
-   "type": "analyst",
-   "tone": "positive",
-   "source_url": "https://benzinga.com/trading-ideas/movers/26/10/62160121/melius-upgrades-microsoft-to-buy-with-665-target-on-ai-security-demand"
-  },
-  {
-   "symbols": [
-    "MSFT"
-   ],
-   "date": "2026-10-05",
-   "headline": "Wells Fargo raises Microsoft price target to $725 from $700 on AI monetization",
-   "summary": "<cite index=\"8-5,8-6\">The move represents a 3.57% increase in Wells Fargo's target, with analyst Michael Turrin citing Microsoft's AI monetization, November's Ignite conference and new segment reporting.</cite>",
-   "type": "analyst",
-   "tone": "positive",
-   "source_url": "https://ad-hoc-news.de/boerse/news/corporate-news/wells-fargo-raises-target-for-microsoft-stock-from-usd-700-to-usd-725/70232116"
-  },
-  {
-   "symbols": [
-    "AAPL"
-   ],
-   "date": "2026-10-05",
-   "headline": "Apple to unveil Siri AI smart home hub lineup on October 13, 2026",
-   "summary": "<cite index=\"19-5,19-7\">Apple is set to unveil a smart home hub with a screen, an updated HomePod mini, and a new Apple TV at its October 13 event, all powered by Siri AI.</cite> <cite index=\"10-3,10-4,10-5\">The main product is a roughly 6-inch display designed to recognize different household members and serve as a central controller for locks, thermostats, FaceTime, music and connected devices.</cite>",
-   "type": "product",
-   "tone": "positive",
-   "source_url": "https://newsbytesapp.com/news/science/apple-to-unveil-siri-ai-smart-home-lineup-october-13-2026/tldr"
-  },
-  {
-   "symbols": [
-    "TSLA"
-   ],
-   "date": "2026-10-05",
-   "headline": "Tesla expands Texas Cybercab fleet fourfold to 169 units following Austin commercial launch",
-   "summary": "<cite index=\"22-3,22-4,22-8,22-10\">Tesla nearly quadrupled its Cybercab fleet in Texas from 45 to 169 in a month since the driverless two-seaters launched in Austin on Sept. 3, based on Texas DMV records.</cite> <cite index=\"22-12,22-13,22-14\">Early riders gave it mixed reviews, with some complaining about long waits, pickups in the wrong spot, and problems with butterfly doors and trunk.</cite>",
-   "type": "product",
-   "tone": "mixed",
-   "source_url": "https://www.tikr.com/blog/tesla-cybercab-fleet-texas-austin-commercial-service"
-  },
-  {
-   "symbols": [
-    "TSLA"
-   ],
-   "date": "2026-10-02",
-   "headline": "Tesla reports Q3 2026 vehicle deliveries of 486,532, beating forecasts by 6.5%",
-   "summary": "<cite index=\"29-2,29-6\">Tesla delivered 486,532 vehicles in Q3 2026, exceeding the 456,896 forecast by Reuters' Visible Alpha by approximately 6.5%.</cite> <cite index=\"29-8,29-9\">FSD subscriptions reached 1.48 million (56% increase YoY), and Tesla added Cybercab to its Texas robotaxi fleet with FSD approved in eight European countries.</cite>",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://tradingkey.com/analysis/stocks/us-stocks/262199625-tesla-tsla-stock-forecast-october-5-2026"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "date": "2026-09-28",
-   "headline": "Nvidia announces $150 billion increase to share repurchase authorization, total now $235 billion",
-   "summary": "<cite index=\"34-12\">Nvidia's Board authorized an additional $150 billion under the company's share repurchase program, increasing total remaining authorized amount to $235 billion.</cite>",
-   "type": "product",
-   "tone": "positive",
-   "source_url": "https://nvidianews.nvidia.com/"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "date": "2026-10-01",
-   "headline": "Alphabet unveils Gemini 4 Argon AI model after delays, matches rivals on coding and cybersecurity",
-   "summary": "<cite index=\"49-3,49-4,49-5\">Alphabet's new flagship AI model Argon tops the Gemini 4 generation and took months longer than promised. Google says it matches OpenAI's Astra and Anthropic's Opus on key coding and cybersecurity tests, areas where Alphabet had been slipping behind rivals.</cite> <cite index=\"49-6,49-7\">Argon is not available to everyone yet, with Google offering it only to select cybersecurity partners with no public release date announced.</cite>",
-   "type": "product",
-   "tone": "mixed",
-   "source_url": "https://finance.yahoo.com/technology/ai/articles/alphabet-unveils-gemini-4-argon-164313390.html"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "date": "2026-10-02",
-   "headline": "Alphabet projects $195-205 billion data center spending for 2026 amid AI competition",
-   "summary": "<cite index=\"49-1\">Alphabet projects 2026 data center capital spending of $195 billion to $205 billion.</cite> <cite index=\"49-2\">The company is becoming a chip supplier, selling TPUs that Google designs and Taiwan Semiconductor Manufacturing builds.</cite>",
-   "type": "guidance",
-   "tone": "mixed",
-   "source_url": "https://finance.yahoo.com/technology/ai/articles/alphabet-unveils-gemini-4-argon-164313390.html"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "date": "2026-10-05",
-   "headline": "SGX implements board lot reduction for 11 stocks including three Singapore banks",
-   "summary": "The Singapore Exchange board lot reduction kicks in for 11 stocks including DBS, OCBC and UOB, lowering minimum trade sizes to improve liquidity and accessibility.",
-   "type": "product",
-   "tone": "positive",
-   "source_url": "https://www.straitstimes.com/business/companies-markets/sgx-board-lot-reduction-kicks-off-for-11-stocks-including-the-three-spore-banks"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "date": "2026-10-05",
-   "headline": "SGX rolls out youth stock programme to lower barriers for young investors",
-   "summary": "Singapore Exchange and partners launch youth stock programme designed to equip young investors with knowledge and lower participation barriers.",
-   "type": "product",
-   "tone": "positive",
-   "source_url": "https://www.straitstimes.com/business/companies-markets/sgx-and-partners-roll-out-youth-stock-programme-to-lower-barriers-and-equip-young-investors"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "date": "2026-10-05",
-   "headline": "Nvidia stock settles at $233.95 with fresh all-time highs driven by AI capex expectations",
-   "summary": "<cite index=\"30-5,30-14,30-15\">Nvidia expects to grow revenue at 70% pace next year, with Q2 guidance revealing the company expects 70% revenue growth during fiscal 2028, making it primed for strong future growth as a $5 trillion company.</cite>",
-   "type": "analyst",
-   "tone": "positive",
-   "source_url": "https://simplywall.st/stocks/us/semiconductors/nasdaq-nvda/nvidia/news/ai-chips-update-aibotics-boosts-ai-strategy-with-empulser-ac"
-  },
-  {
    "symbols": [],
-   "date": "2026-10-03",
-   "headline": "AI capex buildup faces revenue monetization test as hyperscalers ramp spending to $1.3 trillion in 2027",
-   "summary": "<cite index=\"30-16,30-17\">AI hyperscalers are expected to ramp up data center spending to nearly $1.3 trillion in 2027 from current estimates, with the big five hyperscalers expected to spend nearly $800 billion on data center build-outs this year.</cite>",
+   "date": "2026-10-05",
+   "headline": "US Markets Hit Records as Jobs Data Ease Fed Rate Hike Concerns",
+   "summary": "Nasdaq Composite and Nasdaq-100 set fresh records with tech stocks leading the rally. September payrolls increased by just 29,000, below expectations, supporting speculation the Federal Reserve will hold rates steady in October.",
    "type": "macro",
-   "tone": "mixed",
-   "source_url": "https://www.fool.com/investing/2026/09/30/nvidia-could-have-a-monster-october-heres-why/"
+   "tone": "positive",
+   "source_url": "https://www.cnbc.com/2026/10/01/stock-market-today-live-updates-.html"
+  },
+  {
+   "symbols": [
+    "D05.SI",
+    "O39.SI",
+    "U11.SI"
+   ],
+   "date": "2026-10-05",
+   "headline": "SGX Reduces Board Lots for Blue-Chip Stocks to 10 Shares, Lowering Retail Entry Barriers",
+   "summary": "Singapore Exchange cut minimum board lot sizes for 11 blue-chip stocks including DBS, OCBC, and UOB from 100 shares to 10 shares, reducing minimum cash outlay and improving accessibility for retail investors.",
+   "type": "product",
+   "tone": "positive",
+   "source_url": "https://thekopinotes.com/articles/news/sgx-board-lot-reduction-singapore-investors-2026/"
+  },
+  {
+   "symbols": [
+    "S68.SI"
+   ],
+   "date": "2026-10-05",
+   "headline": "SGX Shares Fall to Lows as Valuations Concern Major Brokers",
+   "summary": "Singapore Exchange shares declined further, erasing $4.2 billion in market value since August peak. Citigroup cut price target to S$17.70 with sell rating, JPMorgan moved to neutral, and Macquarie went to underperform.",
+   "type": "analyst",
+   "tone": "negative",
+   "source_url": "https://www.bloomberg.com/news/articles/2026-10-05/sgx-loses-4-2-billion-in-value-as-analysts-balk-at-valuation"
+  },
+  {
+   "symbols": [
+    "NVDA",
+    "TSLA",
+    "MSFT",
+    "META"
+   ],
+   "date": "2026-10-05",
+   "headline": "Nasdaq 100 Hits Record Highs on AI Stock Strength",
+   "summary": "Tech stocks led market rally with Nvidia, Meta, Microsoft and Tesla all advancing despite higher Treasury yields. Nasdaq-100 reached all-time high as investors shrug off bond market concerns.",
+   "type": "other",
+   "tone": "positive",
+   "source_url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-oct-05-2026"
   }
  ],
  "sources": [
   {
-   "url": "https://www.cnn.com/markets/stocks/MSFT",
-   "title": "MSFT Stock Quote Price and Forecast",
+   "url": "https://www.stashaway.sg/r/ocbc-dbs-uob-singapore-bank-stock",
+   "title": "OCBC vs DBS vs UOB Singapore's Leading Bank Stocks for 2026",
+   "age": "17 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html",
+   "title": "DBS, OCBC and UOB Beat the STI in 1H 2026: Here’s What Drove the Rally",
+   "age": "88 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
+   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
+   "age": "61 days ago"
+  },
+  {
+   "url": "https://sias.org.sg/latest-updates/dbs-ocbc-and-singtel-drove-the-sti-to-new-all-time-high-uob-took-a-hit/",
+   "title": "DBS, OCBC and Singtel drove the STI to new all-time high, UOB took a hit",
+   "age": "329 days ago"
+  },
+  {
+   "url": "https://thekopinotes.com/articles/news/sgx-board-lot-reduction-singapore-investors-2026/",
+   "title": "SGX Board Lot Reduction 2026: Singapore Blue Chips Guide",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-2026-outlook",
+   "title": "Singapore banks 2026 outlook: DBS OCBC vs UOB",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/1189208007",
+   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hant/news/1189208007",
+   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/news/2490281759",
+   "title": "Year-in-Review: 8 Singapore Companies That Raised Their Dividends in 2024",
+   "age": null
+  },
+  {
+   "url": "https://www.spglobal.com/market-intelligence/en/news-insights/research/big-tech-earnings-preview-microsoft-meta-amazon-n-apple",
+   "title": "Big tech earnings preview: Microsoft, Meta, Amazon & Apple",
+   "age": "242 days ago"
+  },
+  {
+   "url": "https://www.fool.com/investing/stock-market/upcoming-earnings-reports/",
+   "title": "Earnings Reports of Top Companies: Revenue, Profits & Forecasts",
+   "age": "25 days ago"
+  },
+  {
+   "url": "https://www.nasdaq.com/articles/zacks-earnings-trends-highlights-nvidia-amazon-alphabet-microsoft-and-meta-apple-and-tesla",
+   "title": "Zacks Earnings Trends Highlights: Nvidia, Amazon, Alphabet, Microsoft and Meta, Apple and Tesla",
+   "age": "333 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/07/31/apple-aapl-amazon-amzn-stock-today.html",
+   "title": "Alphabet, Amazon and Microsoft added nearly $1.5 trillion in combined value this week",
+   "age": "66 days ago"
+  },
+  {
+   "url": "https://fortune.com/2026/07/26/big-tech-earnings-meta-microsoft-apple-amazon-market-revolt-ai-spending/",
+   "title": "Big Tech earnings slam into a market in revolt over AI spending",
+   "age": "71 days ago"
+  },
+  {
+   "url": "https://www.fool.com/investing/2026/04/30/amazon-meta-alphabet-and-microsoft-just-reported-e/",
+   "title": "Amazon, Meta, Alphabet, and Microsoft Just Reported Earnings. Here's the Best of the Bunch.",
+   "age": "158 days ago"
+  },
+  {
+   "url": "https://marketwise.com/investing/ai-demand-big-tech-earnings-spending/",
+   "title": "What Alphabet, Amazon, Meta, and Microsoft Earnings Say About AI - MarketWise",
+   "age": "67 days ago"
+  },
+  {
+   "url": "https://www.nasdaq.com/doc/NDXEarningsUpdate-Q3-2025%28Final%29",
+   "title": "NDXEarningsUpdate Q3 2025%28Final%29",
+   "age": null
+  },
+  {
+   "url": "https://www.nasdaq.com/articles/amazon-alphabet-and-nvidia-are-part-zacks-earnings-preview",
+   "title": "Amazon, Alphabet and Nvidia are part of Zacks Earnings Preview",
+   "age": null
+  },
+  {
+   "url": "https://www.marketbeat.com/stocks/NASDAQ/META/earnings/",
+   "title": "Meta Platforms (META) Earnings Date and Reports 2026 $META",
+   "age": "69 days ago"
+  },
+  {
+   "url": "https://www.marketbeat.com/stocks/NASDAQ/TSLA/earnings/",
+   "title": "Tesla (TSLA) Earnings Date and Reports 2026 $TSLA",
+   "age": "75 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001326801/000162828026028364/meta-03312026xexhibit991.htm",
+   "title": "Meta Platforms, Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001326801/000162828026050596/meta-06302026xexhibit991.htm",
+   "title": "Meta Platforms, Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003832/meta-12312025xexhibit991.htm",
+   "title": "Meta Platforms, Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/calendar/earnings?symbol=TSLA",
+   "title": "Company Earnings Calendar - Yahoo Finance",
+   "age": "166 days ago"
+  },
+  {
+   "url": "https://www.investing.com/equities/tesla-motors-earnings",
+   "title": "Tesla (TSLA) Earnings Date & Report - Investing.com",
+   "age": "74 days ago"
+  },
+  {
+   "url": "https://admiralmarkets.com/education/articles/shares/meta-stock-analysis-october-2026",
+   "title": "Meta Stock Analysis, October 2026: Muse and Q3 Earnings",
    "age": "3 days ago"
   },
   {
-   "url": "https://www.benzinga.com/quote/MSFT/news",
-   "title": "Latest Microsoft Stock News",
-   "age": "136 days ago"
+   "url": "https://marketchameleon.com/Overview/TSLA/Earnings/Earnings-Dates/",
+   "title": "TSLA Earnings Dates, Upcoming and Historical Tesla",
+   "age": "167 days ago"
   },
   {
-   "url": "https://news.microsoft.com/source/view-all/",
-   "title": "Latest news - Source",
-   "age": "4 days ago"
+   "url": "https://public.com/stocks/meta/earnings",
+   "title": "Meta (META) Earnings: Latest Report, Earnings Call & Financials",
+   "age": "69 days ago"
   },
   {
-   "url": "https://blockchain.news/news/20261004-price-prediction-msft-azures-ai-revenue-machine-eyes-575",
-   "title": "MSFT Price Prediction: Azure's AI Revenue Machine Eyes $575 as $519 Resistance Looms - Blockchain.News",
+   "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-oct-05-2026",
+   "title": "Stock Market Today (Oct. 5, 2026): S&P 500 moves higher, yields higher after ISM data - TheStreet",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-10-01/asian-stocks-to-fall-on-oil-rally-bonds-in-focus-markets-wrap",
+   "title": "Stock Market Today: Dow, S&P Live Updates for October 2 - Bloomberg",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/10/01/stock-market-today-live-updates-.html",
+   "title": "Stocks rise Friday after soft jobs data, Nvidia leads Nasdaq to intraday record",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://tradingeconomics.com/united-states/stock-market",
+   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
+   "age": "773 days ago"
+  },
+  {
+   "url": "https://fred.stlouisfed.org/series/SP500",
+   "title": "S&P 500 (SP500)",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://fred.stlouisfed.org/data/SP500",
+   "title": "Table Data - S&P 500",
+   "age": "831 days ago"
+  },
+  {
+   "url": "https://www.spglobal.com/spdji/en/commentary/article/us-equities-market-attributes-october-2025",
+   "title": "IN THIS LIST",
+   "age": null
+  },
+  {
+   "url": "https://www.bloomberg.com/news/videos/2025-10-06/s-p-nasdaq-hit-records-as-yields-fall-closing-bell-video",
+   "title": "Oct 6th, 2025",
+   "age": null
+  },
+  {
+   "url": "https://www.marketbeat.com/articles/how-major-us-stock-indexes-fared-wednesday-1012025-2025-10-01",
+   "title": "Free Trial",
+   "age": null
+  },
+  {
+   "url": "https://www.business-standard.com/article/news-cm/us-nasdaq-s-p500-holds-at-records-121063000515_1.html",
+   "title": "Tuesday, December 30, 2025 | 10:23 PM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-10-05/sgx-loses-4-2-billion-in-value-as-analysts-balk-at-valuation",
+   "title": "SGX Loses $4.2 Billion in Value as Analysts Balk at Valuation - Bloomberg",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://peterlewismoneytalk.substack.com/p/peters-asian-business-and-finance-fad",
+   "title": "PETER’S ASIAN BUSINESS & FINANCE BRIEFING",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://simplywall.st/markets/sg",
+   "title": "Singaporean (SGX) Market Analysis & Valuation - Updated Today",
+   "age": "159 days ago"
+  },
+  {
+   "url": "https://www.briefs.co/news/singapore-exchange-shares-extend-slide-as-valuation-worries/",
+   "title": "Singapore Exchange Slides on Valuation Concerns",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://ad-hoc-news.de/boerse/news/corporate-news/sgx-cuts-board-lots-for-dbs-group-stock-to-10-shares/70231928",
+   "title": "SGX cuts board lots for DBS Group stock to 10 shares",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://phemex.com/news/article/sgx-market-cap-drops-42-billion-as-citi-jpmorgan-and-macquarie-cut-ratings-98788",
+   "title": "SGX Shares Drop $4.2B as Citi, JPMorgan Downgrade Stock",
    "age": "1 days ago"
   },
   {
-   "url": "https://blockchain.news/news/20261005-price-prediction-msft-550-is-the-next-real-test",
-   "title": "MSFT Price Prediction: $550 Is the Next Real Test — Bulls Have 30 Days to Prove It - Blockchain.News",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://benzinga.com/trading-ideas/movers/26/10/62160121/melius-upgrades-microsoft-to-buy-with-665-target-on-ai-security-demand",
-   "title": "Melius Upgrades Microsoft to Buy With $665 Target on AI Security Demand - Microsoft (NASDAQ:MSFT) - Benzinga",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://247wallst.com/investing/2026/10/05/here-are-mondays-top-wall-street-analyst-research-calls-align-technology-autonation-estee-lauder-harley-davidson-hubspot-microsoft-mosaic-ryder-system-wells-fargo-company-and-more",
-   "title": "Here Are Monday’s Top Wall Street Analyst Research Calls: Align Technology, AutoNation, Estee Lauder, Harley-Davidson, HubSpot, Microsoft, Mosaic, Ryder System, Wells Fargo & Company, and More - 24/7 Wall St.",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://ad-hoc-news.de/boerse/news/corporate-news/wells-fargo-raises-target-for-microsoft-stock-from-usd-700-to-usd-725/70232116",
-   "title": "Wells Fargo raises target for Microsoft stock from USD 700 to USD 725",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.marketbeat.com/stocks/nasdaq/Msft/news",
-   "title": "www.marketbeat.com",
+   "url": "https://simplywall.st/news/sg/transportation/page/8",
+   "title": "Singaporean Transportation Stock News",
    "age": null
   },
   {
-   "url": "https://finance.yahoo.com/technology/articles/apple-enter-smart-home-market-162400796.html",
-   "title": "Apple to enter smart-home market with Siri AI hub",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/ai/articles/apple-aapl-prepares-siri-powered-131125203.html",
-   "title": "Apple (AAPL) Prepares A Siri Powered Smart Home Hub",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://gurufocus.com/news/9107844/apple-stocks-rises-although-ai-agents-threaten-appstore-gatekeeping",
-   "title": "Apple Stocks Rises Although AI Agents Threaten App-Store Gatekeeping",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Apple_Intelligence",
-   "title": "Apple Intelligence",
+   "url": "https://www.tipranks.com/stocks/sg:s68/stock-news",
+   "title": "stock news",
    "age": null
   },
   {
-   "url": "https://www.barchart.com/story/news/3164119/apple-is-pushing-siri-ai-into-europe-this-could-be-bigger-for-aapl-stock-than-you-think",
-   "title": "Apple Is Pushing Siri AI Into Europe. This Could Be Bigger for AAPL Stock Than You Think.",
-   "age": "89 days ago"
-  },
-  {
-   "url": "https://cultofmac.com/news/apple-october-rumors-2026",
-   "title": "8 hot products to expect from Apple in October",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.bloomberg.com/news/videos/2026-10-01/iphone-18-ai-in-your-house-apple-s-influencer-problem-video",
-   "title": "Watch Apple Wants to Take Over Your Home. Is Siri AI Ready? - Bloomberg",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://stocktwits.com/news-articles/markets/equity/apple-wwdc-2026-aapl-stock-slips-as-lack-of-launch-deadline-for-siri-ai-spooks-retail-investors/cZ0vKIBR7GC",
-   "title": "Apple WWDC 2026: AAPL Stock Slips As Lack Of Launch Deadline For Siri AI Spooks Retail Investors",
-   "age": "118 days ago"
-  },
-  {
-   "url": "https://macdailynews.com/2025/12/17/after-lagging-in-ai-2026-will-be-critical-for-apples-siri/",
-   "title": "After lagging in AI, 2026 will be critical for Apple's Siri - MacDailyNews",
-   "age": "291 days ago"
-  },
-  {
-   "url": "https://newsbytesapp.com/news/science/apple-to-unveil-siri-ai-smart-home-lineup-october-13-2026/tldr",
-   "title": "Apple to unveil Siri AI smart home lineup October 13, 2026",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Tesla_Cybercab",
-   "title": "Tesla Cybercab",
+   "url": "https://www.tipranks.com/stocks/sg:s68",
+   "title": "www.tipranks.com",
    "age": null
-  },
-  {
-   "url": "https://teslaoracle.com/2026/10/04/tesla-tsla-announces-the-date-and-time-for-the-q3-2026-earnings-call-live-webcast-with-elon-musk-and-his-team",
-   "title": "Tesla (TSLA) announces the date and time for the Q3 2026 earnings call live webcast with Elon Musk and his team - Tesla Oracle",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.tikr.com/blog/tesla-cybercab-fleet-texas-austin-commercial-service",
-   "title": "Tesla Expands Texas Cybercab Fleet Fourfold Following Austin Commercial Service Launch",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/10/03/tesla-cybercab-pressure-to-expand-after-rocky-first-month-in-austin.html",
-   "title": "Tesla’s Cybercab had a rocky first month in Austin. Now comes the hard part: expanding",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://teslaoracle.com/2026/10/01/tesla-update-2026-38-improves-car-visuals-and-adds-auto-leveling-headlights-for-legacy-hw3-cars-nhtsa-recall-release-notes",
-   "title": "Tesla update 2026.38 improves car visuals and adds auto-leveling headlights for legacy HW3 cars (NHTSA recall, release notes) - Tesla Oracle",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/10/02/tesla-tsla-q3-2026-vehicle-delivery-production.html",
-   "title": "Tesla (TSLA) Q3 2026 vehicle deliveries and production",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://energynow.com/2024/10/elon-musk-unveils-30000-tesla-cybercab-with-2026-production-but-details-lacking/",
-   "title": "Elon Musk Unveils $30,000 Tesla Cybercab with 2026 Production, but Details Lacking - Energy News, Top Headlines, Commentaries, Features & Events - EnergyNow.com",
-   "age": "30 days ago"
-  },
-  {
-   "url": "https://techcrunch.com/2026/10/02/tesla-sustains-its-ev-sales-momentum-despite-us-troubles",
-   "title": "Tesla sustains its EV sales momentum despite US troubles",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://teslaoracle.com/2026/10/02/tesla-emergency-drive-away-feature-can-cost-25k-in-supercharger-damages-coming-in-the-2026-38-3-update",
-   "title": "Tesla Emergency Drive Away feature can cost $25K in Supercharger damages, coming in the 2026.38.3 update to the US only - Tesla Oracle",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://tradingkey.com/analysis/stocks/us-stocks/262199625-tesla-tsla-stock-forecast-october-5-2026",
-   "title": "Tesla Stock Forecast: Q3 Delivery Beat Shifts Focus to Margins and AI",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.fool.com/investing/2026/09/30/nvidia-could-have-a-monster-october-heres-why/",
-   "title": "Nvidia Could Have a Monster October. Here's Why.",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/quotes/NVDA",
-   "title": "NVDA: NVIDIA Corporation - Stock Price, Quote and News - CNBC",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.cnn.com/markets/stocks/NVDA",
-   "title": "NVDA Stock Quote Price and Forecast",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027",
-   "title": "NVIDIA Announces Financial Results for Second Quarter Fiscal 2027",
-   "age": "40 days ago"
-  },
-  {
-   "url": "https://nvidianews.nvidia.com/news/latest",
-   "title": "Latest News",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://public.com/stocks/nvda/news",
-   "title": "NVIDIA (NVDA) Latest News & Stock Updates - Page 1",
-   "age": "21 days ago"
-  },
-  {
-   "url": "https://nvidianews.nvidia.com/news",
-   "title": "News Archive",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://simplywall.st/stocks/us/semiconductors/nasdaq-nvda/nvidia/news/ai-chips-update-aibotics-boosts-ai-strategy-with-empulser-ac",
-   "title": "AI Chips Update - AIBotics Boosts AI Strategy with Empulser Acquisition - Simply Wall St News",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Nvidia_GTC",
-   "title": "Nvidia GTC",
-   "age": null
-  },
-  {
-   "url": "https://nvidianews.nvidia.com/",
-   "title": "Home",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/quotes/GOOGL",
-   "title": "GOOGL: Alphabet Class A - Stock Price, Quote and News - CNBC",
-   "age": "28 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/quotes/GOOG",
-   "title": "GOOG: Alphabet Class C - Stock Price, Quote and News - CNBC",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.cnn.com/markets/stocks/GOOGL",
-   "title": "GOOGL Stock Quote Price and Forecast",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Googlebook",
-   "title": "Googlebook",
-   "age": null
-  },
-  {
-   "url": "https://www.barchart.com/story/news/36859123/alphabet-soars-is-googl-stock-still-a-buy-for-2026",
-   "title": "Alphabet Soars — Is GOOGL Stock Still a Buy for 2026?",
-   "age": "276 days ago"
-  },
-  {
-   "url": "https://fool.com/investing/2026/10/02/alphabet-stock-is-down-15-from-its-all-time-high",
-   "title": "Alphabet Stock Is Down 15% From Its All-Time High. Now Is the Perfect Time to Buy",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Alphabet_Inc.",
-   "title": "Alphabet Inc.",
-   "age": null
-  },
-  {
-   "url": "https://www.cnn.com/markets/stocks/GOOG",
-   "title": "__symbol__ Stock Quote Price and Forecast",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/GV_(company)",
-   "title": "GV (company)",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/ai/articles/alphabet-unveils-gemini-4-argon-164313390.html",
-   "title": "Alphabet Unveils Gemini 4 Argon After Delays, and Bets on Price",
-   "age": "2 days ago"
   }
  ],
  "leads": [
   {
    "symbols": [
-    "MSFT"
-   ],
-   "source": "cnbc.com",
-   "pubDate": "2026-10-05T12:51:24Z",
-   "headline": "Satya Nadella reinvented Microsoft once. Can he do it again in the AI era?",
-   "url": "https://www.cnbc.com/2026/10/05/satya-nadella-reinvented-microsoft-once-can-he-do-it-in-the-ai-era.html"
-  },
-  {
-   "symbols": [
-    "AAPL"
+    "BRK-B"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-10-05T12:46:52Z",
-   "headline": "Will Siri Overhaul Help Apple (AAPL) Restore Its AI Credibility?",
-   "url": "https://finance.yahoo.com/technology/ai/articles/siri-overhaul-help-apple-aapl-124652463.html"
-  },
-  {
-   "symbols": [
-    "AAPL",
-    "TSLA"
-   ],
-   "source": "247wallst.com",
-   "pubDate": "2026-10-05T12:45:56Z",
-   "headline": "Who’s Worse At AI Monetization, Tesla or Apple?",
-   "url": "https://247wallst.com/investing/2026/10/05/whos-worse-at-ai-monetization-tesla-or-apple/"
-  },
-  {
-   "symbols": [
-    "TSLA"
-   ],
-   "source": "tikr.com",
-   "pubDate": "2026-10-05T12:45:43Z",
-   "headline": "Tesla Expands Texas Cybercab Fleet Fourfold Following Austin Commercial Service Launch",
-   "url": "https://www.tikr.com/blog/tesla-cybercab-fleet-texas-austin-commercial-service"
-  },
-  {
-   "symbols": [
-    "AAPL"
-   ],
-   "source": "247wallst.com",
-   "pubDate": "2026-10-05T12:45:42Z",
-   "headline": "Prediction: Qualcomm Could Be on the Verge of a Major Transformation",
-   "url": "https://247wallst.com/investing/2026/10/05/prediction-qualcomm-could-be-on-the-verge-of-a-major-transformation/"
+   "pubDate": "2026-10-06T00:55:00Z",
+   "headline": "Greenbrier Responds to Trade Petition on Railway Tank Cars",
+   "url": "https://finance.yahoo.com/economy/policy/articles/greenbrier-responds-trade-petition-railway-005500898.html"
   },
   {
    "symbols": [
     "NVDA"
    ],
-   "source": "247wallst.com",
-   "pubDate": "2026-10-05T12:45:36Z",
-   "headline": "NVIDIA Is the 8th Biggest Holding in the Most Popular AI ETF. What’s Number One?",
-   "url": "https://247wallst.com/investing/etf/2026/10/05/nvidia-is-the-8th-biggest-holding-in-the-most-popular-ai-etf-whats-number-one/"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "source": "247wallst.com",
-   "pubDate": "2026-10-05T12:45:18Z",
-   "headline": "Alphabet’s AI Monetization Mix Stands Out Singularly, So I Keep Hitting Buy",
-   "url": "https://247wallst.com/investing/2026/10/05/alphabets-ai-monetization-mix-stands-out-singularly-so-i-keep-hitting-buy/"
-  },
-  {
-   "symbols": [
-    "BRK-B"
-   ],
    "source": "fool.com",
-   "pubDate": "2026-10-05T12:35:00Z",
-   "headline": "Berkshire vs. Occidental: Who Actually Won the $10 Billion Chemicals Deal?",
-   "url": "https://www.fool.com/investing/2026/10/05/berkshire-vs-occidental-who-actually-won-the-10-bi/"
+   "pubDate": "2026-10-06T00:03:54Z",
+   "headline": "Nvidia vs. Taiwan Semiconductor Manufacturing: Which Technology Stock Is a Better Buy in 2026?",
+   "url": "https://www.fool.com/coverage/better-buy/2026/10/05/nvidia-vs-taiwan-semiconductor-manufacturing-which-technology-stock-is-a-better-buy-in-2026/"
+  },
+  {
+   "symbols": [
+    "TSLA"
+   ],
+   "source": "stocktwits.com",
+   "pubDate": "2026-10-05T23:31:20Z",
+   "headline": "LCID Stock Stays Flat After-Hours On Q3 Sales Dip While TSLA, RIVN Beat Estimates",
+   "url": "https://stocktwits.com/news-articles/markets/equity/lcid-stock-stays-flat-after-hours-on-q3-sales-dip-while-tsla-rivn-beat-estimates/cZDqXBjRBjs"
+  },
+  {
+   "symbols": [
+    "MSFT"
+   ],
+   "source": "thestreet.com",
+   "pubDate": "2026-10-05T23:12:00Z",
+   "headline": "Microsoft cutting off a best-seller with no extension on Oct. 13",
+   "url": "https://www.thestreet.com/technology/microsoft-ending-support-for-a-beloved-best-seller-on-oct-13"
+  },
+  {
+   "symbols": [
+    "MSFT",
+    "META"
+   ],
+   "source": "stocktwits.com",
+   "pubDate": "2026-10-05T23:06:12Z",
+   "headline": "Meta And Microsoft Reportedly Trim Anthropic Reliance as Internal AI Tools Take Center Stage",
+   "url": "https://stocktwits.com/news-articles/markets/equity/meta-and-microsoft-reportedly-trim-anthropic-reliance-as-internal-ai-tools-take-center-stage/cZDqQVcRBjr"
+  },
+  {
+   "symbols": [
+    "NVDA",
+    "TSLA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-05T22:35:32Z",
+   "headline": "Dow Jones Futures: Nasdaq Hits Record Highs; TSMC, Nvidia, Elon Musk-Led SpaceX, Tesla Rally",
+   "url": "https://finance.yahoo.com/m/9c90b53b-8f8f-31da-a2bd-40e22a1f7b08/dow-jones-futures%3A-nasdaq.html"
+  },
+  {
+   "symbols": [
+    "MSFT",
+    "NVDA",
+    "META"
+   ],
+   "source": "cnbc.com",
+   "pubDate": "2026-10-05T22:18:13Z",
+   "headline": "Stocks are hitting records despite surging yields. Cramer explains why",
+   "url": "https://www.cnbc.com/2026/10/05/cramer-ai-stocks-treasury-yields.html"
+  },
+  {
+   "symbols": [
+    "NVDA",
+    "TSLA"
+   ],
+   "source": "stocktwits.com",
+   "pubDate": "2026-10-05T22:09:32Z",
+   "headline": "Nasdaq 100 Hits Record Highs As Investors Shrug Off Pressure From Soaring Yields — NVDA, SPCX, CRML, TSLA, QCOM In Focus",
+   "url": "https://stocktwits.com/news-articles/markets/equity/nasdaq-100-hits-record-highs-as-investors-shrug-off-pressure-from-soaring-yields-nvda-spcx-crml-tsla-qcom-in-focus/cZDqO2yRBjp"
+  },
+  {
+   "symbols": [
+    "S68.SI"
+   ],
+   "source": "straitstimes.com",
+   "pubDate": "2026-10-05T19:16:00Z",
+   "headline": "Beyond paper tigers: Evolving SGX’s regulations to match Asia’s needs",
+   "url": "https://www.straitstimes.com/business/beyond-paper-tigers-evolving-sgxs-regulations-to-match-asias-needs"
+  },
+  {
+   "symbols": [
+    "U11.SI"
+   ],
+   "source": "straitstimes.com",
+   "pubDate": "2026-10-05T19:09:00Z",
+   "headline": "Anchored on Asean: UOB eyes disciplined growth in next decade",
+   "url": "https://www.straitstimes.com/business/anchored-on-asean-uob-eyes-disciplined-growth-in-next-decade"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "source": "straitstimes.com",
+   "pubDate": "2026-10-05T19:06:00Z",
+   "headline": "The next wave of customer engagement",
+   "url": "https://www.straitstimes.com/business/the-next-wave-of-customer-engagement"
+  },
+  {
+   "symbols": [
+    "D05.SI"
+   ],
+   "source": "straitstimes.com",
+   "pubDate": "2026-10-05T19:03:00Z",
+   "headline": "How DBS is shaping Asia’s future as an AI-enabled bank with a heart",
+   "url": "https://www.straitstimes.com/business/how-dbs-is-shaping-asias-future-as-an-ai-enabled-bank-with-a-heart"
   },
   {
    "symbols": [
@@ -473,59 +420,24 @@
   },
   {
    "symbols": [
-    "Z74.SI"
+    "D05.SI",
+    "NVDA"
    ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-10-04T14:06:15Z",
-   "headline": "Nationwide Disaster Roaming Access Could Be A Game Changer For TPG Telecom (ASX:TPG)",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/nationwide-disaster-roaming-access-could-140615898.html"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-10-04T04:00:00Z",
-   "headline": "Not SGX’s fault if stocks have no liquidity, says chairman: Markets this week",
-   "url": "https://www.straitstimes.com/business/companies-markets/not-sgxs-fault-if-stocks-have-no-liquidity-says-chairman-markets-this-week"
-  },
-  {
-   "symbols": [
-    "U11.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-10-02T11:45:09Z",
-   "headline": "UOB rolls out online booking for branch appointments",
-   "url": "https://www.businesstimes.com.sg/companies-markets/uob-rolls-out-online-booking-branch-appointments"
-  },
-  {
-   "symbols": [
-    "Y92.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-10-02T10:07:55Z",
-   "headline": "Singapore stocks continue losing streak on Friday; STI falls 0.6%",
-   "url": "https://www.businesstimes.com.sg/companies-markets/singapore-stocks-continue-losing-streak-friday-sti-falls-0-6"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-10-02T04:26:13Z",
-   "headline": "DFI Retail’s Starbucks deal offers ‘earnings stability’ despite near-term hit: analysts",
-   "url": "https://www.businesstimes.com.sg/companies-markets/dfi-retails-starbucks-deal-offers-earnings-stability-despite-near-term-hit-analysts"
+   "source": "sg.finance.yahoo.com",
+   "pubDate": "2026-10-05T00:41:01Z",
+   "headline": "Nvidia's valuations show AI rally isn't a bubble, DBS says",
+   "url": "https://sg.finance.yahoo.com/news/nvidias-valuations-show-ai-rally-004101832.html"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 42789,
-  "output": 3116,
+  "input": 43024,
+  "output": 1510,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1084
+  "costUsd": 0.1006
  },
- "createdAt": "2026-10-05T13:01:18.703Z"
+ "createdAt": "2026-10-06T01:01:37.765Z"
 }
