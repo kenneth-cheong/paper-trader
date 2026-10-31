@@ -1,0 +1,29 @@
+name: Stall watch
+
+# Hourly while markets trade (scripts/stall-watch.mjs): opens an issue when the Update prices, AI picks
+# and AI fund job hasn't finished for 3 hours, closes it once the job runs again, and cancels a run left
+# waiting on an environment for over 2 hours. Its own workflow and queue, so whatever holds up
+# prices.yml can't hold this up too.
+on:
+  schedule:
+    - cron: '7 3-9,15-21 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  actions: write # cancels a run stuck waiting
+  issues: write
+
+jobs:
+  watch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/stall-watch.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}

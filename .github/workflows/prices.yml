@@ -46,16 +46,16 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
+# Two jobs, each queued on its own: the update job (prices, picks, the AI funds) never waits on the
+# github-pages environment, so a deploy stuck there can only hold up the site, not the trading. From
+# 6 to 31 Oct 2026 one run sat 'waiting' on that environment and, with one shared queue, every later
+# run was dropped from it unstarted. The stall watch (stall-watch.yml) now raises an issue for that.
 jobs:
-  deploy:
+  update:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: ai-fund
+      cancel-in-progress: false
     env:
       ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
       DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }} # opt-in: for a fund whose AI model is DeepSeek (README → DeepSeek)
@@ -281,5 +281,16 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
+
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4

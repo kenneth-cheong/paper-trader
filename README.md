@@ -2,6 +2,14 @@
 
 Practice trading Singapore (SGX) and US stocks with virtual cash at real market prices, and see whether you end up with a net profit or loss. Claude adds long/short picks based on the news, proposes strategies, and can run a fund of its own.
 
+## The current test: 2 Nov 2026 to 29 Jan 2027
+
+The AI funds run unchanged for about 60 trading days to find out whether they have any edge. Over their first 7 trading days (to 6 Oct) the AI picks were 0.4% ahead of the index a week later and 1.0% behind by 30 Oct, with high-conviction picks the worst. That was too few separate calls to tell anything apart from luck. Then the job stalled from 6 to 31 Oct (see *Stall watch* below).
+
+- **Frozen until 29 Jan 2027:** nothing that changes how the funds decide: the prompts, models, styles, decisions per day, limits, learning rules or the watchlist (`symbols.json`), in code or in a fund's *Settings*. Fixing crashes, data downloads, the site and the stall watch is fine.
+- **The pass mark, on 29 Jan 2027:** keep going only if, on the *Learning* tab, the funds' **stock-specific edge a week later** (after beta and fees) is above zero over at least 30 separate bets, **and** high-conviction ideas haven't done worse than low-conviction ones. Otherwise stop the funds.
+- **No real money before it passes:** leave the `TIGER_LIVE_TRADING` variable unset.
+
 ## What's in it
 
 | Tab | What it does |
@@ -88,6 +96,8 @@ A GitHub Actions workflow (`.github/workflows/prices.yml`) runs every 15 minutes
 The page reloads everything every 5 minutes. Prices can be 20–30 minutes old, because Yahoo delays SGX quotes and GitHub sometimes starts scheduled runs late. Exchange holidays aren't known, so on a holiday the market simply shows no new prices.
 
 **A dependable timer:** GitHub starts scheduled workflows late and, at busy times, skips them altogether (a new repository can wait hours for its first scheduled run). Once the AI fund controls are set up (the GitHub token in Supabase Vault, below), run `supabase/schedule.sql` in Supabase's SQL Editor: Supabase then asks GitHub for a run on the same timetable. When both timers fire, the job still runs once.
+
+**Stall watch:** the trading runs in an `update` job and the site's deploy in a `deploy` job, each queued on its own, so a deploy stuck on the `github-pages` environment holds up only the site. From 6 to 31 Oct 2026 one run sat *waiting* there and, with one shared queue, every later run was dropped unstarted, without an alert, since the alerts come from inside those runs. `stall-watch.yml` (`scripts/stall-watch.mjs`) now checks every hour while markets trade: it opens an issue (GitHub emails you, and Telegram tells you when set up) when no update has finished for 3 hours, closes it once one does, and cancels a run that has waited on an environment for over 2 hours.
 
 **Install it as an app:** on a computer, open the site in Chrome or Edge and use the install button in the address bar (or the menu's *Install Paper Trader*); on Android, Chrome's *Add to Home screen* / *Install app*; on an iPhone or iPad, Safari's Share button → *Add to Home Screen*. It then opens in its own window without the browser's bars. `manifest.webmanifest` and the icons in `icons/` make it installable, and `sw.js` fetches everything fresh from the network first (the newest prices and app when online), keeping the last copy only so it still opens offline. An app added to an iPhone's home screen keeps its own storage, so you sign in once more there.
 
@@ -443,6 +453,7 @@ Without `data/prices.json`, the page uses the made-up `data/sample-prices.json` 
 | `supabase/setup.sql` | Database tables, access rules and the invite-only sign-up check. |
 | `supabase/fund-control.sql` | Lets admins start, pause, approve and stop the AI fund from the app. |
 | `supabase/schedule.sql` | Starts the scheduled job from Supabase on the same timetable, since GitHub's own schedule runs late or not at all. |
+| `scripts/stall-watch.mjs`, `.github/workflows/stall-watch.yml` | The stall watch: an issue when the update job hasn't finished for 3 hours while a market trades, and cancelling a run stuck waiting on an environment. |
 | `scripts/tiger_broker.py` | Sends the AI fund's orders to Tiger and brings back fills (with `test/test_tiger_broker.py`). |
 | `scripts/public-fund.mjs` | Writes the public copy of the AI fund, without your Tiger account details, the idea log's theses, the lesson book's records of lessons that have gone (only the track record's counts of them), the words of your notes on stocks, the articles you logged and your questions (only how many of each), or your reasons for declining trades; each fund's stop log is cut to its latest 50 changes, each open position's track to its worst and best move (and when tracking began, for one from before it), and its weekly reports to the latest 4, without your calls. |
 | `app.js`, `index.html`, `styles.css` | The web app. |
