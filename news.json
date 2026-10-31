@@ -1,443 +1,488 @@
 {
- "market_summary": "<cite index=\"29-2,29-3\">US markets closed higher on October 5, with the Nasdaq reaching an intraday record high as a weaker-than-expected September jobs report eased concerns about potential interest rate hikes, reducing expectations for another Fed hike in October.",
+ "market_summary": "Global equity markets faced mixed sentiment at end-October 2026. Singapore's banking sector remained in focus with DBS and OCBC reporting strong results and recognition, while UOB awaits Q3 earnings on November 4. Singapore Airlines extended Middle East flight cancellations to February 2027 due to geopolitical tensions, offsetting positive sustainable aviation fuel commitments. US tech earnings season is ramping up with Apple set to report November 2; analysts expect $1.99 EPS on $113.31 billion revenue amid iPhone Duo launch and holiday quarter guidance scrutiny.",
  "items": [
   {
-   "symbols": [],
-   "date": "2026-10-05",
-   "headline": "US Markets Hit Records as Jobs Data Ease Fed Rate Hike Concerns",
-   "summary": "Nasdaq Composite and Nasdaq-100 set fresh records with tech stocks leading the rally. September payrolls increased by just 29,000, below expectations, supporting speculation the Federal Reserve will hold rates steady in October.",
-   "type": "macro",
+   "symbols": [
+    "D05.SI"
+   ],
+   "date": "2026-10-13",
+   "headline": "CGS International upgrades DBS to Add, raises target to SGD 79.50",
+   "summary": "CGS International upgraded DBS Group to Add from Hold and raised its price target from SGD 77.10 to SGD 79.50, citing 20% return on equity and strong earnings base.",
+   "type": "analyst",
    "tone": "positive",
-   "source_url": "https://www.cnbc.com/2026/10/01/stock-market-today-live-updates-.html"
+   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-raises-target-for-dbs-group-stock-to-sgd-79-50/70312279"
   },
   {
    "symbols": [
-    "D05.SI",
-    "O39.SI",
-    "U11.SI"
+    "D05.SI"
    ],
    "date": "2026-10-05",
-   "headline": "SGX Reduces Board Lots for Blue-Chip Stocks to 10 Shares, Lowering Retail Entry Barriers",
-   "summary": "Singapore Exchange cut minimum board lot sizes for 11 blue-chip stocks including DBS, OCBC, and UOB from 100 shares to 10 shares, reducing minimum cash outlay and improving accessibility for retail investors.",
+   "headline": "DBS Q2 2026 net profit rises 9% year-over-year to SGD 3.1 billion",
+   "summary": "DBS Group reported second-quarter 2026 net profit of SGD 3.1 billion, up 9% from the year-earlier quarter, with wealth management fees rising 42% to SGD 919 million.",
+   "type": "earnings",
+   "tone": "positive",
+   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-nears-its-52-week-high-after-9-percent-profit-growth/70235258"
+  },
+  {
+   "symbols": [
+    "D05.SI"
+   ],
+   "date": "2026-10-16",
+   "headline": "DBS Group lists USD 1.5 billion of bonds in Singapore",
+   "summary": "DBS Group arranged USD 1.5 billion of bonds, a financing milestone reflecting strong market access as the bank manages capital ahead of third-quarter results.",
+   "type": "deal",
+   "tone": "positive",
+   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-lists-usd-1-5-billion-of-bonds-and-dbs-group-stock-costs-eur-52-25/70381272"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "date": "2026-10-27",
+   "headline": "OCBC recognized as strongest bank in Singapore and Asia Pacific by The Asian Banker",
+   "summary": "OCBC was named the strongest bank in Singapore and Asia Pacific and third globally in The Asian Banker's World's 1,000 Strongest Banks ranking, cementing its position after topping Forbes and Statista rankings.",
+   "type": "analyst",
+   "tone": "positive",
+   "source_url": "https://www.ocbc.com/group/media/release/2026/ocbc-strongest-bank-in-singapore-and-asia-pacific"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "date": "2026-10-29",
+   "headline": "OCBC launches Alipay+ Travel Treat for overseas digital payments rewards",
+   "summary": "OCBC launched an in-app travel rewards service for overseas Alipay+ QR payments, broadening its digital banking offer and customer engagement.",
    "type": "product",
    "tone": "positive",
-   "source_url": "https://thekopinotes.com/articles/news/sgx-board-lot-reduction-singapore-investors-2026/"
+   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-broadens-travel-rewards-as-digital-payments-expand/70438233"
   },
   {
    "symbols": [
-    "S68.SI"
+    "U11.SI"
    ],
-   "date": "2026-10-05",
-   "headline": "SGX Shares Fall to Lows as Valuations Concern Major Brokers",
-   "summary": "Singapore Exchange shares declined further, erasing $4.2 billion in market value since August peak. Citigroup cut price target to S$17.70 with sell rating, JPMorgan moved to neutral, and Macquarie went to underperform.",
-   "type": "analyst",
-   "tone": "negative",
-   "source_url": "https://www.bloomberg.com/news/articles/2026-10-05/sgx-loses-4-2-billion-in-value-as-analysts-balk-at-valuation"
+   "date": "2026-10-30",
+   "headline": "UOB Q3 earnings scheduled for November 4; analyst consensus targets SGD 43.36",
+   "summary": "United Overseas Bank scheduled to publish third-quarter 2026 results on November 4, with analyst consensus target of SGD 43.36 against current share price near SGD 41.50.",
+   "type": "guidance",
+   "tone": "mixed",
+   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-stock-enters-earnings-test-after-analyst-update/70435247"
   },
   {
    "symbols": [
-    "NVDA",
-    "TSLA",
-    "MSFT",
-    "META"
+    "C6L.SI"
    ],
-   "date": "2026-10-05",
-   "headline": "Nasdaq 100 Hits Record Highs on AI Stock Strength",
-   "summary": "Tech stocks led market rally with Nvidia, Meta, Microsoft and Tesla all advancing despite higher Treasury yields. Nasdaq-100 reached all-time high as investors shrug off bond market concerns.",
-   "type": "other",
+   "date": "2026-10-28",
+   "headline": "Singapore Airlines to purchase up to 4,800 tonnes of sustainable aviation fuel from Aether over three years",
+   "summary": "Singapore Airlines signed agreement with Aether Fuels to purchase SAF from Singapore-based plant over three years starting 2028, supporting net-zero emissions by 2050.",
+   "type": "deal",
    "tone": "positive",
-   "source_url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-oct-05-2026"
+   "source_url": "https://www.esgtoday.com/singapore-airlines-signs-deal-to-purchase-saf-made-from-waste-carbon/"
+  },
+  {
+   "symbols": [
+    "C6L.SI"
+   ],
+   "date": "2026-10-30",
+   "headline": "Singapore Airlines extends Dubai flight cancellations to February 28, 2027 due to Middle East geopolitical situation",
+   "summary": "Singapore Airlines extended cancellation of Singapore-Dubai flights (SQ494/SQ495) to February 28, 2027, citing ongoing geopolitical tensions in the Middle East.",
+   "type": "other",
+   "tone": "negative",
+   "source_url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/10/30/singapore-airlines-extends-dubai-flight-cancellations-to-february-2027"
+  },
+  {
+   "symbols": [
+    "AAPL"
+   ],
+   "date": "2026-11-02",
+   "headline": "Apple to report Q4 2026 earnings on November 2; holiday guidance in focus",
+   "summary": "Apple will release Q4 2026 earnings after market close November 2, with analysts forecasting EPS of $1.99 on revenue of $113.31 billion amid iPhone Duo launch.",
+   "type": "guidance",
+   "tone": "mixed",
+   "source_url": "https://seekingalpha.com/news/4661197-apples-holiday-guidance-to-be-in-focus-during-q4-results"
   }
  ],
  "sources": [
   {
-   "url": "https://www.stashaway.sg/r/ocbc-dbs-uob-singapore-bank-stock",
-   "title": "OCBC vs DBS vs UOB Singapore's Leading Bank Stocks for 2026",
-   "age": "17 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html",
-   "title": "DBS, OCBC and UOB Beat the STI in 1H 2026: Here’s What Drove the Rally",
-   "age": "88 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
-   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
-   "age": "61 days ago"
-  },
-  {
-   "url": "https://sias.org.sg/latest-updates/dbs-ocbc-and-singtel-drove-the-sti-to-new-all-time-high-uob-took-a-hit/",
-   "title": "DBS, OCBC and Singtel drove the STI to new all-time high, UOB took a hit",
-   "age": "329 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/sgx-board-lot-reduction-singapore-investors-2026/",
-   "title": "SGX Board Lot Reduction 2026: Singapore Blue Chips Guide",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-2026-outlook",
-   "title": "Singapore banks 2026 outlook: DBS OCBC vs UOB",
+   "url": "https://companiesmarketcap.com/dbs/earnings/",
+   "title": "DBS Group (D05.SI) - Earnings",
    "age": null
   },
   {
-   "url": "https://www.itiger.com/hans/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-reports-9-percent-profit-growth-in-q2-2026/70223716",
+   "title": "DBS Group stock reports 9 percent profit growth in Q2 2026",
+   "age": "27 days ago"
   },
   {
-   "url": "https://www.itiger.com/hant/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-raises-dbs-target-to-sgd-79-50-dbs-group-stock-awaits-q3/70327459",
+   "title": "CGSI raises DBS target to SGD 79.50: DBS Group stock awaits Q3",
+   "age": "16 days ago"
   },
   {
-   "url": "https://www.itiger.com/news/2490281759",
-   "title": "Year-in-Review: 8 Singapore Companies That Raised Their Dividends in 2024",
-   "age": null
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-sees-sgd-2-86-billion-profit-dbs-group-stock-sits-5-48-percent-below-its-high/70360107",
+   "title": "CGSI sees SGD 2.86 billion profit: DBS Group stock sits 5.48 percent below its high",
+   "age": "12 days ago"
   },
   {
-   "url": "https://www.spglobal.com/market-intelligence/en/news-insights/research/big-tech-earnings-preview-microsoft-meta-amazon-n-apple",
-   "title": "Big tech earnings preview: Microsoft, Meta, Amazon & Apple",
-   "age": "242 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-weighs-1-87-percent-margin-against-9-percent-profit-growth/70253118",
+   "title": "DBS Group stock weighs 1.87 percent margin against 9 percent profit growth",
+   "age": "24 days ago"
   },
   {
-   "url": "https://www.fool.com/investing/stock-market/upcoming-earnings-reports/",
-   "title": "Earnings Reports of Top Companies: Revenue, Profits & Forecasts",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-nears-its-52-week-high-after-9-percent-profit-growth/70235258",
+   "title": "DBS Group stock nears its 52-week high after 9 percent profit growth",
    "age": "25 days ago"
   },
   {
-   "url": "https://www.nasdaq.com/articles/zacks-earnings-trends-highlights-nvidia-amazon-alphabet-microsoft-and-meta-apple-and-tesla",
-   "title": "Zacks Earnings Trends Highlights: Nvidia, Amazon, Alphabet, Microsoft and Meta, Apple and Tesla",
-   "age": "333 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgs-international-raises-target-for-dbs-group-stock-to-sgd-79-50/70370091",
+   "title": "CGS International raises target for DBS Group stock to SGD 79.50",
+   "age": "11 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/07/31/apple-aapl-amazon-amzn-stock-today.html",
-   "title": "Alphabet, Amazon and Microsoft added nearly $1.5 trillion in combined value this week",
-   "age": "66 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-lists-usd-1-5-billion-of-bonds-and-dbs-group-stock-costs-eur-52-25/70381272",
+   "title": "DBS Group lists USD 1.5 billion of bonds and DBS Group stock costs EUR 52.25",
+   "age": "10 days ago"
   },
   {
-   "url": "https://fortune.com/2026/07/26/big-tech-earnings-meta-microsoft-apple-amazon-market-revolt-ai-spending/",
-   "title": "Big Tech earnings slam into a market in revolt over AI spending",
-   "age": "71 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-raises-target-for-dbs-group-stock-to-sgd-79-50/70312279",
+   "title": "CGSI raises target for DBS Group stock to SGD 79.50",
+   "age": "18 days ago"
   },
   {
-   "url": "https://www.fool.com/investing/2026/04/30/amazon-meta-alphabet-and-microsoft-just-reported-e/",
-   "title": "Amazon, Meta, Alphabet, and Microsoft Just Reported Earnings. Here's the Best of the Bunch.",
-   "age": "158 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-launches-taiwan-qr-payments-while-dbs-group-stock-trades-at-eur-51-68/70413105",
+   "title": "DBS launches Taiwan QR payments while DBS Group stock trades at EUR 51.68",
+   "age": "5 days ago"
   },
   {
-   "url": "https://marketwise.com/investing/ai-demand-big-tech-earnings-spending/",
-   "title": "What Alphabet, Amazon, Meta, and Microsoft Earnings Say About AI - MarketWise",
-   "age": "67 days ago"
+   "url": "https://www.ocbc.com.my/group/media/release/index",
+   "title": "Media Newsroom",
+   "age": "1517 days ago"
   },
   {
-   "url": "https://www.nasdaq.com/doc/NDXEarningsUpdate-Q3-2025%28Final%29",
-   "title": "NDXEarningsUpdate Q3 2025%28Final%29",
+   "url": "https://www.ocbc.com.hk/personal-banking/latest-news.page",
+   "title": "Latest News",
+   "age": "334 days ago"
+  },
+  {
+   "url": "https://www.marketscreener.com/news/pt-bank-ocbc-nisp-tbk-ocbc-recorded-a-double-digit-growth-in-total-asset-and-credit-disbursement-i-ce785fdbdd88f623",
+   "title": "PT Bank OCBC NISP Tbk : OCBC Recorded a Double-digit growth in Total Asset and Credit Disbursement in Q3/2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.ocbc.com/group/media/release/2026/ocbc-strongest-bank-in-singapore-and-asia-pacific",
+   "title": "OCBC builds on world's top-performing recognition with strongest bank accolade",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://www.caproasia.com/2026/10/29/singapore-2nd-largest-bank-102-billion-ocbc-mobile-app-internet-banking-disrupted-restored-on-23rd-october-2026-friday/",
+   "title": "Singapore 2nd Largest Bank $102 Billion OCBC Mobile App & Internet Banking Disrupted & Restored on 23rd October 2026 (Friday)",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Great_Eastern_Life",
+   "title": "Great Eastern Life",
    "age": null
   },
   {
-   "url": "https://www.nasdaq.com/articles/amazon-alphabet-and-nvidia-are-part-zacks-earnings-preview",
-   "title": "Amazon, Alphabet and Nvidia are part of Zacks Earnings Preview",
-   "age": null
-  },
-  {
-   "url": "https://www.marketbeat.com/stocks/NASDAQ/META/earnings/",
-   "title": "Meta Platforms (META) Earnings Date and Reports 2026 $META",
-   "age": "69 days ago"
-  },
-  {
-   "url": "https://www.marketbeat.com/stocks/NASDAQ/TSLA/earnings/",
-   "title": "Tesla (TSLA) Earnings Date and Reports 2026 $TSLA",
-   "age": "75 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001326801/000162828026028364/meta-03312026xexhibit991.htm",
-   "title": "Meta Platforms, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001326801/000162828026050596/meta-06302026xexhibit991.htm",
-   "title": "Meta Platforms, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003832/meta-12312025xexhibit991.htm",
-   "title": "Meta Platforms, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/calendar/earnings?symbol=TSLA",
-   "title": "Company Earnings Calendar - Yahoo Finance",
-   "age": "166 days ago"
-  },
-  {
-   "url": "https://www.investing.com/equities/tesla-motors-earnings",
-   "title": "Tesla (TSLA) Earnings Date & Report - Investing.com",
-   "age": "74 days ago"
-  },
-  {
-   "url": "https://admiralmarkets.com/education/articles/shares/meta-stock-analysis-october-2026",
-   "title": "Meta Stock Analysis, October 2026: Muse and Q3 Earnings",
+   "url": "https://journalarta.com/en/2026/10/28/ocbc-testing-support-level-stock-gains-0-03-october-27-2026/",
+   "title": "OCBC Testing Support Level: Stock Gains 0.03% (October 27, 2026)",
    "age": "3 days ago"
   },
   {
-   "url": "https://marketchameleon.com/Overview/TSLA/Earnings/Earnings-Dates/",
-   "title": "TSLA Earnings Dates, Upcoming and Historical Tesla",
-   "age": "167 days ago"
-  },
-  {
-   "url": "https://public.com/stocks/meta/earnings",
-   "title": "Meta (META) Earnings: Latest Report, Earnings Call & Financials",
-   "age": "69 days ago"
-  },
-  {
-   "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-oct-05-2026",
-   "title": "Stock Market Today (Oct. 5, 2026): S&P 500 moves higher, yields higher after ISM data - TheStreet",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-broadens-travel-rewards-as-digital-payments-expand/70438233",
+   "title": "OCBC stock broadens travel rewards as digital payments expand",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.bloomberg.com/news/articles/2026-10-01/asian-stocks-to-fall-on-oil-rally-bonds-in-focus-markets-wrap",
-   "title": "Stock Market Today: Dow, S&P Live Updates for October 2 - Bloomberg",
-   "age": "3 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-announced-lower-online-commissions-ocbc-stock-gains-1-00-percent/70276763",
+   "title": "OCBC announced lower online commissions: OCBC stock gains 1.00 percent",
+   "age": "22 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/10/01/stock-market-today-live-updates-.html",
-   "title": "Stocks rise Friday after soft jobs data, Nvidia leads Nasdaq to intraday record",
-   "age": "3 days ago"
+   "url": "https://twelvedata.com/markets/699438/stock/xstu/uob/earnings",
+   "title": "United Overseas Bank Limited (UOB) - Earnings",
+   "age": "348 days ago"
   },
   {
-   "url": "https://tradingeconomics.com/united-states/stock-market",
-   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
-   "age": "773 days ago"
+   "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-uob-posts-steady-q2-2026-results-as-revenue-beats-forecasts-93CH-4847060",
+   "title": "Earnings call transcript: UOB posts steady Q2 2026 results as revenue beats forecasts By Investing.com",
+   "age": "84 days ago"
   },
   {
-   "url": "https://fred.stlouisfed.org/series/SP500",
-   "title": "S&P 500 (SP500)",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://fred.stlouisfed.org/data/SP500",
-   "title": "Table Data - S&P 500",
-   "age": "831 days ago"
-  },
-  {
-   "url": "https://www.spglobal.com/spdji/en/commentary/article/us-equities-market-attributes-october-2025",
-   "title": "IN THIS LIST",
+   "url": "https://www.investing.com/equities/united-overseas-bank-earnings",
+   "title": "UOB (UOBH) Earnings Date & Report - Investing.com",
    "age": null
   },
   {
-   "url": "https://www.bloomberg.com/news/videos/2025-10-06/s-p-nasdaq-hit-records-as-yields-fall-closing-bell-video",
-   "title": "Oct 6th, 2025",
+   "url": "https://www.poems.com.sg/stocks/articles/united-overseas-bank-reports-mixed-2q26-results-maintains-neutral-rating-with-s43-00-target/",
+   "title": "United Overseas Bank Reports Mixed 2Q26 Results; Maintains Neutral Rating with S$43.00 Target - POEMS",
+   "age": "366 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0002002045/000121390026084021/ea0297613-20f_gclglobal.htm",
+   "title": "GCL Global Holdings Ltd - Form 20-F - FY2026",
    "age": null
   },
   {
-   "url": "https://www.marketbeat.com/articles/how-major-us-stock-indexes-fared-wednesday-1012025-2025-10-01",
-   "title": "Free Trial",
-   "age": null
+   "url": "https://finance.yahoo.com/quote/U11.SI/",
+   "title": "United Overseas Bank Limited (U11.SI) Stock Price, News, Quote & History - Yahoo Finance",
+   "age": "14 days ago"
   },
   {
-   "url": "https://www.business-standard.com/article/news-cm/us-nasdaq-s-p500-holds-at-records-121063000515_1.html",
-   "title": "Tuesday, December 30, 2025 | 10:23 PM ISTहिंदी में पढें",
-   "age": null
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-redeems-usd-750-million-bonds-as-united-overseas-bank-stock-trades-at-eur-28-58/70324367",
+   "title": "UOB redeems USD 750 million bonds as United Overseas Bank stock trades at EUR 28.58",
+   "age": "16 days ago"
   },
   {
-   "url": "https://www.bloomberg.com/news/articles/2026-10-05/sgx-loses-4-2-billion-in-value-as-analysts-balk-at-valuation",
-   "title": "SGX Loses $4.2 Billion in Value as Analysts Balk at Valuation - Bloomberg",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://peterlewismoneytalk.substack.com/p/peters-asian-business-and-finance-fad",
-   "title": "PETER’S ASIAN BUSINESS & FINANCE BRIEFING",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://simplywall.st/markets/sg",
-   "title": "Singaporean (SGX) Market Analysis & Valuation - Updated Today",
-   "age": "159 days ago"
-  },
-  {
-   "url": "https://www.briefs.co/news/singapore-exchange-shares-extend-slide-as-valuation-worries/",
-   "title": "Singapore Exchange Slides on Valuation Concerns",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://ad-hoc-news.de/boerse/news/corporate-news/sgx-cuts-board-lots-for-dbs-group-stock-to-10-shares/70231928",
-   "title": "SGX cuts board lots for DBS Group stock to 10 shares",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://phemex.com/news/article/sgx-market-cap-drops-42-billion-as-citi-jpmorgan-and-macquarie-cut-ratings-98788",
-   "title": "SGX Shares Drop $4.2B as Citi, JPMorgan Downgrade Stock",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/united-overseas-bank-stock-faces-earnings-test-after-analyst-update/70433065",
+   "title": "United Overseas Bank stock faces earnings test after analyst update",
    "age": "1 days ago"
   },
   {
-   "url": "https://simplywall.st/news/sg/transportation/page/8",
-   "title": "Singaporean Transportation Stock News",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-stock-enters-earnings-test-after-analyst-update/70435247",
+   "title": "UOB stock enters earnings test after analyst update",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/press-release/",
+   "title": "News releases",
+   "age": "42 days ago"
+  },
+  {
+   "url": "https://loyaltylobby.com/2026/10/30/singapore-airlines-extends-dubai-flight-cancellations-through-february-28-2027/",
+   "title": "Singapore Airlines Extends Dubai Flight Cancellations Through February 28, 2027 - LoyaltyLobby",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.esgtoday.com/singapore-airlines-signs-deal-to-purchase-saf-made-from-waste-carbon/",
+   "title": "Singapore Airlines Signs Deal to Purchase SAF Made from Waste Carbon - ESG Today",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://gulfbusiness.com/en/2026/aviation/singapore-airlines-cancels-dubai-flights-until-february-2027-amid-middle-east-tensions/",
+   "title": "Singapore Airlines cancels Dubai flights until February 2027 amid Middle East tensions",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/sg/corporate/newsroom/press-release/2026/oct-to-dec-2026/Discounted_Travel_Fair_Singapore_Airlines_Scoot_Discount/",
+   "title": "More Than 380,000 Discounted Singapore Airlines And Scoot Tickets Available At 2026 Time To Fly Travel Fair",
+   "age": "18 days ago"
+  },
+  {
+   "url": "https://sg.trip.com/guide/info/singapore-airlines-launches-8-major-new-routes.html",
+   "title": "Singapore Airlines Launches 8 New Routes in 2026",
+   "age": "29 days ago"
+  },
+  {
+   "url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/10/30/singapore-airlines-extends-dubai-flight-cancellations-to-february-2027",
+   "title": "Singapore Airlines extends Dubai flight cancellations to February 2027",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://deeparrival.com/news/singapore-airlines-fare-sale-ends-october-7-2026/",
+   "title": "Singapore Airlines October 7 Deadline Brings 870 Dollar Europe Returns",
+   "age": "28 days ago"
+  },
+  {
+   "url": "https://www-singaporeair-com.translate.goog/en_UK/us/corporate/newsroom/press-release/?_x_tr_sl=en&_x_tr_tl=id&_x_tr_hl=id&_x_tr_pto=tc",
+   "title": "News releases",
+   "age": "42 days ago"
+  },
+  {
+   "url": "https://www.macrumors.com/2026/10/06/apple-q4-2026-earnings-nov-2/",
+   "title": "Apple to Report Q4 2026 Earnings on November 2 - MacRumors",
+   "age": "24 days ago"
+  },
+  {
+   "url": "https://us.plus500.com/en/forecasts/apple-earnings-expectations",
+   "title": "Apple Earnings Forecasts & Outlook",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:s68/stock-news",
-   "title": "stock news",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/a8-kex991q3202606272026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:s68",
-   "title": "www.tipranks.com",
+   "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000005/a8-kex991q1202612272025.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
+  },
+  {
+   "url": "https://seekingalpha.com/news/4661197-apples-holiday-guidance-to-be-in-focus-during-q4-results",
+   "title": "Apple’s holiday guidance to be in focus during Q4 results (AAPL:NASDAQ)",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/earnings-preview-expect-apples-report-124755233.html",
+   "title": "Earnings Preview: What to Expect From Apple's Report",
+   "age": "16 days ago"
+  },
+  {
+   "url": "https://www.marketpulse.com/markets/apple-ahead-of-earnings-record-sales-are-only-the-beginning-of-the-test/",
+   "title": "Apple ahead of earnings: record sales are only the beginning of the test",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.marketbeat.com/instant-alerts/upcoming-apple-aapl-expected-to-post-earnings-on-monday-2026-10-26/",
+   "title": "Apple (AAPL) Expected to Post Earnings on Monday",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://www.bybit.com/en/wiki/article/apple-aapl-earnings-dates-2026-schedule/",
+   "title": "Apple AAPL Earnings Dates 2026 Schedule",
+   "age": "92 days ago"
   }
  ],
  "leads": [
   {
    "symbols": [
-    "BRK-B"
+    "NVDA"
+   ],
+   "source": "fool.com",
+   "pubDate": "2026-10-31T11:29:00Z",
+   "headline": "Meet the Brilliant AI Stock Obliterating Nvidia in 2026 With a Return of 44%",
+   "url": "https://www.fool.com/investing/2026/10/31/meet-brilliant-ai-stock-nvidia-in-2026-return-44/"
+  },
+  {
+   "symbols": [
+    "MSFT",
+    "NVDA"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-10-06T00:55:00Z",
-   "headline": "Greenbrier Responds to Trade Petition on Railway Tank Cars",
-   "url": "https://finance.yahoo.com/economy/policy/articles/greenbrier-responds-trade-petition-railway-005500898.html"
+   "pubDate": "2026-10-31T10:08:01Z",
+   "headline": "Volkswagen (XTRA:VOW3) Puts New Vehicle Software And AV Data Partnerships To Work",
+   "url": "https://finance.yahoo.com/technology/articles/volkswagen-xtra-vow3-puts-vehicle-100801350.html"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-31T10:00:00Z",
+   "headline": "Reddit (and everyone else) faces a bleak internet without Google traffic",
+   "url": "https://finance.yahoo.com/technology/article/reddit-and-everyone-else-faces-a-bleak-internet-without-google-traffic-100000669.html"
+  },
+  {
+   "symbols": [
+    "AMZN",
+    "GOOGL"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-31T09:55:29Z",
+   "headline": "AppLovin, 8x8, Elastic, Shopify, and F5 shares are falling, what you need to know",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/applovin-8x8-elastic-shopify-f5-095529415.html"
   },
   {
    "symbols": [
     "NVDA"
    ],
    "source": "fool.com",
-   "pubDate": "2026-10-06T00:03:54Z",
-   "headline": "Nvidia vs. Taiwan Semiconductor Manufacturing: Which Technology Stock Is a Better Buy in 2026?",
-   "url": "https://www.fool.com/coverage/better-buy/2026/10/05/nvidia-vs-taiwan-semiconductor-manufacturing-which-technology-stock-is-a-better-buy-in-2026/"
+   "pubDate": "2026-10-31T09:35:00Z",
+   "headline": "Here's What $10,000 Invested Equally in SpaceX and Nvidia Could Be Worth in 2030",
+   "url": "https://www.fool.com/investing/2026/10/31/what-10k-invested-equally-spacex-nvidia-stock/"
   },
   {
    "symbols": [
-    "TSLA"
-   ],
-   "source": "stocktwits.com",
-   "pubDate": "2026-10-05T23:31:20Z",
-   "headline": "LCID Stock Stays Flat After-Hours On Q3 Sales Dip While TSLA, RIVN Beat Estimates",
-   "url": "https://stocktwits.com/news-articles/markets/equity/lcid-stock-stays-flat-after-hours-on-q3-sales-dip-while-tsla-rivn-beat-estimates/cZDqXBjRBjs"
-  },
-  {
-   "symbols": [
-    "MSFT"
-   ],
-   "source": "thestreet.com",
-   "pubDate": "2026-10-05T23:12:00Z",
-   "headline": "Microsoft cutting off a best-seller with no extension on Oct. 13",
-   "url": "https://www.thestreet.com/technology/microsoft-ending-support-for-a-beloved-best-seller-on-oct-13"
-  },
-  {
-   "symbols": [
-    "MSFT",
-    "META"
-   ],
-   "source": "stocktwits.com",
-   "pubDate": "2026-10-05T23:06:12Z",
-   "headline": "Meta And Microsoft Reportedly Trim Anthropic Reliance as Internal AI Tools Take Center Stage",
-   "url": "https://stocktwits.com/news-articles/markets/equity/meta-and-microsoft-reportedly-trim-anthropic-reliance-as-internal-ai-tools-take-center-stage/cZDqQVcRBjr"
-  },
-  {
-   "symbols": [
-    "NVDA",
-    "TSLA"
+    "AMZN",
+    "GOOGL"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-10-05T22:35:32Z",
-   "headline": "Dow Jones Futures: Nasdaq Hits Record Highs; TSMC, Nvidia, Elon Musk-Led SpaceX, Tesla Rally",
-   "url": "https://finance.yahoo.com/m/9c90b53b-8f8f-31da-a2bd-40e22a1f7b08/dow-jones-futures%3A-nasdaq.html"
+   "pubDate": "2026-10-31T09:31:29Z",
+   "headline": "Zeta Global and Commerce stocks trade down, what you need to know",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/zeta-global-commerce-stocks-trade-093129865.html"
   },
   {
    "symbols": [
-    "MSFT",
-    "NVDA",
-    "META"
+    "AMZN"
    ],
-   "source": "cnbc.com",
-   "pubDate": "2026-10-05T22:18:13Z",
-   "headline": "Stocks are hitting records despite surging yields. Cramer explains why",
-   "url": "https://www.cnbc.com/2026/10/05/cramer-ai-stocks-treasury-yields.html"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-31T09:30:00Z",
+   "headline": "Jeff Bezos' father fled Cuba at 16 with three shirts — then invested $245,573 in life savings to help launch Amazon",
+   "url": "https://finance.yahoo.com/small-business/articles/jeff-bezos-father-fled-cuba-093000674.html"
   },
   {
    "symbols": [
-    "NVDA",
-    "TSLA"
+    "AMZN",
+    "GOOGL"
    ],
-   "source": "stocktwits.com",
-   "pubDate": "2026-10-05T22:09:32Z",
-   "headline": "Nasdaq 100 Hits Record Highs As Investors Shrug Off Pressure From Soaring Yields — NVDA, SPCX, CRML, TSLA, QCOM In Focus",
-   "url": "https://stocktwits.com/news-articles/markets/equity/nasdaq-100-hits-record-highs-as-investors-shrug-off-pressure-from-soaring-yields-nvda-spcx-crml-tsla-qcom-in-focus/cZDqO2yRBjp"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-10-05T19:16:00Z",
-   "headline": "Beyond paper tigers: Evolving SGX’s regulations to match Asia’s needs",
-   "url": "https://www.straitstimes.com/business/beyond-paper-tigers-evolving-sgxs-regulations-to-match-asias-needs"
-  },
-  {
-   "symbols": [
-    "U11.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-10-05T19:09:00Z",
-   "headline": "Anchored on Asean: UOB eyes disciplined growth in next decade",
-   "url": "https://www.straitstimes.com/business/anchored-on-asean-uob-eyes-disciplined-growth-in-next-decade"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-10-05T19:06:00Z",
-   "headline": "The next wave of customer engagement",
-   "url": "https://www.straitstimes.com/business/the-next-wave-of-customer-engagement"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-10-31T09:23:29Z",
+   "headline": "Cloudflare, Fastly, Oracle, JFrog, and Okta shares plummet, what you need to know",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/cloudflare-fastly-oracle-jfrog-okta-092329601.html"
   },
   {
    "symbols": [
     "D05.SI"
    ],
    "source": "straitstimes.com",
-   "pubDate": "2026-10-05T19:03:00Z",
-   "headline": "How DBS is shaping Asia’s future as an AI-enabled bank with a heart",
-   "url": "https://www.straitstimes.com/business/how-dbs-is-shaping-asias-future-as-an-ai-enabled-bank-with-a-heart"
+   "pubDate": "2026-10-30T09:20:00Z",
+   "headline": "Ultra-wealthy families in Asia, including Singapore, lack succession and crisis planning: DBS report",
+   "url": "https://www.straitstimes.com/business/ultra-wealthy-families-in-asia-including-spore-lack-succession-and-crisis-planning-dbs-report"
   },
   {
    "symbols": [
     "S68.SI"
    ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-10-05T05:05:00Z",
-   "headline": "SGX and partners roll out youth stock programme to lower barriers and equip young investors",
-   "url": "https://www.straitstimes.com/business/companies-markets/sgx-and-partners-roll-out-youth-stock-programme-to-lower-barriers-and-equip-young-investors"
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-30T08:04:41Z",
+   "headline": "Who are some of the longest-serving CEOs among Singapore’s blue-chip companies?",
+   "url": "https://www.businesstimes.com.sg/companies-markets/who-are-some-longest-serving-ceos-among-singapores-blue-chip-companies"
   },
   {
    "symbols": [
-    "S68.SI"
+    "D05.SI"
    ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-10-05T04:08:00Z",
-   "headline": "SGX board lot reduction kicks in for 11 stocks, including the three S’pore banks",
-   "url": "https://www.straitstimes.com/business/companies-markets/sgx-board-lot-reduction-kicks-off-for-11-stocks-including-the-three-spore-banks"
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-30T05:51:24Z",
+   "headline": "DBS remains Asean’s most valuable brand; Grab among fastest-growing: report",
+   "url": "https://www.businesstimes.com.sg/companies-markets/dbs-remains-aseans-most-valuable-brand-grab-among-fastest-growing-report"
   },
   {
    "symbols": [
-    "D05.SI",
-    "NVDA"
+    "BN4.SI"
    ],
-   "source": "sg.finance.yahoo.com",
-   "pubDate": "2026-10-05T00:41:01Z",
-   "headline": "Nvidia's valuations show AI rally isn't a bubble, DBS says",
-   "url": "https://sg.finance.yahoo.com/news/nvidias-valuations-show-ai-rally-004101832.html"
+   "source": "straitstimes.com",
+   "pubDate": "2026-10-29T12:45:00Z",
+   "headline": "Keppel’s essential services offer resilience and room for growth: CEO",
+   "url": "https://www.straitstimes.com/business/companies-markets/after-shift-from-oil-rigs-to-asset-management-keppel-ceo-charts-an-ai-future"
+  },
+  {
+   "symbols": [
+    "Z74.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-29T07:09:10Z",
+   "headline": "Singtel’s NCS to more than triple AI specialist workforce to over 300 in two years",
+   "url": "https://www.businesstimes.com.sg/companies-markets/singtels-ncs-more-triple-ai-specialist-workforce-over-300-two-years"
+  },
+  {
+   "symbols": [
+    "D05.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-29T05:22:29Z",
+   "headline": "DBS denies rumours of Indonesia unit merging with Bank Central Asia; analysts see sense in a deal",
+   "url": "https://www.businesstimes.com.sg/companies-markets/dbs-denies-rumours-indonesia-unit-merging-bank-central-asia-analysts-see-sense-deal"
+  },
+  {
+   "symbols": [
+    "C6L.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-10-29T03:32:36Z",
+   "headline": "SIA to buy up to 4,800 tonnes of sustainable aviation fuel from Aether’s Singapore plant",
+   "url": "https://www.businesstimes.com.sg/companies-markets/sia-buy-4800-tonnes-sustainable-aviation-fuel-aethers-singapore-plant"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 43024,
-  "output": 1510,
+  "input": 42952,
+  "output": 2717,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1006
+  "costUsd": 0.1065
  },
- "createdAt": "2026-10-06T01:01:37.765Z"
+ "createdAt": "2026-10-31T11:43:54.510Z"
 }

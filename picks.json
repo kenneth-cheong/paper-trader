@@ -1,318 +1,322 @@
 {
- "market_summary": "US equities are in a risk-on mode: the Oct 1 payrolls miss (29k vs expectations) has markets pricing a Fed hold, and the Nasdaq-100/Nasdaq Composite just printed fresh record highs on Oct 5 led by AI/mega-cap tech (NVDA, MSFT, META, TSLA all up sharply). In Singapore, SGX itself is the standout mover — down ~18% in a month after Citi/JPM/Macquarie all cut ratings/targets on valuation concerns, even as SGX cut board lots for banks to boost retail access. The SG banks (DBS/OCBC/UOB) remain in solid uptrends near 52w highs but are little-changed on fresh upside, trading close to consensus targets, implying limited near-term re-rating room. Overall: momentum favors large-cap US tech; SGX (the operator) is the clearest negative-momentum setup on the watchlist.",
+ "market_summary": "Singapore banks are heading into a cluster of Q3 earnings (UOB Nov 4, DBS Nov 5, OCBC Nov 6) against a backdrop of strong fundamentals but recent profit-taking — all three majors are down 4-7% over the past month despite still-positive analyst upside. US mega-cap tech sold off sharply on Oct 30-31 (QQQ -3.5%, NVDA -4.2%, GOOGL -1.4% day but -17% 1m) as investors de-risk ahead of Apple's Nov 2 report and amid AI-capex valuation jitters. Singapore Airlines faces a fresh negative headline (Dubai route cancellations extended to Feb 2027) that is being only partly offset by a longer-dated SAF supply deal. Overall tone is cautious/rotational: value-for-income SGX names with high implied upside (Singtel, OCBC, DBS) look attractive for mean reversion, while momentum-broken US growth names (GOOGL, NVDA) and SIA look vulnerable to further near-term weakness.",
  "picks": [
   {
-   "symbol": "S68.SI",
-   "stance": "short",
-   "conviction": "high",
-   "horizon": "weeks",
-   "thesis": "SGX stock is in a clear, accelerating downtrend (-18% 1m, -14% 3m, now -13.6% below its 50-day MA) driven by a wave of sell-side downgrades on valuation. Rel volume is elevated (1.38x) confirming active distribution, not just drift.",
-   "news": "Oct 5, 2026: Citigroup cut to Sell (PT S$17.70), JPMorgan moved to Neutral, Macquarie to Underperform, citing valuation after the stock lost S$4.2bn in market cap since its August peak.",
-   "risks": "Consensus target (S$24.12) is still well above the current S$20.75 price, implying some analysts see this as overdone; a bounce or short-covering rally could occur quickly given how far/fast it has fallen, and any surprise trading-volume/IPO pipeline news could reverse sentiment.",
-   "source_urls": [
-    "https://www.bloomberg.com/news/articles/2026-10-05/sgx-loses-4-2-billion-in-value-as-analysts-balk-at-valuation"
-   ],
-   "priceAtPick": 20.75
-  },
-  {
-   "symbol": "NVDA",
-   "stance": "long",
-   "conviction": "high",
-   "horizon": "weeks",
-   "thesis": "Nvidia is leading the AI-driven Nasdaq rally, trading only 1.3% from its 52-week high and +9.4% above its 50-day MA, with near-unanimous buy ratings (58 buy/2 hold/1 sell) and a consensus target well above current price. The weak jobs report reduces hike risk, supporting continued risk appetite in high-beta tech.",
-   "news": "Oct 5, 2026: Nvidia advanced alongside Meta, Microsoft and Tesla as the Nasdaq-100 hit a record high on AI-stock strength, even as Treasury yields rose.",
-   "risks": "High beta (1.59) and elevated volatility (37.6% annualized) mean any reversal in rate expectations, a disappointing AI capex data point, or a broader tech pullback would hit this name hardest.",
-   "source_urls": [
-    "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-oct-05-2026"
-   ],
-   "priceAtPick": 238.9
-  },
-  {
-   "symbol": "MSFT",
+   "symbol": "O39.SI",
    "stance": "long",
    "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "Microsoft has a fresh analyst upgrade (Stifel Hold→Buy, target raised to $575) and is up 5.7% in a month, trading 7.7% above its 50-day MA with strong momentum into the broader tech record-high move. Consensus still implies ~10% upside to target.",
-   "news": "2026-09-23: Stifel upgraded MSFT from Hold to Buy, raising target from $530 to $575 (stock +5.5% since); Oct 5, 2026: MSFT was among the Nasdaq-100 record-high leaders.",
-   "risks": "Stock is already near 52-week highs (-3.1%) after a big run, so much good news may be priced in; any disappointment in AI/cloud (Azure) growth guidance could trigger profit-taking.",
+   "thesis": "OCBC has back-to-back positive fresh news (industry recognition as strongest bank in SG/APAC, new Alipay+ travel rewards product) right before its Nov 6 Q3 earnings, yet the stock has pulled back 7.2% over the past month and sits 9% off its 52-week high. With 8 buy/6 hold/3 sell and 6.8% implied upside to consensus target, the pullback looks more like profit-taking after a +72% 1y run than a fundamental deterioration. A clean earnings print could trigger a bounce back toward MA50.",
+   "news": "OCBC named strongest bank in SG/APAC by The Asian Banker (Oct 27, 2026) and launched Alipay+ Travel Treat rewards (Oct 29, 2026); Q3 earnings due Nov 6, 2026.",
+   "risks": "If Q3 results disappoint or net interest margin guidance is cut, the stock could extend its 1-month downtrend instead of bouncing; broader risk-off in financials would also weigh.",
    "source_urls": [
-    "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-oct-05-2026"
+    "https://www.ocbc.com/group/media/release/2026/ocbc-strongest-bank-in-singapore-and-asia-pacific",
+    "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-broadens-travel-rewards-as-digital-payments-expand/70438233"
    ],
-   "priceAtPick": 525.18
+   "priceAtPick": 29.29
+  },
+  {
+   "symbol": "D05.SI",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "DBS remains the Street's favorite SG bank (analyst upgrade to Add, target SGD79.50, implied 8.4% upside, 10 buy/6 hold/1 sell) and recently executed a large USD1.5bn bond issuance showing strong funding access ahead of its Nov 5 Q3 results. The stock is down 5.5% over the month and 4.1% below its 50-day MA despite being up 24.8% over 6 months and 10.7% above its 200-day MA, suggesting a dip within an intact uptrend rather than trend reversal.",
+   "news": "DBS arranged a USD1.5bn bond issuance (reported Oct 16, 2026); Q3 earnings due Nov 5, 2026; background CGS International upgrade to Add with SGD79.50 target (mid-Oct) and strong Q2 profit growth (+9% YoY, reported early Oct).",
+   "risks": "Earnings could disappoint on NIM compression or credit costs; a hawkish rate outlook or regional credit event would pressure bank valuations broadly.",
+   "source_urls": [
+    "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-lists-usd-1-5-billion-of-bonds-and-dbs-group-stock-costs-eur-52-25/70381272"
+   ],
+   "priceAtPick": 73.13
   },
   {
    "symbol": "Z74.SI",
    "stance": "long",
-   "conviction": "medium",
+   "conviction": "low",
    "horizon": "months",
-   "thesis": "Singtel is deeply out of favor technically (-18% from 52w high, -7.2% vs 200-day MA) despite an overwhelmingly bullish analyst base (12 buy/2 hold/0 sell) and a 24.6% implied upside to consensus target — one of the largest upside gaps on the watchlist. Low beta (0.83) offers defensive ballast if tech rally stalls.",
-   "news": "No company-specific catalyst in the latest news batch; the view rests on the large disconnect between price action (down across 1m/3m/6m) and analyst consensus/target, which may represent a value opportunity if the stock stabilizes.",
-   "risks": "Persistent downtrend (price below both 50- and 200-day MAs) suggests the market may be pricing in a structural concern (e.g., regional telecom competition or FX) not reflected in analyst targets; could keep underperforming without a fresh catalyst.",
-   "source_urls": [
-    "https://www.cnbc.com/2026/10/01/stock-market-today-live-updates-.html"
-   ],
-   "priceAtPick": 4.27
+   "thesis": "Singtel has the most bullish analyst skew on the watchlist (13 buy/2 hold/0 sell) and the largest implied upside of any SGX name (27.2% to consensus target of SGD5.25), despite a weak 6-month (-11.6%) and 1-year (-3.7%) return and trading 9.6% below its 200-day MA. This looks like a laggard value/catch-up candidate heading into Nov 11 earnings, though there is no fresh positive catalyst in the news right now.",
+   "news": "No fresh company-specific news this cycle; earnings scheduled Nov 11, 2026 with an estimated 4.3% typical move.",
+   "risks": "Thin recent newsflow means this is a valuation/consensus-target call, not catalyst-driven; continued regional telecom competitive pressure or a soft Optus/Bharti update could keep the stock range-bound or push it lower.",
+   "source_urls": [],
+   "priceAtPick": 4.13
   },
   {
-   "symbol": "TSLA",
+   "symbol": "C6L.SI",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "Singapore Airlines just extended its Dubai route cancellations to February 2027 citing Middle East geopolitical tensions — a direct, ongoing revenue headwind on a key route. Analyst sentiment is already weak (only 1 buy vs 10 hold/3 sell) and the stock is down 13.1% over 3 months and 14.7% off its 52-week high. The positive SAF supply deal does not start until 2028 and is unlikely to offset near-term capacity/revenue loss from cancelled flights.",
+   "news": "SIA extended SQ494/SQ495 Dubai flight cancellations to Feb 28, 2027 (reported Oct 30, 2026); SAF purchase agreement with Aether Fuels for 2028 start (reported Oct 28, 2026).",
+   "risks": "A de-escalation in Middle East tensions allowing route resumption, strong cargo/passenger yields in upcoming Nov 11 earnings, or oil price declines (lower fuel costs) could reverse the bearish case quickly.",
+   "source_urls": [
+    "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/10/30/singapore-airlines-extends-dubai-flight-cancellations-to-february-2027",
+    "https://www.esgtoday.com/singapore-airlines-signs-deal-to-purchase-saf-made-from-waste-carbon/"
+   ],
+   "priceAtPick": 6.69
+  },
+  {
+   "symbol": "GOOGL",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "Alphabet is in a sharp, broadening downtrend: -17.3% over 1 month, -25.1% over 3 months, -27.4% over 6 months, now 17.9% below its 200-day MA and 30.5% off its 52-week high. A sell-side downgrade (Citizens, Market Outperform to Market Perform) came just two days ago after the stock had already fallen ~14% since the prior rating, confirming deteriorating sentiment rather than a bottom signal. Elevated relative volume (2.1x) suggests active distribution.",
+   "news": "Citizens downgraded GOOGL from Market Outperform to Market Perform on Oct 29, 2026, noting the stock had already fallen 13.9% since its prior rating.",
+   "risks": "Consensus still shows 45% implied upside to target and the stock could be deeply oversold — any positive catalyst (antitrust resolution, strong ad/cloud guidance, AI product news) could spark a sharp short squeeze.",
+   "source_urls": [],
+   "priceAtPick": 279.84
+  },
+  {
+   "symbol": "NVDA",
    "stance": "short",
    "conviction": "low",
    "horizon": "days",
-   "thesis": "Tesla jumped +7% in a single session with no company-specific news in the feed, pushing it 9% above its 50-day MA — a sharp, seemingly news-light spike in the most volatile, highest-beta (1.83) name on the list. Analyst base is split (18 buy/20 hold/4 sell), and the stock remains down double-digits over 3 months and -13% over 1 year, suggesting the move may be more squeeze/momentum than fundamental re-rating.",
-   "news": "Oct 5, 2026: TSLA was mentioned as one of the AI/tech names advancing in the Nasdaq-100 record-high rally, but no Tesla-specific catalyst was reported.",
-   "risks": "If the move is tied to a real catalyst not yet reflected in this news feed (e.g., delivery numbers, robotaxi developments), continued momentum could extend the rally and squeeze shorts hard given the stock's history of large, catalyst-driven moves.",
-   "source_urls": [
-    "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-oct-05-2026"
-   ],
-   "priceAtPick": 378.73
+   "thesis": "Nvidia fell 4.2% in a single session amid a broad tech/AI selloff (QQQ -3.5%, high rel. volume across mega-caps), is down 11.4% over the month and now 7.7% below its 50-day MA with high realized volatility (37%) and the highest beta (1.62) on the watchlist. This is a tactical, momentum-driven short on continued de-risking into November rather than a fundamental call — the extremely high consensus price target (60.7% implied upside) argues the longer-term bull case is intact.",
+   "news": "No company-specific news; move is part of a broader Oct 30-31 tech/AI selloff visible across QQQ, AMZN, GOOGL, META in the price data.",
+   "risks": "NVDA has very high analyst conviction (59 buy/2 hold/1 sell) and any stabilization in the AI trade, a strong partner earnings read-through, or short-covering bounce could reverse this quickly; high volatility makes this a risky, fast-moving trade.",
+   "source_urls": [],
+   "priceAtPick": 204.64
   }
  ],
  "sources": [
   {
-   "url": "https://www.stashaway.sg/r/ocbc-dbs-uob-singapore-bank-stock",
-   "title": "OCBC vs DBS vs UOB Singapore's Leading Bank Stocks for 2026",
-   "age": "17 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/dbs-ocbc-uob-beat-sti-093000726.html",
-   "title": "DBS, OCBC and UOB Beat the STI in 1H 2026: Here’s What Drove the Rally",
-   "age": "88 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
-   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
-   "age": "61 days ago"
-  },
-  {
-   "url": "https://sias.org.sg/latest-updates/dbs-ocbc-and-singtel-drove-the-sti-to-new-all-time-high-uob-took-a-hit/",
-   "title": "DBS, OCBC and Singtel drove the STI to new all-time high, UOB took a hit",
-   "age": "329 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/sgx-board-lot-reduction-singapore-investors-2026/",
-   "title": "SGX Board Lot Reduction 2026: Singapore Blue Chips Guide",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.singaporenewstoday.com/dynamic/singapore-banking-sector-dbs-ocbc-uob-2026-outlook",
-   "title": "Singapore banks 2026 outlook: DBS OCBC vs UOB",
+   "url": "https://companiesmarketcap.com/dbs/earnings/",
+   "title": "DBS Group (D05.SI) - Earnings",
    "age": null
   },
   {
-   "url": "https://www.itiger.com/hans/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-reports-9-percent-profit-growth-in-q2-2026/70223716",
+   "title": "DBS Group stock reports 9 percent profit growth in Q2 2026",
+   "age": "27 days ago"
   },
   {
-   "url": "https://www.itiger.com/hant/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-raises-dbs-target-to-sgd-79-50-dbs-group-stock-awaits-q3/70327459",
+   "title": "CGSI raises DBS target to SGD 79.50: DBS Group stock awaits Q3",
+   "age": "16 days ago"
   },
   {
-   "url": "https://www.itiger.com/news/2490281759",
-   "title": "Year-in-Review: 8 Singapore Companies That Raised Their Dividends in 2024",
-   "age": null
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-sees-sgd-2-86-billion-profit-dbs-group-stock-sits-5-48-percent-below-its-high/70360107",
+   "title": "CGSI sees SGD 2.86 billion profit: DBS Group stock sits 5.48 percent below its high",
+   "age": "12 days ago"
   },
   {
-   "url": "https://www.spglobal.com/market-intelligence/en/news-insights/research/big-tech-earnings-preview-microsoft-meta-amazon-n-apple",
-   "title": "Big tech earnings preview: Microsoft, Meta, Amazon & Apple",
-   "age": "242 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-weighs-1-87-percent-margin-against-9-percent-profit-growth/70253118",
+   "title": "DBS Group stock weighs 1.87 percent margin against 9 percent profit growth",
+   "age": "24 days ago"
   },
   {
-   "url": "https://www.fool.com/investing/stock-market/upcoming-earnings-reports/",
-   "title": "Earnings Reports of Top Companies: Revenue, Profits & Forecasts",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-nears-its-52-week-high-after-9-percent-profit-growth/70235258",
+   "title": "DBS Group stock nears its 52-week high after 9 percent profit growth",
    "age": "25 days ago"
   },
   {
-   "url": "https://www.nasdaq.com/articles/zacks-earnings-trends-highlights-nvidia-amazon-alphabet-microsoft-and-meta-apple-and-tesla",
-   "title": "Zacks Earnings Trends Highlights: Nvidia, Amazon, Alphabet, Microsoft and Meta, Apple and Tesla",
-   "age": "333 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgs-international-raises-target-for-dbs-group-stock-to-sgd-79-50/70370091",
+   "title": "CGS International raises target for DBS Group stock to SGD 79.50",
+   "age": "11 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/07/31/apple-aapl-amazon-amzn-stock-today.html",
-   "title": "Alphabet, Amazon and Microsoft added nearly $1.5 trillion in combined value this week",
-   "age": "66 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-lists-usd-1-5-billion-of-bonds-and-dbs-group-stock-costs-eur-52-25/70381272",
+   "title": "DBS Group lists USD 1.5 billion of bonds and DBS Group stock costs EUR 52.25",
+   "age": "10 days ago"
   },
   {
-   "url": "https://fortune.com/2026/07/26/big-tech-earnings-meta-microsoft-apple-amazon-market-revolt-ai-spending/",
-   "title": "Big Tech earnings slam into a market in revolt over AI spending",
-   "age": "71 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-raises-target-for-dbs-group-stock-to-sgd-79-50/70312279",
+   "title": "CGSI raises target for DBS Group stock to SGD 79.50",
+   "age": "18 days ago"
   },
   {
-   "url": "https://www.fool.com/investing/2026/04/30/amazon-meta-alphabet-and-microsoft-just-reported-e/",
-   "title": "Amazon, Meta, Alphabet, and Microsoft Just Reported Earnings. Here's the Best of the Bunch.",
-   "age": "158 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-launches-taiwan-qr-payments-while-dbs-group-stock-trades-at-eur-51-68/70413105",
+   "title": "DBS launches Taiwan QR payments while DBS Group stock trades at EUR 51.68",
+   "age": "5 days ago"
   },
   {
-   "url": "https://marketwise.com/investing/ai-demand-big-tech-earnings-spending/",
-   "title": "What Alphabet, Amazon, Meta, and Microsoft Earnings Say About AI - MarketWise",
-   "age": "67 days ago"
+   "url": "https://www.ocbc.com.my/group/media/release/index",
+   "title": "Media Newsroom",
+   "age": "1517 days ago"
   },
   {
-   "url": "https://www.nasdaq.com/doc/NDXEarningsUpdate-Q3-2025%28Final%29",
-   "title": "NDXEarningsUpdate Q3 2025%28Final%29",
+   "url": "https://www.ocbc.com.hk/personal-banking/latest-news.page",
+   "title": "Latest News",
+   "age": "334 days ago"
+  },
+  {
+   "url": "https://www.marketscreener.com/news/pt-bank-ocbc-nisp-tbk-ocbc-recorded-a-double-digit-growth-in-total-asset-and-credit-disbursement-i-ce785fdbdd88f623",
+   "title": "PT Bank OCBC NISP Tbk : OCBC Recorded a Double-digit growth in Total Asset and Credit Disbursement in Q3/2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.ocbc.com/group/media/release/2026/ocbc-strongest-bank-in-singapore-and-asia-pacific",
+   "title": "OCBC builds on world's top-performing recognition with strongest bank accolade",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://www.caproasia.com/2026/10/29/singapore-2nd-largest-bank-102-billion-ocbc-mobile-app-internet-banking-disrupted-restored-on-23rd-october-2026-friday/",
+   "title": "Singapore 2nd Largest Bank $102 Billion OCBC Mobile App & Internet Banking Disrupted & Restored on 23rd October 2026 (Friday)",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Great_Eastern_Life",
+   "title": "Great Eastern Life",
    "age": null
   },
   {
-   "url": "https://www.nasdaq.com/articles/amazon-alphabet-and-nvidia-are-part-zacks-earnings-preview",
-   "title": "Amazon, Alphabet and Nvidia are part of Zacks Earnings Preview",
-   "age": null
-  },
-  {
-   "url": "https://www.marketbeat.com/stocks/NASDAQ/META/earnings/",
-   "title": "Meta Platforms (META) Earnings Date and Reports 2026 $META",
-   "age": "69 days ago"
-  },
-  {
-   "url": "https://www.marketbeat.com/stocks/NASDAQ/TSLA/earnings/",
-   "title": "Tesla (TSLA) Earnings Date and Reports 2026 $TSLA",
-   "age": "75 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001326801/000162828026028364/meta-03312026xexhibit991.htm",
-   "title": "Meta Platforms, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001326801/000162828026050596/meta-06302026xexhibit991.htm",
-   "title": "Meta Platforms, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/1326801/000162828026003832/meta-12312025xexhibit991.htm",
-   "title": "Meta Platforms, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/calendar/earnings?symbol=TSLA",
-   "title": "Company Earnings Calendar - Yahoo Finance",
-   "age": "166 days ago"
-  },
-  {
-   "url": "https://www.investing.com/equities/tesla-motors-earnings",
-   "title": "Tesla (TSLA) Earnings Date & Report - Investing.com",
-   "age": "74 days ago"
-  },
-  {
-   "url": "https://admiralmarkets.com/education/articles/shares/meta-stock-analysis-october-2026",
-   "title": "Meta Stock Analysis, October 2026: Muse and Q3 Earnings",
+   "url": "https://journalarta.com/en/2026/10/28/ocbc-testing-support-level-stock-gains-0-03-october-27-2026/",
+   "title": "OCBC Testing Support Level: Stock Gains 0.03% (October 27, 2026)",
    "age": "3 days ago"
   },
   {
-   "url": "https://marketchameleon.com/Overview/TSLA/Earnings/Earnings-Dates/",
-   "title": "TSLA Earnings Dates, Upcoming and Historical Tesla",
-   "age": "167 days ago"
-  },
-  {
-   "url": "https://public.com/stocks/meta/earnings",
-   "title": "Meta (META) Earnings: Latest Report, Earnings Call & Financials",
-   "age": "69 days ago"
-  },
-  {
-   "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-oct-05-2026",
-   "title": "Stock Market Today (Oct. 5, 2026): S&P 500 moves higher, yields higher after ISM data - TheStreet",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-broadens-travel-rewards-as-digital-payments-expand/70438233",
+   "title": "OCBC stock broadens travel rewards as digital payments expand",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.bloomberg.com/news/articles/2026-10-01/asian-stocks-to-fall-on-oil-rally-bonds-in-focus-markets-wrap",
-   "title": "Stock Market Today: Dow, S&P Live Updates for October 2 - Bloomberg",
-   "age": "3 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-announced-lower-online-commissions-ocbc-stock-gains-1-00-percent/70276763",
+   "title": "OCBC announced lower online commissions: OCBC stock gains 1.00 percent",
+   "age": "22 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/10/01/stock-market-today-live-updates-.html",
-   "title": "Stocks rise Friday after soft jobs data, Nvidia leads Nasdaq to intraday record",
-   "age": "3 days ago"
+   "url": "https://twelvedata.com/markets/699438/stock/xstu/uob/earnings",
+   "title": "United Overseas Bank Limited (UOB) - Earnings",
+   "age": "348 days ago"
   },
   {
-   "url": "https://tradingeconomics.com/united-states/stock-market",
-   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
-   "age": "773 days ago"
+   "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-uob-posts-steady-q2-2026-results-as-revenue-beats-forecasts-93CH-4847060",
+   "title": "Earnings call transcript: UOB posts steady Q2 2026 results as revenue beats forecasts By Investing.com",
+   "age": "84 days ago"
   },
   {
-   "url": "https://fred.stlouisfed.org/series/SP500",
-   "title": "S&P 500 (SP500)",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://fred.stlouisfed.org/data/SP500",
-   "title": "Table Data - S&P 500",
-   "age": "831 days ago"
-  },
-  {
-   "url": "https://www.spglobal.com/spdji/en/commentary/article/us-equities-market-attributes-october-2025",
-   "title": "IN THIS LIST",
+   "url": "https://www.investing.com/equities/united-overseas-bank-earnings",
+   "title": "UOB (UOBH) Earnings Date & Report - Investing.com",
    "age": null
   },
   {
-   "url": "https://www.bloomberg.com/news/videos/2025-10-06/s-p-nasdaq-hit-records-as-yields-fall-closing-bell-video",
-   "title": "Oct 6th, 2025",
+   "url": "https://www.poems.com.sg/stocks/articles/united-overseas-bank-reports-mixed-2q26-results-maintains-neutral-rating-with-s43-00-target/",
+   "title": "United Overseas Bank Reports Mixed 2Q26 Results; Maintains Neutral Rating with S$43.00 Target - POEMS",
+   "age": "366 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0002002045/000121390026084021/ea0297613-20f_gclglobal.htm",
+   "title": "GCL Global Holdings Ltd - Form 20-F - FY2026",
    "age": null
   },
   {
-   "url": "https://www.marketbeat.com/articles/how-major-us-stock-indexes-fared-wednesday-1012025-2025-10-01",
-   "title": "Free Trial",
-   "age": null
+   "url": "https://finance.yahoo.com/quote/U11.SI/",
+   "title": "United Overseas Bank Limited (U11.SI) Stock Price, News, Quote & History - Yahoo Finance",
+   "age": "14 days ago"
   },
   {
-   "url": "https://www.business-standard.com/article/news-cm/us-nasdaq-s-p500-holds-at-records-121063000515_1.html",
-   "title": "Tuesday, December 30, 2025 | 10:23 PM ISTहिंदी में पढें",
-   "age": null
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-redeems-usd-750-million-bonds-as-united-overseas-bank-stock-trades-at-eur-28-58/70324367",
+   "title": "UOB redeems USD 750 million bonds as United Overseas Bank stock trades at EUR 28.58",
+   "age": "16 days ago"
   },
   {
-   "url": "https://www.bloomberg.com/news/articles/2026-10-05/sgx-loses-4-2-billion-in-value-as-analysts-balk-at-valuation",
-   "title": "SGX Loses $4.2 Billion in Value as Analysts Balk at Valuation - Bloomberg",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://peterlewismoneytalk.substack.com/p/peters-asian-business-and-finance-fad",
-   "title": "PETER’S ASIAN BUSINESS & FINANCE BRIEFING",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://simplywall.st/markets/sg",
-   "title": "Singaporean (SGX) Market Analysis & Valuation - Updated Today",
-   "age": "159 days ago"
-  },
-  {
-   "url": "https://www.briefs.co/news/singapore-exchange-shares-extend-slide-as-valuation-worries/",
-   "title": "Singapore Exchange Slides on Valuation Concerns",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://ad-hoc-news.de/boerse/news/corporate-news/sgx-cuts-board-lots-for-dbs-group-stock-to-10-shares/70231928",
-   "title": "SGX cuts board lots for DBS Group stock to 10 shares",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://phemex.com/news/article/sgx-market-cap-drops-42-billion-as-citi-jpmorgan-and-macquarie-cut-ratings-98788",
-   "title": "SGX Shares Drop $4.2B as Citi, JPMorgan Downgrade Stock",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/united-overseas-bank-stock-faces-earnings-test-after-analyst-update/70433065",
+   "title": "United Overseas Bank stock faces earnings test after analyst update",
    "age": "1 days ago"
   },
   {
-   "url": "https://simplywall.st/news/sg/transportation/page/8",
-   "title": "Singaporean Transportation Stock News",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-stock-enters-earnings-test-after-analyst-update/70435247",
+   "title": "UOB stock enters earnings test after analyst update",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/press-release/",
+   "title": "News releases",
+   "age": "42 days ago"
+  },
+  {
+   "url": "https://loyaltylobby.com/2026/10/30/singapore-airlines-extends-dubai-flight-cancellations-through-february-28-2027/",
+   "title": "Singapore Airlines Extends Dubai Flight Cancellations Through February 28, 2027 - LoyaltyLobby",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.esgtoday.com/singapore-airlines-signs-deal-to-purchase-saf-made-from-waste-carbon/",
+   "title": "Singapore Airlines Signs Deal to Purchase SAF Made from Waste Carbon - ESG Today",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://gulfbusiness.com/en/2026/aviation/singapore-airlines-cancels-dubai-flights-until-february-2027-amid-middle-east-tensions/",
+   "title": "Singapore Airlines cancels Dubai flights until February 2027 amid Middle East tensions",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/sg/corporate/newsroom/press-release/2026/oct-to-dec-2026/Discounted_Travel_Fair_Singapore_Airlines_Scoot_Discount/",
+   "title": "More Than 380,000 Discounted Singapore Airlines And Scoot Tickets Available At 2026 Time To Fly Travel Fair",
+   "age": "18 days ago"
+  },
+  {
+   "url": "https://sg.trip.com/guide/info/singapore-airlines-launches-8-major-new-routes.html",
+   "title": "Singapore Airlines Launches 8 New Routes in 2026",
+   "age": "29 days ago"
+  },
+  {
+   "url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/10/30/singapore-airlines-extends-dubai-flight-cancellations-to-february-2027",
+   "title": "Singapore Airlines extends Dubai flight cancellations to February 2027",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://deeparrival.com/news/singapore-airlines-fare-sale-ends-october-7-2026/",
+   "title": "Singapore Airlines October 7 Deadline Brings 870 Dollar Europe Returns",
+   "age": "28 days ago"
+  },
+  {
+   "url": "https://www-singaporeair-com.translate.goog/en_UK/us/corporate/newsroom/press-release/?_x_tr_sl=en&_x_tr_tl=id&_x_tr_hl=id&_x_tr_pto=tc",
+   "title": "News releases",
+   "age": "42 days ago"
+  },
+  {
+   "url": "https://www.macrumors.com/2026/10/06/apple-q4-2026-earnings-nov-2/",
+   "title": "Apple to Report Q4 2026 Earnings on November 2 - MacRumors",
+   "age": "24 days ago"
+  },
+  {
+   "url": "https://us.plus500.com/en/forecasts/apple-earnings-expectations",
+   "title": "Apple Earnings Forecasts & Outlook",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:s68/stock-news",
-   "title": "stock news",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/a8-kex991q3202606272026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:s68",
-   "title": "www.tipranks.com",
+   "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000005/a8-kex991q1202612272025.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
+  },
+  {
+   "url": "https://seekingalpha.com/news/4661197-apples-holiday-guidance-to-be-in-focus-during-q4-results",
+   "title": "Apple’s holiday guidance to be in focus during Q4 results (AAPL:NASDAQ)",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/earnings-preview-expect-apples-report-124755233.html",
+   "title": "Earnings Preview: What to Expect From Apple's Report",
+   "age": "16 days ago"
+  },
+  {
+   "url": "https://www.marketpulse.com/markets/apple-ahead-of-earnings-record-sales-are-only-the-beginning-of-the-test/",
+   "title": "Apple ahead of earnings: record sales are only the beginning of the test",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.marketbeat.com/instant-alerts/upcoming-apple-aapl-expected-to-post-earnings-on-monday-2026-10-26/",
+   "title": "Apple (AAPL) Expected to Post Earnings on Monday",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://www.bybit.com/en/wiki/article/apple-aapl-earnings-dates-2026-schedule/",
+   "title": "Apple AAPL Earnings Dates 2026 Schedule",
+   "age": "92 days ago"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 51245,
-  "output": 4254,
+  "input": 52892,
+  "output": 7531,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1445
+  "costUsd": 0.1745
  },
- "createdAt": "2026-10-06T01:01:37.765Z"
+ "createdAt": "2026-10-31T11:43:54.510Z"
 }
