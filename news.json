@@ -1,414 +1,380 @@
 {
- "market_summary": "Global equity markets faced mixed sentiment at end-October 2026. Singapore's banking sector remained in focus with DBS and OCBC reporting strong results and recognition, while UOB awaits Q3 earnings on November 4. Singapore Airlines extended Middle East flight cancellations to February 2027 due to geopolitical tensions, offsetting positive sustainable aviation fuel commitments. US tech earnings season is ramping up with Apple set to report November 2; analysts expect $1.99 EPS on $113.31 billion revenue amid iPhone Duo launch and holiday quarter guidance scrutiny.",
+ "market_summary": "Global markets fell sharply on October 31 as concerns over AI profitability and capital spending intensified. The Nasdaq dropped 2.9% and S&P 500 fell 1.8% following disappointing tech earnings and profit warnings. Amazon missed Q3 expectations with negative free cash flow despite strong cloud growth, while concerns about massive AI infrastructure investments with unclear returns pressured tech stocks. Asian markets opened lower on November 2, with the Nikkei falling 0.5% and Kospi down 1.4%, tracking Wall Street's losses. Apple earnings are due after market close today, with analysts expecting $1.99 EPS on $113.31B revenue. US midterm elections on November 3 add to market uncertainty.",
  "items": [
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "date": "2026-10-13",
-   "headline": "CGS International upgrades DBS to Add, raises target to SGD 79.50",
-   "summary": "CGS International upgraded DBS Group to Add from Hold and raised its price target from SGD 77.10 to SGD 79.50, citing 20% return on equity and strong earnings base.",
-   "type": "analyst",
-   "tone": "positive",
-   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-raises-target-for-dbs-group-stock-to-sgd-79-50/70312279"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "date": "2026-10-05",
-   "headline": "DBS Q2 2026 net profit rises 9% year-over-year to SGD 3.1 billion",
-   "summary": "DBS Group reported second-quarter 2026 net profit of SGD 3.1 billion, up 9% from the year-earlier quarter, with wealth management fees rising 42% to SGD 919 million.",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-nears-its-52-week-high-after-9-percent-profit-growth/70235258"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "date": "2026-10-16",
-   "headline": "DBS Group lists USD 1.5 billion of bonds in Singapore",
-   "summary": "DBS Group arranged USD 1.5 billion of bonds, a financing milestone reflecting strong market access as the bank manages capital ahead of third-quarter results.",
-   "type": "deal",
-   "tone": "positive",
-   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-lists-usd-1-5-billion-of-bonds-and-dbs-group-stock-costs-eur-52-25/70381272"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "date": "2026-10-27",
-   "headline": "OCBC recognized as strongest bank in Singapore and Asia Pacific by The Asian Banker",
-   "summary": "OCBC was named the strongest bank in Singapore and Asia Pacific and third globally in The Asian Banker's World's 1,000 Strongest Banks ranking, cementing its position after topping Forbes and Statista rankings.",
-   "type": "analyst",
-   "tone": "positive",
-   "source_url": "https://www.ocbc.com/group/media/release/2026/ocbc-strongest-bank-in-singapore-and-asia-pacific"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "date": "2026-10-29",
-   "headline": "OCBC launches Alipay+ Travel Treat for overseas digital payments rewards",
-   "summary": "OCBC launched an in-app travel rewards service for overseas Alipay+ QR payments, broadening its digital banking offer and customer engagement.",
-   "type": "product",
-   "tone": "positive",
-   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-broadens-travel-rewards-as-digital-payments-expand/70438233"
-  },
-  {
-   "symbols": [
-    "U11.SI"
-   ],
-   "date": "2026-10-30",
-   "headline": "UOB Q3 earnings scheduled for November 4; analyst consensus targets SGD 43.36",
-   "summary": "United Overseas Bank scheduled to publish third-quarter 2026 results on November 4, with analyst consensus target of SGD 43.36 against current share price near SGD 41.50.",
-   "type": "guidance",
-   "tone": "mixed",
-   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-stock-enters-earnings-test-after-analyst-update/70435247"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "date": "2026-10-28",
-   "headline": "Singapore Airlines to purchase up to 4,800 tonnes of sustainable aviation fuel from Aether over three years",
-   "summary": "Singapore Airlines signed agreement with Aether Fuels to purchase SAF from Singapore-based plant over three years starting 2028, supporting net-zero emissions by 2050.",
-   "type": "deal",
-   "tone": "positive",
-   "source_url": "https://www.esgtoday.com/singapore-airlines-signs-deal-to-purchase-saf-made-from-waste-carbon/"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "date": "2026-10-30",
-   "headline": "Singapore Airlines extends Dubai flight cancellations to February 28, 2027 due to Middle East geopolitical situation",
-   "summary": "Singapore Airlines extended cancellation of Singapore-Dubai flights (SQ494/SQ495) to February 28, 2027, citing ongoing geopolitical tensions in the Middle East.",
-   "type": "other",
-   "tone": "negative",
-   "source_url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/10/30/singapore-airlines-extends-dubai-flight-cancellations-to-february-2027"
-  },
   {
    "symbols": [
     "AAPL"
    ],
    "date": "2026-11-02",
-   "headline": "Apple to report Q4 2026 earnings on November 2; holiday guidance in focus",
-   "summary": "Apple will release Q4 2026 earnings after market close November 2, with analysts forecasting EPS of $1.99 on revenue of $113.31 billion amid iPhone Duo launch.",
-   "type": "guidance",
+   "headline": "Apple Q4 2026 Earnings Due Today After Market Close",
+   "summary": "Apple is scheduled to report Q4 2026 earnings on November 2 after the close. Analysts forecast earnings of $1.99 per share on $113.31 billion in revenue, up 9-11% year-over-year.",
+   "type": "earnings",
    "tone": "mixed",
-   "source_url": "https://seekingalpha.com/news/4661197-apples-holiday-guidance-to-be-in-focus-during-q4-results"
+   "source_url": "https://www.marketbeat.com/instant-alerts/upcoming-apple-aapl-expected-to-post-earnings-on-monday-2026-10-26/"
+  },
+  {
+   "symbols": [
+    "AMZN"
+   ],
+   "date": "2026-10-29",
+   "headline": "Amazon Q3 Earnings Miss Expectations; Reports Negative Free Cash Flow",
+   "summary": "Amazon reported Q3 2026 EPS of $1.89 versus $1.97 expected and revenue of $201.94B versus $202.22B expected. Aggressive AI spending drove negative free cash flow of $42.4B for the trailing twelve months. AWS revenue grew 39% to $46B but retail growth slowed.",
+   "type": "earnings",
+   "tone": "negative",
+   "source_url": "https://www.cnbc.com/2026/10/29/amazon-amzn-q3-earnings-report-2026.html"
+  },
+  {
+   "symbols": [
+    "SPY",
+    "QQQ"
+   ],
+   "date": "2026-10-31",
+   "headline": "Nasdaq Falls 2.9% on AI Profitability Concerns; Major Tech Selloff",
+   "summary": "The Nasdaq composite fell 2.9% and S&P 500 dropped 1.8% on October 31, marking the worst day since June. The decline was driven by concerns over massive AI infrastructure spending by major tech companies without clear paths to profitability. Microsoft's results showed strong cloud demand, but Alphabet and Amazon reinforced investor concerns.",
+   "type": "macro",
+   "tone": "negative",
+   "source_url": "https://abc.net.au/news/2026-10-31/wall-street-drops-to-its-worst-day-since-june/107331332"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "date": "2026-10-31",
+   "headline": "Alphabet Stock Plunges on AI Spending Concerns; Market Questions Search Growth",
+   "summary": "Alphabet lost about $500 billion on Thursday in its post-earnings selloff as search growth slowed to 12%. Google's AI investment spending drew investor scrutiny following disappointing earnings report, contributing to the broad tech selloff.",
+   "type": "earnings",
+   "tone": "negative",
+   "source_url": "https://finance.yahoo.com/markets/stocks/articles/reddit-stock-crashed-29-google-230000851.html"
+  },
+  {
+   "symbols": [],
+   "date": "2026-10-31",
+   "headline": "Reddit Stock Crashes 29% on Google AI Traffic Warning",
+   "summary": "Reddit stock fell 29% on October 31, its worst day ever, wiping out $7 billion in market value. CEO Steve Huffman warned that search referral traffic from Google was down meaningfully due to AI Mode and AI Overviews. Despite 53% revenue growth to $895M, U.S. daily users fell 2%.",
+   "type": "guidance",
+   "tone": "negative",
+   "source_url": "https://www.cnbc.com/2026/10/29/amazon-amzn-q3-earnings-report-2026.html"
+  },
+  {
+   "symbols": [
+    "ES3.SI"
+   ],
+   "date": "2026-11-02",
+   "headline": "Asian Markets Decline Amid AI Investment Concerns",
+   "summary": "Asian share markets slipped on November 2 as worries about AI investment sustainability weighed on tech stocks. MSCI's Asia-Pacific index outside Japan eased 0.4%, Japan's Nikkei fell 0.54%, and South Korea's Kospi dropped 1.39%, tracking Wall Street's losses from October 31.",
+   "type": "macro",
+   "tone": "negative",
+   "source_url": "https://www.globalbankingandfinance.com/asia-shares-bend-ai-stress-apple-earnings-loom/"
   }
  ],
  "sources": [
-  {
-   "url": "https://companiesmarketcap.com/dbs/earnings/",
-   "title": "DBS Group (D05.SI) - Earnings",
-   "age": null
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-reports-9-percent-profit-growth-in-q2-2026/70223716",
-   "title": "DBS Group stock reports 9 percent profit growth in Q2 2026",
-   "age": "27 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-raises-dbs-target-to-sgd-79-50-dbs-group-stock-awaits-q3/70327459",
-   "title": "CGSI raises DBS target to SGD 79.50: DBS Group stock awaits Q3",
-   "age": "16 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-sees-sgd-2-86-billion-profit-dbs-group-stock-sits-5-48-percent-below-its-high/70360107",
-   "title": "CGSI sees SGD 2.86 billion profit: DBS Group stock sits 5.48 percent below its high",
-   "age": "12 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-weighs-1-87-percent-margin-against-9-percent-profit-growth/70253118",
-   "title": "DBS Group stock weighs 1.87 percent margin against 9 percent profit growth",
-   "age": "24 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-stock-nears-its-52-week-high-after-9-percent-profit-growth/70235258",
-   "title": "DBS Group stock nears its 52-week high after 9 percent profit growth",
-   "age": "25 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgs-international-raises-target-for-dbs-group-stock-to-sgd-79-50/70370091",
-   "title": "CGS International raises target for DBS Group stock to SGD 79.50",
-   "age": "11 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-group-lists-usd-1-5-billion-of-bonds-and-dbs-group-stock-costs-eur-52-25/70381272",
-   "title": "DBS Group lists USD 1.5 billion of bonds and DBS Group stock costs EUR 52.25",
-   "age": "10 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgsi-raises-target-for-dbs-group-stock-to-sgd-79-50/70312279",
-   "title": "CGSI raises target for DBS Group stock to SGD 79.50",
-   "age": "18 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-launches-taiwan-qr-payments-while-dbs-group-stock-trades-at-eur-51-68/70413105",
-   "title": "DBS launches Taiwan QR payments while DBS Group stock trades at EUR 51.68",
-   "age": "5 days ago"
-  },
-  {
-   "url": "https://www.ocbc.com.my/group/media/release/index",
-   "title": "Media Newsroom",
-   "age": "1517 days ago"
-  },
-  {
-   "url": "https://www.ocbc.com.hk/personal-banking/latest-news.page",
-   "title": "Latest News",
-   "age": "334 days ago"
-  },
-  {
-   "url": "https://www.marketscreener.com/news/pt-bank-ocbc-nisp-tbk-ocbc-recorded-a-double-digit-growth-in-total-asset-and-credit-disbursement-i-ce785fdbdd88f623",
-   "title": "PT Bank OCBC NISP Tbk : OCBC Recorded a Double-digit growth in Total Asset and Credit Disbursement in Q3/2026",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.ocbc.com/group/media/release/2026/ocbc-strongest-bank-in-singapore-and-asia-pacific",
-   "title": "OCBC builds on world's top-performing recognition with strongest bank accolade",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://www.caproasia.com/2026/10/29/singapore-2nd-largest-bank-102-billion-ocbc-mobile-app-internet-banking-disrupted-restored-on-23rd-october-2026-friday/",
-   "title": "Singapore 2nd Largest Bank $102 Billion OCBC Mobile App & Internet Banking Disrupted & Restored on 23rd October 2026 (Friday)",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Great_Eastern_Life",
-   "title": "Great Eastern Life",
-   "age": null
-  },
-  {
-   "url": "https://journalarta.com/en/2026/10/28/ocbc-testing-support-level-stock-gains-0-03-october-27-2026/",
-   "title": "OCBC Testing Support Level: Stock Gains 0.03% (October 27, 2026)",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-broadens-travel-rewards-as-digital-payments-expand/70438233",
-   "title": "OCBC stock broadens travel rewards as digital payments expand",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-announced-lower-online-commissions-ocbc-stock-gains-1-00-percent/70276763",
-   "title": "OCBC announced lower online commissions: OCBC stock gains 1.00 percent",
-   "age": "22 days ago"
-  },
-  {
-   "url": "https://twelvedata.com/markets/699438/stock/xstu/uob/earnings",
-   "title": "United Overseas Bank Limited (UOB) - Earnings",
-   "age": "348 days ago"
-  },
-  {
-   "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-uob-posts-steady-q2-2026-results-as-revenue-beats-forecasts-93CH-4847060",
-   "title": "Earnings call transcript: UOB posts steady Q2 2026 results as revenue beats forecasts By Investing.com",
-   "age": "84 days ago"
-  },
-  {
-   "url": "https://www.investing.com/equities/united-overseas-bank-earnings",
-   "title": "UOB (UOBH) Earnings Date & Report - Investing.com",
-   "age": null
-  },
-  {
-   "url": "https://www.poems.com.sg/stocks/articles/united-overseas-bank-reports-mixed-2q26-results-maintains-neutral-rating-with-s43-00-target/",
-   "title": "United Overseas Bank Reports Mixed 2Q26 Results; Maintains Neutral Rating with S$43.00 Target - POEMS",
-   "age": "366 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0002002045/000121390026084021/ea0297613-20f_gclglobal.htm",
-   "title": "GCL Global Holdings Ltd - Form 20-F - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/U11.SI/",
-   "title": "United Overseas Bank Limited (U11.SI) Stock Price, News, Quote & History - Yahoo Finance",
-   "age": "14 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-redeems-usd-750-million-bonds-as-united-overseas-bank-stock-trades-at-eur-28-58/70324367",
-   "title": "UOB redeems USD 750 million bonds as United Overseas Bank stock trades at EUR 28.58",
-   "age": "16 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/united-overseas-bank-stock-faces-earnings-test-after-analyst-update/70433065",
-   "title": "United Overseas Bank stock faces earnings test after analyst update",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-stock-enters-earnings-test-after-analyst-update/70435247",
-   "title": "UOB stock enters earnings test after analyst update",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/press-release/",
-   "title": "News releases",
-   "age": "42 days ago"
-  },
-  {
-   "url": "https://loyaltylobby.com/2026/10/30/singapore-airlines-extends-dubai-flight-cancellations-through-february-28-2027/",
-   "title": "Singapore Airlines Extends Dubai Flight Cancellations Through February 28, 2027 - LoyaltyLobby",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.esgtoday.com/singapore-airlines-signs-deal-to-purchase-saf-made-from-waste-carbon/",
-   "title": "Singapore Airlines Signs Deal to Purchase SAF Made from Waste Carbon - ESG Today",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://gulfbusiness.com/en/2026/aviation/singapore-airlines-cancels-dubai-flights-until-february-2027-amid-middle-east-tensions/",
-   "title": "Singapore Airlines cancels Dubai flights until February 2027 amid Middle East tensions",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/sg/corporate/newsroom/press-release/2026/oct-to-dec-2026/Discounted_Travel_Fair_Singapore_Airlines_Scoot_Discount/",
-   "title": "More Than 380,000 Discounted Singapore Airlines And Scoot Tickets Available At 2026 Time To Fly Travel Fair",
-   "age": "18 days ago"
-  },
-  {
-   "url": "https://sg.trip.com/guide/info/singapore-airlines-launches-8-major-new-routes.html",
-   "title": "Singapore Airlines Launches 8 New Routes in 2026",
-   "age": "29 days ago"
-  },
-  {
-   "url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/10/30/singapore-airlines-extends-dubai-flight-cancellations-to-february-2027",
-   "title": "Singapore Airlines extends Dubai flight cancellations to February 2027",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://deeparrival.com/news/singapore-airlines-fare-sale-ends-october-7-2026/",
-   "title": "Singapore Airlines October 7 Deadline Brings 870 Dollar Europe Returns",
-   "age": "28 days ago"
-  },
-  {
-   "url": "https://www-singaporeair-com.translate.goog/en_UK/us/corporate/newsroom/press-release/?_x_tr_sl=en&_x_tr_tl=id&_x_tr_hl=id&_x_tr_pto=tc",
-   "title": "News releases",
-   "age": "42 days ago"
-  },
-  {
-   "url": "https://www.macrumors.com/2026/10/06/apple-q4-2026-earnings-nov-2/",
-   "title": "Apple to Report Q4 2026 Earnings on November 2 - MacRumors",
-   "age": "24 days ago"
-  },
-  {
-   "url": "https://us.plus500.com/en/forecasts/apple-earnings-expectations",
-   "title": "Apple Earnings Forecasts & Outlook",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/a8-kex991q3202606272026.htm",
-   "title": "Apple Inc. - Form 8-K - FY2026",
-   "age": null
-  },
   {
    "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000005/a8-kex991q1202612272025.htm",
    "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://seekingalpha.com/news/4661197-apples-holiday-guidance-to-be-in-focus-during-q4-results",
-   "title": "Apple’s holiday guidance to be in focus during Q4 results (AAPL:NASDAQ)",
-   "age": "0 days ago"
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000011/a8-kex991q2202603282026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
   },
   {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/earnings-preview-expect-apples-report-124755233.html",
-   "title": "Earnings Preview: What to Expect From Apple's Report",
-   "age": "16 days ago"
+   "url": "https://www.tipranks.com/stocks/aapl/earnings",
+   "title": "Apple (AAPL) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "3 days ago"
   },
   {
-   "url": "https://www.marketpulse.com/markets/apple-ahead-of-earnings-record-sales-are-only-the-beginning-of-the-test/",
-   "title": "Apple ahead of earnings: record sales are only the beginning of the test",
-   "age": "1 days ago"
+   "url": "https://9to5mac.com/2026/10/06/apple-sets-q4-2026-earnings-release-for-november-2/",
+   "title": "Apple sets Q4 2026 earnings release for November 2 - 9to5Mac",
+   "age": "18 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000013/aapl-20260328.htm",
+   "title": "Apple Inc. - Form 10-Q - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000020/aapl-20260627.htm",
+   "title": "Apple Inc. - Form 10-Q - FY2026",
+   "age": null
   },
   {
    "url": "https://www.marketbeat.com/instant-alerts/upcoming-apple-aapl-expected-to-post-earnings-on-monday-2026-10-26/",
    "title": "Apple (AAPL) Expected to Post Earnings on Monday",
-   "age": "5 days ago"
+   "age": "6 days ago"
   },
   {
-   "url": "https://www.bybit.com/en/wiki/article/apple-aapl-earnings-dates-2026-schedule/",
-   "title": "Apple AAPL Earnings Dates 2026 Schedule",
-   "age": "92 days ago"
+   "url": "https://finance.yahoo.com/calendar/earnings?symbol=AAPL",
+   "title": "Company Earnings Calendar - Yahoo Finance",
+   "age": "185 days ago"
+  },
+  {
+   "url": "https://www.trefis.com/stock/aapl/articles/621479/apple-earnings-ahead-what-past-reactions-say-about-the-stock/2026-10-30",
+   "title": "Apple Earnings Ahead: What Past Reactions Say About The Stock",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.marketbeat.com/earnings/reports/2026-10-29-amazoncom-inc-stock/",
+   "title": "Amazon.com (AMZN) Q3 2026 Earnings Results & Report",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://seekingalpha.com/article/4960778-amazon-com-inc-2026-q3-results-earnings-call-presentation",
+   "title": "Amazon.com, Inc. 2026 Q3 - Results - Earnings Call Presentation (NASDAQ:AMZN) 2026-11-01",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Second-Quarter-Results/",
+   "title": "Amazon.com, Inc. - Amazon.com Announces Second Quarter Results",
+   "age": "95 days ago"
+  },
+  {
+   "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/",
+   "title": "Amazon.com, Inc. - Amazon.com Announces Third Quarter Results",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/10/29/amazon-amzn-q3-earnings-report-2026.html",
+   "title": "Amazon (AMZN) Q3 earnings report 2026",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://ir.aboutamazon.com/files/doc_earnings/2026/q3/earnings-result/AMZN-Q3-2026-Earnings-Release.pdf",
+   "title": "AMAZON.COM ANNOUNCES THIRD QUARTER RESULTS",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.investing.com/equities/amazon-com-inc-earnings",
+   "title": "Amazon.com (AMZN) Earnings Date & Report - Investing.com",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001018724/000101872426000038/amzn-20260930xex991.htm",
+   "title": "AMAZON COM INC - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://techcrunch.com/2026/10/29/amazon-reported-booming-cloud-revenue-but-otherwise-missed-expectations/",
+   "title": "Amazon reported booming cloud revenue but otherwise missed expectations",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://edwardlane.substack.com/p/stock-market-report-for-november",
+   "title": "Stock Market Report for November 1, 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.fool.com/investing/2026/10/23/if-only-buy-ai-stock-in-november-sell-off-alab/",
+   "title": "If I Could Only Buy 1 AI Stock in November After This Sell-Off, It Would Be This One.",
+   "age": "9 days ago"
+  },
+  {
+   "url": "https://247wallst.com/cards/xpost-01m6c0zrkr8597m05vbme54j7h",
+   "title": "AI stocks just logged their 7th-worst two-year selloff, one month from an all-time high",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://abc.net.au/news/2026-10-31/wall-street-drops-to-its-worst-day-since-june/107331332",
+   "title": "Wall Street drops to its worst day since June after sell-off for tech stocks deepens - ABC News",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/The_2028_Artificial_Intelligence_Crisis",
+   "title": "The 2028 Artificial Intelligence Crisis",
+   "age": null
+  },
+  {
+   "url": "https://ziontile.com/article/tech-stocks-tumble-as-ai-investments-face-scrutiny",
+   "title": "Tech Stocks Tumble as AI Investments Face Scrutiny (2026)",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.nbcnews.com/business/markets/tech-stocks-nasdaq-ai-boom-fears-deepen-rcna606512",
+   "title": "Tech stocks wipe out $1 trillion in value as concerns deepen about the AI boom",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://finance.biggo.com/news/53d41a49-f555-4281-958f-a908f7b823d7",
+   "title": "Panic Selling Sweeps US Stocks: Nasdaq Falls Nearly 8% Over Three Straight Sessions as AI Financing Worries and Midterms Take Center Stage — BigGo Finance",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://tradingeconomics.com/united-states/stock-market/news/527854",
+   "title": "US Futures Stabilize After AI-Driven Selloff",
+   "age": null
+  },
+  {
+   "url": "https://marketindex.com.au/news/asx-200-live-today-monday-2nd-november",
+   "title": "ASX 200 Live Today - Monday, 2nd November",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/11/01/stock-market-today-live-updates.html",
+   "title": "Stock market today: Live updates",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.globalbankingandfinance.com/asia-shares-bend-ai-stress-apple-earnings-loom/",
+   "title": "Asian Shares Drop Amid AI Concerns; Apple Earnings in Focus",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://liveworldmarket.com/asia-stock-market-dashboard",
+   "title": "Asia Stock Markets Today: Nikkei, Hang Seng, Shanghai & KOSPI",
+   "age": null
+  },
+  {
+   "url": "https://www.newsonair.gov.in/fpis-withdraw-%E2%82%B912569-cr-from-indian-equity-markets/",
+   "title": "November 12, 2025 5:55 PM",
+   "age": null
+  },
+  {
+   "url": "https://www.tradingview.com/markets/indices/quotes-asia/",
+   "title": "Asia Stock Indices: Japan 225 (Nikkei), NIFTY 50 — TradingView",
+   "age": null
+  },
+  {
+   "url": "https://www.newsonair.gov.in/asian-stock-markets-closes-in-positive-zone-today/",
+   "title": "November 26, 2025 6:23 PM",
+   "age": null
+  },
+  {
+   "url": "https://www.newsonair.gov.in/most-asian-markets-end-in-red",
+   "title": "November 26, 2024 6:31 PM",
+   "age": null
+  },
+  {
+   "url": "https://www.newsonair.gov.in/asian-markets-end-mixed-european-stocks-trade-higher",
+   "title": "November 19, 2025 6:38 PM",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/reddit-stock-crashed-29-google-230000851.html",
+   "title": "Reddit Stock Crashed 29%: Is Google AI Coming for More Stocks?",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://beincrypto.com/reddit-stock-google-ai-traffic-crash/",
+   "title": "Reddit Stock Crashed 29%: Is Google AI Coming for More Stocks?",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://biztoc.com/x/e12f9861069e75c9",
+   "title": "Reddit Stock Crashed 29%: Is Google AI Coming for More Stocks?",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tech2geek.net/reddit-stock-crashes-22-as-ai-search-threatens-its-traffic-and-business-model/",
+   "title": "Reddit Stock Crashes 22% as AI Search Threatens Its Traffic and Business Model - Tech2Geek",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://qz.com/reddit-stock-google-ai-search-traffic-earnings-103026",
+   "title": "Reddit stock falls 25% after Q3 earnings as Google AI cuts traffic",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://phemex.com/news/article/reddit-stock-plunges-28-as-ceo-warns-google-ai-search-is-cutting-platform-traffic-101909",
+   "title": "Reddit Stock Crashes 28% on Google AI Search Traffic Warning",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://coincentral.com/reddit-rddt-stock-plunges-29-after-google-ai-cuts-us-traffic",
+   "title": "Reddit (RDDT) Stock Plunges 29% After Google AI Cuts US Traffic - CoinCentral",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://dissenter.com/economy/reddit-stock-crashes-29-as-google-ai-strangles-search-traffic",
+   "title": "Reddit Stock Crashes 29% as Google AI Strangles Search Traffic",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://coinpaper.com/38164/reddit-stock-crashes-29-as-google-s-ai-search-cuts-more-than-1-million-weekly-referrals",
+   "title": "Reddit Stock Crashes 29% as Google's AI Search Cuts More Than 1 Million Weekly Referrals",
+   "age": "1 days ago"
   }
  ],
  "leads": [
   {
    "symbols": [
-    "NVDA"
+    "AAPL"
    ],
-   "source": "fool.com",
-   "pubDate": "2026-10-31T11:29:00Z",
-   "headline": "Meet the Brilliant AI Stock Obliterating Nvidia in 2026 With a Return of 44%",
-   "url": "https://www.fool.com/investing/2026/10/31/meet-brilliant-ai-stock-nvidia-in-2026-return-44/"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-02T00:43:55Z",
+   "headline": "Dow Jones Futures Rise After Market Sell-Off; How Midterm Elections May Swing Stocks",
+   "url": "https://finance.yahoo.com/m/d0bc23d0-115b-314d-8989-07ca797bebfa/dow-jones-futures-rise-after.html"
   },
   {
    "symbols": [
-    "MSFT",
-    "NVDA"
+    "AAPL"
    ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-10-31T10:08:01Z",
-   "headline": "Volkswagen (XTRA:VOW3) Puts New Vehicle Software And AV Data Partnerships To Work",
-   "url": "https://finance.yahoo.com/technology/articles/volkswagen-xtra-vow3-puts-vehicle-100801350.html"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-10-31T10:00:00Z",
-   "headline": "Reddit (and everyone else) faces a bleak internet without Google traffic",
-   "url": "https://finance.yahoo.com/technology/article/reddit-and-everyone-else-faces-a-bleak-internet-without-google-traffic-100000669.html"
-  },
-  {
-   "symbols": [
-    "AMZN",
-    "GOOGL"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-10-31T09:55:29Z",
-   "headline": "AppLovin, 8x8, Elastic, Shopify, and F5 shares are falling, what you need to know",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/applovin-8x8-elastic-shopify-f5-095529415.html"
+   "source": "channelnewsasia.com",
+   "pubDate": "2026-11-02T00:40:46Z",
+   "headline": "Asia shares bend under AI stress; Apple earnings loom",
+   "url": "https://www.channelnewsasia.com/business/asia-shares-bend-under-ai-stress-apple-earnings-loom-6511816"
   },
   {
    "symbols": [
     "NVDA"
    ],
    "source": "fool.com",
-   "pubDate": "2026-10-31T09:35:00Z",
-   "headline": "Here's What $10,000 Invested Equally in SpaceX and Nvidia Could Be Worth in 2030",
-   "url": "https://www.fool.com/investing/2026/10/31/what-10k-invested-equally-spacex-nvidia-stock/"
+   "pubDate": "2026-11-02T00:28:00Z",
+   "headline": "If I Could Only Buy and Hold 1 \"Magnificent Seven\" Stock Through 2030, It Would Be This One",
+   "url": "https://www.fool.com/investing/2026/11/01/if-i-could-only-buy-and-hold-1-magnificent-seven-s/"
   },
   {
    "symbols": [
-    "AMZN",
-    "GOOGL"
+    "BN4.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-02T00:27:42Z",
+   "headline": "Stocks to watch: Wilmar, Great Eastern, Keppel, Nio, Lendlease Global Reit",
+   "url": "https://www.businesstimes.com.sg/companies-markets/stocks-watch-wilmar-great-eastern-keppel-nio-lendlease-global-reit"
+  },
+  {
+   "symbols": [
+    "AAPL"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-10-31T09:31:29Z",
-   "headline": "Zeta Global and Commerce stocks trade down, what you need to know",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/zeta-global-commerce-stocks-trade-093129865.html"
+   "pubDate": "2026-11-01T23:25:00Z",
+   "headline": "Stock futures open a monster week after a $5 trillion AI wipeout",
+   "url": "https://finance.yahoo.com/markets/article/stock-futures-open-a-monster-week-after-a-5-trillion-ai-wipeout-232500194.html"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "source": "beincrypto.com",
+   "pubDate": "2026-11-01T23:00:00Z",
+   "headline": "Reddit Stock Crashed 29%: Is Google AI Coming for More Stocks?",
+   "url": "https://beincrypto.com/reddit-stock-google-ai-traffic-crash/"
+  },
+  {
+   "symbols": [
+    "META"
+   ],
+   "source": "thestreet.com",
+   "pubDate": "2026-11-01T22:33:51Z",
+   "headline": "Instinct's WhatsApp replies fail, AI agent blames billing",
+   "url": "https://www.thestreet.com/crypto/artificial-intelligence/instincts-whatsapp-replies-fail-ai-agent-blames-billing"
+  },
+  {
+   "symbols": [
+    "AAPL"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-01T22:24:07Z",
+   "headline": "Apple earnings: what to look for from AAPL",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-earnings-look-aapl-222407504.html"
   },
   {
    "symbols": [
     "AMZN"
    ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-10-31T09:30:00Z",
-   "headline": "Jeff Bezos' father fled Cuba at 16 with three shirts — then invested $245,573 in life savings to help launch Amazon",
-   "url": "https://finance.yahoo.com/small-business/articles/jeff-bezos-father-fled-cuba-093000674.html"
-  },
-  {
-   "symbols": [
-    "AMZN",
-    "GOOGL"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-10-31T09:23:29Z",
-   "headline": "Cloudflare, Fastly, Oracle, JFrog, and Okta shares plummet, what you need to know",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/cloudflare-fastly-oracle-jfrog-okta-092329601.html"
+   "source": "247wallst.com",
+   "pubDate": "2026-11-01T22:07:05Z",
+   "headline": "Amazon Stock Fell After Earnings. Jim Cramer Says Buy Right Here",
+   "url": "https://247wallst.com/investing/2026/11/01/amazon-stock-fell-after-earnings-jim-cramer-says-buy-right-here/"
   },
   {
    "symbols": [
@@ -463,26 +429,17 @@
    "pubDate": "2026-10-29T05:22:29Z",
    "headline": "DBS denies rumours of Indonesia unit merging with Bank Central Asia; analysts see sense in a deal",
    "url": "https://www.businesstimes.com.sg/companies-markets/dbs-denies-rumours-indonesia-unit-merging-bank-central-asia-analysts-see-sense-deal"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-10-29T03:32:36Z",
-   "headline": "SIA to buy up to 4,800 tonnes of sustainable aviation fuel from Aether’s Singapore plant",
-   "url": "https://www.businesstimes.com.sg/companies-markets/sia-buy-4800-tonnes-sustainable-aviation-fuel-aethers-singapore-plant"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 42952,
-  "output": 2717,
+  "input": 38754,
+  "output": 2274,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1065
+  "costUsd": 0.1001
  },
- "createdAt": "2026-10-31T11:43:54.510Z"
+ "createdAt": "2026-11-02T01:01:43.693Z"
 }
