@@ -1,93 +1,120 @@
 {
- "market_summary": "Global markets fell sharply on October 31 as concerns over AI profitability and capital spending intensified. The Nasdaq dropped 2.9% and S&P 500 fell 1.8% following disappointing tech earnings and profit warnings. Amazon missed Q3 expectations with negative free cash flow despite strong cloud growth, while concerns about massive AI infrastructure investments with unclear returns pressured tech stocks. Asian markets opened lower on November 2, with the Nikkei falling 0.5% and Kospi down 1.4%, tracking Wall Street's losses. Apple earnings are due after market close today, with analysts expecting $1.99 EPS on $113.31B revenue. US midterm elections on November 3 add to market uncertainty.",
+ "market_summary": "<cite index=\"10-1,10-2,10-3,10-4\">S&P Global revised Meta's outlook to negative on November 2, citing uncertainties around the company's capital expenditure plans and free operating cash flow, as Meta embarks on aggressive investments in artificial intelligence with projected annual capital expenditures between $135 billion and $145 billion.</cite> <cite index=\"29-6,29-8,30-3\">AWS revenue came in at $45.98 billion in Q3, up 39% year-over-year and above consensus, generating $17.77 billion in operating income, up 55%, with AWS's fastest Q3 growth in nearly five years.</cite> <cite index=\"25-2,25-3\">OCBC stock enters its results week under pressure after insurance subsidiary Great Eastern reported a steep decline in third-quarter profit, falling 72 percent year-on-year to 102.9 million Singapore dollars.</cite> <cite index=\"38-4,38-6\">Singapore's STI is consolidating following recent weakness, with Singapore's economy showing 5.4% year-on-year GDP growth in 3Q2026 driven largely by the AI-related manufacturing boom.</cite>",
  "items": [
   {
    "symbols": [
     "AAPL"
    ],
    "date": "2026-11-02",
-   "headline": "Apple Q4 2026 Earnings Due Today After Market Close",
-   "summary": "Apple is scheduled to report Q4 2026 earnings on November 2 after the close. Analysts forecast earnings of $1.99 per share on $113.31 billion in revenue, up 9-11% year-over-year.",
+   "headline": "Apple to report Q4 2026 earnings after market close",
+   "summary": "<cite index=\"4-1,4-8\">Apple Inc. is set to announce its fourth-quarter earnings after the market closes on November 2, 2026. Analysts anticipate that Apple will report earnings per share (EPS) of $2 and revenue of $113.46 billion for Q4, up from last year's EPS of $1.85 and revenue of $102.46 billion.</cite>",
    "type": "earnings",
    "tone": "mixed",
-   "source_url": "https://www.marketbeat.com/instant-alerts/upcoming-apple-aapl-expected-to-post-earnings-on-monday-2026-10-26/"
+   "source_url": "https://www.gurufocus.com/news/9161631/apple-aapl-set-to-release-q4-earnings-amid-new-product-launches"
+  },
+  {
+   "symbols": [
+    "META"
+   ],
+   "date": "2026-11-02",
+   "headline": "S&P Global cuts Meta's credit outlook to negative on AI spending concerns",
+   "summary": "<cite index=\"10-1,10-2,10-3,10-4\">S&P Global Ratings revised its outlook on Meta Platforms from stable to negative on November 2, citing uncertainties around the company's capital expenditure plans and free operating cash flow, with S&P forecasting Meta's capital expenditure at $135 billion to $145 billion annually.</cite>",
+   "type": "analyst",
+   "tone": "negative",
+   "source_url": "https://www.gurufocus.com/news/9161452/sp-global-lowers-meta-platforms-outlook-to-negative-amid-ai-spending-concerns-meta"
   },
   {
    "symbols": [
     "AMZN"
    ],
    "date": "2026-10-29",
-   "headline": "Amazon Q3 Earnings Miss Expectations; Reports Negative Free Cash Flow",
-   "summary": "Amazon reported Q3 2026 EPS of $1.89 versus $1.97 expected and revenue of $201.94B versus $202.22B expected. Aggressive AI spending drove negative free cash flow of $42.4B for the trailing twelve months. AWS revenue grew 39% to $46B but retail growth slowed.",
+   "headline": "AWS Q3 revenue accelerates 39% to $46 billion",
+   "summary": "<cite index=\"29-6,29-8\">AWS revenue came in at $45.98 billion in Q3 2026, up 39% year-over-year and above the $45.29 billion consensus, generating $17.77 billion in third-quarter operating income, up 55%.</cite>",
    "type": "earnings",
-   "tone": "negative",
-   "source_url": "https://www.cnbc.com/2026/10/29/amazon-amzn-q3-earnings-report-2026.html"
+   "tone": "positive",
+   "source_url": "https://www.cnbc.com/2026/10/29/aws-q3-earnings-report-2026.html"
   },
   {
    "symbols": [
-    "SPY",
-    "QQQ"
+    "MSFT"
    ],
-   "date": "2026-10-31",
-   "headline": "Nasdaq Falls 2.9% on AI Profitability Concerns; Major Tech Selloff",
-   "summary": "The Nasdaq composite fell 2.9% and S&P 500 dropped 1.8% on October 31, marking the worst day since June. The decline was driven by concerns over massive AI infrastructure spending by major tech companies without clear paths to profitability. Microsoft's results showed strong cloud demand, but Alphabet and Amazon reinforced investor concerns.",
-   "type": "macro",
-   "tone": "negative",
-   "source_url": "https://abc.net.au/news/2026-10-31/wall-street-drops-to-its-worst-day-since-june/107331332"
+   "date": "2026-10-29",
+   "headline": "Microsoft Azure revenue grows 48%, remains 72% size of AWS",
+   "summary": "<cite index=\"29-1,29-2,30-8\">Microsoft published its first earnings report with Azure cloud revenue reported separately, with Azure growing at 48% year-on-year and now 72% the size of AWS, up from 58% two years ago, while total revenue rose 19% year-on-year to $92.3 billion.</cite>",
+   "type": "earnings",
+   "tone": "positive",
+   "source_url": "https://www.cnbc.com/2026/10/29/aws-q3-earnings-report-2026.html"
   },
   {
    "symbols": [
     "GOOGL"
    ],
-   "date": "2026-10-31",
-   "headline": "Alphabet Stock Plunges on AI Spending Concerns; Market Questions Search Growth",
-   "summary": "Alphabet lost about $500 billion on Thursday in its post-earnings selloff as search growth slowed to 12%. Google's AI investment spending drew investor scrutiny following disappointing earnings report, contributing to the broad tech selloff.",
+   "date": "2026-10-28",
+   "headline": "Google Cloud revenue surges 103% in Q3",
+   "summary": "<cite index=\"31-1,31-3\">Google Cloud revenue jumped 103% year-on-year to $30.7 billion in Q3 2026, with Google Cloud, Azure, and AWS together bringing in $110 billion of revenue.</cite>",
    "type": "earnings",
-   "tone": "negative",
-   "source_url": "https://finance.yahoo.com/markets/stocks/articles/reddit-stock-crashed-29-google-230000851.html"
+   "tone": "positive",
+   "source_url": "https://www.midgardfinance.com/research/cloud/"
   },
   {
-   "symbols": [],
-   "date": "2026-10-31",
-   "headline": "Reddit Stock Crashes 29% on Google AI Traffic Warning",
-   "summary": "Reddit stock fell 29% on October 31, its worst day ever, wiping out $7 billion in market value. CEO Steve Huffman warned that search referral traffic from Google was down meaningfully due to AI Mode and AI Overviews. Despite 53% revenue growth to $895M, U.S. daily users fell 2%.",
-   "type": "guidance",
+   "symbols": [
+    "O39.SI",
+    "D05.SI",
+    "U11.SI"
+   ],
+   "date": "2026-11-02",
+   "headline": "Singapore banks fall ahead of earnings; OCBC leads losses as STI slides 1.4%",
+   "summary": "<cite index=\"25-2,25-3\">OCBC stock enters its results week under pressure after insurance subsidiary Great Eastern reported a steep decline in third-quarter profit, falling 72 percent year on year to 102.9 million Singapore dollars.</cite>",
+   "type": "other",
    "tone": "negative",
-   "source_url": "https://www.cnbc.com/2026/10/29/amazon-amzn-q3-earnings-report-2026.html"
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/singapore-shares-end-lower-local-banks-decline-sti-falls-1-4"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "date": "2026-11-06",
+   "headline": "OCBC Q3 2026 earnings scheduled for release",
+   "summary": "<cite index=\"20-1,20-2\">OCBC's next earnings date is estimated for November 6, 2026, based on past reporting schedules, with consensus EPS forecast of S$0.44.</cite>",
+   "type": "earnings",
+   "tone": "mixed",
+   "source_url": "https://www.tipranks.com/stocks/sg:o39/earnings"
+  },
+  {
+   "symbols": [
+    "D05.SI"
+   ],
+   "date": "2026-11-05",
+   "headline": "DBS Q3 2026 earnings scheduled for release",
+   "summary": "<cite index=\"23-11\">DBS is scheduled to report its third-quarter results on November 5, 2026, following UOB on November 4 and OCBC on November 6.</cite>",
+   "type": "earnings",
+   "tone": "mixed",
+   "source_url": "https://thekopinotes.com/articles/news/singapore-banks-october-2026-selloff/"
+  },
+  {
+   "symbols": [
+    "U11.SI"
+   ],
+   "date": "2026-11-04",
+   "headline": "UOB Q3 2026 earnings scheduled for release",
+   "summary": "<cite index=\"25-5\">UOB is scheduled to publish its third-quarter results on November 4, 2026, preceding DBS on November 5 and OCBC on November 6.</cite>",
+   "type": "earnings",
+   "tone": "mixed",
+   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-faces-earnings-test-after-great-eastern-profit-slump/70444136"
   },
   {
    "symbols": [
     "ES3.SI"
    ],
    "date": "2026-11-02",
-   "headline": "Asian Markets Decline Amid AI Investment Concerns",
-   "summary": "Asian share markets slipped on November 2 as worries about AI investment sustainability weighed on tech stocks. MSCI's Asia-Pacific index outside Japan eased 0.4%, Japan's Nikkei fell 0.54%, and South Korea's Kospi dropped 1.39%, tracking Wall Street's losses from October 31.",
+   "headline": "Singapore market weakness as STI consolidates below key support levels",
+   "summary": "<cite index=\"38-9,38-11,38-12\">The STI has consolidated following its September highs with a 1GT Bearish signal still in play, with price breaking below the 5,600 support and consolidating around the 5,350-5,400 region while trading below the 20-day and 100-day moving averages.</cite>",
    "type": "macro",
    "tone": "negative",
-   "source_url": "https://www.globalbankingandfinance.com/asia-shares-bend-ai-stress-apple-earnings-loom/"
+   "source_url": "https://joeychoy.beehiiv.com/p/november-2026-newsletter"
   }
  ],
  "sources": [
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000005/a8-kex991q1202612272025.htm",
-   "title": "Apple Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000011/a8-kex991q2202603282026.htm",
-   "title": "Apple Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/aapl/earnings",
-   "title": "Apple (AAPL) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://9to5mac.com/2026/10/06/apple-sets-q4-2026-earnings-release-for-november-2/",
-   "title": "Apple sets Q4 2026 earnings release for November 2 - 9to5Mac",
-   "age": "18 days ago"
-  },
   {
    "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000013/aapl-20260328.htm",
    "title": "Apple Inc. - Form 10-Q - FY2026",
@@ -99,199 +126,224 @@
    "age": null
   },
   {
-   "url": "https://www.marketbeat.com/instant-alerts/upcoming-apple-aapl-expected-to-post-earnings-on-monday-2026-10-26/",
-   "title": "Apple (AAPL) Expected to Post Earnings on Monday",
-   "age": "6 days ago"
+   "url": "https://www.earningswhispers.com/stocks/AAPL",
+   "title": "Earnings Whispers",
+   "age": null
+  },
+  {
+   "url": "https://www.gurufocus.com/news/9161631/apple-aapl-set-to-release-q4-earnings-amid-new-product-launches",
+   "title": "Apple (AAPL) Set to Release Q4 Earnings Amid New Product Launches",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/aapl/earnings",
+   "title": "Apple (AAPL) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "95 days ago"
   },
   {
    "url": "https://finance.yahoo.com/calendar/earnings?symbol=AAPL",
    "title": "Company Earnings Calendar - Yahoo Finance",
-   "age": "185 days ago"
+   "age": "186 days ago"
   },
   {
-   "url": "https://www.trefis.com/stock/aapl/articles/621479/apple-earnings-ahead-what-past-reactions-say-about-the-stock/2026-10-30",
-   "title": "Apple Earnings Ahead: What Past Reactions Say About The Stock",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.marketbeat.com/earnings/reports/2026-10-29-amazoncom-inc-stock/",
-   "title": "Amazon.com (AMZN) Q3 2026 Earnings Results & Report",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://seekingalpha.com/article/4960778-amazon-com-inc-2026-q3-results-earnings-call-presentation",
-   "title": "Amazon.com, Inc. 2026 Q3 - Results - Earnings Call Presentation (NASDAQ:AMZN) 2026-11-01",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Second-Quarter-Results/",
-   "title": "Amazon.com, Inc. - Amazon.com Announces Second Quarter Results",
-   "age": "95 days ago"
-  },
-  {
-   "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/",
-   "title": "Amazon.com, Inc. - Amazon.com Announces Third Quarter Results",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/10/29/amazon-amzn-q3-earnings-report-2026.html",
-   "title": "Amazon (AMZN) Q3 earnings report 2026",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://ir.aboutamazon.com/files/doc_earnings/2026/q3/earnings-result/AMZN-Q3-2026-Earnings-Release.pdf",
-   "title": "AMAZON.COM ANNOUNCES THIRD QUARTER RESULTS",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.investing.com/equities/amazon-com-inc-earnings",
-   "title": "Amazon.com (AMZN) Earnings Date & Report - Investing.com",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001018724/000101872426000038/amzn-20260930xex991.htm",
-   "title": "AMAZON COM INC - Form 8-K - FY2026",
+   "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000005/a8-kex991q1202612272025.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://techcrunch.com/2026/10/29/amazon-reported-booming-cloud-revenue-but-otherwise-missed-expectations/",
-   "title": "Amazon reported booming cloud revenue but otherwise missed expectations",
-   "age": "3 days ago"
+   "url": "https://www.investing.com/equities/apple-computer-inc-earnings",
+   "title": "Apple (AAPL) Earnings Date & Report - Investing.com",
+   "age": "94 days ago"
   },
   {
-   "url": "https://edwardlane.substack.com/p/stock-market-report-for-november",
-   "title": "Stock Market Report for November 1, 2026",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.fool.com/investing/2026/10/23/if-only-buy-ai-stock-in-november-sell-off-alab/",
-   "title": "If I Could Only Buy 1 AI Stock in November After This Sell-Off, It Would Be This One.",
-   "age": "9 days ago"
-  },
-  {
-   "url": "https://247wallst.com/cards/xpost-01m6c0zrkr8597m05vbme54j7h",
-   "title": "AI stocks just logged their 7th-worst two-year selloff, one month from an all-time high",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://abc.net.au/news/2026-10-31/wall-street-drops-to-its-worst-day-since-june/107331332",
-   "title": "Wall Street drops to its worst day since June after sell-off for tech stocks deepens - ABC News",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/The_2028_Artificial_Intelligence_Crisis",
-   "title": "The 2028 Artificial Intelligence Crisis",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/a8-kex991q3202606272026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://ziontile.com/article/tech-stocks-tumble-as-ai-investments-face-scrutiny",
-   "title": "Tech Stocks Tumble as AI Investments Face Scrutiny (2026)",
+   "url": "https://www.gurufocus.com/news/9161452/sp-global-lowers-meta-platforms-outlook-to-negative-amid-ai-spending-concerns-meta",
+   "title": "S&P Global Lowers Meta Platforms Outlook to Negative Amid AI Spending Concerns (META)",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.nbcnews.com/business/markets/tech-stocks-nasdaq-ai-boom-fears-deepen-rcna606512",
-   "title": "Tech stocks wipe out $1 trillion in value as concerns deepen about the AI boom",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://finance.biggo.com/news/53d41a49-f555-4281-958f-a908f7b823d7",
-   "title": "Panic Selling Sweeps US Stocks: Nasdaq Falls Nearly 8% Over Three Straight Sessions as AI Financing Worries and Midterms Take Center Stage — BigGo Finance",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://tradingeconomics.com/united-states/stock-market/news/527854",
-   "title": "US Futures Stabilize After AI-Driven Selloff",
-   "age": null
-  },
-  {
-   "url": "https://marketindex.com.au/news/asx-200-live-today-monday-2nd-november",
-   "title": "ASX 200 Live Today - Monday, 2nd November",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/01/stock-market-today-live-updates.html",
-   "title": "Stock market today: Live updates",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.globalbankingandfinance.com/asia-shares-bend-ai-stress-apple-earnings-loom/",
-   "title": "Asian Shares Drop Amid AI Concerns; Apple Earnings in Focus",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://liveworldmarket.com/asia-stock-market-dashboard",
-   "title": "Asia Stock Markets Today: Nikkei, Hang Seng, Shanghai & KOSPI",
-   "age": null
-  },
-  {
-   "url": "https://www.newsonair.gov.in/fpis-withdraw-%E2%82%B912569-cr-from-indian-equity-markets/",
-   "title": "November 12, 2025 5:55 PM",
-   "age": null
-  },
-  {
-   "url": "https://www.tradingview.com/markets/indices/quotes-asia/",
-   "title": "Asia Stock Indices: Japan 225 (Nikkei), NIFTY 50 — TradingView",
-   "age": null
-  },
-  {
-   "url": "https://www.newsonair.gov.in/asian-stock-markets-closes-in-positive-zone-today/",
-   "title": "November 26, 2025 6:23 PM",
-   "age": null
-  },
-  {
-   "url": "https://www.newsonair.gov.in/most-asian-markets-end-in-red",
-   "title": "November 26, 2024 6:31 PM",
-   "age": null
-  },
-  {
-   "url": "https://www.newsonair.gov.in/asian-markets-end-mixed-european-stocks-trade-higher",
-   "title": "November 19, 2025 6:38 PM",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/reddit-stock-crashed-29-google-230000851.html",
-   "title": "Reddit Stock Crashed 29%: Is Google AI Coming for More Stocks?",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://beincrypto.com/reddit-stock-google-ai-traffic-crash/",
-   "title": "Reddit Stock Crashed 29%: Is Google AI Coming for More Stocks?",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://biztoc.com/x/e12f9861069e75c9",
-   "title": "Reddit Stock Crashed 29%: Is Google AI Coming for More Stocks?",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.tech2geek.net/reddit-stock-crashes-22-as-ai-search-threatens-its-traffic-and-business-model/",
-   "title": "Reddit Stock Crashes 22% as AI Search Threatens Its Traffic and Business Model - Tech2Geek",
+   "url": "https://ppc.land/s-p-turns-negative-on-meta-as-2027-ai-spending-forecast-tops-225bn/",
+   "title": "S&P turns negative on Meta as 2027 AI spending forecast tops $225bn",
    "age": "1 days ago"
   },
   {
-   "url": "https://qz.com/reddit-stock-google-ai-search-traffic-earnings-103026",
-   "title": "Reddit stock falls 25% after Q3 earnings as Google AI cuts traffic",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://phemex.com/news/article/reddit-stock-plunges-28-as-ceo-warns-google-ai-search-is-cutting-platform-traffic-101909",
-   "title": "Reddit Stock Crashes 28% on Google AI Search Traffic Warning",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://coincentral.com/reddit-rddt-stock-plunges-29-after-google-ai-cuts-us-traffic",
-   "title": "Reddit (RDDT) Stock Plunges 29% After Google AI Cuts US Traffic - CoinCentral",
+   "url": "https://seekingalpha.com/news/4661912-sp-cuts-meta-outlook-to-negative-over-elevated-capex-and-cash-flow-risks",
+   "title": "S&P cuts Meta outlook to negative over elevated capex and cash flow risks (META:NASDAQ)",
    "age": "0 days ago"
   },
   {
-   "url": "https://dissenter.com/economy/reddit-stock-crashes-29-as-google-ai-strangles-search-traffic",
-   "title": "Reddit Stock Crashes 29% as Google AI Strangles Search Traffic",
-   "age": "1 days ago"
+   "url": "https://finimize.com/content/sp-turns-more-cautious-on-metas-ai-spending-plans",
+   "title": "S&P Turns More Cautious On Meta’s AI Spending Plans - Finimize",
+   "age": "2 days ago"
   },
   {
-   "url": "https://coinpaper.com/38164/reddit-stock-crashes-29-as-google-s-ai-search-cuts-more-than-1-million-weekly-referrals",
-   "title": "Reddit Stock Crashes 29% as Google's AI Search Cuts More Than 1 Million Weekly Referrals",
-   "age": "1 days ago"
+   "url": "https://www.briefs.co/news/s-p-turns-meta-s-outlook-negative-as-ai-spend-lifts-debt-met/",
+   "title": "S&P Cuts Meta Outlook as AI Spending Raises Risk",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://en.sedaily.com/finance/2026/11/02/metas-credit-outlook-cut-to-negative-on-ai-spending",
+   "title": "Meta's Credit Outlook Cut to Negative on AI Spending - Seoul Economic Daily",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://srnnews.com/sp-global-revises-outlook-on-meta-to-negative-on-cashflow-concerns/",
+   "title": "S&P Global revises Meta's outlook to 'negative' on AI spending, cash flow concerns - SRN News",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://finance.biggo.com/news/39f48773-5730-47fe-a8a9-babe78a2a634",
+   "title": "S&P Cuts Meta Credit Rating Outlook to 'Negative' on AI Investment Burden, Warns on Cash Flow — BigGo Finance",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.foreignpolicyjournal.com/2026/11/02/70-billion-forecasting-gap-puts-meta-platforms-nasdaq-meta-at-the-center-of-an-unprecedented-ai-spending-debate/",
+   "title": "$70 Billion Forecasting Gap Puts Meta Platforms (NASDAQ: META) At The Center Of An Unprecedented AI Spending Debate",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.ocbc.com/group/investors/financials.page",
+   "title": "Financial Results Overview - Singapore",
+   "age": "1347 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
+   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "88 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
+   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
+   "age": "88 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/analysed-singapore-3-big-banks-233000885.html",
+   "title": "We Analysed Singapore’s 3 Big Banks. Here’s Which One Looks Strongest",
+   "age": "52 days ago"
+  },
+  {
+   "url": "https://thekopinotes.com/articles/news/singapore-banks-october-2026-selloff/",
+   "title": "DBS, OCBC & UOB: October 2026 Bank Selloff — Buy the Dip or Wait for Q3 Results? - The Kopi Notes",
+   "age": "23 days ago"
+  },
+  {
+   "url": "https://sgstocksinvesting.com/singapore-bank-stocks-dbs-ocbc-uob-investment-outlook-2026/",
+   "title": "Should Investors Still Buy Singapore Bank Stocks? DBS, OCBC and UOB Face a New Earnings Test",
+   "age": "83 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-faces-earnings-test-after-great-eastern-profit-slump/70444136",
+   "title": "OCBC stock faces earnings test after Great Eastern profit slump",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/1184208770",
+   "title": "As DBS, OCBC and UOB Unveil Q4 Earnings, Investors Eye More Share Buybacks and Special Dividends",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hant/news/1189208007",
+   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/1189208007",
+   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
+   "age": null
+  },
+  {
+   "url": "https://www.cnbc.com/2026/10/29/aws-q3-earnings-report-2026.html",
+   "title": "AWS Q3 earnings report 2026",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.computing.co.uk/news/2026/aws-and-azure-growth-accelerates",
+   "title": "AWS and Azure growth accelerates as cloud giants post strong results",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.midgardfinance.com/research/cloud/",
+   "title": "AWS vs Azure vs Google Cloud: Revenue and Market Share",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.panabee.com/news/amazon-earnings-q3-2026-report",
+   "title": "Amazon Earnings Q3 2026 - Report",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://tech-insider.org/au/google-cloud-103-percent-azure-aws-q3-2026-australia/",
+   "title": "Google Cloud Revenue Up 103%: Azure, AWS Trail [2026]",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.stocktitan.net/articles/amazon-q3-2026-earnings-aws-cloud-growth",
+   "title": "Amazon Earnings: AWS Is Growing as Fast as in 2021, at Nearly Three Times the Size",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://betafinch.com/blog/cloud-earnings-guidance-leaders-2026",
+   "title": "Cloud Earnings Guidance Leaders 2026: AWS, Azure, and GCP",
+   "age": "180 days ago"
+  },
+  {
+   "url": "https://windowsforum.com/news/aws-azure-and-google-cloud-q3-2026-revenue-growth-rates-and-why-they-arent-directly-comparable.450256/",
+   "title": "AWS, Azure and Google Cloud Q3 2026 Revenue: Growth Rates and Why They Aren’t Directly Comparable",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://vanderbiltreport.com/amazon-earnings-q3-2026-aws-growth/",
+   "title": "Amazon Earnings Q3 2026: AWS +39%, EPS Miss, Shares Fall",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://joeychoy.beehiiv.com/p/november-2026-newsletter",
+   "title": "November 2026 Newsletter",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://growbeansprout.com/quote/sti",
+   "title": "STI Index: Share Price, Analysis, News, Dividends - Growbeansprout.com",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.business-standard.com/article/news-cm/singapore-market-ends-lower-122112500728_1.html",
+   "title": "Friday, January 02, 2026 | 09:33 AM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://tradingeconomics.com/singapore/stock-market",
+   "title": "stock market",
+   "age": null
+  },
+  {
+   "url": "https://www.business-standard.com/amp/article/news-cm/singapore-market-ends-lower-122112500728_1.html",
+   "title": "Singapore Market ends lower",
+   "age": null
+  },
+  {
+   "url": "https://tradingeconomics.com/singapore/stock-market/forecast",
+   "title": "tradingeconomics.com",
+   "age": null
+  },
+  {
+   "url": "https://www.business-standard.com/article/news-cm/singapore-market-ends-lower-122120600850_1.html",
+   "title": "Saturday, January 03, 2026 | 10:58 AM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://www.business-standard.com/markets/capital-market-news/singapore-market-falls-0-83-124022101005_1.html",
+   "title": "Tuesday, January 13, 2026 | 11:28 AM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://www.business-standard.com/article/news-cm/singapore-market-ends-lower-122112300902_1.html",
+   "title": "Friday, December 26, 2025 | 10:52 AM ISTहिंदी में पढें",
+   "age": null
   }
  ],
  "leads": [
@@ -300,27 +352,115 @@
     "AAPL"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-02T00:43:55Z",
-   "headline": "Dow Jones Futures Rise After Market Sell-Off; How Midterm Elections May Swing Stocks",
-   "url": "https://finance.yahoo.com/m/d0bc23d0-115b-314d-8989-07ca797bebfa/dow-jones-futures-rise-after.html"
+   "pubDate": "2026-11-02T13:00:00Z",
+   "headline": "Earnings from Apple, Palantir, and jobs report data: What to Watch",
+   "url": "https://finance.yahoo.com/video/earnings-apple-palantir-jobs-report-130000506.html"
   },
   {
    "symbols": [
-    "AAPL"
+    "MSFT"
    ],
-   "source": "channelnewsasia.com",
-   "pubDate": "2026-11-02T00:40:46Z",
-   "headline": "Asia shares bend under AI stress; Apple earnings loom",
-   "url": "https://www.channelnewsasia.com/business/asia-shares-bend-under-ai-stress-apple-earnings-loom-6511816"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-02T12:45:00Z",
+   "headline": "Clarivate to Bring Trusted Trademark Data into Microsoft Copilot Through IPOne",
+   "url": "https://finance.yahoo.com/technology/ai/articles/clarivate-bring-trusted-trademark-data-124500677.html"
   },
   {
    "symbols": [
-    "NVDA"
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "GOOGL"
    ],
    "source": "fool.com",
-   "pubDate": "2026-11-02T00:28:00Z",
-   "headline": "If I Could Only Buy and Hold 1 \"Magnificent Seven\" Stock Through 2030, It Would Be This One",
-   "url": "https://www.fool.com/investing/2026/11/01/if-i-could-only-buy-and-hold-1-magnificent-seven-s/"
+   "pubDate": "2026-11-02T12:31:00Z",
+   "headline": "Meet the Spectacular Vanguard ETF With 44.6% of Its Portfolio Parked in Nvidia, Alphabet, Apple, and Microsoft",
+   "url": "https://www.fool.com/investing/2026/11/02/meet-vanguard-etf-446-portfolio-nvidia-alphabet/"
+  },
+  {
+   "symbols": [
+    "AAPL",
+    "MSFT",
+    "AMZN",
+    "GOOGL"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-02T12:30:00Z",
+   "headline": "Cloud Numbers Are In; This Week the Spotlight Moves to Phones, Laptops and Chips",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/cloud-numbers-week-spotlight-moves-123000890.html"
+  },
+  {
+   "symbols": [
+    "META"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-02T12:24:57Z",
+   "headline": "Meta's AI Spending Push Triggers Negative S&P Outlook",
+   "url": "https://finance.yahoo.com/technology/ai/articles/metas-ai-spending-push-triggers-122457767.html"
+  },
+  {
+   "symbols": [
+    "AMZN"
+   ],
+   "source": "247wallst.com",
+   "pubDate": "2026-11-02T12:15:10Z",
+   "headline": "AWS Holds the Scale Crown, Azure Leads the Velocity Charge",
+   "url": "https://247wallst.com/investing/2026/11/02/aws-holds-the-scale-crown-azure-leads-the-velocity-charge/"
+  },
+  {
+   "symbols": [
+    "AMZN",
+    "GOOGL"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-02T12:00:00Z",
+   "headline": "Is this the dot-com bubble again? Nearly $1 trillion gone",
+   "url": "https://finance.yahoo.com/video/dot-com-bubble-again-nearly-120000826.html"
+  },
+  {
+   "symbols": [
+    "META"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-02T12:00:00Z",
+   "headline": "Capital Power reports third quarter 2026 results",
+   "url": "https://finance.yahoo.com/energy/articles/capital-power-reports-third-quarter-120000145.html"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-02T10:08:31Z",
+   "headline": "Singapore shares end lower as local banks decline; STI falls 1.4%",
+   "url": "https://www.businesstimes.com.sg/companies-markets/singapore-shares-end-lower-local-banks-decline-sti-falls-1-4"
+  },
+  {
+   "symbols": [
+    "BN4.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-02T04:28:58Z",
+   "headline": "Keppel South Central: Deals juiced up with income support need not be bad ones",
+   "url": "https://www.businesstimes.com.sg/opinion-features/keppel-south-central-deals-juiced-income-support-need-not-be-bad-ones"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-02T03:59:11Z",
+   "headline": "Singapore banks fall ahead of earnings release; OCBC leads bank losses as STI slides 1.4%",
+   "url": "https://www.businesstimes.com.sg/companies-markets/singapore-banks-fall-ahead-earnings-release-ocbc-leads-bank-losses-sti-slides-1-4"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-02T03:59:11Z",
+   "headline": "OCBC leads bank losses as STI slides 1.4%",
+   "url": "https://www.businesstimes.com.sg/companies-markets/ocbc-leads-bank-losses-sti-slides-1-4"
   },
   {
    "symbols": [
@@ -330,51 +470,6 @@
    "pubDate": "2026-11-02T00:27:42Z",
    "headline": "Stocks to watch: Wilmar, Great Eastern, Keppel, Nio, Lendlease Global Reit",
    "url": "https://www.businesstimes.com.sg/companies-markets/stocks-watch-wilmar-great-eastern-keppel-nio-lendlease-global-reit"
-  },
-  {
-   "symbols": [
-    "AAPL"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-01T23:25:00Z",
-   "headline": "Stock futures open a monster week after a $5 trillion AI wipeout",
-   "url": "https://finance.yahoo.com/markets/article/stock-futures-open-a-monster-week-after-a-5-trillion-ai-wipeout-232500194.html"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "source": "beincrypto.com",
-   "pubDate": "2026-11-01T23:00:00Z",
-   "headline": "Reddit Stock Crashed 29%: Is Google AI Coming for More Stocks?",
-   "url": "https://beincrypto.com/reddit-stock-google-ai-traffic-crash/"
-  },
-  {
-   "symbols": [
-    "META"
-   ],
-   "source": "thestreet.com",
-   "pubDate": "2026-11-01T22:33:51Z",
-   "headline": "Instinct's WhatsApp replies fail, AI agent blames billing",
-   "url": "https://www.thestreet.com/crypto/artificial-intelligence/instincts-whatsapp-replies-fail-ai-agent-blames-billing"
-  },
-  {
-   "symbols": [
-    "AAPL"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-01T22:24:07Z",
-   "headline": "Apple earnings: what to look for from AAPL",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-earnings-look-aapl-222407504.html"
-  },
-  {
-   "symbols": [
-    "AMZN"
-   ],
-   "source": "247wallst.com",
-   "pubDate": "2026-11-01T22:07:05Z",
-   "headline": "Amazon Stock Fell After Earnings. Jim Cramer Says Buy Right Here",
-   "url": "https://247wallst.com/investing/2026/11/01/amazon-stock-fell-after-earnings-jim-cramer-says-buy-right-here/"
   },
   {
    "symbols": [
@@ -393,53 +488,17 @@
    "pubDate": "2026-10-30T08:04:41Z",
    "headline": "Who are some of the longest-serving CEOs among Singapore’s blue-chip companies?",
    "url": "https://www.businesstimes.com.sg/companies-markets/who-are-some-longest-serving-ceos-among-singapores-blue-chip-companies"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-10-30T05:51:24Z",
-   "headline": "DBS remains Asean’s most valuable brand; Grab among fastest-growing: report",
-   "url": "https://www.businesstimes.com.sg/companies-markets/dbs-remains-aseans-most-valuable-brand-grab-among-fastest-growing-report"
-  },
-  {
-   "symbols": [
-    "BN4.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-10-29T12:45:00Z",
-   "headline": "Keppel’s essential services offer resilience and room for growth: CEO",
-   "url": "https://www.straitstimes.com/business/companies-markets/after-shift-from-oil-rigs-to-asset-management-keppel-ceo-charts-an-ai-future"
-  },
-  {
-   "symbols": [
-    "Z74.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-10-29T07:09:10Z",
-   "headline": "Singtel’s NCS to more than triple AI specialist workforce to over 300 in two years",
-   "url": "https://www.businesstimes.com.sg/companies-markets/singtels-ncs-more-triple-ai-specialist-workforce-over-300-two-years"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-10-29T05:22:29Z",
-   "headline": "DBS denies rumours of Indonesia unit merging with Bank Central Asia; analysts see sense in a deal",
-   "url": "https://www.businesstimes.com.sg/companies-markets/dbs-denies-rumours-indonesia-unit-merging-bank-central-asia-analysts-see-sense-deal"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 38754,
-  "output": 2274,
+  "input": 41996,
+  "output": 2359,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1001
+  "costUsd": 0.1038
  },
- "createdAt": "2026-11-02T01:01:43.693Z"
+ "createdAt": "2026-11-02T13:01:17.279Z"
 }
