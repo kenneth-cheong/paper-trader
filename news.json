@@ -1,149 +1,58 @@
 {
- "market_summary": "<cite index=\"10-1,10-2,10-3,10-4\">S&P Global revised Meta's outlook to negative on November 2, citing uncertainties around the company's capital expenditure plans and free operating cash flow, as Meta embarks on aggressive investments in artificial intelligence with projected annual capital expenditures between $135 billion and $145 billion.</cite> <cite index=\"29-6,29-8,30-3\">AWS revenue came in at $45.98 billion in Q3, up 39% year-over-year and above consensus, generating $17.77 billion in operating income, up 55%, with AWS's fastest Q3 growth in nearly five years.</cite> <cite index=\"25-2,25-3\">OCBC stock enters its results week under pressure after insurance subsidiary Great Eastern reported a steep decline in third-quarter profit, falling 72 percent year-on-year to 102.9 million Singapore dollars.</cite> <cite index=\"38-4,38-6\">Singapore's STI is consolidating following recent weakness, with Singapore's economy showing 5.4% year-on-year GDP growth in 3Q2026 driven largely by the AI-related manufacturing boom.</cite>",
+ "market_summary": "US stocks rallied on strong tech earnings despite broader market volatility. Apple beat Q4 expectations with record revenue and iPhone sales, while the SpaceX-Tesla merger remains under exploration with no formal announcement. Meta faces UK regulatory scrutiny over AI content terms. Singapore's STI fell 1.4% recently as local banks declined ahead of Q3 earnings releases scheduled for early November, with inflation stable at 2.2%.",
  "items": [
   {
    "symbols": [
     "AAPL"
    ],
    "date": "2026-11-02",
-   "headline": "Apple to report Q4 2026 earnings after market close",
-   "summary": "<cite index=\"4-1,4-8\">Apple Inc. is set to announce its fourth-quarter earnings after the market closes on November 2, 2026. Analysts anticipate that Apple will report earnings per share (EPS) of $2 and revenue of $113.46 billion for Q4, up from last year's EPS of $1.85 and revenue of $102.46 billion.</cite>",
+   "headline": "Apple beats Q4 2026 earnings: revenue $114.48B vs $113.39B estimates, iPhone revenue $57.58B",
+   "summary": "Apple reported fiscal Q4 2026 revenue of $114.48 billion, beating estimates of $113.39 billion. EPS came in at $2.10 per share, topping the $1.98 estimate. iPhone revenue hit $57.58 billion versus $56.49 billion expected.",
    "type": "earnings",
+   "tone": "positive",
+   "source_url": "https://www.benzinga.com/markets/earnings/26/11/62801967/apple-tops-expectations-in-q4-as-active-installed-base-hits-all-time-high"
+  },
+  {
+   "symbols": [
+    "TSLA"
+   ],
+   "date": "2026-11-02",
+   "headline": "Tesla-SpaceX merger talks continue: both companies form independent committees to explore deal",
+   "summary": "Both Tesla and SpaceX have formed special committees of independent directors to explore a potential merger as of early November 2026. No terms have been agreed and no formal announcement has been made, though Barclays predicts possible announcement by end of 2026.",
+   "type": "deal",
    "tone": "mixed",
-   "source_url": "https://www.gurufocus.com/news/9161631/apple-aapl-set-to-release-q4-earnings-amid-new-product-launches"
+   "source_url": "https://purepowerpicks.com/tesla-spacex-merger/"
   },
   {
    "symbols": [
     "META"
    ],
-   "date": "2026-11-02",
-   "headline": "S&P Global cuts Meta's credit outlook to negative on AI spending concerns",
-   "summary": "<cite index=\"10-1,10-2,10-3,10-4\">S&P Global Ratings revised its outlook on Meta Platforms from stable to negative on November 2, citing uncertainties around the company's capital expenditure plans and free operating cash flow, with S&P forecasting Meta's capital expenditure at $135 billion to $145 billion annually.</cite>",
-   "type": "analyst",
+   "date": "2026-11-01",
+   "headline": "UK opens competition investigation into Meta's AI content terms for publishers",
+   "summary": "The UK's Competition and Markets Authority opened an investigation on October 30 into Meta's commercial terms allowing use of publisher content for AI development without adequate choice. Meta paused implementation originally planned for November 20.",
+   "type": "legal",
    "tone": "negative",
-   "source_url": "https://www.gurufocus.com/news/9161452/sp-global-lowers-meta-platforms-outlook-to-negative-amid-ai-spending-concerns-meta"
+   "source_url": "https://thenextweb.com/news/cma-meta-investigation-publishers-ai-terms"
   },
   {
    "symbols": [
-    "AMZN"
-   ],
-   "date": "2026-10-29",
-   "headline": "AWS Q3 revenue accelerates 39% to $46 billion",
-   "summary": "<cite index=\"29-6,29-8\">AWS revenue came in at $45.98 billion in Q3 2026, up 39% year-over-year and above the $45.29 billion consensus, generating $17.77 billion in third-quarter operating income, up 55%.</cite>",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://www.cnbc.com/2026/10/29/aws-q3-earnings-report-2026.html"
-  },
-  {
-   "symbols": [
-    "MSFT"
-   ],
-   "date": "2026-10-29",
-   "headline": "Microsoft Azure revenue grows 48%, remains 72% size of AWS",
-   "summary": "<cite index=\"29-1,29-2,30-8\">Microsoft published its first earnings report with Azure cloud revenue reported separately, with Azure growing at 48% year-on-year and now 72% the size of AWS, up from 58% two years ago, while total revenue rose 19% year-on-year to $92.3 billion.</cite>",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://www.cnbc.com/2026/10/29/aws-q3-earnings-report-2026.html"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "date": "2026-10-28",
-   "headline": "Google Cloud revenue surges 103% in Q3",
-   "summary": "<cite index=\"31-1,31-3\">Google Cloud revenue jumped 103% year-on-year to $30.7 billion in Q3 2026, with Google Cloud, Azure, and AWS together bringing in $110 billion of revenue.</cite>",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://www.midgardfinance.com/research/cloud/"
-  },
-  {
-   "symbols": [
-    "O39.SI",
     "D05.SI",
+    "O39.SI",
     "U11.SI"
    ],
    "date": "2026-11-02",
-   "headline": "Singapore banks fall ahead of earnings; OCBC leads losses as STI slides 1.4%",
-   "summary": "<cite index=\"25-2,25-3\">OCBC stock enters its results week under pressure after insurance subsidiary Great Eastern reported a steep decline in third-quarter profit, falling 72 percent year on year to 102.9 million Singapore dollars.</cite>",
-   "type": "other",
-   "tone": "negative",
-   "source_url": "https://www.businesstimes.com.sg/companies-markets/singapore-shares-end-lower-local-banks-decline-sti-falls-1-4"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "date": "2026-11-06",
-   "headline": "OCBC Q3 2026 earnings scheduled for release",
-   "summary": "<cite index=\"20-1,20-2\">OCBC's next earnings date is estimated for November 6, 2026, based on past reporting schedules, with consensus EPS forecast of S$0.44.</cite>",
+   "headline": "Singapore banks face Q3 2026 earnings test; STI falls 1.4% as local banks decline",
+   "summary": "Singapore's three major banks (DBS, OCBC, UOB) prepare to release Q3 2026 results in early November after a recent market pullback. DBS reports November 5, OCBC on November 6, with UOB expected mid-November.",
    "type": "earnings",
    "tone": "mixed",
-   "source_url": "https://www.tipranks.com/stocks/sg:o39/earnings"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "date": "2026-11-05",
-   "headline": "DBS Q3 2026 earnings scheduled for release",
-   "summary": "<cite index=\"23-11\">DBS is scheduled to report its third-quarter results on November 5, 2026, following UOB on November 4 and OCBC on November 6.</cite>",
-   "type": "earnings",
-   "tone": "mixed",
-   "source_url": "https://thekopinotes.com/articles/news/singapore-banks-october-2026-selloff/"
-  },
-  {
-   "symbols": [
-    "U11.SI"
-   ],
-   "date": "2026-11-04",
-   "headline": "UOB Q3 2026 earnings scheduled for release",
-   "summary": "<cite index=\"25-5\">UOB is scheduled to publish its third-quarter results on November 4, 2026, preceding DBS on November 5 and OCBC on November 6.</cite>",
-   "type": "earnings",
-   "tone": "mixed",
-   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-faces-earnings-test-after-great-eastern-profit-slump/70444136"
-  },
-  {
-   "symbols": [
-    "ES3.SI"
-   ],
-   "date": "2026-11-02",
-   "headline": "Singapore market weakness as STI consolidates below key support levels",
-   "summary": "<cite index=\"38-9,38-11,38-12\">The STI has consolidated following its September highs with a 1GT Bearish signal still in play, with price breaking below the 5,600 support and consolidating around the 5,350-5,400 region while trading below the 20-day and 100-day moving averages.</cite>",
-   "type": "macro",
-   "tone": "negative",
-   "source_url": "https://joeychoy.beehiiv.com/p/november-2026-newsletter"
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/singapore-banks-fall-ahead-earnings-release-ocbc-leads-bank-losses-sti-slides-1-4"
   }
  ],
  "sources": [
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000013/aapl-20260328.htm",
-   "title": "Apple Inc. - Form 10-Q - FY2026",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/a8-kex991q4202609262026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000020/aapl-20260627.htm",
-   "title": "Apple Inc. - Form 10-Q - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.earningswhispers.com/stocks/AAPL",
-   "title": "Earnings Whispers",
-   "age": null
-  },
-  {
-   "url": "https://www.gurufocus.com/news/9161631/apple-aapl-set-to-release-q4-earnings-amid-new-product-launches",
-   "title": "Apple (AAPL) Set to Release Q4 Earnings Amid New Product Launches",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/aapl/earnings",
-   "title": "Apple (AAPL) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "95 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/calendar/earnings?symbol=AAPL",
-   "title": "Company Earnings Calendar - Yahoo Finance",
-   "age": "186 days ago"
   },
   {
    "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000005/a8-kex991q1202612272025.htm",
@@ -151,159 +60,104 @@
    "age": null
   },
   {
-   "url": "https://www.investing.com/equities/apple-computer-inc-earnings",
-   "title": "Apple (AAPL) Earnings Date & Report - Investing.com",
-   "age": "94 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/a8-kex991q3202606272026.htm",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000011/a8-kex991q2202603282026.htm",
    "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.gurufocus.com/news/9161452/sp-global-lowers-meta-platforms-outlook-to-negative-amid-ai-spending-concerns-meta",
-   "title": "S&P Global Lowers Meta Platforms Outlook to Negative Amid AI Spending Concerns (META)",
+   "url": "https://finance.yahoo.com/video/apples-q4-earnings-results-beat-estimates-including-iphone-sales-214834130.html",
+   "title": "Apple's Q4 earnings results beat estimates, including iPhone sales",
    "age": "0 days ago"
   },
   {
-   "url": "https://ppc.land/s-p-turns-negative-on-meta-as-2027-ai-spending-forecast-tops-225bn/",
-   "title": "S&P turns negative on Meta as 2027 AI spending forecast tops $225bn",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/aapl-20261102.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://appleinsider.com/articles/26/11/02/apple-beats-wall-street-forecasts-in-first-ternus-led-q4-earnings",
+   "title": "Apple beats Wall Street forecasts in first Ternus-led Q4 earnings",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.marketbeat.com/stocks/NASDAQ/AAPL/earnings/",
+   "title": "Apple (AAPL) Earnings Date and Reports 2026 $AAPL",
+   "age": "95 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/aapl/earnings",
+   "title": "Apple (AAPL) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "95 days ago"
+  },
+  {
+   "url": "https://www.benzinga.com/markets/earnings/26/11/62801967/apple-tops-expectations-in-q4-as-active-installed-base-hits-all-time-high",
+   "title": "Apple Tops Expectations in Q4 as Active Installed Base Hits All-Time High - Apple (NASDAQ:AAPL) - Benzinga",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.thelec.net/news/articleView.html?idxno=14614",
+   "title": "SpaceX-Tesla Merger Could Be Announced by Early December, Barclays Says < IT·Gaming < 기사본문 - The Elec Inc.",
+   "age": "14 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-spacex-merger-could-announced-234757020.html",
+   "title": "Tesla-SpaceX Merger Could Be Announced As Early As Before December AGM, Says Barclays",
+   "age": "19 days ago"
+  },
+  {
+   "url": "https://www.superhero.com.au/news-insights/spacex-tesla-merger-what-it-could-mean-for-shareholders/",
+   "title": "SpaceX Tesla merger: what it could mean for shareholders - Superhero",
    "age": "1 days ago"
   },
   {
-   "url": "https://seekingalpha.com/news/4661912-sp-cuts-meta-outlook-to-negative-over-elevated-capex-and-cash-flow-risks",
-   "title": "S&P cuts Meta outlook to negative over elevated capex and cash flow risks (META:NASDAQ)",
+   "url": "https://tech-insider.org/tesla-spacex-merger-december-6-agm-barclays-2026/",
+   "title": "Tesla-SpaceX Merger Could Land Before Dec. 6 AGM [2026]",
+   "age": "8 days ago"
+  },
+  {
+   "url": "https://stocktwits.com/news-articles/markets/equity/tesla-space-x-merger-could-be-announced-as-early-as-before-december-agm-says-barclays/cZxQdGeRBqr",
+   "title": "Tesla-SpaceX Merger Could Be Announced As Early As Before December AGM, Says Barclays",
+   "age": "19 days ago"
+  },
+  {
+   "url": "https://purepowerpicks.com/tesla-spacex-merger/",
+   "title": "Tesla SpaceX Merger: Odds, Timeline and Share Math (2026)",
    "age": "0 days ago"
   },
   {
-   "url": "https://finimize.com/content/sp-turns-more-cautious-on-metas-ai-spending-plans",
-   "title": "S&P Turns More Cautious On Meta’s AI Spending Plans - Finimize",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.briefs.co/news/s-p-turns-meta-s-outlook-negative-as-ai-spend-lifts-debt-met/",
-   "title": "S&P Cuts Meta Outlook as AI Spending Raises Risk",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://en.sedaily.com/finance/2026/11/02/metas-credit-outlook-cut-to-negative-on-ai-spending",
-   "title": "Meta's Credit Outlook Cut to Negative on AI Spending - Seoul Economic Daily",
+   "url": "https://www.archyde.com/tesla-and-spacex-explore-potential-merger-to-form-tech-conglomerate/",
+   "title": "Tesla and SpaceX Explore Potential Merger to Form Tech Conglomerate",
    "age": "0 days ago"
   },
   {
-   "url": "https://srnnews.com/sp-global-revises-outlook-on-meta-to-negative-on-cashflow-concerns/",
-   "title": "S&P Global revises Meta's outlook to 'negative' on AI spending, cash flow concerns - SRN News",
+   "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262220069-spacex-tesla-merger-barclays-potential-progress-tradingkey",
+   "title": "Will SpaceX Merge With Tesla? Barclays Sees Progress This Year as AI Integration Proves Key",
+   "age": "17 days ago"
+  },
+  {
+   "url": "https://shattered.io/tesla-spacex-merger-hinges-50-percent-all-tesla-shares-vote-2026/",
+   "title": "Tesla-SpaceX Merger Hinges on 50% of Shares [2026]",
    "age": "2 days ago"
   },
   {
-   "url": "https://finance.biggo.com/news/39f48773-5730-47fe-a8a9-babe78a2a634",
-   "title": "S&P Cuts Meta Credit Rating Outlook to 'Negative' on AI Investment Burden, Warns on Cash Flow — BigGo Finance",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.foreignpolicyjournal.com/2026/11/02/70-billion-forecasting-gap-puts-meta-platforms-nasdaq-meta-at-the-center-of-an-unprecedented-ai-spending-debate/",
-   "title": "$70 Billion Forecasting Gap Puts Meta Platforms (NASDAQ: META) At The Center Of An Unprecedented AI Spending Debate",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.ocbc.com/group/investors/financials.page",
-   "title": "Financial Results Overview - Singapore",
-   "age": "1347 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
-   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "88 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
-   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
-   "age": "88 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/analysed-singapore-3-big-banks-233000885.html",
-   "title": "We Analysed Singapore’s 3 Big Banks. Here’s Which One Looks Strongest",
-   "age": "52 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/singapore-banks-october-2026-selloff/",
-   "title": "DBS, OCBC & UOB: October 2026 Bank Selloff — Buy the Dip or Wait for Q3 Results? - The Kopi Notes",
-   "age": "23 days ago"
-  },
-  {
-   "url": "https://sgstocksinvesting.com/singapore-bank-stocks-dbs-ocbc-uob-investment-outlook-2026/",
-   "title": "Should Investors Still Buy Singapore Bank Stocks? DBS, OCBC and UOB Face a New Earnings Test",
-   "age": "83 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-faces-earnings-test-after-great-eastern-profit-slump/70444136",
-   "title": "OCBC stock faces earnings test after Great Eastern profit slump",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.itiger.com/hans/news/1184208770",
-   "title": "As DBS, OCBC and UOB Unveil Q4 Earnings, Investors Eye More Share Buybacks and Special Dividends",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hant/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hans/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
-  },
-  {
-   "url": "https://www.cnbc.com/2026/10/29/aws-q3-earnings-report-2026.html",
-   "title": "AWS Q3 earnings report 2026",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.computing.co.uk/news/2026/aws-and-azure-growth-accelerates",
-   "title": "AWS and Azure growth accelerates as cloud giants post strong results",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.midgardfinance.com/research/cloud/",
-   "title": "AWS vs Azure vs Google Cloud: Revenue and Market Share",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.panabee.com/news/amazon-earnings-q3-2026-report",
-   "title": "Amazon Earnings Q3 2026 - Report",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://tech-insider.org/au/google-cloud-103-percent-azure-aws-q3-2026-australia/",
-   "title": "Google Cloud Revenue Up 103%: Azure, AWS Trail [2026]",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.stocktitan.net/articles/amazon-q3-2026-earnings-aws-cloud-growth",
-   "title": "Amazon Earnings: AWS Is Growing as Fast as in 2021, at Nearly Three Times the Size",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://betafinch.com/blog/cloud-earnings-guidance-leaders-2026",
-   "title": "Cloud Earnings Guidance Leaders 2026: AWS, Azure, and GCP",
-   "age": "180 days ago"
-  },
-  {
-   "url": "https://windowsforum.com/news/aws-azure-and-google-cloud-q3-2026-revenue-growth-rates-and-why-they-arent-directly-comparable.450256/",
-   "title": "AWS, Azure and Google Cloud Q3 2026 Revenue: Growth Rates and Why They Aren’t Directly Comparable",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://vanderbiltreport.com/amazon-earnings-q3-2026-aws-growth/",
-   "title": "Amazon Earnings Q3 2026: AWS +39%, EPS Miss, Shares Fall",
-   "age": "2 days ago"
+   "url": "https://www.tradinghours.com/markets/sgx",
+   "title": "SGX Market Hours & Holidays 2026 - 2027 - TradingHours.com",
+   "age": "154 days ago"
   },
   {
    "url": "https://joeychoy.beehiiv.com/p/november-2026-newsletter",
    "title": "November 2026 Newsletter",
    "age": "0 days ago"
+  },
+  {
+   "url": "https://www.syfe.com/magazine/singapore-stock-market-guide/",
+   "title": "Singapore Stock Market: A Beginner's Guide to Investing on the SGX",
+   "age": "6 days ago"
+  },
+  {
+   "url": "https://sias.org.sg/latest-updates/banks-continued-to-power-the-sti-to-new-high-but-gains-not-broad-based/",
+   "title": "Banks continued to power the STI to new high, but gains not broad-based",
+   "age": "147 days ago"
   },
   {
    "url": "https://growbeansprout.com/quote/sti",
@@ -316,33 +170,113 @@
    "age": null
   },
   {
-   "url": "https://tradingeconomics.com/singapore/stock-market",
-   "title": "stock market",
+   "url": "https://www.business-standard.com/article/news-cm/singapore-market-ends-higher-122111001457_1.html",
+   "title": "Wednesday, December 17, 2025 | 08:53 PM ISTहिंदी में पढें",
    "age": null
   },
   {
-   "url": "https://www.business-standard.com/amp/article/news-cm/singapore-market-ends-lower-122112500728_1.html",
-   "title": "Singapore Market ends lower",
-   "age": null
-  },
-  {
-   "url": "https://tradingeconomics.com/singapore/stock-market/forecast",
-   "title": "tradingeconomics.com",
-   "age": null
-  },
-  {
-   "url": "https://www.business-standard.com/article/news-cm/singapore-market-ends-lower-122120600850_1.html",
-   "title": "Saturday, January 03, 2026 | 10:58 AM ISTहिंदी में पढें",
-   "age": null
-  },
-  {
-   "url": "https://www.business-standard.com/markets/capital-market-news/singapore-market-falls-0-83-124022101005_1.html",
-   "title": "Tuesday, January 13, 2026 | 11:28 AM ISTहिंदी में पढें",
+   "url": "https://www.business-standard.com/article/news-cm/singapore-market-extends-gain-122111400760_1.html",
+   "title": "Friday, January 02, 2026 | 03:16 AM ISTहिंदी में पढें",
    "age": null
   },
   {
    "url": "https://www.business-standard.com/article/news-cm/singapore-market-ends-lower-122112300902_1.html",
    "title": "Friday, December 26, 2025 | 10:52 AM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://www.pymnts.com/cpi-posts/meta-faces-uk-antitrust-investigation-over-publisher-content-and-ai-terms/",
+   "title": "Meta Faces UK Antitrust Investigation Over Publisher Content and AI Terms",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://thenextweb.com/news/cma-meta-investigation-publishers-ai-terms",
+   "title": "UK watchdog opens an investigation into Meta’s AI terms for publishers",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.euronews.com/2026/10/30/uk-probes-meta-over-exploitative-new-terms-for-media-as-global-pushback-mounts",
+   "title": "UK probes Meta over 'exploitative' new terms for media as global pushback mounts",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://rallies.ai/news/uks-cma-opens-investigation-into-metas-commercial-terms-d30f729d75923982",
+   "title": "UK's CMA opens investigation into Meta's terms for publishers and advertisers - META News",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://daily.dev/posts/uk-watchdog-opens-an-investigation-into-meta-s-ai-terms-for-publishers-fpuj9k2kb",
+   "title": "UK watchdog opens an investigation into Meta’s AI terms for publishers",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://blog.pebblous.ai/blog/meta-commercial-terms-cma-investigation/en/",
+   "title": "Meta's Terms on Publisher Content Draw a UK Antitrust Investigation",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Artificial_intelligence_safety_institute",
+   "title": "Artificial intelligence safety institute",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Communications_and_Digital_Committee",
+   "title": "Communications and Digital Committee",
+   "age": null
+  },
+  {
+   "url": "https://www.resultsense.com/news/2026-11-02-cma-meta-investigation-publisher-terms/",
+   "title": "CMA opens Competition Act case into Meta's publisher terms",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
+   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
+   "age": "89 days ago"
+  },
+  {
+   "url": "https://www.ocbc.com/group/investors/financials.page",
+   "title": "Financial Results Overview",
+   "age": "1347 days ago"
+  },
+  {
+   "url": "https://financialhorse.com/why-is-ocbc-share-price-beating-dbs-and-uob-bank-in-2026-which-is-the-best-bank-stock-to-buy-today/",
+   "title": "Why is OCBC share price beating DBS and UOB Bank in 2026? Which is the best bank stock to buy today?",
+   "age": "156 days ago"
+  },
+  {
+   "url": "https://mysweetretirement.com/dbs-vs-uob-vs-ocbc/",
+   "title": "DBS vs UOB vs OCBC: Q1 2026 Results & Share Price Analysis",
+   "age": "56 days ago"
+  },
+  {
+   "url": "https://thekopinotes.com/articles/news/dbs-ocbc-uob-q2-2026-results/",
+   "title": "DBS, OCBC, UOB Q2 2026 Results: Record Profits (2026)",
+   "age": "83 days ago"
+  },
+  {
+   "url": "https://thekopinotes.com/articles/news/singapore-banks-october-2026-selloff/",
+   "title": "DBS, OCBC & UOB: October 2026 Bank Selloff — Buy the Dip or Wait for Q3 Results? - The Kopi Notes",
+   "age": "23 days ago"
+  },
+  {
+   "url": "https://sgstocksinvesting.com/singapore-bank-stocks-dbs-ocbc-uob-investment-outlook-2026/",
+   "title": "Should Investors Still Buy Singapore Bank Stocks? DBS, OCBC and UOB Face a New Earnings Test",
+   "age": "83 days ago"
+  },
+  {
+   "url": "https://www.easyglobalbanking.com/singapore-banking/dbs-vs-ocbc-vs-uob-2026-results/",
+   "title": "DBS vs OCBC vs UOB: Best Bank for Clients in 2026?",
+   "age": "24 days ago"
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/1184208770",
+   "title": "As DBS, OCBC and UOB Unveil Q4 Earnings, Investors Eye More Share Buybacks and Special Dividends",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hant/news/1189208007",
+   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
    "age": null
   }
  ],
@@ -352,79 +286,72 @@
     "AAPL"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-02T13:00:00Z",
-   "headline": "Earnings from Apple, Palantir, and jobs report data: What to Watch",
-   "url": "https://finance.yahoo.com/video/earnings-apple-palantir-jobs-report-130000506.html"
+   "pubDate": "2026-11-02T18:50:56Z",
+   "headline": "Apple Fiscal 2027 Results Could Miss Street Views Amid iPhone Growth Slowdown, Oppenheimer Says",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-fiscal-2027-results-could-185056840.html"
   },
   {
    "symbols": [
-    "MSFT"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-02T12:45:00Z",
-   "headline": "Clarivate to Bring Trusted Trademark Data into Microsoft Copilot Through IPOne",
-   "url": "https://finance.yahoo.com/technology/ai/articles/clarivate-bring-trusted-trademark-data-124500677.html"
-  },
-  {
-   "symbols": [
-    "AAPL",
-    "MSFT",
-    "NVDA",
-    "GOOGL"
+    "BRK-B"
    ],
    "source": "fool.com",
-   "pubDate": "2026-11-02T12:31:00Z",
-   "headline": "Meet the Spectacular Vanguard ETF With 44.6% of Its Portfolio Parked in Nvidia, Alphabet, Apple, and Microsoft",
-   "url": "https://www.fool.com/investing/2026/11/02/meet-vanguard-etf-446-portfolio-nvidia-alphabet/"
+   "pubDate": "2026-11-02T18:45:30Z",
+   "headline": "1 of Greg Abel's Favorite Stocks and a Top 5 Berkshire Hathaway Holding Just Suffered a Devastating Decline",
+   "url": "https://www.fool.com/investing/2026/11/02/1-of-greg-abels-favorite-stocks-and-a-top-5-berksh/"
   },
   {
    "symbols": [
-    "AAPL",
-    "MSFT",
-    "AMZN",
-    "GOOGL"
+    "NVDA"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-02T12:30:00Z",
-   "headline": "Cloud Numbers Are In; This Week the Spotlight Moves to Phones, Laptops and Chips",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/cloud-numbers-week-spotlight-moves-123000890.html"
+   "pubDate": "2026-11-02T18:44:24Z",
+   "headline": "XMax Doubles Down on Nvidia to Dominate the AI Arms Race",
+   "url": "https://finance.yahoo.com/technology/ai/articles/xmax-doubles-down-nvidia-dominate-184424405.html"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "source": "axios.com",
+   "pubDate": "2026-11-02T18:39:58Z",
+   "headline": "Netflix hires Darshan Kantak to lead ads platform",
+   "url": "https://www.axios.com/2026/11/02/netflix-darshan-kantak-ads-platform"
+  },
+  {
+   "symbols": [
+    "AAPL"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-02T18:37:43Z",
+   "headline": "Is Apple the right anti-AI stock for investors to 'hide' in?",
+   "url": "https://finance.yahoo.com/video/is-apple-the-right-anti-ai-stock-for-investors-to-hide-in-183743155.html"
   },
   {
    "symbols": [
     "META"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-02T12:24:57Z",
-   "headline": "Meta's AI Spending Push Triggers Negative S&P Outlook",
-   "url": "https://finance.yahoo.com/technology/ai/articles/metas-ai-spending-push-triggers-122457767.html"
+   "pubDate": "2026-11-02T18:36:44Z",
+   "headline": "Meta Stocks Edge Lower 0.06% With UK Inquiry Challenging Its AI Content Terms",
+   "url": "https://finance.yahoo.com/technology/ai/articles/meta-stocks-edge-lower-0-183644685.html"
   },
   {
    "symbols": [
-    "AMZN"
+    "TSLA"
    ],
-   "source": "247wallst.com",
-   "pubDate": "2026-11-02T12:15:10Z",
-   "headline": "AWS Holds the Scale Crown, Azure Leads the Velocity Charge",
-   "url": "https://247wallst.com/investing/2026/11/02/aws-holds-the-scale-crown-azure-leads-the-velocity-charge/"
+   "source": "stocktwits.com",
+   "pubDate": "2026-11-02T18:31:18Z",
+   "headline": "Black Cautions Tesla Shareholders On SpaceX Merger Risks: Says Marvell-Lumentum Deal Reaction Offers Early Warning",
+   "url": "https://stocktwits.com/news-articles/markets/equity/black-cautions-tesla-shareholders-on-space-x-merger-risks-says-marvell-lumentum-deal-reaction-offers-early-warning/cNGa3WER9Po"
   },
   {
    "symbols": [
-    "AMZN",
-    "GOOGL"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-02T12:00:00Z",
-   "headline": "Is this the dot-com bubble again? Nearly $1 trillion gone",
-   "url": "https://finance.yahoo.com/video/dot-com-bubble-again-nearly-120000826.html"
-  },
-  {
-   "symbols": [
-    "META"
+    "AAPL"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-02T12:00:00Z",
-   "headline": "Capital Power reports third quarter 2026 results",
-   "url": "https://finance.yahoo.com/energy/articles/capital-power-reports-third-quarter-120000145.html"
+   "pubDate": "2026-11-02T18:30:00Z",
+   "headline": "Apple Q4 earnings live: iPhone 18 sales in the spotlight",
+   "url": "https://finance.yahoo.com/markets/stocks/article/apple-q4-earnings-live-iphone-18-sales-in-the-spotlight-183000820.html"
   },
   {
    "symbols": [
@@ -493,12 +420,12 @@
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 41996,
-  "output": 2359,
+  "input": 41215,
+  "output": 1449,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1038
+  "costUsd": 0.0985
  },
- "createdAt": "2026-11-02T13:01:17.279Z"
+ "createdAt": "2026-11-02T23:59:30.051Z"
 }
