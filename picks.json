@@ -1,57 +1,86 @@
 {
- "market_summary": "Tech earnings are driving divergence in US large caps: Apple's Q4 beat gave a brief lift but the stock still slipped on the day as the print was largely priced in, while Tesla keeps grinding higher on persistent SpaceX-merger speculation and a cluster of analyst upgrades. Meta is under fresh UK regulatory pressure over AI content terms, adding to a rough month for the stock. In Singapore, the STI has pulled back 1.4% as DBS, OCBC and UOB trade down hard (heavy volume) ahead of Q3 results due Nov 4-6, a binary setup that could go either way. Overall US indices (SPY/QQQ) are soft from highs, reflecting broader risk-off tone even as mega-cap earnings season delivers mixed signals.",
+ "market_summary": "A sharp AI-spending-driven tech selloff hit US markets on Nov 2-3, 2026 (Nasdaq -2.9%, worst day in ~5 months) after Apple's weak margin guidance and Amazon's EPS miss overshadowed otherwise solid revenue numbers; Microsoft was a relative bright spot after beating on Azure/AI strength. In Singapore, the STI is down 1.4% in October with the three major banks (>50% of index weight) under pressure from bond-yield-driven mark-to-market losses ahead of Q3 results due Nov 4-6, UOB seen as least exposed and OCBC most exposed. Breadth is narrow and volatility elevated across both markets; near-term price action will be dominated by the SG bank earnings cluster this week and lingering AI-capex anxiety in US mega-caps.",
  "picks": [
   {
-   "symbol": "TSLA",
+   "symbol": "MSFT",
    "stance": "long",
    "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Three separate sell-side upgrades in the last 10 days (Barclays, CLSA, BNP Paribas) have accompanied an 9% 1-month rally, and both Tesla and SpaceX have now formed independent board committees to formally explore a merger. This is a concrete process step (not just rumor), and speculation of this magnitude tends to keep a bid under the stock until there's clarity one way or the other. Price is already above both 50- and 200-day MAs, confirming the momentum shift.",
-   "news": "Tesla-SpaceX merger talks continue: both companies formed special committees of independent directors to explore a deal as of Nov 2, 2026; Barclays sees a possible announcement by year-end. Multiple brokers upgraded the stock Oct 22-26.",
-   "risks": "If the committees conclude there's no viable deal, or if talks drag on for months without progress, the speculative premium could unwind quickly. Valuation is already rich (45% annualized vol, beta 1.8), so any disappointment could trigger an outsized pullback.",
+   "thesis": "Microsoft beat on both lines with strong Azure/AI monetization and a one-off $3.2B Anthropic stake gain, yet the stock has been dragged down with the broader Nasdaq selloff (-2.8% on Nov 2-3) despite fundamentals being the sector's strongest print this earnings season. Analyst coverage is almost unanimously bullish (52 buy/5 hold/0 sell) with ~25% implied upside to consensus target, suggesting the recent pullback is sentiment-driven rather than fundamental.",
+   "news": "Microsoft beat on top and bottom lines Oct 30 2026 with strong Azure growth and a $3.2B Anthropic stake gain plus lower-than-expected restructuring costs; shares still fell with the broader tech rout on Nov 2-3.",
+   "risks": "If AI capex concerns persist and investors rotate out of all mega-cap tech indiscriminately regardless of fundamentals, MSFT could keep drifting lower with the index; a weak Azure guide in the next quarter would also undercut the thesis.",
    "source_urls": [
-    "https://purepowerpicks.com/tesla-spacex-merger/"
+    "https://www.cnbc.com/2026/07/29/microsoft-msft-q4-earnings-report-2026.html",
+    "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-2-132700821.html"
    ],
-   "priceAtPick": 403.82
-  },
-  {
-   "symbol": "META",
-   "stance": "short",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "UK's CMA opened a formal competition investigation (Oct 30) into Meta's AI content-licensing terms for publishers, forcing Meta to pause a planned Nov 20 rollout. This adds a concrete regulatory overhang right as the stock is already down almost 17% in a month and 22% off its 52-week high, with price trading well below both 50- and 200-day MAs. Regulatory delays to AI monetization plans are a tangible negative catalyst, not just sentiment.",
-   "news": "UK CMA opened a competition investigation into Meta's AI content terms for publishers on Oct 30, 2026; Meta paused the Nov 20 implementation as a result.",
-   "risks": "Analyst consensus still implies ~40% upside and the stock has already sold off sharply, so a lot of bad news may be priced in; a quick resolution or earnings beat could spark a sharp reversal higher.",
-   "source_urls": [
-    "https://thenextweb.com/news/cma-meta-investigation-publishers-ai-terms"
-   ],
-   "priceAtPick": 606.73
-  },
-  {
-   "symbol": "D05.SI",
-   "stance": "long",
-   "conviction": "low",
-   "horizon": "weeks",
-   "thesis": "DBS has pulled back 7% in a month on elevated volume (2.2x normal) purely ahead of its Nov 5 earnings release, with no company-specific negative news reported. Analyst consensus remains constructive (10 buy/6 hold/1 sell, ~10.5% implied upside), and the stock is still up 33% over the past year and trading above its 200-day MA, suggesting the recent drop is more sector-wide de-risking than a fundamental deterioration.",
-   "news": "Singapore banks fall ahead of Q3 earnings; DBS reports Nov 5, OCBC Nov 6, UOB mid-November, amid a 1.4% STI pullback (Nov 2, 2026).",
-   "risks": "This is a binary, earnings-driven trade: a Q3 miss or soft NIM guidance (rates backdrop) could extend the decline rather than reverse it. Typical results-day move is only ~1.9%, so the thesis plays out gradually, not immediately.",
-   "source_urls": [
-    "https://www.businesstimes.com.sg/companies-markets/singapore-banks-fall-ahead-earnings-release-ocbc-leads-bank-losses-sti-slides-1-4"
-   ],
-   "priceAtPick": 71.71
+   "priceAtPick": 507.12
   },
   {
    "symbol": "GOOGL",
    "stance": "short",
-   "conviction": "low",
+   "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Alphabet has sharply underperformed peers, down almost 19% in a month and nearly 31% off its 52-week high, with price well below both 50- and 200-day MAs. A sell-side downgrade (Citizens, Market Outperform to Market Perform, Oct 29) adds to the negative momentum, and there's no fresh positive catalyst in the available news to counter the trend.",
-   "news": "Citizens downgraded Alphabet from Market Outperform to Market Perform on Oct 29, 2026, after the stock had already fallen roughly 14% since.",
-   "risks": "The stock is already deeply oversold and the broad analyst base still models ~46% upside to target, so this could easily be a bottoming process rather than further downside; a bounce on any AI/ad-revenue news could quickly invalidate the short.",
+   "thesis": "Alphabet is in a severe, accelerating downtrend: -18.8% over 1 month and -26.1% over 3 months, trading 17-18% below both its 50- and 200-day moving averages. A recent analyst downgrade (Citizens, Oct 29) reinforces the negative momentum shift, and the stock is caught in the same AI-capex anxiety hitting the whole sector, with no fresh positive catalyst in the news flow to counter it.",
+   "news": "Citizens downgraded GOOGL from Market Outperform to Market Perform on Oct 29 2026; broader Nasdaq tumbled 2.9% on Nov 2 amid AI spending concerns pulling down high-multiple tech names.",
+   "risks": "Stock is already down a lot and could be oversold/due for a bounce; any reassurance on AI capex ROI or a strong cloud/ad number at next earnings could trigger a sharp short squeeze given still-high consensus price targets (45.7% implied upside).",
    "source_urls": [
-    "https://thenextweb.com/news/cma-meta-investigation-publishers-ai-terms"
+    "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-2-132700821.html"
    ],
    "priceAtPick": 278.99
+  },
+  {
+   "symbol": "U11.SI",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "UOB reports Q3 results Nov 4 and is explicitly flagged as the least exposed of the three Singapore banks to bond-yield-driven mark-to-market losses (small SGD7bn trading book, only SGD50-80m estimated hit), while its stock has already priced in less damage than peers (-6% 1m vs OCBC's -12.5%). This relative resilience combined with a lower beta (0.91) makes it the safer way to play a potential stabilization in SG bank sentiment post-earnings.",
+   "news": "UOB reports Nov 4 2026; flagged by Minichart (Oct 23) as least exposed to bond-yield-driven MTM losses versus DBS and OCBC.",
+   "risks": "A broad macro shock to Singapore banks (further bond yield spikes, NIM compression) would hit all three regardless of relative positioning; a results-day move historically averages 2.7%, so a surprise miss could still hurt.",
+   "source_urls": [
+    "https://www.minichart.com.sg/2026/10/23/singapore-banks-in-focus-as-3q-results-loom-and-nims-bottom/"
+   ],
+   "priceAtPick": 40.46
+  },
+  {
+   "symbol": "O39.SI",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "OCBC reports Nov 6 with net profit expected to fall sequentially to SGD1.9-2.0bn from SGD2.2bn on lower trading income, and the stock has already fallen the most among SG banks this month (-12.5% 1m, -13.5% from 52w high), reflecting the heaviest mark-to-market exposure from the bond yield surge. Weak guidance into the print plus ongoing STI tech/financial weakness (STI total returns -5.2% in October) support further downside into and after results.",
+   "news": "OCBC reports Nov 6 2026 with expected weaker q/q profit; Minichart (Oct 23) frames OCBC earnings as 'expected marginally weaker on lower trading income' within a sector under bond-yield pressure.",
+   "risks": "Banks often sell off into earnings and rally on 'less bad than feared' results; OCBC's -12.5% monthly decline may already fully discount the earnings miss, risking a relief rally post-print.",
+   "source_urls": [
+    "https://www.minichart.com.sg/2026/10/23/singapore-banks-in-focus-as-3q-results-loom-and-nims-bottom/",
+    "https://www.businesstimes.com.sg/companies-markets/stis-total-returns-slide-5-2-october-tech-index-plunges-17-3"
+   ],
+   "priceAtPick": 27.91
+  },
+  {
+   "symbol": "BRK-B",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "months",
+   "thesis": "Berkshire is acting as a defensive haven amid the tech-led volatility spike, up 2.5% on Nov 2-3 while the Nasdaq fell 2.9%, and is near its 52-week high with low volatility (14.9%) and a low beta (0.3). As investors rotate out of high-multiple AI names on spending-discipline concerns, Berkshire's diversified, value-oriented profile should continue to benefit on a relative basis.",
+   "news": "Berkshire rose 2.5% on Nov 2-3 2026 even as the broader Nasdaq tumbled 2.9% in its worst day in nearly five months amid the tech/AI selloff.",
+   "risks": "If the market selloff proves short-lived and risk appetite snaps back toward high-beta tech, Berkshire's relative outperformance could stall or reverse as money rotates back into growth names; the stock trades near its 52-week high with limited near-term analyst upside (-0.1% implied).",
+   "source_urls": [
+    "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-2-132700821.html"
+   ],
+   "priceAtPick": 556.11
+  },
+  {
+   "symbol": "QQQ",
+   "stance": "short",
+   "conviction": "low",
+   "horizon": "days",
+   "thesis": "The Nasdaq-100 just posted its worst single day in nearly five months on AI-capex concerns, with Apple and Amazon both disappointing and dragging the index down; QQQ is trading 6% below its 50-day moving average with elevated relative volume (1.39x), suggesting the selloff has momentum that could persist in the very near term as more mega-caps (including Nvidia on Nov 17) report.",
+   "news": "Nasdaq fell 2.9% (747.73 points) on Nov 2 2026, its worst day in nearly five months, driven by AAPL margin guidance disappointment and AMZN's earnings miss.",
+   "risks": "This is a short-term, event-driven trade; a quick reversal/dip-buying rally (common after single large down days) or a strong Nvidia-adjacent catalyst could reverse the move fast, and QQQ is still up 7.8% over the past year, so the broader trend remains intact.",
+   "source_urls": [
+    "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-2-132700821.html",
+    "https://www.cnbc.com/2026/11/03/apple-earnings-analysts-margin-outlook.html"
+   ],
+   "priceAtPick": 681.09
   }
  ],
  "sources": [
@@ -61,240 +90,245 @@
    "age": null
   },
   {
+   "url": "https://www.bloomberg.com/news/videos/2026-11-03/apple-slides-after-earnings-video",
+   "title": "Watch Apple Slides After Earnings - Bloomberg",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/a8-kex991q3202606272026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.cnbc.com/2026/11/03/apple-earnings-analysts-margin-outlook.html",
+   "title": "Apple earnings beat, but margin outlook weighs on stock",
+   "age": "0 days ago"
+  },
+  {
    "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000005/a8-kex991q1202612272025.htm",
    "title": "Apple Inc. - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000011/a8-kex991q2202603282026.htm",
-   "title": "Apple Inc. - Form 8-K - FY2026",
+   "url": "https://www.cnbc.com/2026/11/02/apple-aapl-q4-2026-earnings-live-updates.html",
+   "title": "Apple's stock drops on weak margin forecast in Ternus’ first earnings report",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000013/aapl-20260328.htm",
+   "title": "Apple Inc. - Form 10-Q - FY2026",
    "age": null
   },
   {
-   "url": "https://finance.yahoo.com/video/apples-q4-earnings-results-beat-estimates-including-iphone-sales-214834130.html",
-   "title": "Apple's Q4 earnings results beat estimates, including iPhone sales",
+   "url": "https://www.tradingpedia.com/2026/11/03/apple-shares-fall-as-margin-outlook-china-eclipse-beat/",
+   "title": "Apple Shares Fall as Margin Outlook, China Eclipse Beat",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/aapl-20261102.htm",
-   "title": "Apple Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://appleinsider.com/articles/26/11/02/apple-beats-wall-street-forecasts-in-first-ternus-led-q4-earnings",
-   "title": "Apple beats Wall Street forecasts in first Ternus-led Q4 earnings",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.marketbeat.com/stocks/NASDAQ/AAPL/earnings/",
-   "title": "Apple (AAPL) Earnings Date and Reports 2026 $AAPL",
-   "age": "95 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/aapl/earnings",
-   "title": "Apple (AAPL) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "95 days ago"
-  },
-  {
-   "url": "https://www.benzinga.com/markets/earnings/26/11/62801967/apple-tops-expectations-in-q4-as-active-installed-base-hits-all-time-high",
-   "title": "Apple Tops Expectations in Q4 as Active Installed Base Hits All-Time High - Apple (NASDAQ:AAPL) - Benzinga",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.thelec.net/news/articleView.html?idxno=14614",
-   "title": "SpaceX-Tesla Merger Could Be Announced by Early December, Barclays Says < IT·Gaming < 기사본문 - The Elec Inc.",
-   "age": "14 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/tesla-spacex-merger-could-announced-234757020.html",
-   "title": "Tesla-SpaceX Merger Could Be Announced As Early As Before December AGM, Says Barclays",
-   "age": "19 days ago"
-  },
-  {
-   "url": "https://www.superhero.com.au/news-insights/spacex-tesla-merger-what-it-could-mean-for-shareholders/",
-   "title": "SpaceX Tesla merger: what it could mean for shareholders - Superhero",
+   "url": "https://www.ebc.com/forex/apple-q4-2026-earnings-preview-revenue-margins",
+   "title": "Apple Earnings Preview: Can $113B Revenue Offset a Margin Squeeze?",
    "age": "1 days ago"
   },
   {
-   "url": "https://tech-insider.org/tesla-spacex-merger-december-6-agm-barclays-2026/",
-   "title": "Tesla-SpaceX Merger Could Land Before Dec. 6 AGM [2026]",
-   "age": "8 days ago"
-  },
-  {
-   "url": "https://stocktwits.com/news-articles/markets/equity/tesla-space-x-merger-could-be-announced-as-early-as-before-december-agm-says-barclays/cZxQdGeRBqr",
-   "title": "Tesla-SpaceX Merger Could Be Announced As Early As Before December AGM, Says Barclays",
-   "age": "19 days ago"
-  },
-  {
-   "url": "https://purepowerpicks.com/tesla-spacex-merger/",
-   "title": "Tesla SpaceX Merger: Odds, Timeline and Share Math (2026)",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.archyde.com/tesla-and-spacex-explore-potential-merger-to-form-tech-conglomerate/",
-   "title": "Tesla and SpaceX Explore Potential Merger to Form Tech Conglomerate",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.tradingkey.com/analysis/stocks/us-stocks/262220069-spacex-tesla-merger-barclays-potential-progress-tradingkey",
-   "title": "Will SpaceX Merge With Tesla? Barclays Sees Progress This Year as AI Integration Proves Key",
-   "age": "17 days ago"
-  },
-  {
-   "url": "https://shattered.io/tesla-spacex-merger-hinges-50-percent-all-tesla-shares-vote-2026/",
-   "title": "Tesla-SpaceX Merger Hinges on 50% of Shares [2026]",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.tradinghours.com/markets/sgx",
-   "title": "SGX Market Hours & Holidays 2026 - 2027 - TradingHours.com",
-   "age": "154 days ago"
-  },
-  {
-   "url": "https://joeychoy.beehiiv.com/p/november-2026-newsletter",
-   "title": "November 2026 Newsletter",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.syfe.com/magazine/singapore-stock-market-guide/",
-   "title": "Singapore Stock Market: A Beginner's Guide to Investing on the SGX",
-   "age": "6 days ago"
-  },
-  {
-   "url": "https://sias.org.sg/latest-updates/banks-continued-to-power-the-sti-to-new-high-but-gains-not-broad-based/",
-   "title": "Banks continued to power the STI to new high, but gains not broad-based",
-   "age": "147 days ago"
-  },
-  {
-   "url": "https://growbeansprout.com/quote/sti",
-   "title": "STI Index: Share Price, Analysis, News, Dividends - Growbeansprout.com",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.business-standard.com/article/news-cm/singapore-market-ends-lower-122112500728_1.html",
-   "title": "Friday, January 02, 2026 | 09:33 AM ISTहिंदी में पढें",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000789019/000119312526427876/d62902dars.pdf",
+   "title": "MICROSOFT CORP - Form ARS - FY2026",
    "age": null
   },
   {
-   "url": "https://www.business-standard.com/article/news-cm/singapore-market-ends-higher-122111001457_1.html",
-   "title": "Wednesday, December 17, 2025 | 08:53 PM ISTहिंदी में पढें",
+   "url": "https://www.geekwire.com/2026/microsoft-earnings-preview-employee-buyouts-ai-spending-and-a-new-financial-scorecard/",
+   "title": "Microsoft earnings preview: Employee buyouts, AI spending and a new financial scorecard",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/789019/000119312526027198/msft-ex99_1.htm",
+   "title": "MICROSOFT CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.business-standard.com/article/news-cm/singapore-market-extends-gain-122111400760_1.html",
-   "title": "Friday, January 02, 2026 | 03:16 AM ISTहिंदी में पढें",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000789019/000119312526191457/msft-ex99_1.htm",
+   "title": "MICROSOFT CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.business-standard.com/article/news-cm/singapore-market-ends-lower-122112300902_1.html",
-   "title": "Friday, December 26, 2025 | 10:52 AM ISTहिंदी में पढें",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000789019/000119312526436149/msft-ex99_1.htm",
+   "title": "MICROSOFT CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.pymnts.com/cpi-posts/meta-faces-uk-antitrust-investigation-over-publisher-content-and-ai-terms/",
-   "title": "Meta Faces UK Antitrust Investigation Over Publisher Content and AI Terms",
-   "age": "1 days ago"
+   "url": "https://www.cnbc.com/2026/07/29/microsoft-msft-q4-earnings-report-2026.html",
+   "title": "Microsoft (MSFT) Q4 earnings report 2026",
+   "age": "88 days ago"
   },
   {
-   "url": "https://thenextweb.com/news/cma-meta-investigation-publishers-ai-terms",
-   "title": "UK watchdog opens an investigation into Meta’s AI terms for publishers",
-   "age": "1 days ago"
+   "url": "https://www.microsoft.com/en-us/investor/events/fy-2026/earnings-fy-2026-q3",
+   "title": "Microsoft Fiscal Year 2026 Third Quarter Earnings Conference Call",
+   "age": "4 days ago"
   },
   {
-   "url": "https://www.euronews.com/2026/10/30/uk-probes-meta-over-exploitative-new-terms-for-media-as-global-pushback-mounts",
-   "title": "UK probes Meta over 'exploitative' new terms for media as global pushback mounts",
+   "url": "https://fortune.com/2026/10/28/microsofts-cloud-growth-accelerates-and-so-too-does-the-spending/",
+   "title": "Microsoft’s cloud growth accelerates, and so too does the spending",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://americanbazaaronline.com/2026/10/29/microsoft-profit-surges-to-36-6-billion-as-ai-spending-soars-491039/",
+   "title": "Microsoft profit surges to $36.6 billion as AI spending soars and buyouts loom for 60,000 workers",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-2-132700821.html",
+   "title": "Stock Market News for Nov 2, 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-today-nov-2-144446387.html",
+   "title": "Stock Market Today (Nov. 2, 2026): S&P 500, Nasdaq measure modest gains ahead of Apple earnings, U.S. midterm elections",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.kucoin.com/news/insight/TEM/6ae63205bbcb5200074555ec",
+   "title": "U.S. STOCK MARKET",
    "age": "3 days ago"
   },
   {
-   "url": "https://rallies.ai/news/uks-cma-opens-investigation-into-metas-commercial-terms-d30f729d75923982",
-   "title": "UK's CMA opens investigation into Meta's terms for publishers and advertisers - META News",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://daily.dev/posts/uk-watchdog-opens-an-investigation-into-meta-s-ai-terms-for-publishers-fpuj9k2kb",
-   "title": "UK watchdog opens an investigation into Meta’s AI terms for publishers",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://blog.pebblous.ai/blog/meta-commercial-terms-cma-investigation/en/",
-   "title": "Meta's Terms on Publisher Content Draw a UK Antitrust Investigation",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Artificial_intelligence_safety_institute",
-   "title": "Artificial intelligence safety institute",
-   "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Communications_and_Digital_Committee",
-   "title": "Communications and Digital Committee",
-   "age": null
-  },
-  {
-   "url": "https://www.resultsense.com/news/2026-11-02-cma-meta-investigation-publisher-terms/",
-   "title": "CMA opens Competition Act case into Meta's publisher terms",
+   "url": "https://www.cnbc.com/2026/11/01/stock-market-today-live-updates.html",
+   "title": "Nasdaq starts November with 1% loss as tech melts down again",
    "age": "0 days ago"
   },
   {
-   "url": "https://sg.finance.yahoo.com/news/ocbc-uob-top-dbs-earnings-233000658.html",
-   "title": "Can OCBC and UOB Top DBS’s Earnings Report?",
+   "url": "https://marketchameleon.com/Calendar/Earnings",
+   "title": "Earnings Report Calendar",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.investing.com/news/stock-market-news/weekly-earnings-outlook-megacap-tech-ai-hardware-and-healthcare-in-focus-93CH-4992502",
+   "title": "Weekly earnings outlook: mega-cap tech, AI hardware and healthcare in focus By Investing.com",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.earningswhispers.com/",
+   "title": "Earnings Whispers",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.schwab.com/learn/story/stock-market-update-open",
+   "title": "Stocks Stage Rebound Before Apple, Midterm Vote",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://blofin.com/en/academy/education/tradfi/earnings-this-week-nov-2-6-2026",
+   "title": "Earnings This Week (Nov 2-6, 2026): Apple, AMD, Palantir",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.kiplinger.com/investing/stocks/17494/next-week-earnings-calendar-stocks",
+   "title": "Earnings Calendar and Analysis for This Week (November 2-7)",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://growbeansprout.com/singapore-bank-stocks-oct-2026",
+   "title": "Singapore bank stocks have pulled back. Why we're not adding more for now - Growbeansprout.com",
+   "age": "24 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-10-08/singapore-banks-hot-rally-stutters-over-surging-bond-yields",
+   "title": "Singapore Bank Shares Tumble as Yield Surge Threatens Earnings - Bloomberg",
+   "age": "26 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Bank_of_Singapore",
+   "title": "Bank of Singapore",
+   "age": null
+  },
+  {
+   "url": "https://www.thestar.com.my/business/business-news/2026/10/09/singapore-stocks-lag-asia-recovery-as-banks-extend-losses",
+   "title": "Singapore stocks lag Asia recovery as banks extend losses",
+   "age": "24 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
+   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
    "age": "89 days ago"
   },
   {
-   "url": "https://www.ocbc.com/group/investors/financials.page",
-   "title": "Financial Results Overview",
-   "age": "1347 days ago"
-  },
-  {
-   "url": "https://financialhorse.com/why-is-ocbc-share-price-beating-dbs-and-uob-bank-in-2026-which-is-the-best-bank-stock-to-buy-today/",
-   "title": "Why is OCBC share price beating DBS and UOB Bank in 2026? Which is the best bank stock to buy today?",
-   "age": "156 days ago"
-  },
-  {
-   "url": "https://mysweetretirement.com/dbs-vs-uob-vs-ocbc/",
-   "title": "DBS vs UOB vs OCBC: Q1 2026 Results & Share Price Analysis",
-   "age": "56 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/dbs-ocbc-uob-q2-2026-results/",
-   "title": "DBS, OCBC, UOB Q2 2026 Results: Record Profits (2026)",
-   "age": "83 days ago"
+   "url": "https://www.minichart.com.sg/2026/10/19/singapore-banks-in-focus-as-mark-to-market-losses-weigh-on-earnings/",
+   "title": "Singapore Banks in Focus as Mark-to-Market Losses Weigh on Earnings",
+   "age": "15 days ago"
   },
   {
    "url": "https://thekopinotes.com/articles/news/singapore-banks-october-2026-selloff/",
    "title": "DBS, OCBC & UOB: October 2026 Bank Selloff — Buy the Dip or Wait for Q3 Results? - The Kopi Notes",
-   "age": "23 days ago"
-  },
-  {
-   "url": "https://sgstocksinvesting.com/singapore-bank-stocks-dbs-ocbc-uob-investment-outlook-2026/",
-   "title": "Should Investors Still Buy Singapore Bank Stocks? DBS, OCBC and UOB Face a New Earnings Test",
-   "age": "83 days ago"
-  },
-  {
-   "url": "https://www.easyglobalbanking.com/singapore-banking/dbs-vs-ocbc-vs-uob-2026-results/",
-   "title": "DBS vs OCBC vs UOB: Best Bank for Clients in 2026?",
    "age": "24 days ago"
   },
   {
-   "url": "https://www.itiger.com/hans/news/1184208770",
-   "title": "As DBS, OCBC and UOB Unveil Q4 Earnings, Investors Eye More Share Buybacks and Special Dividends",
+   "url": "https://www.minichart.com.sg/2026/10/23/singapore-banks-in-focus-as-3q-results-loom-and-nims-bottom/",
+   "title": "Singapore Banks in Focus as 3Q Results Loom and NIMs Bottom",
+   "age": "11 days ago"
+  },
+  {
+   "url": "https://theedgemalaysia.com/node/821047",
+   "title": "Bank sell-off casts pall in Southeast Asia, Singapore stocks drop 3%",
+   "age": "26 days ago"
+  },
+  {
+   "url": "https://www.spglobal.com/market-intelligence/en/news-insights/articles/2024/3/singapore-banks-earnings-momentum-to-lose-steam-on-funding-costs-rate-cuts-80863926",
+   "title": "20 Mar, 2024",
    "age": null
   },
   {
-   "url": "https://www.itiger.com/hant/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000075/nvda-20260726.htm",
+   "title": "NVIDIA CORP - Form 10-Q - FY2026",
    "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000019/q4fy26pr.htm",
+   "title": "NVIDIA CORP - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000036/nvda-20260512.htm",
+   "title": "NVIDIA CORP - Form DEF 14A - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
+   "title": "NVIDIA CORP - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/nvda/earnings",
+   "title": "Nvidia (NVDA) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "69 days ago"
+  },
+  {
+   "url": "https://www.earningswhispers.com/stocks/NVDA",
+   "title": "Earnings Whispers",
+   "age": "4148 days ago"
+  },
+  {
+   "url": "https://marketchameleon.com/Overview/NVDA/Earnings/Earnings-Dates/",
+   "title": "NVDA Earnings Dates, Upcoming and Historical Nvidia",
+   "age": "165 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/calendar/earnings?symbol=NVDA",
+   "title": "Company Earnings Calendar - Yahoo Finance",
+   "age": "166 days ago"
+  },
+  {
+   "url": "https://www.investing.com/equities/nvidia-corp-earnings",
+   "title": "NVIDIA (NVDA) Earnings Date & Report - Investing.com",
+   "age": "24 days ago"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 50069,
-  "output": 5080,
+  "input": 51039,
+  "output": 6766,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1525
+  "costUsd": 0.164
  },
- "createdAt": "2026-11-02T23:59:30.051Z"
+ "createdAt": "2026-11-03T13:01:12.728Z"
 }
