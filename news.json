@@ -1,475 +1,444 @@
 {
- "market_summary": "Global markets recovered on US election day (November 5, 2026) amid a \"AI rout\" in recent trading, with major tech stocks including META and AAPL in focus as investors assessed Q3 earnings and AI spending plans. Singapore's key banks UOB and DBS reported Q3 results showing mixed performance amid margin pressures from funding costs. Meta raised $15 billion in bonds on November 3 as part of its massive AI infrastructure spending, joining other Big Tech companies in aggressive debt-funded capex plans. Apple reported record fiscal 2026 revenue of $478.8 billion with Q4 growth of 12%, though margin headwinds from rising memory costs emerged. Markets are navigating between growth opportunities and rising funding costs amid elevated interest rates.",
+ "market_summary": "<cite index=\"21-5,21-6,21-7\">U.S. stocks rebounded on November 4 election day with AI-related sectors leading gains; the S&P 500 rose 0.36%, the Nasdaq gained 0.83%, and the Dow Jones fell 0.38%",
  "items": [
   {
    "symbols": [
     "U11.SI"
    ],
    "date": "2026-11-03",
-   "headline": "UOB Q3 2026 net profit S$1.25b misses forecast despite record fee income",
-   "summary": "<cite index=\"1-2,1-5\">UOB's Q3 net profit of S$1.25 billion fell 15% QoQ and missed the S$1.38 billion consensus forecast</cite>. <cite index=\"4-4\">Net fee income surged 19% year-on-year to a record S$733 million, while wealth management fees reached a record S$258 million</cite>. <cite index=\"3-2\">Trading and investment income slid 33% year-over-year</cite>.",
+   "headline": "UOB Q3 net profit misses analyst forecasts amid weaker trading income and margin pressure",
+   "summary": "<cite index=\"1-5\">UOB reported third-quarter net profit of S$1.25 billion, below the Bloomberg consensus estimate of around S$1.37 billion, representing a shortfall of about 9%</cite>. <cite index=\"1-4\">Shares dropped 5.4% to S$38.27, falling to their lowest level since June 16</cite>.",
    "type": "earnings",
-   "tone": "mixed",
-   "source_url": "https://www.straitstimes.com/business/companies-markets/uobs-q3-net-profit-jumps-182-to-1-25b-as-bank-sets-aside-less-for-bad-loans"
+   "tone": "negative",
+   "source_url": "https://www.investing.com/news/earnings/uob-shares-hit-fourmonth-low-as-q3-profit-misses-analyst-estimates-4997156"
   },
   {
    "symbols": [
-    "META"
+    "Z74.SI"
    ],
    "date": "2026-11-03",
-   "headline": "Meta raises $15 billion in bond sale to fund AI infrastructure expansion",
-   "summary": "<cite index=\"22-9\">Meta raised $15 billion through a five-part US dollar bond offering to finance accelerating investments in AI infrastructure</cite>. <cite index=\"22-14\">Meta expects capital expenditure of $135 billion-$145 billion this year, largely driven by AI investments</cite>. <cite index=\"21-4,21-8\">S&P Global Ratings revised the company's outlook from AA- stable to AA- negative, citing uncertainty about its heavy capex spending and negative free cash flow</cite>.",
+   "headline": "Singtel, NUHS, and Ericsson expand partnership to advance 6G AI healthcare",
+   "summary": "<cite index=\"11-1\">The National University Health System (NUHS), Singtel and Ericsson signed a Memorandum of Understanding to advance connected healthcare, 5G-Advanced and 6G technology, as well as connected intelligence</cite>. <cite index=\"10-2\">The NXAC will be the world's first 6G AI centre dedicated to healthcare</cite>.",
    "type": "deal",
-   "tone": "mixed",
-   "source_url": "https://www.channelnewsasia.com/business/meta-raises-15-billion-in-five-part-us-bond-sale-fund-ai-expansion-6518121"
+   "tone": "positive",
+   "source_url": "https://themalaysianreserve.com/2026/11/04/nuhs-singtel-and-ericsson-expand-partnership-to-advance-next-generation-connected-healthcare/"
   },
   {
    "symbols": [
+    "NVDA",
     "AAPL"
    ],
-   "date": "2026-11-02",
-   "headline": "Apple reports record fiscal 2026 revenue of $478.8B, Q4 growth 12% but faces margin pressure",
-   "summary": "<cite index=\"45-6,45-14\">Apple reported record revenues for fiscal 2026 of $478.8 billion, with revenue increasing 15% from $416.2 billion in fiscal 2025, while net income climbed 18% from $112 billion</cite>. <cite index=\"39-1,39-3\">September quarter revenue reached $114.5 billion, up 12% year-over-year, with December quarter total revenue projected to grow 7% to 10%</cite>. <cite index=\"39-11\">Rising memory chip prices are compressing hardware profitability, forcing price increases on Mac computers and iPad tablets</cite>.",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://www.fool.com/earnings/takeaways/2026/11/03/apple-3-key-takeaways-for-long-term-investors/"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "date": "2026-11-05",
-   "headline": "DBS Q3 2026 earnings due November 5, with analysts watching loan growth and margins",
-   "summary": "<cite index=\"19-4,19-5\">DBS's total income reached S$6.09 billion in Q2, up 6%, with net profit rising 9% to a record S$3.08 billion, ahead of the S$2.88 billion Bloomberg consensus</cite>. <cite index=\"19-7\">DBS now expects 2026 total income to exceed 2025, and lifted its forecast for growth in commercial-book non-interest income to the mid-teens</cite>.",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://littlebigreddot.com/dbs-rated-a-buy-ahead-of-its-third-quarter-results-on-5-november-2026/"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "date": "2026-11-06",
-   "headline": "OCBC Q3 2026 earnings scheduled for November 6, tracking record H1 2026 performance",
-   "summary": "<cite index=\"33-6,33-7\">OCBC entered Q3 on the back of its strongest-ever first half: S$4.19 billion net profit for 1H 2026, a 13% year-on-year improvement, with interim dividend of 47 cents per share declared</cite>. <cite index=\"33-9\">Key items to watch on 6 November: NIM (already down ~25bp in 1H 2026), non-interest income momentum from Bank of Singapore, and any capital management announcements</cite>.",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "date": "2026-11-03",
-   "headline": "Singapore Airlines passenger data breach: 46,000 booking records illegally accessed via Amadeus software",
-   "summary": "Singapore Airlines disclosed that 46,000 booking records were illegally accessed in a data breach affecting software provider Amadeus's systems, compromising customer information stored in SIA's reservations.",
-   "type": "legal",
-   "tone": "negative",
-   "source_url": "https://www.businesstimes.com.sg/companies-markets/46000-sia-booking-records-accessed-illegally-data-breach-affecting-software-provider-amadeus"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "date": "2026-11-03",
-   "headline": "Google responds to backlash over removing search from schools that ban AI",
-   "summary": "Google announced it is removing its search services from schools that ban AI tools, prompting political backlash and raising concerns about whether tech companies should be making such policy decisions in education.",
+   "date": "2026-11-04",
+   "headline": "Nvidia reclaims world's most valuable company title from Apple on election day",
+   "summary": "<cite index=\"22-1\">Nvidia reclaimed the top spot on Election Day, rising 2% to a $4.99 trillion market cap while Apple slipped to $4.84 trillion</cite>. <cite index=\"22-2\">Surging AI demand lifted one tech giant back to the top of the market cap rankings on Election Day</cite>.",
    "type": "other",
-   "tone": "negative",
-   "source_url": "https://www.cnbc.com/2026/11/03/google-responds-to-outrage-over-removing-search-in-schools-that-ban-ai.html"
+   "tone": "mixed",
+   "source_url": "https://247wallst.com/investing/2026/11/04/nvidia-took-back-the-worlds-biggest-company-title-from-apple-on-election-day/"
   },
   {
-   "symbols": [],
-   "date": "2026-11-05",
-   "headline": "S&P 500 and Nasdaq recover from AI rout on US midterm election day",
-   "summary": "Major equity indices recovered on November 5 as investors regained risk appetite on US election day, reversing earlier AI-related selloffs that had pressured tech stocks including META, AAPL, and other semiconductor-exposed names.",
+   "symbols": [
+    "AMZN",
+    "META"
+   ],
+   "date": "2026-11-04",
+   "headline": "Data center developers face tighter regulatory headwinds after Democratic election sweep",
+   "summary": "<cite index=\"30-4\">In gubernatorial races in Texas and Georgia, Democrats who campaigned in part on a moratorium on data centre development won offices that the party had not held for decades</cite>. <cite index=\"30-6\">Texas accounts for about a quarter of US data-centre capacity due to come online by 2030</cite>.",
    "type": "macro",
-   "tone": "positive",
-   "source_url": "https://stocktwits.com/news-articles/markets/equity/s-and-p-500-nasdaq-recover-from-ai-rout-on-us-midterm-election-day-meta-aapl-amd-skhy-in-focus/cNGXlSbR9dS"
+   "tone": "negative",
+   "source_url": "https://sg.news.yahoo.com/democratic-victories-cloud-outlook-ai-104322812.html"
+  },
+  {
+   "symbols": [
+    "TSLA"
+   ],
+   "date": "2026-11-04",
+   "headline": "Elon Musk's election gamble backfires amid Democratic sweep in Texas",
+   "summary": "<cite index=\"40-7,40-8\">Democrats' sweeping midterms victory marked a major rejection of Elon Musk and the artificial-intelligence industry; Musk spent a record of at least $474 million on the midterms, funneling $224 million into Texas alone</cite>. <cite index=\"40-6\">The results could create new political obstacles in Texas, where Tesla, SpaceX and other Musk ventures have major operations</cite>.",
+   "type": "macro",
+   "tone": "negative",
+   "source_url": "https://www.cnbc.com/2026/11/04/elon-musk-midterms-ai-data-centers.html"
   }
  ],
  "sources": [
+  {
+   "url": "https://www.investing.com/news/earnings/uob-shares-hit-fourmonth-low-as-q3-profit-misses-analyst-estimates-4997156",
+   "title": "UOB shares hit four-month low as Q3 profit misses analyst estimates By Investing.com",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.thestar.com.my/business/business-news/2026/11/04/singapore039s-uob-q3-net-profit-misses-forecasts-wealth-momentum-continues",
+   "title": "Singapore's UOB Q3 net profit misses forecasts; wealth momentum continues",
+   "age": "0 days ago"
+  },
   {
    "url": "https://growbeansprout.com/uob-3q26-profit-dividend",
    "title": "UOB reports 182% YoY jump in 3Q26 profit off low base: Our Quick Take - Growbeansprout.com",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.asiaone.com/money/uobs-third-quarter-net-profit-undershoots-expectations",
-   "title": "UOB's third-quarter net profit undershoots expectations, Money News - AsiaOne",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-03/uob-profits-miss-estimates-as-lower-trading-income-dampens-gains",
+   "title": "UOB Reports S$1.25 Billion Net Income, Dampened by Lower Trading Gains - Bloomberg",
    "age": "0 days ago"
   },
   {
-   "url": "https://finimize.com/content/uobs-record-fees-couldnt-stop-a-profit-miss",
-   "title": "UOB’s Record Fees Couldn’t Stop A Profit Miss - Finimize",
+   "url": "https://www.kucoin.com/news/flash/uob-q3-net-profit-surges-182-2-amid-low-base-sgx-to-accelerate-ipo-process",
+   "title": "UOB Q3 Net Profit Surges 182.2% Amid Low Base, SGX to Accelerate IPO Process",
    "age": "0 days ago"
   },
   {
-   "url": "https://sg.headtopics.com/news/uob-q3-net-profit-misses-estimates-despite-record-wealth-89516016",
-   "title": "UOB Q3 Net Profit Misses Estimates Despite Record Wealth Management Fees",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-stock-faces-earnings-test-with-bond-risks-in-focus/70451165",
-   "title": "UOB stock faces earnings test with bond risks in focus",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.itiger.com/hant/news/2512170422",
-   "title": "UOB posts record full-year net profit of $6.0 billion for FY2024, up 6% y-o-y",
+   "url": "https://www.sec.gov/Archives/edgar/data/0000914156/000162828026069511/ufpt-20261103x8kxexx991.htm",
+   "title": "UFP TECHNOLOGIES INC - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://www.itiger.com/news/2512170422",
-   "title": "UOB posts record full-year net profit of $6.0 billion for FY2024, up 6% y-o-y",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-stock-misses-q3-profit-forecasts-despite-record-fees/70454978",
+   "title": "UOB stock misses Q3 profit forecasts despite record fees",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://sg.headtopics.com/news/uob-s-q3-net-profit-jumps-182-to-1-25b-but-misses-89524209",
+   "title": "UOB’s Q3 net profit jumps 182% to $1.25b but misses estimates, shares fall over 5%",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://benzinga.com/news/earnings/23/05/32235592/recap-ubiquiti-q3-earnings",
+   "title": "Recap: Ubiquiti Q3 Earnings",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/uovef/stock-analysis",
-   "title": "stock analysis",
+   "url": "https://themalaysianreserve.com/2026/11/04/nuhs-singtel-and-ericsson-expand-partnership-to-advance-next-generation-connected-healthcare/",
+   "title": "NUHS, SINGTEL AND ERICSSON EXPAND PARTNERSHIP TO ADVANCE NEXT-GENERATION CONNECTED HEALTHCARE - The Malaysian Reserve",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.manilatimes.net/2026/11/04/tmt-newswire/pr-newswire/nuhs-singtel-and-ericsson-expand-partnership-to-advance-next-generation-connected-healthcare/2461416",
+   "title": "NUHS, SINGTEL AND ERICSSON EXPAND PARTNERSHIP TO ADVANCE NEXT-GENERATION CONNECTED HEALTHCARE",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.singtel.com/about-us/media-centre/news-releases/nuhs-singtel-and-ericsson-expand-partnership",
+   "title": "NUHS, Singtel and Ericsson expand partnership to advance next-generation connected healthcare",
    "age": null
   },
   {
-   "url": "https://www.itiger.com/news/1105861031",
-   "title": "SG Morning Call | Singapore Stocks Open Higher on Friday; UOB and OCBC Jump After Earnings",
+   "url": "https://technode.global/2026/11/04/nuhs-singtel-ericsson-expand-partnership-to-advance-next-generation-connected-healthcare/",
+   "title": "NUHS, Singtel, Ericsson expand partnership to advance next-generation connected healthcare - TNGlobal",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://lifestyle.middletownlifemagazine.com/story/805330/nuhs-singtel-and-ericsson-expand-partnership-to-advance-next-generation-connected-healthcare/",
+   "title": "NUHS, SINGTEL AND ERICSSON EXPAND PARTNERSHIP TO ADVANCE NEXT-GENERATION CONNECTED HEALTHCARE",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://uk.advfn.com/stock-market/share-news/NUHS-SINGTEL-AND-ERICSSON-EXPAND-PARTNERSHIP-TO-A/99626737",
+   "title": "NUHS, SINGTEL AND ERICSSON EXPAND PARTNERSHIP TO ADVANCE NEXT-GENERATION CONNECTED HEALTHCARE",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tidewaternews.com/health/nuhs-singtel-and-ericsson-expand-partnership-to-advance-next-generation-connected-healthcare/",
+   "title": "NUHS, SINGTEL AND ERICSSON EXPAND PARTNERSHIP TO ADVANCE NEXT-GENERATION CONNECTED HEALTHCARE - TIDEWATER",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://healthtechnologynet.com/2026/11/04/nuhs-singtel-and-ericsson-expand-partnership-to-advance-next-generation-connected-healthcare/",
+   "title": "NUHS, SINGTEL AND ERICSSON EXPAND PARTNERSHIP TO ADVANCE NEXT-GENERATION CONNECTED HEALTHCARE",
    "age": null
   },
   {
-   "url": "https://www.benzinga.com/news/26/10/62649533/deutsche-bank-q3-2026-earnings-call-transcript",
-   "title": "Deutsche Bank Q3 2026 Earnings Call Transcript - Deutsche Bank (NYSE:DB) - Benzinga",
-   "age": "6 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/singtel-stock-gains-healthcare-ai-partnership-with-nuhs-ericsson/70454991",
+   "title": "Singtel stock gains healthcare AI partnership with NUHS, Ericsson",
+   "age": "0 days ago"
   },
   {
-   "url": "https://seekingalpha.com/article/4958512-deutsche-bank-aktiengesellschaft-db-q3-2026-earnings-call-transcript",
-   "title": "Deutsche Bank Aktiengesellschaft (DB) Q3 2026 Earnings Call Transcript",
-   "age": "6 days ago"
-  },
-  {
-   "url": "https://x.com/straits_times/status/1986216897126240390",
-   "title": "The Straits Times on X: \"DBS sees weaker 2026 net profit after Q3 earnings dip 2% to $2.95 billion https://t.co/Alwkl7lR5M\" / X",
-   "age": "363 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001289848/000162828026069509/hurn2026930exh991.htm",
-   "title": "Huron Consulting Group Inc. - Form 8-K - FY2026",
+   "url": "https://www.zacks.com/stock/news/2259353/{https:/www.zackstrade.com/2019-1-dollar}",
+   "title": "2019 1 dollar}",
    "age": null
   },
   {
-   "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-deutsche-bank-posts-record-q3-2026-results-stock-muted-93CH-4977523",
-   "title": "Earnings call transcript: Deutsche Bank posts record Q3 2026 results, stock muted By Investing.com",
-   "age": "6 days ago"
-  },
-  {
-   "url": "https://www.investing.com/news/company-news/deutsche-bank-q3-2026-slides-21st-straight-growth-quarter-93CH-4978778",
-   "title": "Deutsche Bank Q3 2026 slides: 21st straight growth quarter By Investing.com",
-   "age": "6 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001030894/000103089426000050/cls-20260930.htm",
-   "title": "CELESTICA INC - Form 10-Q - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sg:d05/earnings",
-   "title": "DBS Group Holdings (D05) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "91 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/deutsche-bank-db-q3-earnings-101002530.html",
-   "title": "Deutsche Bank (DB) Q3 Earnings and Revenues Top Estimates",
-   "age": "6 days ago"
-  },
-  {
-   "url": "https://littlebigreddot.com/dbs-rated-a-buy-ahead-of-its-third-quarter-results-on-5-november-2026/",
-   "title": "DBS rated a buy ahead of its third-quarter results on 5 November 2026",
+   "url": "https://www.kucoin.com/news/flash/nvidia-market-cap-reaches-5-02-trillion-as-stock-rises-3-11",
+   "title": "NVIDIA's market cap reaches $5.02 trillion as stock rises 3.11%",
    "age": "0 days ago"
   },
   {
-   "url": "https://sg.finance.yahoo.com/news/meta-seeks-least-20-billion-145828805.html",
-   "title": "Meta seeks at least $20 billion in bond sale as AI debt boom accelerates",
+   "url": "https://www.kucoin.com/news/flash/u-s-midterm-election-day-sees-chip-stocks-rebound-nvidia-market-cap-surpasses-5-trillion",
+   "title": "U.S. Midterm Election Day Sees Chip Stocks Rebound, NVIDIA Market Cap Surpasses $5 Trillion",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/11/03/meta-bond-sale-ai-funding.html",
-   "title": "Meta bond sale targets up to $25 billion for AI spending",
+   "url": "https://247wallst.com/investing/2026/11/04/nvidia-took-back-the-worlds-biggest-company-title-from-apple-on-election-day/",
+   "title": "Nvidia Took Back the World’s Biggest Company Title From Apple on Election Day - 24/7 Wall St.",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.aol.com/articles/meta-raises-15-billion-five-225011000.html",
-   "title": "Meta raises $15 billion in five-part US bond sale to fund AI expansion - AOL",
+   "url": "https://www.cnbc.com/2026/10/23/apple-nvidia-market-cap-earnings.html",
+   "title": "Apple is set to take back the market-cap crown from Nvidia. Upcoming earnings may push it over the top",
+   "age": "11 days ago"
+  },
+  {
+   "url": "https://tech-insider.org/apple-vs-nvidia-market-cap-497-billion-2026/",
+   "title": "Apple vs Nvidia Market Cap: $497B Gap Explained [2026]",
+   "age": "19 days ago"
+  },
+  {
+   "url": "https://companiesmarketcap.com/apple/marketcap/",
+   "title": "Apple (AAPL) - Market capitalization",
+   "age": "26 days ago"
+  },
+  {
+   "url": "https://ailearningguides.com/apple-passes-nvidia-market-cap-ai-chips/",
+   "title": "Apple Passes Nvidia Again 2026: What It Signals for AI Chips - AI Learning Guides",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.benzinga.com/markets/equities/26/11/62832505/stock-market-today-nvidia-overtakes-apple-chip-rally-nasdaq-jolts-yields",
+   "title": "Nasdaq 100 Gets Lift, Nvidia Overtakes Apple: Stock Market Today - Apple (NASDAQ:AAPL) - Benzinga",
    "age": "0 days ago"
   },
   {
-   "url": "https://qz.com/meta-bond-offering-20-billion-ai-funding-110326",
-   "title": "Meta is marketing at least $20 billion in bonds to fund AI build-out",
+   "url": "https://www.forbes.com/sites/fionariley/2026/11/03/nvidia-regains-title-of-worlds-most-valuable-company-as-apple-shares-slide/",
+   "title": "Nvidia Regains Title Of World’s Most Valuable Company—As Apple Shares Slide",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.analyticsinsight.net/news/meta-joins-big-techs-debt-rush-as-ai-infrastructure-spending-soars",
-   "title": "Meta Joins Big Tech's Debt Rush as AI Infrastructure Spending Soars",
+   "url": "https://sg.news.yahoo.com/democratic-victories-cloud-outlook-ai-104322812.html",
+   "title": "Democratic victories cloud outlook for AI data center rollout - Yahoo News Singapore",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.billionaires.africa/2026/11/03/american-billionaire-mark-zuckerbergs-meta-seeks-up-to-25-billion-in-bond-sale/",
-   "title": "American billionaire Mark Zuckerberg's Meta seeks up to $25 billion in bond sale",
+   "url": "https://www.sowetan.co.za/news/world/2026-11-04-analysis-trumps-midterm-drubbing-demonstrates-the-power-of-data-centre-opponents/",
+   "title": "ANALYSIS",
    "age": "0 days ago"
   },
   {
-   "url": "https://en.sedaily.com/international/2026/11/03/meta-plans-at-least-20-billion-bond-sale-to-fund-ai-buildout",
-   "title": "Meta Plans at Least $20 Billion Bond Sale to Fund AI Buildout - Seoul Economic Daily",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://ua.news/en/money/meta-planuie-zaluchiti-do-25-mlrd-cherez-obligatsiyi-dlia-shi-cnbc",
-   "title": "Meta plans up to $25B bond sale for AI — CNBC",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://pressnewsagency.org/meta-raises-15-billion-in-five-part-us-bond-sale/",
-   "title": "Meta raises $15 billion in five-part US bond sale",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.marketscreener.com/news/pt-bank-ocbc-nisp-tbk-ocbc-recorded-a-double-digit-growth-in-total-asset-and-credit-disbursement-i-ce785fdbdd88f623",
-   "title": "PT Bank OCBC NISP Tbk : OCBC Recorded a Double-digit growth in Total Asset and Credit Disbursement in Q3/2026",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
-   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "90 days ago"
-  },
-  {
-   "url": "https://www.google.com/finance/quote/O39:SGX",
-   "title": "Oversea-Chinese Banking Corporation Ltd (O39) Stock Price & News - Google Finance",
-   "age": "25 days ago"
-  },
-  {
-   "url": "https://www.investing.com/equities/oversea-chinese-banking-corp.-earnings",
-   "title": "OCBC (OCBC) Earnings Date & Report - Investing.com",
-   "age": "625 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
-   "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/singapore-banks-october-2026-selloff/",
-   "title": "DBS, OCBC & UOB: October 2026 Bank Selloff — Buy the Dip or Wait for Q3 Results? - The Kopi Notes",
-   "age": "25 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/ovchf/earnings",
-   "title": "www.tipranks.com",
-   "age": null
-  },
-  {
-   "url": "https://www.tradingview.com/symbols/SWB-OCBA",
-   "title": "SWB OCBA",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/SG:O39/earnings",
-   "title": "www.tipranks.com",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/a8-kex991q4202609262026.htm",
-   "title": "Apple Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.fool.com/earnings/takeaways/2026/11/03/apple-3-key-takeaways-for-long-term-investors/",
-   "title": "Apple: 3 Key Takeaways for Long-Term Investors",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.fool.com/earnings/call-transcripts/2026/11/02/apple-aapl-q4-2026-earnings-call-transcript/",
-   "title": "Apple (AAPL) Q4 2026 Earnings Call Transcript",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/aapl-20261102.htm",
-   "title": "Apple Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.marketbeat.com/stocks/NASDAQ/AAPL/earnings/",
-   "title": "Apple (AAPL) Earnings Date and Reports 2026 $AAPL",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/320193/000032019326000005/a8-kex991q1202612272025.htm",
-   "title": "Apple Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/a8-kex991q3202606272026.htm",
-   "title": "Apple Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://en.cryptonomist.ch/2026/11/03/apple-record-revenues-2026/",
-   "title": "Apple Record Revenues 2026 Cap Strong Fiscal Year",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.bloomberg.com/news/live-blog/2026-11-02/apple-fourth-quarter-earnings-live-updates",
-   "title": "Apple (AAPL) Earnings: Sales Forecast Disappoints, CEO Ternus Comments - Bloomberg",
+   "url": "https://www.datacenterdynamics.com/en/news/us-midterm-elections-2026-data-centers-donald-trump/",
+   "title": "US Midterm Elections 2026: Anti-data center candidates secure victories across America - DCD",
    "age": "1 days ago"
+  },
+  {
+   "url": "https://www.france24.com/en/live-news/20261104-democratic-victories-cloud-outlook-for-ai-data-center-rollout",
+   "title": "Democratic victories cloud outlook for AI data center rollout",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/2026_Georgia_Public_Service_Commission_election",
+   "title": "2026 Georgia Public Service Commission election",
+   "age": null
+  },
+  {
+   "url": "https://www.breitbart.com/news/democratic-victories-cloud-outlook-for-ai-data-center-rollout/",
+   "title": "Democratic victories cloud outlook for AI data center rollout - Breitbart",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.euronews.com/2026/11/04/us-midterm-elections-backlash-to-ai-data-centres-reaches-ballot-boxes",
+   "title": "US midterm elections: Backlash to AI data centres reaches ballot boxes",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://politics-government.news-articles.net/content/2026/11/04/the-regulatory-pivot-in-ai-data-center-expansion.html",
+   "title": "The Regulatory Pivot in AI Data Center Expansion",
+   "age": "20761 days ago"
+  },
+  {
+   "url": "https://dc.fortune.com/2025/11/05/elections-ai-data-centers-politics-democrats-republicans-virginia-new-jersey-georgia",
+   "title": "elections ai data centers politics democrats republicans virginia new jersey georgia",
+   "age": null
+  },
+  {
+   "url": "https://cyprus-mail.com/2026/11/04/elon-musks-business-empire-braces-for-democratic-wave-as-texas-flips-blue",
+   "title": "Elon Musk's business empire braces for Democratic wave as Texas flips blue",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.internazionale.it/ultime-notizie-reuters/2026/11/04/elon-musk-s-business-empire-braces-for-democratic-wave-as-texas-flips-blue",
+   "title": "Elon Musk’s business empire braces for Democratic wave as Texas flips blue - Internazionale",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/11/04/elon-musk-midterms-ai-data-centers.html",
+   "title": "Elon Musk’s record election bet backfired. The backlash may reach beyond one billionaire",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://unn.ua/en/news/politico-elon-musk-was-among-the-biggest-losers-of-the-us-election",
+   "title": "Politico: Elon Musk was among the \"biggest losers\" of the U.S. election",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://fortune.com/2026/11/04/big-money-politics-billionaire-spending-midterm-election/",
+   "title": "Elon Musk, Vivek Ramaswamy and Rick Jackson spent big. Their sides all lost on Tuesday",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.petertheil.com/168116/",
+   "title": "Politico: Elon Musk was among the \"biggest losers\" of the U.S. election - Peter Theil",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://nuremberg2.substack.com/p/trump-musk-and-rfk-vs-harris-election",
+   "title": "trump musk and rfk vs harris election",
+   "age": null
+  },
+  {
+   "url": "https://www.foxnews.com/politics/elon-musk-reveals-political-pacs-future-amid-tight-presidential-race.print",
+   "title": "Print Print    Close Close",
+   "age": null
+  },
+  {
+   "url": "https://fortune.com/tag/Elon-Musk/page/83",
+   "title": "fortune.com",
+   "age": null
   }
  ],
  "leads": [
   {
    "symbols": [
-    "U11.SI",
-    "S68.SI"
+    "TSLA"
    ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-04T00:53:50Z",
-   "headline": "Stocks to watch: UOB, SGX, CLI, SIA Engineering, CSE, MUST, IX Biopharma",
-   "url": "https://www.businesstimes.com.sg/companies-markets/stocks-watch-uob-sgx-cli-sia-engineering-cse-must-ix-biopharma"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-04T12:55:55Z",
+   "headline": "Stock Market Election News: Dow Futures Jump After Democrat Sweep, But AI Stocks Fade; Elon Musk, SpaceX, Tesla Are Losers (Live)",
+   "url": "https://finance.yahoo.com/m/e5be454d-07fd-3d94-8114-a4e8ff2910de/stock-market-election-news%3A.html"
   },
   {
    "symbols": [
-    "AAPL"
+    "AMZN",
+    "META"
    ],
-   "source": "fool.com",
-   "pubDate": "2026-11-04T00:48:50Z",
-   "headline": "Apple: 3 Key Takeaways for Long-Term Investors",
-   "url": "https://www.fool.com/earnings/takeaways/2026/11/03/apple-3-key-takeaways-for-long-term-investors/"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-04T12:44:38Z",
+   "headline": "Market Chatter: Data Center Developers May Face Tighter Rules After Democratic Wins",
+   "url": "https://finance.yahoo.com/technology/ai/articles/market-chatter-data-center-developers-124438205.html"
+  },
+  {
+   "symbols": [
+    "AAPL",
+    "NVDA"
+   ],
+   "source": "247wallst.com",
+   "pubDate": "2026-11-04T12:37:23Z",
+   "headline": "Nvidia Took Back the World’s Biggest Company Title From Apple on Election Day",
+   "url": "https://247wallst.com/investing/2026/11/04/nvidia-took-back-the-worlds-biggest-company-title-from-apple-on-election-day/"
   },
   {
    "symbols": [
     "GOOGL"
    ],
-   "source": "cnbc.com",
-   "pubDate": "2026-11-04T00:10:07Z",
-   "headline": "Google responds to political backlash over removing search from schools that ban AI",
-   "url": "https://www.cnbc.com/2026/11/03/google-responds-to-outrage-over-removing-search-in-schools-that-ban-ai.html"
+   "source": "fool.com",
+   "pubDate": "2026-11-04T12:35:00Z",
+   "headline": "Is Google's New Cryptocurrency Service a Reason to Buy Ethereum or Solana?",
+   "url": "https://www.fool.com/investing/2026/11/04/is-googles-new-cryptocurrency-service-a-reason-to/"
   },
   {
    "symbols": [
     "AAPL"
    ],
    "source": "247wallst.com",
-   "pubDate": "2026-11-04T00:09:17Z",
-   "headline": "Jim Cramer Says the Executioner Is “Axing Palantir and Apple.” What Investors Should Make of It",
-   "url": "https://247wallst.com/investing/2026/11/03/jim-cramer-says-the-executioner-is-axing-palantir-and-apple-what-investors-should-make-of-it/"
+   "pubDate": "2026-11-04T12:26:10Z",
+   "headline": "Apple Has $89.7 Billion in Purchase Obligations, and Most of It Comes Due Within a Year",
+   "url": "https://247wallst.com/investing/2026/11/04/apple-has-89-7-billion-in-purchase-obligations-and-most-of-it-comes-due-within-a-year/"
   },
   {
    "symbols": [
-    "U11.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-11-04T00:06:56Z",
-   "headline": "UOB’s Q3 net profit jumps 182% to $1.25b as bank sets aside less for bad loans",
-   "url": "https://www.straitstimes.com/business/companies-markets/uobs-q3-net-profit-jumps-182-to-1-25b-as-bank-sets-aside-less-for-bad-loans"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "source": "thesmartinvestor.com.sg",
-   "pubDate": "2026-11-03T23:30:00Z",
-   "headline": "Ahead of DBS’s Earnings: 3 Key Metrics Investors Must Watch",
-   "url": "https://thesmartinvestor.com.sg/ahead-of-dbss-earnings-3-key-metrics-investors-must-watch/"
-  },
-  {
-   "symbols": [
-    "AAPL",
     "META"
    ],
-   "source": "stocktwits.com",
-   "pubDate": "2026-11-03T23:29:55Z",
-   "headline": "S&P 500, Nasdaq Recover From AI Rout On US Midterm Election Day — META, AAPL, AMD, SKHY In Focus",
-   "url": "https://stocktwits.com/news-articles/markets/equity/s-and-p-500-nasdaq-recover-from-ai-rout-on-us-midterm-election-day-meta-aapl-amd-skhy-in-focus/cNGXlSbR9dS"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-03T23:24:29Z",
-   "headline": "Why Reddit Stock Is In Focus After Strong Q3 And A Google Traffic Warning",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/why-reddit-stock-focus-strong-232429824.html"
-  },
-  {
-   "symbols": [
-    "U11.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-03T23:21:31Z",
-   "headline": "UOB Q3 net profit almost trebles to S$1.25 billion off low base, but misses forecasts",
-   "url": "https://www.businesstimes.com.sg/companies-markets/uob-q3-net-profit-almost-trebles-s1-25-billion-low-base-misses-forecasts"
+   "pubDate": "2026-11-04T12:17:59Z",
+   "headline": "AMD Takes $1 Billion Hit From OpenAI and Meta AI Chip Deals",
+   "url": "https://finance.yahoo.com/technology/ai/articles/amd-takes-1-billion-hit-121759186.html"
   },
   {
    "symbols": [
     "NVDA"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-03T23:21:02Z",
-   "headline": "What Is Nvidia (NVDA) Asking Cloud Clients To Change Under New China Rules?",
-   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-asking-cloud-clients-232102833.html"
+   "pubDate": "2026-11-04T12:17:23Z",
+   "headline": "Schneider Electric (ENXTPA:SU) Unveiled Edge AI Tools For Industrial Sites",
+   "url": "https://finance.yahoo.com/technology/ai/articles/schneider-electric-enxtpa-su-unveiled-121723323.html"
   },
   {
    "symbols": [
-    "META"
+    "NVDA"
    ],
-   "source": "channelnewsasia.com",
-   "pubDate": "2026-11-03T22:50:11Z",
-   "headline": "Meta raises $15 billion in five-part US bond sale to fund AI expansion",
-   "url": "https://www.channelnewsasia.com/business/meta-raises-15-billion-in-five-part-us-bond-sale-fund-ai-expansion-6518121"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-04T12:17:21Z",
+   "headline": "Oracle Stock Slips After $7 Billion Tencent Deal Is Canceled",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/oracle-stock-slips-7-billion-121721676.html"
   },
   {
    "symbols": [
-    "U11.SI"
+    "Z74.SI"
    ],
-   "source": "sg.finance.yahoo.com",
-   "pubDate": "2026-11-03T15:12:25Z",
-   "headline": "UOB's 3QFY2026 net profit 10% below expectations due to 41% decline in non-II",
-   "url": "https://sg.finance.yahoo.com/news/uobs-3qfy2026-net-profit-10-151225670.html"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-04T07:47:00Z",
+   "headline": "NUHS, SINGTEL AND ERICSSON EXPAND PARTNERSHIP TO ADVANCE NEXT-GENERATION CONNECTED HEALTHCARE",
+   "url": "https://finance.yahoo.com/healthcare/articles/nuhs-singtel-ericsson-expand-partnership-074700476.html"
   },
   {
    "symbols": [
-    "U11.SI"
-   ],
-   "source": "sg.finance.yahoo.com",
-   "pubDate": "2026-11-03T15:12:25Z",
-   "headline": "UOB's 3Q net profit came in at 10% below expectations due to a 41% decline in non-II",
-   "url": "https://sg.finance.yahoo.com/news/uobs-3q-net-profit-came-151225899.html"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-03T13:26:03Z",
-   "headline": "46,000 SIA booking records accessed illegally in data breach affecting software provider Amadeus",
-   "url": "https://www.businesstimes.com.sg/companies-markets/46000-sia-booking-records-accessed-illegally-data-breach-affecting-software-provider-amadeus"
-  },
-  {
-   "symbols": [
-    "D05.SI",
-    "Z74.SI",
-    "MSFT"
+    "S68.SI"
    ],
    "source": "thesmartinvestor.com.sg",
-   "pubDate": "2026-11-03T06:30:00Z",
-   "headline": "DBS, Singtel or Microsoft: 3 Very Different Stocks for a Long-Term Portfolio",
-   "url": "https://thesmartinvestor.com.sg/dbs-singtel-or-microsoft-3-very-different-stocks-for-a-long-term-portfolio/"
+   "pubDate": "2026-11-04T06:30:00Z",
+   "headline": "Value Unlock: 3 SGX Next 50 Stocks Rewriting Their Growth Story",
+   "url": "https://thesmartinvestor.com.sg/value-unlock-3-sgx-next-50-stocks-rewriting-their-growth-story/"
+  },
+  {
+   "symbols": [
+    "S68.SI"
+   ],
+   "source": "thesmartinvestor.com.sg",
+   "pubDate": "2026-11-04T03:30:00Z",
+   "headline": "Beyond Blue Chips: 3 Hidden Gems Beating the STI’s Red October",
+   "url": "https://thesmartinvestor.com.sg/beyond-blue-chips-3-hidden-gems-beating-the-stis-red-october/"
+  },
+  {
+   "symbols": [
+    "C38U.SI"
+   ],
+   "source": "thesmartinvestor.com.sg",
+   "pubDate": "2026-11-04T03:17:47Z",
+   "headline": "KIP Trading Update: Buying More CapitaLand Integrated Commercial Trust",
+   "url": "https://thesmartinvestor.com.sg/kip-trading-update-buying-more-capitaland-integrated-commercial-trust/"
+  },
+  {
+   "symbols": [
+    "U11.SI"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-04T03:06:50Z",
+   "headline": "UOB shares hit four-month low as Q3 profit misses analyst estimates",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/uob-shares-hit-four-month-030650193.html"
+  },
+  {
+   "symbols": [
+    "U11.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-04T01:19:59Z",
+   "headline": "UOB shares fall over 6% after Q3 earnings miss forecast",
+   "url": "https://www.businesstimes.com.sg/companies-markets/uob-shares-fall-over-6-after-q3-earnings-miss-forecast"
+  },
+  {
+   "symbols": [
+    "U11.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-04T01:19:59Z",
+   "headline": "UOB shares fall 5% after Q3 earnings miss forecast",
+   "url": "https://www.businesstimes.com.sg/companies-markets/uob-shares-fall-5-after-q3-earnings-miss-forecast"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 40806,
-  "output": 2587,
+  "input": 38325,
+  "output": 1713,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1037
+  "costUsd": 0.0969
  },
- "createdAt": "2026-11-04T01:15:58.773Z"
+ "createdAt": "2026-11-04T13:01:26.026Z"
 }
