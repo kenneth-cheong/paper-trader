@@ -1,180 +1,157 @@
 {
- "market_summary": "US equity markets rallied on November 4-5, 2026 with the S&P 500, Nasdaq and Dow all posting strong gains amid a post-election rally, with mega-cap tech stocks (AAPL, MSFT, AMZN) showing buy signals and broader sentiment positive. Singapore's banking sector reported Q3 2026 results mid-week: DBS disappointed with 5% profit decline due to weak trading income, UOB beat on fee income but missed profit expectations with margin pressures ahead, while OCBC heads into results Friday after strong first-half performance. Regional factors include elevated geopolitical risks and higher energy prices weighing on bank earnings and economic outlooks.",
+ "market_summary": "<cite index=\"10-1,10-4,10-5\">Singapore's banking sector faced headwinds as UOB posted third-quarter net profit of S$1.25 billion, missing estimates of S$1.35 billion, prompting shares to sink more than 5% to a five-month low.",
  "items": [
   {
    "symbols": [
     "D05.SI"
    ],
-   "date": "2026-11-04",
-   "headline": "DBS Q3 2026 profit falls 5% YoY to S$2.81 billion, misses forecasts on trading income slump",
-   "summary": "<cite index=\"3-3\">Net profit fell 5% year-on-year to S$2.81 billion in the three months ended September, missing the Bloomberg estimate of S$2.96 billion</cite>. <cite index=\"2-4\">Markets trading income plunged 65% to S$152 million from a year earlier and fell 68% sequentially amid unfavourable market conditions.</cite>",
-   "type": "earnings",
-   "tone": "negative",
-   "source_url": "https://uk.investing.com/news/earnings/dbs-thirdquarter-profit-falls-5-as-trading-income-slumps-4958950"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "date": "2026-11-04",
-   "headline": "DBS declares S$0.75 dividend per share for Q3 2026",
-   "summary": "<cite index=\"2-7\">DBS declared a total third-quarter dividend of 81 Singapore cents per share, comprising an ordinary dividend of 66 cents and a 15-cent capital return dividend</cite>.",
-   "type": "other",
-   "tone": "positive",
-   "source_url": "https://uk.investing.com/news/earnings/dbs-thirdquarter-profit-falls-5-as-trading-income-slumps-4958950"
+   "date": "2026-11-05",
+   "headline": "DBS appoints Anthony Lim as new chairman from January 2027",
+   "summary": "<cite index=",
+   "type": "management",
+   "tone": "mixed",
+   "source_url": "https://www.channelnewsasia.com/singapore/dbs-chairman-peter-seah-anthony-lim-6525876"
   },
   {
    "symbols": [
     "U11.SI"
    ],
-   "date": "2026-11-05",
-   "headline": "UOB Q3 2026 profit misses forecasts at S$1.25 billion despite record fee income; NIM guidance cut",
-   "summary": "<cite index=\"22-3\">UOB's net profit for the third quarter came in at SG$1.25 billion ($975.72 million), underperforming the mean estimate of SG$1.35 billion from two analysts</cite>. <cite index=\"22-5,22-6\">UOB's CFO said NIM for the full year is likely to fall below 1.75 percent, down from the previous quarter's guidance of 1.75 percent to 1.80 percent. For the third quarter, the bank's NIM narrowed 6 basis points quarter-on-quarter to 1.68 percent due to higher funding costs.</cite>",
+   "date": "2026-11-04",
+   "headline": "UOB posts Q3 profit miss amid margin squeeze and raises 2027 cost outlook",
+   "summary": "<cite index=",
    "type": "earnings",
    "tone": "negative",
    "source_url": "https://www.manilatimes.net/2026/11/05/business/foreign-business/singapores-uob-misses-on-quarterly-profit/2462001"
   },
   {
    "symbols": [
-    "U11.SI"
-   ],
-   "date": "2026-11-05",
-   "headline": "UOB records record Q3 fee income of S$733 million, up 19% YoY",
-   "summary": "<cite index=\"20-4,20-5\">Net fee income in the third quarter hit a record S$733mil, a 19% increase from the same period a year ago. It also marked a 10% increase over the previous quarter.</cite>",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://www.thestar.com.my/business/business-news/2026/11/05/uob-earnings-surge-as-provisions-tumble"
-  },
-  {
-   "symbols": [
     "O39.SI"
    ],
    "date": "2026-11-06",
-   "headline": "OCBC Q3 2026 results due Friday, Nov 6 after strong first-half performance",
-   "summary": "<cite index=\"14-8\">OCBC entered Q3 on the back of its strongest-ever first half: S$4.19 billion net profit for 1H 2026, a 13% year-on-year improvement.</cite> OCBC Q3 results are scheduled for release before market open on Friday, November 6.",
+   "headline": "OCBC scheduled to report Q3 results tomorrow before market open",
+   "summary": "<cite index=",
    "type": "earnings",
    "tone": "mixed",
-   "source_url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-heads-into-november-6-results-after-sgx-notice/70455047"
+   "source_url": "https://sg.finance.yahoo.com/news/dbs-earnings-malaysia-investment-hong-095948192.html"
   },
   {
    "symbols": [
-    "AAPL",
-    "MSFT",
     "AMZN"
    ],
    "date": "2026-11-05",
-   "headline": "Dow Jones futures rise after Apple, Microsoft, Amazon flash buy signals in post-election rally",
-   "summary": "Tech mega-caps AAPL, MSFT and AMZN showed strong buy signals amid a broad market rally following the US elections on November 4-5, 2026, driving futures higher.",
-   "type": "analyst",
+   "headline": "Amazon partners with Uber Eats for Prime member restaurant delivery",
+   "summary": "<cite index=",
+   "type": "product",
    "tone": "positive",
-   "source_url": "https://finance.yahoo.com/m/a147bf9a-4218-3171-97a4-fb80fda211eb/dow-jones-futures-rise-after.html"
+   "source_url": "https://finance.yahoo.com/m/999f773f-01eb-3a62-b026-5d54db52c96e/amazon-and-uber-want-to-bring.html"
   },
   {
    "symbols": [
     "AAPL"
    ],
-   "date": "2026-11-05",
-   "headline": "Apple CEO cites 'unprecedented' memory prices, suggests cost pressures on iPhone, Mac, iPad",
-   "summary": "Apple CEO warned that memory prices are 'unprecedented' and could keep climbing, potentially putting fresh pressure on device costs including iPhones, Macs and iPads.",
-   "type": "product",
-   "tone": "negative",
-   "source_url": "https://finance.yahoo.com/technology/articles/apple-ceo-says-memory-prices-233012502.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "date": "2026-11-05",
-   "headline": "Analyst resets Nvidia stock target after Intel crash",
-   "summary": "A 5-star analyst reset Nvidia's stock price target following Intel's recent difficulties in the semiconductor sector.",
+   "date": "2026-11-04",
+   "headline": "Apple shares rally as data center vote backlash seen easing memory cost pressures",
+   "summary": "<cite index=",
    "type": "analyst",
-   "tone": "mixed",
-   "source_url": "https://www.thestreet.com/investing/stocks/melius-nvidia-target-cut-intel"
-  },
-  {
-   "symbols": [
-    "META"
-   ],
-   "date": "2026-11-05",
-   "headline": "AMD hit with S1.1 billion charge related to Meta and OpenAI deals",
-   "summary": "AMD incurred a S1.1 billion charge related to its dealings with Meta and OpenAI, impacting the semiconductor company's financials.",
-   "type": "other",
-   "tone": "negative",
-   "source_url": "https://www.ibtimes.com/amd-1-1-billion-charge-openai-meta-deals-3809435"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "date": "2026-11-05",
-   "headline": "Google turns off AI for schoolchildren by default",
-   "summary": "Google has disabled its AI features by default for child users, signaling a shift in privacy and safety policies for younger audiences.",
-   "type": "product",
-   "tone": "mixed",
-   "source_url": "https://www.channelnewsasia.com/world/google-ai-children-turn-default-6525746"
-  },
-  {
-   "symbols": [
-    "AMZN"
-   ],
-   "date": "2026-11-05",
-   "headline": "Amazon workers in Greater Toronto Area launch unionization campaign with Unifor",
-   "summary": "Amazon warehouse workers in the Greater Toronto Area have launched a unionization effort in partnership with Unifor, seeking better jobs and conditions.",
-   "type": "legal",
-   "tone": "negative",
-   "source_url": "https://finance.yahoo.com/small-business/articles/amazon-workers-greater-toronto-area-234300921.html"
+   "tone": "positive",
+   "source_url": "https://www.trefis.com/stock/aapl/articles/622962/the-open-question-under-apple-stocks-price/2026-11-05"
   }
  ],
  "sources": [
   {
-   "url": "https://x.com/straits_times/status/1986216897126240390",
-   "title": "The Straits Times on X: \"DBS sees weaker 2026 net profit after Q3 earnings dip 2% to $2.95 billion https://t.co/Alwkl7lR5M\" / X",
-   "age": "364 days ago"
+   "url": "https://www.businesstoday.com.my/2026/11/05/dsb-group-appoints-board-member-anthony-lim-as-new-chairman/",
+   "title": "DSB Group Appoints Board Member Anthony Lim As New Chairman - BusinessToday",
+   "age": null
   },
   {
-   "url": "https://uk.investing.com/news/earnings/dbs-thirdquarter-profit-falls-5-as-trading-income-slumps-4958950",
-   "title": "DBS third-quarter profit falls 5% as trading income slumps By Investing.com",
+   "url": "https://fintechnews.sg/140541/fintech/dbs-chairman/",
+   "title": "DBS Names Anthony Lim as Chairman From January 2027 - Fintech Singapore",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.investing.com/news/earnings/dbs-thirdquarter-profit-falls-5-as-trading-income-slumps-5001854",
-   "title": "DBS third-quarter profit misses estimates as trading income slumps By Investing.com",
+   "url": "https://www.marketscreener.com/news/dbs-names-anthony-lim-as-incoming-board-chairman-ce785fdfd08ef520",
+   "title": "DBS : names Anthony Lim as incoming Board Chairman",
    "age": "0 days ago"
   },
   {
-   "url": "https://in.investing.com/news/earnings/dbs-thirdquarter-profit-falls-5-as-trading-income-slumps-5681333",
-   "title": "DBS third-quarter profit misses estimates as trading income slumps By Investing.com",
+   "url": "https://www.asiaone.com/money/dbs-new-chairman-anthony-lim-retire-peter-seah",
+   "title": "Anthony Lim to succeed Peter Seah as DBS chairman from Jan 2027, Money News - AsiaOne",
    "age": "0 days ago"
   },
   {
-   "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
-   "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
+   "url": "https://www.marketscreener.com/news/singapore-s-dbs-names-insider-anthony-lim-as-chairman-ce785fdfd180f022",
+   "title": "Singapore's DBS names insider Anthony Lim as chairman",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://bfsi.eletsonline.com/anthony-lim-to-chair-dbs-group-from-january-2027-succeeding-peter-seah/",
+   "title": "Anthony Lim to chair DBS Group from January 2027, succeeding Peter Seah",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Tan_Teck_Long",
+   "title": "Tan Teck Long",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Peter_Seah",
+   "title": "Peter Seah",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Lim_Tean",
+   "title": "Lim Tean",
+   "age": null
+  },
+  {
+   "url": "https://www.manilatimes.net/2026/11/05/business/foreign-business/singapores-uob-misses-on-quarterly-profit/2462001",
+   "title": "Singapore’s UOB misses on quarterly profit",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://littlebigreddot.com/uob-is-a-hold-after-its-third-quarter-miss-and-5-share-fall/",
+   "title": "UOB is a hold after its third-quarter miss and 5% share fall",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.investing.com/news/earnings/uob-shares-hit-fourmonth-low-as-q3-profit-misses-analyst-estimates-4997156",
+   "title": "UOB shares hit four-month low as Q3 profit misses analyst estimates By Investing.com",
    "age": "1 days ago"
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:d05/earnings",
-   "title": "www.tipranks.com",
+   "url": "https://www.redhot.sg/analysts-trim-uob-target-price-as-margin-squeeze-and-rising-costs-cloud-2027-outlook-736090.html",
+   "title": "Analysts trim UOB target price as margin squeeze and rising costs cloud 2027 outlook - Red Hot Singapore",
    "age": null
   },
   {
-   "url": "https://seekingalpha.com/article/4648026-dbs-group-holdings-ltd-dbsdf-q3-2023-earnings-call-transcript",
-   "title": "DBS Group Holdings Ltd (DBSDF) Q3 2023 Earnings Call Transcript",
+   "url": "https://www.minichart.com.sg/2026/11/04/uob-hold-with-s44-46-target-as-margins-slip-and-cse-global-orders-surge/",
+   "title": "UOB HOLD With S$44.46 Target as Margins Slip and CSE Global Orders Surge",
    "age": null
   },
   {
-   "url": "https://seekingalpha.com/article/4598757-dbs-group-holdings-ltd-dbsdf-q1-2023-earnings-call-transcript",
-   "title": "DBS Group Holdings Ltd (DBSDF) Q1 2023 Earnings Call Transcript",
+   "url": "https://www.minichart.com.sg/2026/11/05/uob-keeps-hold-rating-as-higher-costs-put-s40-00-target-in-focus/",
+   "title": "UOB Keeps HOLD Rating as Higher Costs Put S$40.00 Target in Focus",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/DBSDY/earnings",
-   "title": "www.tipranks.com",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-stock-misses-q3-profit-forecasts-as-fees-hit-a-record/70457498",
+   "title": "UOB stock misses Q3 profit forecasts as fees hit a record",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://gulfnews.com/business/economy/uae-businesses-end-2025-strong-but-rising-costs-cloud-outlook-for-2026-1.500399670",
+   "title": "UAE businesses end 2025 strong but rising costs cloud outlook for 2026",
    "age": null
   },
   {
-   "url": "https://www.marketscreener.com/news/pt-bank-ocbc-nisp-tbk-ocbc-recorded-a-double-digit-growth-in-total-asset-and-credit-disbursement-i-ce785fdbdd88f623",
-   "title": "PT Bank OCBC NISP Tbk : OCBC Recorded a Double-digit growth in Total Asset and Credit Disbursement in Q3/2026",
-   "age": "5 days ago"
+   "url": "https://www.itiger.com/hant/news/2533569113",
+   "title": "Singapore's UOB Drops 2025 Guidance Due to US Tariffs, Posts Stable Q1 Net Profit",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
+   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "91 days ago"
   },
   {
    "url": "https://www.ocbc.com/group/investors/financials.page",
@@ -187,9 +164,9 @@
    "age": "626 days ago"
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
-   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "91 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/vorboerse/ocbc-stock-results-scheduled-for-november-5-2026-ahead-of-the-xetra-open/70396876",
+   "title": "OCBC stock: results scheduled for November 5, 2026 ahead of the Xetra open",
+   "age": "13 days ago"
   },
   {
    "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-q3-results-due-november-6-after-strong-first-half/70442076",
@@ -197,154 +174,119 @@
    "age": "3 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-slips-3-26-prozent-ahead-of-november-6-results/70451178",
-   "title": "OCBC stock slips 3.26% ahead of November 6 results",
-   "age": "1 days ago"
-  },
-  {
    "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-heads-into-november-6-results-after-sgx-notice/70455047",
    "title": "OCBC stock heads into November 6 results after SGX notice",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.business-standard.com/article/reuters/singapore-bank-ocbc-s-q1-profit-at-3-1-2-year-high-tad-below-estimates-118050700130_1.html",
-   "title": "Monday, January 05, 2026 | 12:38 AM ISTहिंदी में पढें",
-   "age": null
-  },
-  {
-   "url": "https://growbeansprout.com/uob-3q26-profit-dividend",
-   "title": "UOB reports 182% YoY jump in 3Q26 profit off low base: Our Quick Take - Growbeansprout.com",
    "age": "1 days ago"
   },
   {
-   "url": "https://www.thestar.com.my/business/business-news/2026/11/05/uob-earnings-surge-as-provisions-tumble",
-   "title": "UOB earnings surge as provisions tumble",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-uob-kay-hian-keeps-sgd-35-70-target-for-ocbc-stock/70342387",
+   "title": "OCBC stock: UOB Kay Hian keeps SGD 35.70 target for OCBC stock",
+   "age": "19 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-faces-earnings-test-after-great-eastern-profit-slump/70444136",
+   "title": "OCBC stock faces earnings test after Great Eastern profit slump",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-heads-into-november-6-results/70462145",
+   "title": "OCBC stock heads into November 6 results",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000729986/000119312526428347/d41860dex991.htm",
-   "title": "UNITED BANKSHARES INC/WV - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.manilatimes.net/2026/11/05/business/foreign-business/singapores-uob-misses-on-quarterly-profit/2462001",
-   "title": "Singapore’s UOB misses on quarterly profit",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000731766/000073176626000255/earningsrelease3q26unh.htm",
-   "title": "UNITEDHEALTH GROUP INC - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/news/company-announcements/uob-reports-stable-third-quarter-performance-on-record-fee-income",
-   "title": "UOB Reports Stable Third-Quarter Performance on Record Fee Income - TipRanks.com",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/1289308/000162828026005449/ex991_earningsx3qfy26.htm",
-   "title": "EnerSys - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000101382/000119312526434198/umbf-ex99_1.htm",
-   "title": "UMB FINANCIAL CORP - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001511737/000151173726000035/exhibit991-33126.htm",
-   "title": "Ubiquiti Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sg:z74/earnings",
-   "title": "Singtel (Z74) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "82 days ago"
-  },
-  {
-   "url": "https://www.singtel.com/about-us/investor-relations/investor-calendar",
-   "title": "Investor Calendar",
-   "age": "531 days ago"
-  },
-  {
-   "url": "https://www.investing.com/equities/singapore-telecommunications-earnings",
-   "title": "SingTel (STEL) Earnings Date & Report - Investing.com",
-   "age": null
-  },
-  {
-   "url": "https://cdn1.singteldigital.com/content/dam/singtel/investorRelations/financialResults/2026/q3fy26/Q3FY26_slides.pdf",
-   "title": "Business Update Nine months & third quarter ended 31 December 2025",
-   "age": "266 days ago"
-  },
-  {
-   "url": "https://www.marketscreener.com/quote/stock/SINGAPORE-TELECOMMUNICATI-6491140/calendar/",
-   "title": "Singapore Telecommunications Limited: Company Events Publications and Financial Calendar",
-   "age": "2270 days ago"
-  },
-  {
-   "url": "https://cdn2.singteldigital.com/content/dam/singtel/investorRelations/financialResults/2026/h2fy26/Singtel_Group_NR_FY26.pdf",
-   "title": "Singapore Telecommunications Limited Company registration number: 199201624D",
-   "age": "168 days ago"
-  },
-  {
-   "url": "https://www.business-standard.com/article/international/singtel-q3-net-profit-falls-8-3-sees-revenue-drop-113021400200_1.html",
-   "title": "Friday, January 02, 2026 | 04:12 PM ISTहिंदी में पढें",
-   "age": null
-  },
-  {
-   "url": "https://www.business-standard.com/article/companies/singtel-s-annual-profit-plunges-65-takes-1-3-bn-hit-on-airtel-snag-120052800205_1.html",
-   "title": "Monday, January 05, 2026 | 04:51 PM ISTहिंदी में पढें",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/news/company-announcements/singtel-reports-strong-profit-growth-amid-strategic-gains",
-   "title": "singtel reports strong profit growth amid strategic gains",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sg:c6l/earnings",
-   "title": "SIA - Singapore Airlines (C6L) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "122 days ago"
-  },
-  {
-   "url": "https://www.theedgesingapore.com/capital/results/sia-reports-3qfy2026-earnings-505-mil-revenue-reaches-quarterly-record",
-   "title": "SIA reports 3QFY2026 earnings of $505 mil; revenue reaches quarterly record",
-   "age": "223 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/sia-reports-3qfy2026-earnings-505-013935396.html",
-   "title": "SIA reports 3QFY2026 earnings of $505 mil; revenue reaches quarterly record",
-   "age": "253 days ago"
-  },
-  {
-   "url": "https://aviationa2z.com/index.php/2026/02/24/singapore-airlines-q3-profit-rises-26/",
-   "title": "Singapore Airlines Q3 Profit Rises 26% as Revenue Hits S$5.5 Billion - Aviation A2Z",
-   "age": "253 days ago"
-  },
-  {
-   "url": "https://www.singaporeair.com/de_DE/de/corporate/newsroom/press-release/2026/january---march-2026/record-quarterly-revenue-drives-25-9--increase-in-sia-group-oper/",
-   "title": "24 February 2026 Page 1 of 6",
-   "age": "254 days ago"
-  },
-  {
-   "url": "https://www.smartkarma.com/home/newswire/earnings-alerts/singapore-airlines-sia-earnings-3q-net-income-hits-s504-6m-amid-strong-revenue-performance/",
-   "title": "Singapore Airlines (SIA) Earnings: 3Q Net Income Hits S$504.6M Amid Strong Revenue Performance",
-   "age": "253 days ago"
-  },
-  {
-   "url": "https://www.enginecowl.com/singapore-airlines-strong-unit-revenue-performance-three-takeaways-from-its-q3-fy2025-26-results/",
-   "title": "Singapore Airlines’ strong unit revenue performance: three takeaways from its Q3 FY2025/26 results",
-   "age": "250 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/singy/earnings",
+   "url": "https://www.tipranks.com/stocks/SG:O39",
    "title": "www.tipranks.com",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:c6l/stock-analysis",
-   "title": "stock analysis",
+   "url": "https://finance.yahoo.com/media-advertising/articles/amazon-launches-partnership-uber-eats-110000302.html",
+   "title": "Amazon Launches Partnership with Uber Eats Featuring $0 Delivery Fee for Prime Members",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-11-05/amazon-adds-uber-food-delivery-perks-for-its-prime-subscribers",
+   "title": "Amazon Adds Uber Food Delivery Perks for Its Prime Subscribers - Bloomberg",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.geekwire.com/2026/amazon-teams-up-with-uber-on-restaurant-delivery-years-after-shutting-down-its-own-service/",
+   "title": "Amazon teams up with Uber on restaurant delivery, years after shutting down its own service",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://investor.uber.com/news-events/news/press-release-details/2026/Amazon-Launches-Partnership-with-Uber-Eats-Featuring-0-Delivery-Fee-for-Prime-Members-2026-afY0fIEoo1/default.aspx",
+   "title": "Uber Technologies, Inc. - Amazon Launches Partnership with Uber Eats Featuring $0 Delivery Fee for Prime Members",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001543151/000154315126000041/uber-20260930.htm",
+   "title": "Uber Technologies, Inc - Form 10-Q - FY2026",
    "age": null
+  },
+  {
+   "url": "https://shiftdelete.net/en/amazon-uber-eats",
+   "title": "Amazon Uber Eats Deal Gives Prime Free Delivery Over $25",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/amazon-partners-with-uber-eats-to-bring-restaurant-delivery-to-prime-members-110100295.html",
+   "title": "Amazon partners with Uber Eats to bring restaurant delivery to Prime members",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001543151/000154315126000039/uberq326earningspressrelea.htm",
+   "title": "Uber Technologies, Inc - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Amazon_Prime_Air",
+   "title": "Amazon Prime Air",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/a8-kex991q4202609262026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.heygotrade.com/en/news/apple-aapl-stock-news-november-5-2026/",
+   "title": "Apple Stock (AAPL) Rises 5.3% as Big Tech Gains on Midterms (Nov 4)",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000026/aapl-20260926.htm",
+   "title": "Apple Inc. - Form 10-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.kucoin.com/blog/apple-stock-q4-2026-earnings-memory-costs",
+   "title": "Apple Stock Falls After Q4 2026 Earnings Beat: Why Margins and Memory Costs Worry Investors| KuCoin",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000013/aapl-20260328.htm",
+   "title": "Apple Inc. - Form 10-Q - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/a8-kex991q3202606272026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000011/a8-kex991q2202603282026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://247wallst.com/investing/2026/11/05/jim-cramers-surprise-midterm-winner-apple-because-fewer-data-centers-could-mean-cheaper-memory/",
+   "title": "Jim Cramer's Surprise Midterm Winner: Apple, Because Fewer Data Centers Could Mean Cheaper Memory - 24/7 Wall St.",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.fool.com/earnings/call-transcripts/2026/11/02/apple-aapl-q4-2026-earnings-call-transcript/",
+   "title": "Apple (AAPL) Q4 2026 Earnings Call Transcript",
+   "age": "2 days ago"
   }
  ],
  "leads": [
@@ -355,146 +297,149 @@
     "AMZN"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-05T00:45:18Z",
-   "headline": "Dow Jones Futures Rise After Apple, Microsoft, Amazon Flash Buy Signals In Postelection Rally. CoreWeave, SpaceX Skid.",
-   "url": "https://finance.yahoo.com/m/a147bf9a-4218-3171-97a4-fb80fda211eb/dow-jones-futures-rise-after.html"
+   "pubDate": "2026-11-05T12:53:31Z",
+   "headline": "Dow Jones Futures Rise As Techs Fall; Apple, Microsoft, Amazon Flash Buy Signals",
+   "url": "https://finance.yahoo.com/m/a147bf9a-4218-3171-97a4-fb80fda211eb/dow-jones-futures-rise-as.html"
   },
   {
    "symbols": [
-    "D05.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-05T00:45:02Z",
-   "headline": "Stocks to watch: DBS, CAReit, Starhill Global Reit, Koh Brothers Eco Engineering",
-   "url": "https://www.businesstimes.com.sg/companies-markets/stocks-watch-dbs-careit-starhill-global-reit-koh-brothers-eco-engineering"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-05T00:44:06Z",
-   "headline": "DBS third-quarter profit misses estimates as trading income slumps",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/dbs-third-quarter-profit-misses-004406390.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "thestreet.com",
-   "pubDate": "2026-11-05T00:37:00Z",
-   "headline": "5-star analyst resets Nvidia stock target after Intel crash",
-   "url": "https://www.thestreet.com/investing/stocks/melius-nvidia-target-cut-intel"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "source": "channelnewsasia.com",
-   "pubDate": "2026-11-05T00:18:00Z",
-   "headline": "DBS third-quarter net profit falls 5% on year, misses forecasts",
-   "url": "https://www.channelnewsasia.com/singapore/dbs-2026-q3-profit-peter-seah-anthony-lim-6525661"
-  },
-  {
-   "symbols": [
+    "MSFT",
     "META"
    ],
-   "source": "ibtimes.com",
-   "pubDate": "2026-11-05T00:14:01Z",
-   "headline": "The Deal With Meta & OpenAI Just Cost AMD $1.1 Billion",
-   "url": "https://www.ibtimes.com/amd-1-1-billion-charge-openai-meta-deals-3809435"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "source": "fool.com",
-   "pubDate": "2026-11-05T00:13:01Z",
-   "headline": "Why Alphabet Stock Popped on Wednesday",
-   "url": "https://www.fool.com/investing/2026/11/04/why-alphabet-stock-popped-on-wednesday/"
+   "source": "247wallst.com",
+   "pubDate": "2026-11-05T12:47:14Z",
+   "headline": "The Same $10,000 in Microsoft and Meta Could Produce Very Different Results by 2030",
+   "url": "https://247wallst.com/investing/2026/11/05/the-same-10000-in-microsoft-and-meta-could-produce-very-different-results-by-2030/"
   },
   {
    "symbols": [
     "AMZN"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-04T23:43:00Z",
-   "headline": "Amazon workers in the Greater Toronto Area launch fight for better jobs with Unifor",
-   "url": "https://finance.yahoo.com/small-business/articles/amazon-workers-greater-toronto-area-234300921.html"
+   "pubDate": "2026-11-05T12:43:00Z",
+   "headline": "Amazon and Uber Want to Bring You Your Next Meal. The Delivery Turf War Is Escalating.",
+   "url": "https://finance.yahoo.com/m/999f773f-01eb-3a62-b026-5d54db52c96e/amazon-and-uber-want-to-bring.html"
   },
   {
    "symbols": [
     "AAPL"
    ],
-   "source": "stocktwits.com",
-   "pubDate": "2026-11-04T23:32:33Z",
-   "headline": "S&P 500, Nasdaq Surge Ahead After Democratic Sweep, Dow Jumps To One-Year High On Lower Oil — AAPL, SNAP, INTC, CRWV, QCOM In Focus",
-   "url": "https://stocktwits.com/news-articles/markets/equity/s-and-p-500-nasdaq-dow-surge-ahead-after-democratic-sweep/cNGLApkR9ET"
+   "source": "trefis.com",
+   "pubDate": "2026-11-05T12:32:33Z",
+   "headline": "The Open Question Under Apple Stock's Price",
+   "url": "https://www.trefis.com/stock/aapl/articles/622962/the-open-question-under-apple-stocks-price/2026-11-05"
   },
   {
    "symbols": [
     "AAPL"
+   ],
+   "source": "247wallst.com",
+   "pubDate": "2026-11-05T12:19:09Z",
+   "headline": "Jim Cramer’s Surprise Midterm Winner: Apple, Because Fewer Data Centers Could Mean Cheaper Memory",
+   "url": "https://247wallst.com/investing/2026/11/05/jim-cramers-surprise-midterm-winner-apple-because-fewer-data-centers-could-mean-cheaper-memory/"
+  },
+  {
+   "symbols": [
+    "TSLA"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-04T23:30:12Z",
-   "headline": "Apple CEO Says Memory Prices Are ‘Unprecedented’ and Could Keep Climbing — iPhone, Mac and iPad Costs Face Fresh Pressure After Recent Price Hikes",
-   "url": "https://finance.yahoo.com/technology/articles/apple-ceo-says-memory-prices-233012502.html"
+   "pubDate": "2026-11-05T12:18:00Z",
+   "headline": "Ferrari vs. Tesla: Can the Luce Outsell the Roadster?",
+   "url": "https://finance.yahoo.com/m/dc1c6f50-6427-339f-a409-37e6de613b3d/ferrari-vs.-tesla%3A-can-the.html"
+  },
+  {
+   "symbols": [
+    "MSFT",
+    "AMZN"
+   ],
+   "source": "247wallst.com",
+   "pubDate": "2026-11-05T12:15:58Z",
+   "headline": "Microsoft Is Executing an Irreproducible Balance-Sheet-Backed Infrastructure Pre-Sale at Scale",
+   "url": "https://247wallst.com/investing/2026/11/05/microsoft-is-executing-an-irreproducible-balance-sheet-backed-infrastructure-pre-sale-at-scale/"
+  },
+  {
+   "symbols": [
+    "AAPL",
+    "TSLA"
+   ],
+   "source": "247wallst.com",
+   "pubDate": "2026-11-05T12:15:57Z",
+   "headline": "Apple Vs. Tesla: Low CapEx Only Matters if Non-Cyclical Cash Flows Come With It",
+   "url": "https://247wallst.com/investing/2026/11/05/apple-vs-tesla-low-capex-only-matters-if-non-cyclical-cash-flows-come-with-it/"
+  },
+  {
+   "symbols": [
+    "U11.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-05T10:35:52Z",
+   "headline": "Analysts trim UOB target price as margin squeeze and rising costs cloud 2027 outlook",
+   "url": "https://www.businesstimes.com.sg/companies-markets/analysts-trim-uob-target-price-margin-squeeze-and-rising-costs-cloud-2027-outlook"
+  },
+  {
+   "symbols": [
+    "D05.SI"
+   ],
+   "source": "sg.finance.yahoo.com",
+   "pubDate": "2026-11-05T09:59:48Z",
+   "headline": "DBS Earnings, Malaysia Investment, and Hong Kong Corporate Moves Lead Asia News",
+   "url": "https://sg.finance.yahoo.com/news/dbs-earnings-malaysia-investment-hong-095948192.html"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "source": "thesmartinvestor.com.sg",
+   "pubDate": "2026-11-05T06:30:00Z",
+   "headline": "Ahead of OCBC’s 3Q Update: 3 Key Metrics Investors Must Watch",
+   "url": "https://thesmartinvestor.com.sg/ahead-of-ocbcs-3q-update-3-key-metrics-investors-must-watch/"
   },
   {
    "symbols": [
     "S68.SI"
    ],
-   "source": "thesmartinvestor.com.sg",
-   "pubDate": "2026-11-04T23:30:00Z",
-   "headline": "STI’s Red October 2026: 4 SGX Blue Chips Still in the Green",
-   "url": "https://thesmartinvestor.com.sg/stis-red-october-2026-4-sgx-blue-chips-still-in-the-green/"
+   "source": "straitstimes.com",
+   "pubDate": "2026-11-05T05:35:00Z",
+   "headline": "iX Biopharma replies SGX on partner’s licence, says US$41m Pentagon ketamine wafer deal unaffected",
+   "url": "https://www.straitstimes.com/business/ix-biopharma-replies-sgx-queries-on-partners-licence-says-us41m-pentagon-ketamine-wafer-deal"
   },
   {
    "symbols": [
-    "GOOGL"
+    "D05.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-05T04:00:00Z",
+   "headline": "Grab’s Singapore, Malaysia businesses worth more than share price: DBS",
+   "url": "https://www.businesstimes.com.sg/companies-markets/grabs-singapore-malaysia-businesses-worth-more-share-price-dbs"
+  },
+  {
+   "symbols": [
+    "D05.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-05T01:53:59Z",
+   "headline": "Things to know about DBS’ incoming chairman Anthony Lim",
+   "url": "https://www.businesstimes.com.sg/companies-markets/things-know-about-dbs-incoming-chairman-anthony-lim"
+  },
+  {
+   "symbols": [
+    "D05.SI"
    ],
    "source": "channelnewsasia.com",
-   "pubDate": "2026-11-04T23:23:00Z",
-   "headline": "Google turns off AI for schoolchildren by default",
-   "url": "https://www.channelnewsasia.com/world/google-ai-children-turn-default-6525746"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-11-04T23:02:22Z",
-   "headline": "DBS chairman Peter Seah to hand reins over to Anthony Lim; bank’s Q3 net profit slips 5% to $2.8b",
-   "url": "https://www.straitstimes.com/business/dbs-chairman-peter-seah-to-retire-with-effect-from-jan-1-2027-q3-net-profit-at-2-8b"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-04T23:00:29Z",
-   "headline": "Peter Seah to retire as DBS chairman after 16 years; Anthony Lim to succeed him",
-   "url": "https://www.businesstimes.com.sg/companies-markets/peter-seah-retire-dbs-chairman-after-16-years-anthony-lim-succeed-him"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-04T22:43:14Z",
-   "headline": "DBS Q3 profit falls 5% to S$2.81 billion on weaker trading income, misses forecasts",
-   "url": "https://www.businesstimes.com.sg/companies-markets/dbs-q3-profit-falls-5-s2-81-billion-weaker-trading-income-misses-forecasts"
+   "pubDate": "2026-11-05T01:23:00Z",
+   "headline": "DBS names board director Anthony Lim as new chairman; Peter Seah retires after 16 years",
+   "url": "https://www.channelnewsasia.com/singapore/dbs-chairman-peter-seah-anthony-lim-6525876"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 41726,
-  "output": 2765,
+  "input": 41066,
+  "output": 1217,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1056
+  "costUsd": 0.0972
  },
- "createdAt": "2026-11-05T01:01:40.237Z"
+ "createdAt": "2026-11-05T13:01:23.614Z"
 }

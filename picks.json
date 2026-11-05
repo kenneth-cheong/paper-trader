@@ -1,125 +1,154 @@
 {
- "market_summary": "US markets are in a strong post-election rally (Nov 4-5) with mega-cap tech leading gains; Microsoft (+9.6%) and Amazon (+8.3%) posted outsized single-day moves on buy signals, while Apple hit near 52-week highs despite CEO warnings on memory cost inflation. In Singapore, Q3 bank earnings season is shaking up the sector: DBS and UOB both missed profit estimates on trading-income weakness and margin pressure, with UOB's NIM guidance cut and a sharp 5% single-day drop on 3.3x normal volume signaling the market is punishing margin compression hardest; OCBC reports Friday. Regional bank momentum has turned negative (all three SG banks down 10-13% over the past month) even as 1-year returns remain strongly positive, suggesting a corrective phase after a big run. Overall, US tech momentum and SG financials are diverging sharply this week.",
+ "market_summary": "SG banks are seeing a post-earnings shakeout: UOB missed Q3 estimates and flagged higher 2027 costs, sending shares to a five-month low, while OCBC and DBS results land this week with elevated results-day volatility expected. US mega-caps are diverging sharply - Apple and Amazon rallied hard on fresh positive catalysts (cheaper memory-cost outlook, Uber Eats tie-up) and sit near 52-week highs, while Nvidia and Alphabet remain in steep pullbacks (-16%+ over 1 month) amid AI-capex and regulatory jitters. Broad indices (SPY, QQQ, STI ETF) are modestly off highs but not broken, suggesting this is more single-name dispersion than a market-wide risk-off move. Volatility and relative volume are elevated across several names (UOB, SIA, AAPL, AMZN), indicating active repositioning around this earnings season.",
  "picks": [
   {
    "symbol": "U11.SI",
    "stance": "short",
    "conviction": "high",
    "horizon": "weeks",
-   "thesis": "UOB just missed Q3 profit estimates and management cut full-year NIM guidance below 1.75%, with NIM already compressing 6bps QoQ to 1.68% on higher funding costs. The stock fell 5% on 3.3x normal volume on the news, well beyond its typical 2% earnings-day move estimate, signaling the market sees this as a structural margin problem, not noise. Record fee income (+19% YoY) was not enough to offset the negative profit/NIM surprise, and the stock is now down 12% over 1 month and 11.8% over 3 months, underperforming peers.",
-   "news": "UOB Q3 2026 profit of S$1.25bn missed the S$1.35bn consensus; NIM guidance cut below 1.75% for FY2026, down from prior 1.75-1.80% guide; stock fell 5% on results day (Nov 5, 2026) on elevated volume.",
-   "risks": "If regional rate expectations stabilize or UOB's fee-income momentum (record S$733m, +19% YoY) proves durable enough to offset NIM pressure, the selloff could reverse quickly; a broad SGX financials rebound (e.g., good OCBC results Friday) could also lift UOB regardless of its own fundamentals.",
+   "thesis": "UOB just missed Q3 profit estimates on margin compression and guided to higher 2027 costs - a rare double-negative (earnings miss + forward cost guidance raise) for a SG bank. Price already broke to a 5-month low with rel. volume 1.86x normal, vs MA50 -9.2% and vs MA200 -4.5%, showing a trend break rather than just a one-day dip. Analyst mix is lukewarm (3 buy/11 hold/2 sell) versus peers DBS/OCBC which are more bullishly rated, suggesting UOB is the relative laggard in the sector repricing.",
+   "news": "UOB posts Q3 profit miss amid margin squeeze and raises 2027 cost outlook (2026-11-04); shares fell >5% to a five-month low per market summary.",
+   "risks": "If management's cost guidance is later seen as conservative, or if peer results (OCBC Nov 6, DBS Nov 5) come in weak too and drag the whole sector down together, UOB could stabilize relatively; a broad SG bank short-covering rally on rate-cut optimism would also hurt this trade.",
    "source_urls": [
-    "https://www.manilatimes.net/2026/11/05/business/foreign-business/singapores-uob-misses-on-quarterly-profit/2462001",
-    "https://www.thestar.com.my/business/business-news/2026/11/05/uob-earnings-surge-as-provisions-tumble"
+    "https://www.manilatimes.net/2026/11/05/business/foreign-business/singapores-uob-misses-on-quarterly-profit/2462001"
    ],
-   "priceAtPick": 38.44
+   "priceAtPick": 37.81
   },
   {
-   "symbol": "MSFT",
+   "symbol": "AAPL",
    "stance": "long",
-   "conviction": "high",
+   "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "Microsoft surged 9.6% in a single session amid a broad post-election rally, flashing a technical buy signal alongside Apple and Amazon. Analyst sentiment is overwhelmingly positive (52 buy vs 5 hold out of 53), with consensus target implying another ~14% upside even after the pop, and the stock remains well above both its 50-day and 200-day moving averages, indicating a durable uptrend rather than a one-day spike.",
-   "news": "Nov 4-5, 2026: Apple, Microsoft and Amazon flashed buy signals in a broad post-election market rally, with MSFT up 9.6% on the day.",
-   "risks": "A single-day 9.6% move is unusually large and could partially be a mean-reversion/gap event; if the post-election rally fades or broader tech sees profit-taking, MSFT could give back a meaningful chunk of the gain. High realized volatility (32.7% annualized) raises the risk of a sharp pullback.",
+   "thesis": "Apple jumped 5.3% in a single session as data-center-related backlash eased fears over memory/component cost pressure, pushing shares to a fresh 52-week high with vs MA50 +4.4% and vs MA200 +17.3% - a clean momentum breakout on a fresh, specific catalyst. Elevated relative volume (2.05x) confirms real buying interest, not just drift.",
+   "news": "Apple shares rally as data center vote backlash seen easing memory cost pressures (2026-11-04/05).",
+   "risks": "Consensus analyst target ($333) is actually below the current price (-4.6% implied downside), so this is a momentum/news trade against a cautious Street view; any reversal in the memory-cost narrative or broader tech profit-taking could snap the rally quickly given how fast the move happened.",
    "source_urls": [
-    "https://finance.yahoo.com/m/a147bf9a-4218-3171-97a4-fb80fda211eb/dow-jones-futures-rise-after.html"
+    "https://www.trefis.com/stock/aapl/articles/622962/the-open-question-under-apple-stocks-price/2026-11-05"
    ],
-   "priceAtPick": 555.8
+   "priceAtPick": 349.51
   },
   {
    "symbol": "AMZN",
    "stance": "long",
    "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "Amazon jumped 8.3% in the post-election tech rally and sits among the names with buy signals; analyst coverage is extremely bullish (56 buy vs 3 hold) with 22.8% implied upside to consensus target, and the stock trades above both 50- and 200-day moving averages, suggesting the rally has technical support beyond a single news day.",
-   "news": "Nov 4-5, 2026: AMZN flagged alongside AAPL/MSFT for a post-election buy signal, up 8.3% on the day; a Toronto warehouse unionization campaign emerged the same day as a minor negative offset.",
-   "risks": "The unionization campaign in Canada is a longer-term labor-cost and reputational risk if it spreads; a single-day 8%+ gain also raises reversion risk if the broader rally cools, and Amazon's 3-month and 6-month returns are still negative, showing the longer trend is less convincingly bullish than the 1-day move suggests.",
+   "thesis": "Amazon rallied 6.1% on news of a new Prime-member restaurant delivery partnership with Uber Eats, a concrete product/ecosystem expansion that should support Prime engagement and advertising/logistics cross-sell. Stock is now back above both MA50 (+4.8%) and MA200 (+9.2%), and analyst sentiment is overwhelmingly bullish (56 buy/3 hold/0 sell) with 22.8% implied upside to target.",
+   "news": "Amazon partners with Uber Eats for Prime member restaurant delivery (2026-11-05).",
+   "risks": "The move already priced in a large single-day pop (+6.1%), so near-term follow-through could stall or partially reverse; the partnership's actual financial contribution is unproven and may take quarters to show up in results, making this more sentiment-driven than fundamentals-driven for now.",
    "source_urls": [
-    "https://finance.yahoo.com/m/a147bf9a-4218-3171-97a4-fb80fda211eb/dow-jones-futures-rise-after.html",
-    "https://finance.yahoo.com/small-business/articles/amazon-workers-greater-toronto-area-234300921.html"
+    "https://finance.yahoo.com/m/999f773f-01eb-3a62-b026-5d54db52c96e/amazon-and-uber-want-to-bring.html"
    ],
    "priceAtPick": 266.03
   },
   {
-   "symbol": "D05.SI",
+   "symbol": "GOOGL",
    "stance": "short",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "DBS missed Q3 profit estimates (S$2.81bn vs S$2.96bn expected) with trading income collapsing 65% YoY and 68% QoQ, a sharp deterioration in a key revenue line. While the generous S$0.81 total dividend (incl. 15-cent capital return) cushioned the immediate reaction (shares only down 0.1% on the day), the stock is already down 9.9% over the past month and sits 6.8% below its 50-day moving average, suggesting the market is still digesting weaker fee/trading dynamics across the sector alongside UOB's miss.",
-   "news": "Nov 4, 2026: DBS Q3 net profit fell 5% YoY to S$2.81bn, missing consensus, driven by a 65% YoY plunge in markets trading income; DBS simultaneously declared an 81-cent total dividend per share.",
-   "risks": "The large dividend payout and capital return could support the stock price and attract income-focused buyers, limiting downside; DBS also still posted strong 6-month (+20.3%) and 1-year (+32.3%) returns, and if OCBC's Friday results beat expectations, sector-wide sentiment could lift DBS regardless of its own weaker trading income line.",
-   "source_urls": [
-    "https://uk.investing.com/news/earnings/dbs-thirdquarter-profit-falls-5-as-trading-income-slumps-4958950"
-   ],
-   "priceAtPick": 70.78
-  },
-  {
-   "symbol": "AAPL",
-   "stance": "long",
    "conviction": "low",
    "horizon": "weeks",
-   "thesis": "Apple is participating in the broad post-election tech rally with a buy signal and sits just 0.2% off its 52-week high, with strong 6-month (+23%) and 1-year (+29.9%) momentum. However, the CEO's warning about 'unprecedented' and potentially rising memory prices is a genuine cost-pressure risk for iPhone/Mac/iPad margins that tempers the bullish case, keeping conviction low despite the positive price action.",
-   "news": "Nov 5, 2026: Apple flagged in a buy-signal basket with MSFT/AMZN amid the post-election rally, but Apple's own CEO separately warned the same day that memory prices are 'unprecedented' and could pressure device costs.",
-   "risks": "If memory cost inflation materially compresses Apple's hardware margins in upcoming quarters, or if analysts' slightly below-market consensus target (implying -4.6% downside) proves prescient, the stock could underperform peers despite near-term rally participation.",
+   "thesis": "Alphabet is in a pronounced downtrend (-16.9% 1m, -27.4% 6m, -28.2% from 52-week high, -13.8% vs MA50, -15% vs MA200) and was downgraded by Citizens from Outperform to Market Perform in late October. The persistence and depth of the drawdown suggests ongoing distribution rather than a one-off dip.",
+   "news": "Citizens downgraded GOOGL from Market Outperform to Market Perform on 2026-10-29 (move since -11.1%), part of background price-data context rather than a brand-new catalyst.",
+   "risks": "This is a low-conviction, contrarian-to-consensus call: the broader analyst base remains near-unanimously bullish (53 buy/5 hold/0 sell) with 38.6% implied upside to target, so a sharp mean-reversion bounce is a real risk, especially if it's driven by index-wide rotation back into mega-cap tech or an AI-capex/regulatory relief headline.",
    "source_urls": [
-    "https://finance.yahoo.com/technology/articles/apple-ceo-says-memory-prices-233012502.html",
-    "https://finance.yahoo.com/m/a147bf9a-4218-3171-97a4-fb80fda211eb/dow-jones-futures-rise-after.html"
+    "https://sg.finance.yahoo.com/news/dbs-earnings-malaysia-investment-hong-095948192.html"
    ],
-   "priceAtPick": 349.51
+   "priceAtPick": 288.93
   }
  ],
  "sources": [
   {
-   "url": "https://x.com/straits_times/status/1986216897126240390",
-   "title": "The Straits Times on X: \"DBS sees weaker 2026 net profit after Q3 earnings dip 2% to $2.95 billion https://t.co/Alwkl7lR5M\" / X",
-   "age": "364 days ago"
+   "url": "https://www.businesstoday.com.my/2026/11/05/dsb-group-appoints-board-member-anthony-lim-as-new-chairman/",
+   "title": "DSB Group Appoints Board Member Anthony Lim As New Chairman - BusinessToday",
+   "age": null
   },
   {
-   "url": "https://uk.investing.com/news/earnings/dbs-thirdquarter-profit-falls-5-as-trading-income-slumps-4958950",
-   "title": "DBS third-quarter profit falls 5% as trading income slumps By Investing.com",
+   "url": "https://fintechnews.sg/140541/fintech/dbs-chairman/",
+   "title": "DBS Names Anthony Lim as Chairman From January 2027 - Fintech Singapore",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.investing.com/news/earnings/dbs-thirdquarter-profit-falls-5-as-trading-income-slumps-5001854",
-   "title": "DBS third-quarter profit misses estimates as trading income slumps By Investing.com",
+   "url": "https://www.marketscreener.com/news/dbs-names-anthony-lim-as-incoming-board-chairman-ce785fdfd08ef520",
+   "title": "DBS : names Anthony Lim as incoming Board Chairman",
    "age": "0 days ago"
   },
   {
-   "url": "https://in.investing.com/news/earnings/dbs-thirdquarter-profit-falls-5-as-trading-income-slumps-5681333",
-   "title": "DBS third-quarter profit misses estimates as trading income slumps By Investing.com",
+   "url": "https://www.asiaone.com/money/dbs-new-chairman-anthony-lim-retire-peter-seah",
+   "title": "Anthony Lim to succeed Peter Seah as DBS chairman from Jan 2027, Money News - AsiaOne",
    "age": "0 days ago"
   },
   {
-   "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
-   "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
+   "url": "https://www.marketscreener.com/news/singapore-s-dbs-names-insider-anthony-lim-as-chairman-ce785fdfd180f022",
+   "title": "Singapore's DBS names insider Anthony Lim as chairman",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://bfsi.eletsonline.com/anthony-lim-to-chair-dbs-group-from-january-2027-succeeding-peter-seah/",
+   "title": "Anthony Lim to chair DBS Group from January 2027, succeeding Peter Seah",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Tan_Teck_Long",
+   "title": "Tan Teck Long",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Peter_Seah",
+   "title": "Peter Seah",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Lim_Tean",
+   "title": "Lim Tean",
+   "age": null
+  },
+  {
+   "url": "https://www.manilatimes.net/2026/11/05/business/foreign-business/singapores-uob-misses-on-quarterly-profit/2462001",
+   "title": "Singapore’s UOB misses on quarterly profit",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://littlebigreddot.com/uob-is-a-hold-after-its-third-quarter-miss-and-5-share-fall/",
+   "title": "UOB is a hold after its third-quarter miss and 5% share fall",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.investing.com/news/earnings/uob-shares-hit-fourmonth-low-as-q3-profit-misses-analyst-estimates-4997156",
+   "title": "UOB shares hit four-month low as Q3 profit misses analyst estimates By Investing.com",
    "age": "1 days ago"
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:d05/earnings",
-   "title": "www.tipranks.com",
+   "url": "https://www.redhot.sg/analysts-trim-uob-target-price-as-margin-squeeze-and-rising-costs-cloud-2027-outlook-736090.html",
+   "title": "Analysts trim UOB target price as margin squeeze and rising costs cloud 2027 outlook - Red Hot Singapore",
    "age": null
   },
   {
-   "url": "https://seekingalpha.com/article/4648026-dbs-group-holdings-ltd-dbsdf-q3-2023-earnings-call-transcript",
-   "title": "DBS Group Holdings Ltd (DBSDF) Q3 2023 Earnings Call Transcript",
+   "url": "https://www.minichart.com.sg/2026/11/04/uob-hold-with-s44-46-target-as-margins-slip-and-cse-global-orders-surge/",
+   "title": "UOB HOLD With S$44.46 Target as Margins Slip and CSE Global Orders Surge",
    "age": null
   },
   {
-   "url": "https://seekingalpha.com/article/4598757-dbs-group-holdings-ltd-dbsdf-q1-2023-earnings-call-transcript",
-   "title": "DBS Group Holdings Ltd (DBSDF) Q1 2023 Earnings Call Transcript",
+   "url": "https://www.minichart.com.sg/2026/11/05/uob-keeps-hold-rating-as-higher-costs-put-s40-00-target-in-focus/",
+   "title": "UOB Keeps HOLD Rating as Higher Costs Put S$40.00 Target in Focus",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/DBSDY/earnings",
-   "title": "www.tipranks.com",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/uob-stock-misses-q3-profit-forecasts-as-fees-hit-a-record/70457498",
+   "title": "UOB stock misses Q3 profit forecasts as fees hit a record",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://gulfnews.com/business/economy/uae-businesses-end-2025-strong-but-rising-costs-cloud-outlook-for-2026-1.500399670",
+   "title": "UAE businesses end 2025 strong but rising costs cloud outlook for 2026",
    "age": null
   },
   {
-   "url": "https://www.marketscreener.com/news/pt-bank-ocbc-nisp-tbk-ocbc-recorded-a-double-digit-growth-in-total-asset-and-credit-disbursement-i-ce785fdbdd88f623",
-   "title": "PT Bank OCBC NISP Tbk : OCBC Recorded a Double-digit growth in Total Asset and Credit Disbursement in Q3/2026",
-   "age": "5 days ago"
+   "url": "https://www.itiger.com/hant/news/2533569113",
+   "title": "Singapore's UOB Drops 2025 Guidance Due to US Tariffs, Posts Stable Q1 Net Profit",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
+   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "91 days ago"
   },
   {
    "url": "https://www.ocbc.com/group/investors/financials.page",
@@ -132,9 +161,9 @@
    "age": "626 days ago"
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
-   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "91 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/vorboerse/ocbc-stock-results-scheduled-for-november-5-2026-ahead-of-the-xetra-open/70396876",
+   "title": "OCBC stock: results scheduled for November 5, 2026 ahead of the Xetra open",
+   "age": "13 days ago"
   },
   {
    "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-q3-results-due-november-6-after-strong-first-half/70442076",
@@ -142,165 +171,130 @@
    "age": "3 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-slips-3-26-prozent-ahead-of-november-6-results/70451178",
-   "title": "OCBC stock slips 3.26% ahead of November 6 results",
-   "age": "1 days ago"
-  },
-  {
    "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-heads-into-november-6-results-after-sgx-notice/70455047",
    "title": "OCBC stock heads into November 6 results after SGX notice",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.business-standard.com/article/reuters/singapore-bank-ocbc-s-q1-profit-at-3-1-2-year-high-tad-below-estimates-118050700130_1.html",
-   "title": "Monday, January 05, 2026 | 12:38 AM ISTहिंदी में पढें",
-   "age": null
-  },
-  {
-   "url": "https://growbeansprout.com/uob-3q26-profit-dividend",
-   "title": "UOB reports 182% YoY jump in 3Q26 profit off low base: Our Quick Take - Growbeansprout.com",
    "age": "1 days ago"
   },
   {
-   "url": "https://www.thestar.com.my/business/business-news/2026/11/05/uob-earnings-surge-as-provisions-tumble",
-   "title": "UOB earnings surge as provisions tumble",
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-uob-kay-hian-keeps-sgd-35-70-target-for-ocbc-stock/70342387",
+   "title": "OCBC stock: UOB Kay Hian keeps SGD 35.70 target for OCBC stock",
+   "age": "19 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-faces-earnings-test-after-great-eastern-profit-slump/70444136",
+   "title": "OCBC stock faces earnings test after Great Eastern profit slump",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-heads-into-november-6-results/70462145",
+   "title": "OCBC stock heads into November 6 results",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000729986/000119312526428347/d41860dex991.htm",
-   "title": "UNITED BANKSHARES INC/WV - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.manilatimes.net/2026/11/05/business/foreign-business/singapores-uob-misses-on-quarterly-profit/2462001",
-   "title": "Singapore’s UOB misses on quarterly profit",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000731766/000073176626000255/earningsrelease3q26unh.htm",
-   "title": "UNITEDHEALTH GROUP INC - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/news/company-announcements/uob-reports-stable-third-quarter-performance-on-record-fee-income",
-   "title": "UOB Reports Stable Third-Quarter Performance on Record Fee Income - TipRanks.com",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/1289308/000162828026005449/ex991_earningsx3qfy26.htm",
-   "title": "EnerSys - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000101382/000119312526434198/umbf-ex99_1.htm",
-   "title": "UMB FINANCIAL CORP - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001511737/000151173726000035/exhibit991-33126.htm",
-   "title": "Ubiquiti Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sg:z74/earnings",
-   "title": "Singtel (Z74) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "82 days ago"
-  },
-  {
-   "url": "https://www.singtel.com/about-us/investor-relations/investor-calendar",
-   "title": "Investor Calendar",
-   "age": "531 days ago"
-  },
-  {
-   "url": "https://www.investing.com/equities/singapore-telecommunications-earnings",
-   "title": "SingTel (STEL) Earnings Date & Report - Investing.com",
-   "age": null
-  },
-  {
-   "url": "https://cdn1.singteldigital.com/content/dam/singtel/investorRelations/financialResults/2026/q3fy26/Q3FY26_slides.pdf",
-   "title": "Business Update Nine months & third quarter ended 31 December 2025",
-   "age": "266 days ago"
-  },
-  {
-   "url": "https://www.marketscreener.com/quote/stock/SINGAPORE-TELECOMMUNICATI-6491140/calendar/",
-   "title": "Singapore Telecommunications Limited: Company Events Publications and Financial Calendar",
-   "age": "2270 days ago"
-  },
-  {
-   "url": "https://cdn2.singteldigital.com/content/dam/singtel/investorRelations/financialResults/2026/h2fy26/Singtel_Group_NR_FY26.pdf",
-   "title": "Singapore Telecommunications Limited Company registration number: 199201624D",
-   "age": "168 days ago"
-  },
-  {
-   "url": "https://www.business-standard.com/article/international/singtel-q3-net-profit-falls-8-3-sees-revenue-drop-113021400200_1.html",
-   "title": "Friday, January 02, 2026 | 04:12 PM ISTहिंदी में पढें",
-   "age": null
-  },
-  {
-   "url": "https://www.business-standard.com/article/companies/singtel-s-annual-profit-plunges-65-takes-1-3-bn-hit-on-airtel-snag-120052800205_1.html",
-   "title": "Monday, January 05, 2026 | 04:51 PM ISTहिंदी में पढें",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/news/company-announcements/singtel-reports-strong-profit-growth-amid-strategic-gains",
-   "title": "singtel reports strong profit growth amid strategic gains",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sg:c6l/earnings",
-   "title": "SIA - Singapore Airlines (C6L) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "122 days ago"
-  },
-  {
-   "url": "https://www.theedgesingapore.com/capital/results/sia-reports-3qfy2026-earnings-505-mil-revenue-reaches-quarterly-record",
-   "title": "SIA reports 3QFY2026 earnings of $505 mil; revenue reaches quarterly record",
-   "age": "223 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/sia-reports-3qfy2026-earnings-505-013935396.html",
-   "title": "SIA reports 3QFY2026 earnings of $505 mil; revenue reaches quarterly record",
-   "age": "253 days ago"
-  },
-  {
-   "url": "https://aviationa2z.com/index.php/2026/02/24/singapore-airlines-q3-profit-rises-26/",
-   "title": "Singapore Airlines Q3 Profit Rises 26% as Revenue Hits S$5.5 Billion - Aviation A2Z",
-   "age": "253 days ago"
-  },
-  {
-   "url": "https://www.singaporeair.com/de_DE/de/corporate/newsroom/press-release/2026/january---march-2026/record-quarterly-revenue-drives-25-9--increase-in-sia-group-oper/",
-   "title": "24 February 2026 Page 1 of 6",
-   "age": "254 days ago"
-  },
-  {
-   "url": "https://www.smartkarma.com/home/newswire/earnings-alerts/singapore-airlines-sia-earnings-3q-net-income-hits-s504-6m-amid-strong-revenue-performance/",
-   "title": "Singapore Airlines (SIA) Earnings: 3Q Net Income Hits S$504.6M Amid Strong Revenue Performance",
-   "age": "253 days ago"
-  },
-  {
-   "url": "https://www.enginecowl.com/singapore-airlines-strong-unit-revenue-performance-three-takeaways-from-its-q3-fy2025-26-results/",
-   "title": "Singapore Airlines’ strong unit revenue performance: three takeaways from its Q3 FY2025/26 results",
-   "age": "250 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/singy/earnings",
+   "url": "https://www.tipranks.com/stocks/SG:O39",
    "title": "www.tipranks.com",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:c6l/stock-analysis",
-   "title": "stock analysis",
+   "url": "https://finance.yahoo.com/media-advertising/articles/amazon-launches-partnership-uber-eats-110000302.html",
+   "title": "Amazon Launches Partnership with Uber Eats Featuring $0 Delivery Fee for Prime Members",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-11-05/amazon-adds-uber-food-delivery-perks-for-its-prime-subscribers",
+   "title": "Amazon Adds Uber Food Delivery Perks for Its Prime Subscribers - Bloomberg",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.geekwire.com/2026/amazon-teams-up-with-uber-on-restaurant-delivery-years-after-shutting-down-its-own-service/",
+   "title": "Amazon teams up with Uber on restaurant delivery, years after shutting down its own service",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://investor.uber.com/news-events/news/press-release-details/2026/Amazon-Launches-Partnership-with-Uber-Eats-Featuring-0-Delivery-Fee-for-Prime-Members-2026-afY0fIEoo1/default.aspx",
+   "title": "Uber Technologies, Inc. - Amazon Launches Partnership with Uber Eats Featuring $0 Delivery Fee for Prime Members",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001543151/000154315126000041/uber-20260930.htm",
+   "title": "Uber Technologies, Inc - Form 10-Q - FY2026",
    "age": null
+  },
+  {
+   "url": "https://shiftdelete.net/en/amazon-uber-eats",
+   "title": "Amazon Uber Eats Deal Gives Prime Free Delivery Over $25",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/amazon-partners-with-uber-eats-to-bring-restaurant-delivery-to-prime-members-110100295.html",
+   "title": "Amazon partners with Uber Eats to bring restaurant delivery to Prime members",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001543151/000154315126000039/uberq326earningspressrelea.htm",
+   "title": "Uber Technologies, Inc - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Amazon_Prime_Air",
+   "title": "Amazon Prime Air",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/a8-kex991q4202609262026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.heygotrade.com/en/news/apple-aapl-stock-news-november-5-2026/",
+   "title": "Apple Stock (AAPL) Rises 5.3% as Big Tech Gains on Midterms (Nov 4)",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000026/aapl-20260926.htm",
+   "title": "Apple Inc. - Form 10-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.kucoin.com/blog/apple-stock-q4-2026-earnings-memory-costs",
+   "title": "Apple Stock Falls After Q4 2026 Earnings Beat: Why Margins and Memory Costs Worry Investors| KuCoin",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000013/aapl-20260328.htm",
+   "title": "Apple Inc. - Form 10-Q - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000018/a8-kex991q3202606272026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000011/a8-kex991q2202603282026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://247wallst.com/investing/2026/11/05/jim-cramers-surprise-midterm-winner-apple-because-fewer-data-centers-could-mean-cheaper-memory/",
+   "title": "Jim Cramer's Surprise Midterm Winner: Apple, Because Fewer Data Centers Could Mean Cheaper Memory - 24/7 Wall St.",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.fool.com/earnings/call-transcripts/2026/11/02/apple-aapl-q4-2026-earnings-call-transcript/",
+   "title": "Apple (AAPL) Q4 2026 Earnings Call Transcript",
+   "age": "2 days ago"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 52088,
-  "output": 6172,
+  "input": 49626,
+  "output": 4459,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1604
+  "costUsd": 0.1467
  },
- "createdAt": "2026-11-05T01:01:40.237Z"
+ "createdAt": "2026-11-05T13:01:23.614Z"
 }
