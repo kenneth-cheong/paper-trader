@@ -1,185 +1,138 @@
 {
- "market_summary": "<cite index=\"2-3\">The Dow Jones fell 1,833 points (down 3.4%) while the Nasdaq Composite plunged 5.52% on November 5, marking its worst day since April 2025.",
+ "market_summary": "US markets are selling off on post-midterm election uncertainty about data centre policy, hitting technology and AI stocks particularly hard. Nvidia tumbled 9.3% on November 5 amid concerns that Democratic election victories could lead to tighter restrictions on data centre construction. Tesla announced it will wind down Cybertruck production by mid-2027 after sales collapsed to roughly 10% of planned volumes. In Singapore, the three major banks reported Q3 results with mixed performance—OCBC beat expectations with record banking operations profit, while DBS and UOB disappointed, prompting multiple analyst target price cuts. Singapore Airlines confirmed further delays to its A350 cabin retrofit programme, now pushing new first and business class service to Q3/Q4 2027 due to supply chain constraints and seat certification issues.",
  "items": [
   {
    "symbols": [
-    "NVDA",
-    "AAPL",
-    "MSFT",
-    "GOOGL",
-    "META",
-    "TSLA",
-    "QQQ",
-    "SPY"
+    "TSLA"
    ],
-   "date": "2026-11-05",
-   "headline": "Tech stocks plunge on AI regulation fears after Democrats' midterm gains",
-   "summary": "<cite index=",
-   "type": "macro",
+   "date": "2026-11-06",
+   "headline": "Tesla to wind down Cybertruck production by mid-2027",
+   "summary": "Tesla will stop Cybertruck production around mid-2027 to make room for Cybercab production, after the vehicle sold at roughly 10% of planned 250,000 annual units, with only 20,237 sold in the U.S. in 2025.",
+   "type": "product",
    "tone": "negative",
-   "source_url": "https://www.bloomberg.com/news/newsletters/2026-11-05/tech-stocks-sink-on-investors-ai-anxiety"
+   "source_url": null
   },
   {
    "symbols": [
     "NVDA"
    ],
    "date": "2026-11-05",
-   "headline": "Nvidia stock crashes 8.91% as AI infrastructure spending slows amid election concerns",
-   "summary": "<cite index=\"11-3,11-6\">Nvidia fell 8.91% to $182.29, its worst daily close since January 27, 2025.</cite> <cite index=\"12-10\">The stock is down 22% over the past month.</cite>",
+   "headline": "Nvidia tumbles 9.3% as AI stocks sell off on data centre policy concerns",
+   "summary": "Nvidia shares fell 9.26% to $181.60 on November 5 amid a broad AI chip selloff driven by post-midterm election concerns that Democratic control could tighten data centre construction regulations.",
    "type": "macro",
    "tone": "negative",
-   "source_url": "https://247wallst.com/investing/2026/11/05/nvidia-stock-just-crashed-22-jim-cramer-says-its-the-cheapest-in-a-decade/"
+   "source_url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-6-2026/"
   },
   {
    "symbols": [
     "O39.SI"
    ],
-   "date": "2026-11-05",
-   "headline": "OCBC Q3 net profit rises 3% to S$2.04 billion, slightly above expectations",
-   "summary": "<cite index=\"19-3,19-4\">OCBC's net income rose 3% to S$2.04 billion for the three months ended Sept. 30, slightly above the S$2 billion average analyst estimate.</cite> <cite index=\"20-4\">The bank now expects loan growth in the low double digits for 2026.</cite>",
+   "date": "2026-11-06",
+   "headline": "OCBC posts 3% Q3 profit growth, beats expectations with record banking operations",
+   "summary": "OCBC reported Q3 net profit of S$2.04 billion, up 3% year-on-year, with record banking operations profit of S$1.90 billion up 16%, and 9M26 net profit reaching record S$6.24 billion up 10%.",
    "type": "earnings",
    "tone": "positive",
-   "source_url": "https://www.businesstimes.com.sg/companies-markets/ocbc-q3-profit-rises-3-s2-04-billion-slightly-above-expectations"
+   "source_url": "https://sg.finance.yahoo.com/news/ocbc-posts-higher-quarterly-profit-040223931.html"
   },
   {
    "symbols": [
-    "D05.SI"
-   ],
-   "date": "2026-11-05",
-   "headline": "DBS Q3 net profit dips 2% to S$2.95 billion, beats analyst expectations",
-   "summary": "<cite index=\"28-3\">DBS reported a 2% drop in third-quarter earnings to S$2.95 billion ($2.28 billion), beating analysts' estimates of S$2.72 billion.</cite> <cite index=\"31-11\">Trading income declined 65 percent year-over-year to reach SGD 152 million.</cite>",
-   "type": "earnings",
-   "tone": "mixed",
-   "source_url": "https://growbeansprout.com/dbs-3q26-profit-dividend"
-  },
-  {
-   "symbols": [
+    "D05.SI",
     "U11.SI"
    ],
-   "date": "2026-11-04",
-   "headline": "UOB Q3 profit misses expectations at S$1.25 billion, down 15% quarter-on-quarter",
-   "summary": "<cite index=\"29-3,29-5\">UOB's 3Q26 net profit of S$1.25 billion fell 15% QoQ and missed the S$1.38 billion consensus forecast, despite fee income hitting a record high of S$733 million.</cite>",
-   "type": "earnings",
+   "date": "2026-11-06",
+   "headline": "Analysts cut DBS and UOB target prices after Q3 results miss on cautious 2027 guidance",
+   "summary": "Multiple analysts cut DBS target prices by S$1-5 per share following lower earnings estimates, with Citi reducing to S$80.30 from S$86.60 and others following suit, as banks signal more cautious 2027 outlooks.",
+   "type": "analyst",
    "tone": "negative",
-   "source_url": "https://growbeansprout.com/uob-3q26-profit-dividend"
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/analysts-cut-dbs-target-price-lower-2027-earnings-see-buying-opportunity-after-share-price-slide"
   },
   {
    "symbols": [
-    "AAPL"
+    "C6L.SI"
    ],
-   "date": "2026-11-05",
-   "headline": "Apple raises $7.5 billion from investment-grade debt offering",
-   "summary": "<cite index=\"38-1,38-3\">Apple Inc. raised $7.5 billion from its high-grade bond offering, attracting solid demand with about $31 billion of orders at its peak, or more than four times its size.</cite>",
-   "type": "deal",
-   "tone": "positive",
-   "source_url": "https://www.businesstimes.com.sg/companies-markets/telcos-media-tech/apple-raises-us7-5-billion-investment-grade-debt-offering"
-  },
-  {
-   "symbols": [],
-   "date": "2026-11-05",
-   "headline": "Nasdaq enters correction territory as AI trade concerns mount",
-   "summary": "<cite index=\"3-1\">The Nasdaq 100 fell 6.4% and wiped out $2.3 trillion in value amid a selloff in technology stocks as investors fretted that Democrats may tighten regulation of the artificial intelligence industry.</cite>",
-   "type": "macro",
-   "tone": "negative",
-   "source_url": "https://www.bloomberg.com/news/newsletters/2026-11-05/tech-stocks-sink-on-investors-ai-anxiety"
-  },
-  {
-   "symbols": [
-    "GOOGL",
-    "AMZN"
-   ],
-   "date": "2026-11-05",
-   "headline": "Amazon challenges Google's shopping dominance with direct product feeds",
-   "summary": "Amazon is launching a new initiative to challenge Google Shopping by allowing merchants to feed product information directly, as reported in recent market updates.",
+   "date": "2026-11-06",
+   "headline": "Singapore Airlines delays A350 cabin retrofit to Q3/Q4 2027 due to certification issues",
+   "summary": "SIA confirmed new first and business class products for A350 aircraft will not enter service until Q3/Q4 2027, delayed further from previous Q1 2027 target due to supply chain constraints and seat certification delays.",
    "type": "product",
-   "tone": "mixed",
-   "source_url": "https://www.mediapost.com/publications/article/419260/amazon-challenges-google-shopping-with-direct-prod.html"
+   "tone": "negative",
+   "source_url": "https://mainlymiles.com/2026/11/06/singapore-airlines-unveils-new-first-business-class/"
   },
   {
    "symbols": [
-    "ES3.SI"
+    "Z74.SI"
    ],
-   "date": "2026-11-05",
-   "headline": "Singapore market caught in global tech selloff amid AI regulation concerns",
-   "summary": "<cite index=\"5-1\">The tech-heavy Nasdaq dropped 5% Thursday, erasing post-midterm gains and entering correction territory, as a chip selloff bled into other sectors of the economy.</cite> Singapore's ETF indices tracking regional and US tech exposure faced pressure.",
-   "type": "macro",
-   "tone": "negative",
-   "source_url": "https://www.axios.com/2026/11/05/nasdaq-plummets-correction"
-  },
-  {
-   "symbols": [],
-   "date": "2026-11-05",
-   "headline": "Semiconductor stocks tumble as AI data center expansion faces regulatory headwinds",
-   "summary": "<cite index=\"8-4\">The S&P 500 fell 4.4%, while a key semiconductor index tumbled 12%.</cite> <cite index=\"5-4\">Investors fretted over the possibility that Democrats' midterm gains would slow the AI buildout, as tech-critical candidates swept to power in Texas, Georgia, and Ohio.</cite>",
-   "type": "macro",
-   "tone": "negative",
-   "source_url": "https://features.financialjuice.com/2026/11/05/tech-stocks-plunge-as-post-election-ai-concerns-spark-broad-market-selloff-us-market-wrap/"
+   "date": "2026-11-06",
+   "headline": "Singtel executive Low Ka Hoe to become Netlink NBN Trust CEO",
+   "summary": "Ex-ST Engineering and Singtel executive Low Ka Hoe will succeed Tong Yew Heng as CEO of Netlink NBN Trust, marking a leadership transition at the fibre infrastructure operator.",
+   "type": "management",
+   "tone": "mixed",
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/ex-st-engineering-singtel-executive-low-ka-hoe-succeed-tong-yew-heng-netlink-nbn-trust-ceo"
   }
  ],
  "sources": [
   {
-   "url": "https://www.gurufocus.com/news/9175295/nasdaq-tech-selloff-hits-sandisk-sndk-amid-market-correction-on-november-5-2026",
-   "title": "Nasdaq Tech Selloff Hits SanDisk (SNDK) Amid Market Correction on November 5, 2026",
+   "url": "https://electrek.co/2026/11/06/tesla-ending-cybertruck-production-sales-10-percent-plan/",
+   "title": "Tesla to end Cybertruck production as sales stall at ~10% of plan",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.foxbusiness.com/markets/stocks-nov-5-2026",
-   "title": "Nasdaq tumbles 5%, Dow plunges more than 1,800 points",
+   "url": "https://www.autoevolution.com/news/the-cybertruck-may-have-looked-like-the-future-but-will-soon-be-history-musk-confirms-278056.html",
+   "title": "The Tesla Cybertruck May Have Looked Like the Future, but Will Soon Be History, Musk Confirms - autoevolution",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.bloomberg.com/news/newsletters/2026-11-05/tech-stocks-sink-on-investors-ai-anxiety",
-   "title": "Tech Stocks Sink on Investors’ AI Anxiety - Bloomberg",
+   "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/06/tesla-to-wind-down-cybertruck-production-after-years-of-poor-sales-in-few-markets/",
+   "title": "Tesla to wind down Cybertruck production after years of poor sales in few markets",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.cnn.com/2026/11/05/investing/tech-heavy-nasdaq-plunges",
-   "title": "Massive tech sell-off wipes $2.5 trillion from the stock market",
+   "url": "https://en.wikipedia.org/wiki/Tesla_Cybertruck",
+   "title": "Tesla Cybertruck",
+   "age": null
+  },
+  {
+   "url": "https://www.carscoops.com/2308891/tesla-to-end-cybertruck-production-2027/",
+   "title": "Telsa's Cybertruck Has Only Months To Live - CarScoops",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.semafor.com/article/11/05/2026/us-tech-selloff-erases-post-midterm-gains",
-   "title": "US tech selloff erases post-midterm gains",
+   "url": "https://techcrunch.com/2026/11/06/tesla-will-stop-making-the-cybertruck-in-2027/",
+   "title": "Tesla will stop making the Cybertruck in 2027",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.axios.com/2026/11/05/nasdaq-plummets-correction",
-   "title": "Tech stocks tumble as election rattles AI trade",
+   "url": "https://en.wikipedia.org/wiki/Tesla_Cybercab",
+   "title": "Tesla Cybercab",
+   "age": null
+  },
+  {
+   "url": "https://www.detroitnews.com/story/business/autos/2026/11/06/tesla-wind-down-cybertruck-production-after-years-poor-sales-in-few-markets/92639154007/",
+   "title": "Tesla to wind down Cybertruck production after years of poor sales in few markets",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.tokenpost.com/news/investing/49564",
-   "title": "Tech Selloff Sends Nasdaq 100 Down 6.4%, Erasing $2.3 Trillion in Value",
-   "age": "0 days ago"
+   "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026003837/exhibit991.htm",
+   "title": "Tesla, Inc. - Form 8-K - FY2026",
+   "age": null
   },
   {
-   "url": "https://features.financialjuice.com/2026/11/05/tech-stocks-plunge-as-post-election-ai-concerns-spark-broad-market-selloff-us-market-wrap/",
-   "title": "Tech Stocks Plunge as Post-Election AI Concerns Spark Broad Market Selloff",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://eurasiabusinessnews.com/2026/11/05/stock-market-today-nasdaq-sinks-5-as-ai-selloff-hits-chip-and-data-center-stocks/",
-   "title": "Stock Market Today: Nasdaq Sinks 5% as AI Selloff Hits Chip and Data-Center Stocks, Oil price at $96",
-   "age": "0 days ago"
+   "url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-5-2026/",
+   "title": "Nvidia Stock (NVDA) Falls 3.2% as Chip Stocks Slide (Nov 4)",
+   "age": "1 days ago"
   },
   {
    "url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-3-2026/",
    "title": "Nvidia Stock (NVDA) Falls 1.3% as Chip Stocks Slide (Nov 2)",
-   "age": "2 days ago"
+   "age": "3 days ago"
   },
   {
-   "url": "https://fourweekmba.com/ai-12-ai-stocks-lose-1-44t-at-close-as-nvidia-falls-8-9/",
-   "title": "12 AI Stocks Lose $1.44T at Close as Nvidia Falls 8.9% - FourWeekMBA",
+   "url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-6-2026/",
+   "title": "Nvidia Stock (NVDA) Falls 9.3% as AI Chip Stocks Slide (Nov 5)",
    "age": "0 days ago"
   },
   {
-   "url": "https://247wallst.com/investing/2026/11/05/nvidia-stock-just-crashed-22-jim-cramer-says-its-the-cheapest-in-a-decade/",
-   "title": "Nvidia Stock Just Crashed 22%. Jim Cramer Says It's the Cheapest in a Decade - 24/7 Wall St.",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.benzinga.com/markets/prediction-markets/26/11/62956559/nvidia-stock-selloff",
-   "title": "Nvidia Stock Is Down Nearly 24% Ahead of Earnings: Is It a Buy? - Apple (NASDAQ:AAPL), Amazon.com (NASDAQ - Benzinga",
+   "url": "https://www.fool.com/coverage/stock-market-today/2026/11/05/stock-market-today-nov-5-nvidia-slides-on-ai-chip-selloff-as-election-uncertainty-weighs/",
+   "title": "Stock Market Today, Nov. 5: Nvidia Slides on AI Chip Selloff as Election Uncertainty Weighs",
    "age": "0 days ago"
   },
   {
@@ -188,8 +141,8 @@
    "age": "0 days ago"
   },
   {
-   "url": "https://www.washingtontimes.com/news/2026/nov/5/drops-nvidia-ai-chip-stocks-erasing-wall-streets-rally-day/",
-   "title": "More drops for Nvidia and other AI chip stocks erase Wall Street’s rally from the day before",
+   "url": "https://www.fxleaders.com/news/2026/11/05/nvidia-nvda-stock-plunges-nearly-8-as-broad-ai-and-chip-sell-off-erases-over-1000-nasdaq-points/",
+   "title": "Nvidia (NVDA) Stock Plunges Nearly 8% as Broad AI and Chip Sell-Off Erases Over 1,000 Nasdaq Points - Forex News by FX Leaders",
    "age": "0 days ago"
   },
   {
@@ -198,34 +151,109 @@
    "age": "0 days ago"
   },
   {
-   "url": "https://explainx.ai/blog/ai-stocks-crash-nov-5-2026-nvidia-micron-amd-coreweave-why-data-center-midterm-fears-bubble-2026",
-   "title": "AI Stocks Crash Nov 5: Why Nvidia, Micron, AMD Fell",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.fool.com/investing/2025/12/21/will-nvidia-stock-crash-in-2026",
-   "title": "will nvidia stock crash in 2026",
-   "age": null
-  },
-  {
-   "url": "https://www.bloomberg.com/news/articles/2026-11-05/ocbc-s-profit-gains-dented-by-drop-in-trading-insurance-income",
-   "title": "OCBC’s Profit Gains Dented by Drop in Trading, Insurance Income - Bloomberg",
+   "url": "https://journalarta.com/en/2026/11/06/nvidia-nvda-stock-on-thursday-falls-9-26-rsi-oversold/",
+   "title": "Nvidia (NVDA) Stock: $181.60, Down 9.26% Nov 5 — JournalArta Global",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.businesstoday.com.my/2026/11/06/ocbc-q3-net-profit-rises-3-to-s2-04-billion-beats-forecasts/",
-   "title": "OCBC Q3 Net Profit Rises 3% To S$2.04 Billion, Beats Forecasts",
+   "url": "https://coincentral.com/nvidia-nvda-stock-falls-9-as-washington-data-center-fears-hit-chip-sector",
+   "title": "Nvidia (NVDA) Stock Falls 9% as Washington Data Center Fears Hit Chip Sector - CoinCentral",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.poems.com.sg/stock-research/UOB.SG/",
+   "title": "UOB Share Target Price S$38.00 - Stock Analyst Research",
+   "age": "44 days ago"
+  },
+  {
+   "url": "https://www.dbs.com.sg/treasures/aics/templatedata/article/equity/data/en/DBSV/012014/UOB_SP.xml",
+   "title": "UOB",
+   "age": "18 days ago"
+  },
+  {
+   "url": "https://littlebigreddot.com/dbs-rated-a-buy-ahead-of-its-third-quarter-results-on-5-november-2026/",
+   "title": "DBS rated a buy ahead of its third-quarter results on 5 November 2026",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.moomoo.com/community/feed/ocbc-bank-o39-sg-dbs-d05-sg-uob-u11-sg-117397325479942",
+   "title": "$OCBC Bank (O39.SG)$$DBS (D05.SG)$$UOB (U11.SG)$ [Share Link... - moomoo Community",
+   "age": "30 days ago"
+  },
+  {
+   "url": "https://www.redhot.sg/analysts-cut-dbs-target-price-on-lower-2027-earnings-but-see-buying-opportunity-after-share-price-slide-736457.html",
+   "title": "Analysts cut DBS target price on lower 2027 earnings, but see buying opportunity after share price slide - Red Hot Singapore",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
-   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "92 days ago"
+   "url": "https://www.minichart.com.sg/2026/10/19/singapore-banks-in-focus-as-mark-to-market-losses-weigh-on-earnings/",
+   "title": "Singapore Banks in Focus as Mark-to-Market Losses Weigh on Earnings",
+   "age": "18 days ago"
   },
   {
-   "url": "https://www.ocbc.com/group/investors/financials.page",
-   "title": "Financial Results Overview",
-   "age": "1351 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-keeps-hold-rating-as-uob-stock-heads-toward-november-4-results/70397572",
+   "title": "DBS keeps Hold rating as UOB stock heads toward November 4 results",
+   "age": "14 days ago"
+  },
+  {
+   "url": "https://tradingview.com/symbols/SWB-DEVL/forecast",
+   "title": "Price target",
+   "age": null
+  },
+  {
+   "url": "https://investing.com/news/company-news/ubs-cuts-dbs-group-stock-rating-on-limited-price-target-upside-93CH-3519566",
+   "title": "🐂 Not all bull runs are created equal. November’s AI picks include 5 stocks up +20% eachUnlock Stocks",
+   "age": null
+  },
+  {
+   "url": "https://mainlymiles.com/2026/05/10/delayed-singapore-airlines-new-first-and-business-class/",
+   "title": "Delayed: Singapore Airlines' new First and Business Class cabins - Mainly Miles",
+   "age": "180 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html",
+   "title": "Singapore Airlines reveals new business and first class seats",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://milelion.com/2026/05/05/confirmed-singapore-airlines-new-first-and-business-class-seats-delayed-to-2027/",
+   "title": "Confirmed: Singapore Airlines' new First and Business Class seats delayed to 2027 - The MileLion",
+   "age": "185 days ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2026/11/06/singapore-airlines-unveils-new-first-business-class/",
+   "title": "Singapore Airlines unveils new First and Business Class, now delayed to 2H 2027 - Mainly Miles",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://livefromalounge.com/singapore-airlines-new-a350-first-and-business-class-seats-pushed-to-2027-launch/",
+   "title": "Singapore Airlines’ new A350 First and Business Class Seats pushed to 2027 launch - Live From A Lounge",
+   "age": "184 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/List_of_Airbus_A380_operators",
+   "title": "List of Airbus A380 operators",
+   "age": null
+  },
+  {
+   "url": "https://aviationa2z.com/index.php/2026/05/05/singapore-airlines-delays-new-a350-first-and-business-class-to-2027/",
+   "title": "Singapore Airlines Delays New A350 First and Business Class to 2027 - Aviation A2Z",
+   "age": "185 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Singapore_Airlines_fleet",
+   "title": "Singapore Airlines fleet",
+   "age": null
+  },
+  {
+   "url": "https://ftnnews.com/travel-news/aviation/singapore-airlines-delays-launch-of-new-first-business-class-seats-on-airbus-a350-due-to-supply-chain-constraints/",
+   "title": "Singapore Airlines A350 New Cabins Delayed to 2027",
+   "age": "183 days ago"
+  },
+  {
+   "url": "https://growbeansprout.com/ocbc-3q26-profit-dividend",
+   "title": "OCBC reports 3% rise in 3Q26 net profit and upgrades 2026 guidance: Our Quick Take - Growbeansprout.com",
+   "age": "0 days ago"
   },
   {
    "url": "https://sg.finance.yahoo.com/news/ocbc-q3-profit-rises-3-001057075.html",
@@ -233,9 +261,29 @@
    "age": "0 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-q3-results-due-november-6-after-strong-first-half/70442076",
-   "title": "OCBC stock: Q3 results due November 6 after strong first half",
-   "age": "4 days ago"
+   "url": "https://www.finews.asia/finance/45171-ocbc-result-9m-2026",
+   "title": "OCBC posts record nine-month profit",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.theedgesingapore.com/capital/results/ocbc-only-local-bank-met-expectations-3q",
+   "title": "OCBC is the only local bank that met expectations in 3Q",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
+   "title": "DBS and UOB Miss, OCBC Beats: What Q3 2026 Results Say About Singapore Banks",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://time.news/ocbc-q3-profit-rises-3-to-s2-04-billion-beats-expectations/",
+   "title": "OCBC Q3 Profit Rises 3% to S$2.04 Billion, Beats Expectations - Time News",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-reaches-record-nine-month-profit-as-q3-earnings-rise/70468430",
+   "title": "OCBC stock reaches record nine-month profit as Q3 earnings rise",
+   "age": "0 days ago"
   },
   {
    "url": "https://www.tipranks.com/stocks/ovchf/earnings",
@@ -243,120 +291,133 @@
    "age": null
   },
   {
-   "url": "https://www.business-standard.com/article/reuters/singapore-s-ocbc-third-quarter-profit-up-12-percent-flags-stress-in-oil-and-gas-sector-117102600185_1.html",
-   "title": "Tuesday, January 06, 2026 | 02:00 AM ISTहिंदी में पढें",
-   "age": null
-  },
-  {
    "url": "https://www.tipranks.com/stocks/SG:O39/earnings",
    "title": "www.tipranks.com",
    "age": null
-  },
-  {
-   "url": "https://www.thestar.com.my/business/business-news/2025/11/06/singapore-bank-uob039s-third-quarter-net-profit-slumps-72-misses-forecast",
-   "title": "Singapore banks DBS, UOB flag margin pressure; Q3 earnings diverge",
-   "age": "364 days ago"
-  },
-  {
-   "url": "https://growbeansprout.com/uob-3q26-profit-dividend",
-   "title": "UOB reports 182% YoY jump in 3Q26 profit off low base: Our Quick Take - Growbeansprout.com",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://growbeansprout.com/dbs-3q26-profit-dividend",
-   "title": "DBS profit falls 5% in 3Q26 on lower trading income and declares S$0.81 in total dividends: Our Quick Take - Growbeansprout.com",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://musaeum.substack.com/p/dbs-and-uob-both-missed-their-profit",
-   "title": "DBS and UOB Both Missed Their Profit Forecasts. What Happened?",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.dbs.com/iwov-resources/images/investors/quarterly-financials/2026/3Q26_CFO_presentation.pdf",
-   "title": "Strong franchise growth, record 9M income and earnings",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
-   "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.malaymail.com/amp/news/singapore/2024/11/08/singapores-uob-sees-better-loan-growth-in-2025-as-q3-profit-hits-record/156200",
-   "title": "www.malaymail.com",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hans/news/2534124171",
-   "title": "Singapore's 3 Big Banks Have Reported Earnings: Here's What You Need to Know",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hant/news/2509047468",
-   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus",
-   "age": null
-  },
-  {
-   "url": "https://www.gurufocus.com/news/9175095/apple-aapl-launches-7-billion-debt-offering-amid-solid-market-confidence",
-   "title": "Apple (AAPL) Launches $7 Billion Debt Offering Amid Solid Market Confidence",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.bloomberg.com/news/articles/2026-11-05/apple-kicks-off-high-grade-debt-sale-joining-issuance-spree",
-   "title": "Apple Taps Bond Market With Seven-Part Investment-Grade Debt Offering - Bloomberg",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://fourweekmba.com/ai-apple-files-seven-part-bond-sale-with-debt-at-38-of-capital/",
-   "title": "Apple Files Seven-Part Bond Sale With Debt at 38% of Capital - FourWeekMBA",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000026/a10-kexhibit4109262026.htm",
-   "title": "Apple Inc. - Form 10-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://appleinsider.com/articles/26/11/05/apple-is-gearing-up-for-a-fresh-7-billion-in-bond-sale",
-   "title": "$7 billion in fresh debt reportedly eyed for Apple bond sale",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000020/aapl-20260627.htm",
-   "title": "Apple Inc. - Form 10-Q - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.streetinsider.com/General+News/Apple+seeks+to+raise+up+to+$7+billion+in+seven-tranche+bond+offering/27296594.html",
-   "title": "Apple seeks to raise up to $7 billion in seven-tranche bond offering",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.investing.com/news/stock-market-news/apple-seeks-to-raise-up-to-7-billion-in-seventranche-bond-offering-5004546",
-   "title": "Apple seeks to raise up to $7 billion in seven-tranche bond offering By Investing.com",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000026/aapl-20260926.htm",
-   "title": "Apple Inc. - Form 10-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://macdailynews.com/2026/11/05/apple-seeks-about-7-billion-in-high-grade-debt-sale/",
-   "title": "Apple seeks about $7 billion in high-grade debt sale - MacDailyNews",
-   "age": "0 days ago"
   }
  ],
  "leads": [
   {
    "symbols": [
-    "NVDA"
+    "NVDA",
+    "TSLA"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-06T00:45:07Z",
-   "headline": "Dow Jones Futures Fall; Nasdaq Dives 5.5%, Nvidia, Sandisk, CoreWeave, SpaceX Plunge, But Sell-Off Spreads Beyond AI",
-   "url": "https://finance.yahoo.com/m/0cd2227b-7753-3d54-a8c5-286efe82ac39/dow-jones-futures-fall%3B.html"
+   "pubDate": "2026-11-06T12:59:01Z",
+   "headline": "Dow Jones Futures Fall, AI Stocks Nvidia, Sandisk, CoreWeave, SpaceX Bounce; Tesla To End Cybertruck Production",
+   "url": "https://finance.yahoo.com/m/0cd2227b-7753-3d54-a8c5-286efe82ac39/dow-jones-futures-fall%2C-ai.html"
+  },
+  {
+   "symbols": [
+    "MSFT"
+   ],
+   "source": "channelnewsasia.com",
+   "pubDate": "2026-11-06T12:47:26Z",
+   "headline": "Activists breach Microsoft data centre construction site as protests spread in Europe",
+   "url": "https://www.channelnewsasia.com/business/activists-breach-microsoft-data-centre-construction-site-protests-spread-in-europe-6531336"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-06T12:45:29Z",
+   "headline": "Alphabet discloses US$548 million worth of Qualcomm stake",
+   "url": "https://www.businesstimes.com.sg/companies-markets/alphabet-discloses-us548-million-worth-qualcomm-stake"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "247wallst.com",
+   "pubDate": "2026-11-06T12:37:04Z",
+   "headline": "Nvidia Just Had Its Worst Day Since DeepSeek, Losing About $450 Billion",
+   "url": "https://247wallst.com/investing/2026/11/06/nvidia-just-had-its-worst-day-since-deepseek-losing-about-450-billion/"
+  },
+  {
+   "symbols": [
+    "AAPL",
+    "MSFT",
+    "NVDA",
+    "TSLA"
+   ],
+   "source": "stocktwits.com",
+   "pubDate": "2026-11-06T12:30:00Z",
+   "headline": "From Musk’s Tesla Cybertruck To Ternus’ Memory Warning: MAG 7 Voices In Midterm Election Week",
+   "url": "https://stocktwits.com/news-articles/markets/equity/musk-tesla-cybertruck-ternus-memory-warning-mag-7-voices-in-midterm-election-week/cNGlofFR9Ic"
+  },
+  {
+   "symbols": [
+    "TSLA"
+   ],
+   "source": "247wallst.com",
+   "pubDate": "2026-11-06T12:21:49Z",
+   "headline": "Tesla and SpaceX Have Lost $457 Billion in Two Days",
+   "url": "https://247wallst.com/investing/2026/11/06/tesla-and-spacex-have-lost-457-billion-in-two-days/"
+  },
+  {
+   "symbols": [
+    "META"
+   ],
+   "source": "trefis.com",
+   "pubDate": "2026-11-06T12:20:59Z",
+   "headline": "How Has Meta's Story Changed?",
+   "url": "https://www.trefis.com/stock/meta/articles/623298/how-has-metas-story-changed/2026-11-06"
+  },
+  {
+   "symbols": [
+    "MSFT"
+   ],
+   "source": "trefis.com",
+   "pubDate": "2026-11-06T12:20:58Z",
+   "headline": "What Are Microsoft Investors Betting On?",
+   "url": "https://www.trefis.com/stock/msft/articles/623291/what-are-microsoft-investors-betting-on/2026-11-06"
+  },
+  {
+   "symbols": [
+    "Z74.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-06T11:47:40Z",
+   "headline": "Ex-ST Engineering, Singtel executive Low Ka Hoe to succeed Tong Yew Heng as Netlink NBN Trust CEO",
+   "url": "https://www.businesstimes.com.sg/companies-markets/ex-st-engineering-singtel-executive-low-ka-hoe-succeed-tong-yew-heng-netlink-nbn-trust-ceo"
+  },
+  {
+   "symbols": [
+    "D05.SI",
+    "U11.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-06T07:42:14Z",
+   "headline": "Analysts cut DBS target price on lower 2027 earnings, but see buying opportunity after share price slide",
+   "url": "https://www.businesstimes.com.sg/companies-markets/analysts-cut-dbs-target-price-lower-2027-earnings-see-buying-opportunity-after-share-price-slide"
+  },
+  {
+   "symbols": [
+    "C6L.SI"
+   ],
+   "source": "cnbc.com",
+   "pubDate": "2026-11-06T05:36:10Z",
+   "headline": "The world's best airline is updating its business and first-class experience",
+   "url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html"
+  },
+  {
+   "symbols": [
+    "C6L.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-06T05:30:00Z",
+   "headline": "Singapore Airlines’ new planes and seats delayed again due to certification issues",
+   "url": "https://www.businesstimes.com.sg/singapore/singapore-airlines-new-planes-and-seats-delayed-again-due-certification-issues"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "source": "sg.finance.yahoo.com",
+   "pubDate": "2026-11-06T04:02:23Z",
+   "headline": "OCBC Posts Higher Quarterly Profit on Stronger Net Interest Income",
+   "url": "https://sg.finance.yahoo.com/news/ocbc-posts-higher-quarterly-profit-040223931.html"
   },
   {
    "symbols": [
@@ -369,134 +430,23 @@
   },
   {
    "symbols": [
-    "AAPL"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-06T00:24:17Z",
-   "headline": "Apple raises US$7.5 billion from investment-grade debt offering",
-   "url": "https://www.businesstimes.com.sg/companies-markets/telcos-media-tech/apple-raises-us7-5-billion-investment-grade-debt-offering"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "marketbeat.com",
-   "pubDate": "2026-11-06T00:14:32Z",
-   "headline": "Box Unveils AI Agent Tools and NVIDIA Partnership at BoxWorks 2026",
-   "url": "https://www.marketbeat.com/instant-alerts/event-box-unveils-ai-agent-tools-and-nvidia-partnership-at-boxworks-2026-2026-11-05/"
-  },
-  {
-   "symbols": [
     "O39.SI"
    ],
    "source": "channelnewsasia.com",
    "pubDate": "2026-11-06T00:11:00Z",
    "headline": "OCBC third-quarter net profit up 3% on-year, above forecasts",
    "url": "https://www.channelnewsasia.com/singapore/ocbc-earnings-q3-2026-net-profit-6529241"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-06T00:10:57Z",
-   "headline": "OCBC Q3 profit rises 3% as expected on lending strength",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/ocbc-q3-profit-rises-3-001057075.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "247wallst.com",
-   "pubDate": "2026-11-06T00:09:51Z",
-   "headline": "Nvidia Stock Just Crashed 22%. Jim Cramer Says It’s the Cheapest in a Decade",
-   "url": "https://247wallst.com/investing/2026/11/05/nvidia-stock-just-crashed-22-jim-cramer-says-its-the-cheapest-in-a-decade/"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "source": "straitstimes.com",
-   "pubDate": "2026-11-05T23:32:48Z",
-   "headline": "OCBC’s Q3 net earnings up 3% at $2.04b, lifted by record banking operations profit",
-   "url": "https://www.straitstimes.com/business/ocbcs-q3-net-profit-up-3-at-2-04b-lifted-by-record-banking-operations-profit"
-  },
-  {
-   "symbols": [
-    "C38U.SI"
-   ],
-   "source": "thesmartinvestor.com.sg",
-   "pubDate": "2026-11-05T23:30:00Z",
-   "headline": "STI’s Red October 2026: 4 Blue-Chip REITs Still in the Green",
-   "url": "https://thesmartinvestor.com.sg/stis-red-october-2026-4-blue-chip-reits-still-in-the-green/"
-  },
-  {
-   "symbols": [
-    "AMZN",
-    "GOOGL"
-   ],
-   "source": "mediapost.com",
-   "pubDate": "2026-11-05T23:27:27Z",
-   "headline": "Amazon Challenges Google Shopping With Direct Product Feeds",
-   "url": "https://www.mediapost.com/publications/article/419260/amazon-challenges-google-shopping-with-direct-prod.html"
-  },
-  {
-   "symbols": [
-    "MSFT"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-05T23:21:25Z",
-   "headline": "IREN (IREN) Draws Tighter Oversight On Neocloud Data Center Projects",
-   "url": "https://finance.yahoo.com/technology/ai/articles/iren-iren-draws-tighter-oversight-232125190.html"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-05T23:13:42Z",
-   "headline": "OCBC Q3 profit rises 3% to S$2.04 billion, slightly above expectations",
-   "url": "https://www.businesstimes.com.sg/companies-markets/ocbc-q3-profit-rises-3-s2-04-billion-slightly-above-expectations"
-  },
-  {
-   "symbols": [
-    "AAPL",
-    "GOOGL",
-    "META"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-05T23:00:00Z",
-   "headline": "Apple, Alphabet, and Meta: 3 Big Takeaways from Recent Earnings",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-alphabet-meta-3-big-230000891.html"
-  },
-  {
-   "symbols": [
-    "AMZN"
-   ],
-   "source": "fool.com",
-   "pubDate": "2026-11-05T22:59:37Z",
-   "headline": "Stock Market Today, Nov. 5: Amazon Shares Slide as Technology Selloff Erases Early Gains",
-   "url": "https://www.fool.com/coverage/stock-market-today/2026/11/05/stock-market-today-nov-5-amazon-shares-slide-as-technology-selloff-erases-early-gains/"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "source": "sg.finance.yahoo.com",
-   "pubDate": "2026-11-05T15:12:50Z",
-   "headline": "OCBC is the only local bank that met expectations in 3Q",
-   "url": "https://sg.finance.yahoo.com/news/ocbc-only-local-bank-met-151250037.html"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 41472,
-  "output": 2322,
+  "input": 41195,
+  "output": 2575,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1031
+  "costUsd": 0.1041
  },
- "createdAt": "2026-11-06T01:15:49.305Z"
+ "createdAt": "2026-11-06T13:01:07.692Z"
 }
