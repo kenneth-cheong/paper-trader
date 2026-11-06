@@ -1,10 +1,62 @@
 {
- "market_summary": "Wall Street suffered its worst session in months on 5 Nov as the Nasdaq Composite erased ~$2.5T in value on fears that a Democratic-controlled Congress could tighten regulation on AI data-center buildout; QQQ fell 5.6% and entered correction territory, SPY fell 2.8%, with NVDA (-12.1%), TSLA (-13.8%), GOOGL and META all hit hard, while AAPL (+3.7%) and MSFT held up comparatively well. In Singapore, the big three banks reported Q3 results this week with divergent outcomes: OCBC beat estimates and raised 2026 loan-growth guidance, DBS beat on profit and lifted its dividend sharply (though flagged flat-to-down 2026 profit), while UOB missed estimates and cut its NIM outlook, with elevated trading volume confirming distribution. SGX bank stocks have already de-rated 8-13% over the past month on rate and margin worries, so post-earnings reactions are diverging by name. Overall risk sentiment is fragile and headline-driven, favoring tactical, name-specific positioning over broad index bets until the AI-regulation narrative and Nvidia's Nov 17 earnings clarify the picture.</market_summary>\n<parameter name=\"picks\">[{\"symbol\":\"O39.SI\",\"stance\":\"long\",\"conviction\":\"high\",\"horizon\":\"weeks\",\"thesis\":\"OCBC beat Q3 estimates and raised full-year 2026 loan growth guidance to low double digits from high-single/low-double digits, a genuine positive surprise against a sector that has been de-rating on margin fears. Stock is up only modestly today despite the beat, leaving room for a continued post-earnings re-rating versus peers, and it still trades ~13% below its 52-week high with 12% implied upside to consensus target.\",\"news\":\"OCBC Q3 net profit S$2.04b, beat the S$2.01b estimate, and raised 2026 loan growth guidance (CNA, 2026-11-06).\",\"risks\":\"Broader SGX bank sector weakness (rates, NIM compression) could continue to weigh on all three banks regardless of individual earnings quality; a reversal in regional loan demand would undercut the guidance upgrade.\",\"source_urls\":[\"https://www.channelnewsasia.com/singapore/ocbc-earnings-q3-2026-net-profit-6529241\"]},{\"symbol\":\"QQQ\",\"stance\":\"short\",\"conviction\":\"medium\",\"horizon\":\"weeks\",\"thesis\":\"The Nasdaq-100 plunged 5.5-5.6% on Nov 5 into correction territory as midterm election results raised fears of tighter AI/data-center regulation under a Democratic Congress, hitting NVDA, META, GOOGL and TSLA hardest. This is a fresh, market-wide catalyst (not just a single stock event) and policy uncertainty is unlikely to resolve quickly, while NVDA's Nov 17 earnings add another volatility catalyst for the index's largest weight.\", \"news\":\"QQQ fell 5.6% intraday to correction territory on 2026-11-05 amid fears a Democratic Congress will restrict AI data-center development (Yahoo Finance, 2026-11-05).\", \"risks\":\"A sharp oversold bounce is common after single-day capitulation moves of this size; if NVDA's Nov 17 results reassure on demand, or if regulatory fears prove overstated, QQQ could snap back quickly.\", \"source_urls\":[\"https://finance.yahoo.com/technology/ai/articles/us-tech-stocks-plunge-fears-163336141.html\"]},{\"symbol\":\"U11.SI\",\"stance\":\"short\",\"conviction\":\"medium\",\"horizon\":\"weeks\",\"thesis\":\"UOB missed Q3 profit estimates (S$1.25b vs S$1.35b expected) and cut its full-year NIM outlook on elevated funding costs, a genuinely negative, fresh catalyst. Elevated relative volume (1.86x) alongside the stock's -1.6% reaction confirms active selling, and UOB already has the weakest momentum of the three SG banks (-10.9% 1m, -12.7% 3m, below both 50- and 200-day averages).\", \"news\":\"UOB Q3 net profit S$1.25b missed the S$1.35b estimate and management lowered full-year NIM guidance (Manila Times, 2026-11-05).\", \"risks\":\"Valuation is now cheaper with 15.6% implied upside to consensus target, and further bad news may already be priced in after the sharp multi-month decline, raising bounce risk if NIM pressure eases.\", \"source_urls\":[\"https://www.manilatimes.net/2026/11/05/business/foreign-business/singapores-uob-misses-on-quarterly-profit/2462001\"]},{\"symbol\":\"AAPL\",\"stance\":\"long\",\"conviction\":\"medium\",\"horizon\":\"weeks\",\"thesis\":\"Apple was one of the only mega-caps to rally (+3.7%) during Thursday's broad tech rout, and it just raised $7.5B in investment-grade debt with ~4x oversubscription, signaling strong investor confidence even as AI-infrastructure credit worries rattle the rest of the sector. Apple's relative insulation from the data-center/AI-capex regulatory fears driving the selloff (it is not a major AI infrastructure capex name) could make it a relative safe-haven within tech over the next few weeks.\", \"news\":\"Apple raised $7.5B via bond sale with ~$31b of orders (4x oversubscribed) on 2026-11-05, even as broader markets sold off (Business Times, 2026-11-05).\", \"risks\":\"Analyst consensus target (333) is actually below the current price (344), implying the stock already looks fully valued; a broad market rout could still drag AAPL down with it regardless of relative strength.\", \"source_urls\":[\"https://www.businesstimes.com.sg/companies-markets/telcos-media-tech/apple-raises-us7-5-billion-investment-grade-debt-offering\"]},{\"symbol\":\"D05.SI\",\"stance\":\"long\",\"conviction\":\"low\",\"horizon\":\"weeks\",\"thesis\":\"DBS beat Q3 profit estimates (S$2.95b vs S$2.72b expected) and sharply raised its quarterly dividend to 75 cents from 54 cents a year ago, a strong shareholder-return signal. The stock is down 8.1% over the past month on sector-wide NIM worries, which may be overdone given the earnings beat, offering a value/income entry, though management's guidance for 2026 profit to be slightly below 2026 tempers enthusiasm.\", \"news\":\"DBS Q3 net profit S$2.95b beat estimates; dividend raised to 75 cents per share; guided 2026 profit slightly below current year (The Star, 2026-11-05).\", \"risks\":\"Guidance for flat-to-down profit in 2026 and continued sector-wide bank weakness (rates, NIM pressure) could keep the stock range-bound or pressured despite the beat.\", \"source_urls\":[\"https://www.thestar.com.my/business/business-news/2025/11/06/singapore-bank-uob039s-third-quarter-net-profit-slumps-72-misses-forecast\"]}]",
- "picks": [],
+ "market_summary": "Markets are reeling from a one-day AI-regulation panic: the Nasdaq fell ~5.5-6.4% and the Dow lost 1,833 points on Nov 5 after Democratic midterm gains raised fears of tighter AI oversight, hammering semis (sector index -12%) and mega-cap tech (NVDA -8.9% to -12%, TSLA -13.8%, META/GOOGL down double digits over the month). Apple and Amazon bucked the selloff, rising 3-4% intraday, with Apple also pricing a well-oversubscribed $7.5B bond deal, suggesting investors are rotating toward \"safer\" megacaps with less AI-capex/regulatory exposure. In Singapore, the three banks reported mixed Q3 results (DBS and OCBC beat estimates, UOB missed) but all fell with the global risk-off tape; SGX stocks with less US-tech linkage (STI, REITs, banks) sold off less violently than the Nasdaq-heavy names. Overall this looks like a sharp, headline-driven de-risking event rather than a fundamental shift, so near-term volatility should stay elevated into NVDA's Nov 17 earnings.</market_summary>\n<parameter name=\"picks\">[{\"symbol\":\"NVDA\",\"stance\":\"short\",\"conviction\":\"high\",\"horizon\":\"weeks\",\"thesis\":\"Nvidia is the epicenter of the AI-regulation scare, down 8.9% on Nov 5 to its worst close since Jan 2025 and -24% over the past month. Price is well below both 50- and 200-day averages (-17.9%/-11.3%) with elevated relative volume, showing active distribution, and earnings on Nov 17 add an extra volatility catalyst that could extend the move either way but keeps downside risk high into the print.\",\"news\":\"Nvidia stock crashed 8.91% to $182.29 on Nov 5, 2026 amid AI infrastructure spending slowdown fears tied to Democrats' midterm gains and possible AI regulation; down 22% over the past month (247wallst, Nov 5, 2026).\",\"risks\":\"Extremely oversold (analyst consensus target implies 80% upside) so a sharp relief bounce or dovish regulatory signal could trigger a violent short squeeze, especially heading into the Nov 17 earnings date.\",\"source_urls\":[\"https://247wallst.com/investing/2026/11/05/nvidia-stock-just-crashed-22-jim-cramer-says-its-the-cheapest-in-a-decade/\",\"https://www.bloomberg.com/news/newsletters/2026-11-05/tech-stocks-sink-on-investors-ai-anxiety\"]},{\"symbol\":\"TSLA\",\"stance\":\"short\",\"conviction\":\"medium\",\"horizon\":\"weeks\",\"thesis\":\"Tesla dropped 13.8% on Nov 5, the sharpest move on the watchlist, reflecting its high beta (1.74) and sensitivity to the broad tech/AI de-rating. It's now trading below both the 50- and 200-day moving averages with a one-month return of -9.7%, and the stock remains a crowded high-multiple name vulnerable to further risk-off flows even though recent analyst upgrades (Barclays, CLSA, BNP) suggest some underlying bullish repositioning that could cap downside.\",\"news\":\"Tesla fell 13.8% on Nov 5, 2026 amid the broad tech/AI-regulation selloff that hit the Nasdaq (Bloomberg/Axios, Nov 5, 2026); several analysts had upgraded the stock in late October before this drop.\",\"risks\":\"Multiple recent analyst upgrades (Barclays to Overweight, CLSA and BNP Paribas off Underperform) show positive sentiment building; a snapback rally on any AI-regulation reassurance or strong delivery/earnings data would hurt this short.\",\"source_urls\":[\"https://www.axios.com/2026/11/05/nasdaq-plummets-correction\",\"https://www.bloomberg.com/news/newsletters/2026-11-05/tech-stocks-sink-on-investors-ai-anxiety\"]},{\"symbol\":\"O39.SI\",\"name\":\"OCBC\",\"stance\":\"long\",\"conviction\":\"medium\",\"horizon\":\"weeks\",\"thesis\":\"OCBC posted a Q3 profit beat (S$2.04B vs S$2B consensus) and guided to low-double-digit loan growth for 2026, yet the stock is down 13.1% from its 52-week high and only up 0.4% today despite the beat, lagging the good news. With 63% one-year return already banked and valuation now reset lower after a 10.6% 3-month pullback, this looks like a quality defensive bank trading at a discount to its own momentum, insulated from the US AI-regulation shock.\",\"news\":\"OCBC Q3 net profit rose 3% to S$2.04 billion, beating the S$2B analyst estimate, with loan growth guidance raised to low double digits for 2026 (Business Times, Nov 5, 2026).\",\"risks\":\"Broader SGX/bank sentiment could stay weak if the global risk-off mood persists or regional rate-cut expectations change; the stock has also fallen 7.7% versus its 50-day average, so near-term technical momentum is still negative.\",\"source_urls\":[\"https://www.businesstimes.com.sg/companies-markets/ocbc-q3-profit-rises-3-s2-04-billion-slightly-above-expectations\"]},{\"symbol\":\"AAPL\",\"stance\":\"long\",\"conviction\":\"medium\",\"horizon\":\"weeks\",\"thesis\":\"Apple rose 3.7% on a day the Nasdaq fell over 5%, showing clear relative strength as investors rotate away from AI-capex-exposed names toward companies seen as less exposed to AI-regulation risk. The company also successfully raised $7.5B in investment-grade debt with orders over 4x oversubscribed, reflecting strong credit demand and balance sheet confidence. Apple is trading just 1.5% off its 52-week high and above both key moving averages, a rare picture of strength in this tape.\",\"news\":\"Apple shares rose 3.7% on Nov 5, 2026 even as broader tech sold off; separately Apple raised $7.5 billion in a heavily oversubscribed bond offering (Business Times, Nov 5, 2026).\",\"risks\":\"Analyst consensus target is actually below the current price (implied downside -3.2%), and continued broad market risk-off could eventually drag even relative-strength names lower if the correction deepens.\",\"source_urls\":[\"https://www.businesstimes.com.sg/companies-markets/telcos-media-tech/apple-raises-us7-5-billion-investment-grade-debt-offering\",\"https://www.bloomberg.com/news/newsletters/2026-11-05/tech-stocks-sink-on-investors-ai-anxiety\"]},{\"symbol\":\"D05.SI\",\"stance\":\"long\",\"conviction\":\"low\",\"horizon\":\"weeks\",\"thesis\":\"DBS beat Q3 profit expectations (S$2.95B vs S$2.72B consensus) despite a 2% YoY decline and a sharp drop in trading income, suggesting resilient core banking operations. The stock still trades 4.6% above its 200-day average despite the recent pullback, and analyst consensus implies 14% upside, making it a reasonable value pick among SGX blue chips that are less tied to the US AI-regulation story driving today's global selloff.\",\"news\":\"DBS Q3 net profit fell 2% to S$2.95 billion but beat analyst estimates of S$2.72 billion, even as trading income fell 65% YoY (GrowBeansprout, Nov 5, 2026).\",\"risks\":\"UOB's earnings miss the same week highlights sector-wide margin pressure; a broader risk-off continuation in Asia or disappointing guidance on net interest margins could offset the earnings beat.\",\"source_urls\":[\"https://growbeansprout.com/dbs-3q26-profit-dividend\"]}]",
+ "picks": [
+  {
+   "symbol": "NVDA",
+   "stance": "short",
+   "conviction": "high",
+   "horizon": "weeks",
+   "thesis": "placeholder",
+   "news": "",
+   "risks": "",
+   "source_urls": [],
+   "priceAtPick": 181.6
+  }
+ ],
  "sources": [
   {
-   "url": "https://www.gurufocus.com/news/9176543/nvidia-nvda-shares-drop-9-amid-tech-selloff-and-vendor-concerns",
-   "title": "NVIDIA (NVDA) Shares Drop 9% Amid Tech Selloff and Vendor Concerns",
+   "url": "https://www.gurufocus.com/news/9175295/nasdaq-tech-selloff-hits-sandisk-sndk-amid-market-correction-on-november-5-2026",
+   "title": "Nasdaq Tech Selloff Hits SanDisk (SNDK) Amid Market Correction on November 5, 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.foxbusiness.com/markets/stocks-nov-5-2026",
+   "title": "Nasdaq tumbles 5%, Dow plunges more than 1,800 points",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/newsletters/2026-11-05/tech-stocks-sink-on-investors-ai-anxiety",
+   "title": "Tech Stocks Sink on Investors’ AI Anxiety - Bloomberg",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnn.com/2026/11/05/investing/tech-heavy-nasdaq-plunges",
+   "title": "Massive tech sell-off wipes $2.5 trillion from the stock market",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.semafor.com/article/11/05/2026/us-tech-selloff-erases-post-midterm-gains",
+   "title": "US tech selloff erases post-midterm gains",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.axios.com/2026/11/05/nasdaq-plummets-correction",
+   "title": "Tech stocks tumble as election rattles AI trade",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tokenpost.com/news/investing/49564",
+   "title": "Tech Selloff Sends Nasdaq 100 Down 6.4%, Erasing $2.3 Trillion in Value",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://features.financialjuice.com/2026/11/05/tech-stocks-plunge-as-post-election-ai-concerns-spark-broad-market-selloff-us-market-wrap/",
+   "title": "Tech Stocks Plunge as Post-Election AI Concerns Spark Broad Market Selloff",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://eurasiabusinessnews.com/2026/11/05/stock-market-today-nasdaq-sinks-5-as-ai-selloff-hits-chip-and-data-center-stocks/",
+   "title": "Stock Market Today: Nasdaq Sinks 5% as AI Selloff Hits Chip and Data-Center Stocks, Oil price at $96",
    "age": "0 days ago"
   },
   {
@@ -13,18 +65,8 @@
    "age": "2 days ago"
   },
   {
-   "url": "https://www.gurufocus.com/news/9176886/nvidia-nvda-and-other-ai-stocks-tumble-after-midterm-elections",
-   "title": "NVIDIA (NVDA) and Other AI Stocks Tumble After Midterm Elections",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.fool.com/coverage/stock-market-today/2026/11/05/stock-market-today-nov-5-nvidia-slides-on-ai-chip-selloff-as-election-uncertainty-weighs/",
-   "title": "Stock Market Today, Nov. 5: Nvidia Slides on AI Chip Selloff as Election Uncertainty Weighs",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.marketbeat.com/instant-alerts/price-nvidia-nasdaq-nvda-stock-falls-93-should-you-sell-2026-11-05/",
-   "title": "NVIDIA (NASDAQ:NVDA) Stock Falls 9.3% - Should You Sell?",
+   "url": "https://fourweekmba.com/ai-12-ai-stocks-lose-1-44t-at-close-as-nvidia-falls-8-9/",
+   "title": "12 AI Stocks Lose $1.44T at Close as Nvidia Falls 8.9% - FourWeekMBA",
    "age": "0 days ago"
   },
   {
@@ -38,8 +80,18 @@
    "age": "0 days ago"
   },
   {
-   "url": "https://www.fxleaders.com/news/2026/11/05/nvidia-nvda-plunges-nearly-8-as-broad-ai-chip-sell-off-erases-over-1000-nasdaq-points/",
-   "title": "Nvidia (NVDA) Plunges Nearly 8% as Broad AI & Chip Sell-Off Erases Over 1,000 Nasdaq Points - Forex News by FX Leaders",
+   "url": "https://invezz.com/ng/news/2026/11/05/nvidia-stock-plunges-8percent-as-ai-spending-fears-and-financing-risks-mount/",
+   "title": "Nvidia stock plunges 8% as AI spending fears and financing risks mount",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.washingtontimes.com/news/2026/nov/5/drops-nvidia-ai-chip-stocks-erasing-wall-streets-rally-day/",
+   "title": "More drops for Nvidia and other AI chip stocks erase Wall Street’s rally from the day before",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.stocktitan.net/articles/why-ai-stocks-are-down-today-nvidia-back-to-start-of-2026",
+   "title": "AI Stocks Fall Again as Nvidia Dips Below Where It Started the Year",
    "age": "0 days ago"
   },
   {
@@ -48,14 +100,19 @@
    "age": "1 days ago"
   },
   {
-   "url": "https://www.businesstoday.com.my/2026/11/06/ocbc-q3-net-profit-rises-3-to-s2-04-billion-beats-forecasts/",
-   "title": "OCBC Q3 Net Profit Rises 3% To S$2.04 Billion, Beats Forecasts",
+   "url": "https://www.fool.com/investing/2025/12/21/will-nvidia-stock-crash-in-2026",
+   "title": "will nvidia stock crash in 2026",
    "age": null
   },
   {
-   "url": "https://growbeansprout.com/ocbc-3q26-profit-dividend",
-   "title": "OCBC reports 3% rise in 3Q26 net profit and upgrades 2026 guidance: Our Quick Take - Growbeansprout.com",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-05/ocbc-s-profit-gains-dented-by-drop-in-trading-insurance-income",
+   "title": "OCBC’s Profit Gains Dented by Drop in Trading, Insurance Income - Bloomberg",
    "age": "0 days ago"
+  },
+  {
+   "url": "https://www.businesstoday.com.my/2026/11/06/ocbc-q3-net-profit-rises-3-to-s2-04-billion-beats-forecasts/",
+   "title": "OCBC Q3 Net Profit Rises 3% To S$2.04 Billion, Beats Forecasts",
+   "age": null
   },
   {
    "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
@@ -63,18 +120,28 @@
    "age": "92 days ago"
   },
   {
-   "url": "https://www.ocbc.com/group/investors/index.page",
-   "title": "Investors Overview",
-   "age": "90 days ago"
+   "url": "https://www.ocbc.com/group/investors/financials.page",
+   "title": "Financial Results Overview",
+   "age": "1351 days ago"
   },
   {
-   "url": "https://www.theedgesingapore.com/capital/results/ocbc-only-local-bank-met-expectations-3q",
-   "title": "OCBC is the only local bank that met expectations in 3Q",
+   "url": "https://sg.finance.yahoo.com/news/ocbc-q3-profit-rises-3-001057075.html",
+   "title": "OCBC Q3 profit rises 3% as expected on lending strength",
    "age": "0 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-q3-results-due-november-6-after-strong-first-half/70442076",
+   "title": "OCBC stock: Q3 results due November 6 after strong first half",
+   "age": "4 days ago"
   },
   {
    "url": "https://www.tipranks.com/stocks/ovchf/earnings",
    "title": "www.tipranks.com",
+   "age": null
+  },
+  {
+   "url": "https://www.business-standard.com/article/reuters/singapore-s-ocbc-third-quarter-profit-up-12-percent-flags-stress-in-oil-and-gas-sector-117102600185_1.html",
+   "title": "Tuesday, January 06, 2026 | 02:00 AM ISTहिंदी में पढें",
    "age": null
   },
   {
@@ -83,23 +150,18 @@
    "age": null
   },
   {
-   "url": "https://www.tradingview.com/symbols/SWB-OCBA",
-   "title": "SWB OCBA",
-   "age": null
-  },
-  {
-   "url": "https://www.business-standard.com/article/reuters/singapore-bank-ocbc-s-q1-profit-at-3-1-2-year-high-tad-below-estimates-118050700130_1.html",
-   "title": "Monday, January 05, 2026 | 12:38 AM ISTहिंदी में पढें",
-   "age": null
-  },
-  {
    "url": "https://www.thestar.com.my/business/business-news/2025/11/06/singapore-bank-uob039s-third-quarter-net-profit-slumps-72-misses-forecast",
    "title": "Singapore banks DBS, UOB flag margin pressure; Q3 earnings diverge",
    "age": "364 days ago"
   },
   {
-   "url": "https://www.manilatimes.net/2026/11/05/business/foreign-business/singapores-uob-misses-on-quarterly-profit/2462001",
-   "title": "Singapore’s UOB misses on quarterly profit",
+   "url": "https://growbeansprout.com/uob-3q26-profit-dividend",
+   "title": "UOB reports 182% YoY jump in 3Q26 profit off low base: Our Quick Take - Growbeansprout.com",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://growbeansprout.com/dbs-3q26-profit-dividend",
+   "title": "DBS profit falls 5% in 3Q26 on lower trading income and declares S$0.81 in total dividends: Our Quick Take - Growbeansprout.com",
    "age": "1 days ago"
   },
   {
@@ -108,23 +170,18 @@
    "age": "0 days ago"
   },
   {
+   "url": "https://www.dbs.com/iwov-resources/images/investors/quarterly-financials/2026/3Q26_CFO_presentation.pdf",
+   "title": "Strong franchise growth, record 9M income and earnings",
+   "age": "0 days ago"
+  },
+  {
    "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
    "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
    "age": "2 days ago"
   },
   {
-   "url": "https://www.spglobal.com/market-intelligence/en/news-insights/articles/2023/10/singapore-banks-net-income-growth-to-level-off-in-q3-2023-as-margins-peak-78034499",
-   "title": "Featured Topics",
-   "age": null
-  },
-  {
    "url": "https://www.malaymail.com/amp/news/singapore/2024/11/08/singapores-uob-sees-better-loan-growth-in-2025-as-q3-profit-hits-record/156200",
    "title": "www.malaymail.com",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/news/2534124171",
-   "title": "Singapore's 3 Big Banks Have Reported Earnings: Here's What You Need to Know",
    "age": null
   },
   {
@@ -133,53 +190,8 @@
    "age": null
   },
   {
-   "url": "https://tw.tradingview.com/chart/O39/9qQPvqX3-Capital-Returns-DBS-and-UOB-Impress-OCBC-Lags",
-   "title": "9qQPvqX3 Capital Returns DBS and UOB Impress OCBC Lags",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/ai/articles/us-tech-stocks-plunge-fears-163336141.html",
-   "title": "US tech stocks plunge on fears of tighter AI regulation by Democrats",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/04/stock-market-today-live-updates.html",
-   "title": "Nasdaq tumbles into correction territory on AI tech wreck",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://abc17news.com/money/cnn-business-consumer/2026/11/05/stocks-plunge-as-midterm-results-send-ai-trade-into-a-tailspin/",
-   "title": "Massive tech sell-off wipes $2.5 trillion from the stock market - ABC17NEWS",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.axios.com/2026/11/05/nasdaq-plummets-correction",
-   "title": "Tech stocks tumble as election rattles AI trade",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnn.com/2026/11/05/investing/tech-heavy-nasdaq-plunges",
-   "title": "Massive tech sell-off wipes $2.5 trillion from the stock market",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://fortune.com/2026/11/05/tech-stocks-are-suffering-the-biggest-selloff-since-covid-as-investors-see-premature-end-to-ai-datacenter-boom/",
-   "title": "Tech stocks are suffering their biggest selloff since Covid, as investors see premature end to AI datacenter boom",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.benzinga.com/markets/tech/26/11/62934964/us-tech-stocks-wipe-out-1-7-trillion-thursday-nvidia-amd-micron",
-   "title": "US Tech Stocks Wipe Out $1.7 Trillion as Nvidia, AMD Sink - NVIDIA (NASDAQ:NVDA) - Benzinga",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.fool.com/investing/breakfast-news/2025/11/05/breakfast-news-tech-stock-sell-off",
-   "title": "breakfast news tech stock sell off",
-   "age": null
-  },
-  {
-   "url": "https://variety.com/2024/biz/news/media-tech-stocks-drop-market-crash-fears-recession-1236095976",
-   "title": "Media, Tech Stocks Dragged Down Amid Broader Market Sell-Off Over Fears of Slowing U.S. Economy",
+   "url": "https://www.itiger.com/hant/news/2509047468",
+   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus",
    "age": null
   },
   {
@@ -236,12 +248,12 @@
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 51398,
-  "output": 6879,
+  "input": 51492,
+  "output": 5956,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1679
+  "costUsd": 0.1595
  },
- "createdAt": "2026-11-06T01:01:32.301Z"
+ "createdAt": "2026-11-06T01:15:49.305Z"
 }
