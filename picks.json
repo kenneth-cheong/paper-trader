@@ -1,86 +1,132 @@
 {
- "market_summary": "Markets are reeling from a post-midterm-election risk-off wave concentrated in US tech/AI names, with Nvidia -9.3% (Nov 5) and QQQ -6.5%/SPY -4.4% on fears that a Democratic-controlled Congress could tighten data-centre build-out regulation. Tesla added a company-specific shock, confirming it will wind down the failed Cybertruck program by mid-2027 after sales ran at ~10% of plan, sending the stock down nearly 11% intraday. In Singapore, bank earnings diverged sharply — OCBC beat with record banking profit while DBS and UOB missed, triggering a round of analyst target-price cuts and dragging the sector and the STI ETF lower. Broad volatility and elevated relative volumes across almost every name suggest nervous, headline-driven trading rather than orderly repricing, so near-term moves may overshoot in both directions.",
+ "market_summary": "SG bank earnings week is the dominant local catalyst: OCBC beat with record banking profit and raised 2026 guidance, while DBS and UOB missed and saw target cuts, creating a split reaction even though all three stocks fell on the day amid broader risk-off. Singapore Airlines' cabin retrofit delay to H2 2027 adds to a thin but negative news flow for the carrier just ahead of its Nov 11 results. In the US, Nvidia's tightened Southeast Asia chip-tracking is a compliance measure rather than a new demand shock, and the stock bounced +2.8% after a brutal month-long drawdown (-19%), while Tesla rallied despite confirming Cybertruck wind-down, as the market looks past the product to the Cybercab pivot. Broader indices (SPY/QQQ/ES3) are all pulling back from highs amid rate/inflation uncertainty, so single-name dispersion is doing the work right now rather than broad beta.",
  "picks": [
-  {
-   "symbol": "TSLA",
-   "stance": "short",
-   "conviction": "high",
-   "horizon": "days",
-   "thesis": "Tesla is killing the Cybertruck program by mid-2027 after it sold at roughly 10% of the planned 250k/year run-rate — a clear admission of a failed, capital-intensive product. The stock already dropped ~11% on the day, well beyond the broader market's -4% to -6% tech selloff, confirming this is idiosyncratic bad news, not just macro beta. High volatility (46% annualized) and beta of 1.76 mean further downside follow-through is plausible as analysts digest the write-down implications and refocus on Cybercab execution risk.",
-   "news": "Tesla to wind down Cybertruck production by mid-2027 after Cybertruck sales reached only ~20,237 units in the US in 2025, vs a planned 250,000/year (2026-11-06).",
-   "risks": "Tesla's bulls focus on Cybercab/robotaxi optionality and a recent Barclays upgrade (Oct 26, target raised to 450); any positive FSD/robotaxi headline or short squeeze could reverse the move quickly given high short-covering risk in this highly volatile name.",
-   "source_urls": [
-    "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-6-2026/"
-   ],
-   "priceAtPick": 343.69
-  },
-  {
-   "symbol": "NVDA",
-   "stance": "short",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "Nvidia fell 9.3% in a single session on fears that post-midterm political shifts could slow data-centre permitting/build-out, compounding an already steep downtrend (-23.5% in a month, -17.7% below its 50-day average). Rel. volume is nearly 3x normal, showing real distribution, not just noise. With earnings on Nov 17 acting as a binary catalyst into a jittery tape, momentum favors further weakness or at least continued high volatility before any policy clarity emerges.",
-   "news": "Nvidia shares fell 9.26% to $181.60 on Nov 5 amid a broad AI-chip selloff tied to data-centre regulation concerns following the midterm elections.",
-   "risks": "Analyst consensus remains overwhelmingly bullish (59 buys vs 3 non-buys, implied upside >80%), so this is a contrarian, momentum-only short; a dovish policy signal or strong Nov 17 earnings beat could trigger a sharp snap-back rally.",
-   "source_urls": [
-    "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-6-2026/"
-   ],
-   "priceAtPick": 181.6
-  },
-  {
-   "symbol": "U11.SI",
-   "stance": "short",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "UOB's Q3 results disappointed and prompted cautious 2027 guidance, and unlike DBS, there's no 'buying opportunity' framing from analysts — UOB's price action is weaker (-8.4% 1m, -12.5% 3m, below both 50- and 200-day averages) and the rating mix is the most cautious of the three banks (only 3 buys vs 11 holds). Elevated relative volume (1.98x) suggests continued distribution post-earnings.",
-   "news": "Analysts cut DBS and UOB target prices on Nov 6 after Q3 results missed, citing cautious 2027 guidance from bank management.",
-   "risks": "Consensus target still implies 18.5% upside, and a broader SGX bank-sector bounce (e.g., sympathy from an OCBC-led rally) could lift all three banks together regardless of UOB-specific weakness.",
-   "source_urls": [
-    "https://www.businesstimes.com.sg/companies-markets/analysts-cut-dbs-target-price-lower-2027-earnings-see-buying-opportunity-after-share-price-slide"
-   ],
-   "priceAtPick": 36.88
-  },
   {
    "symbol": "O39.SI",
    "stance": "long",
-   "conviction": "medium",
+   "conviction": "high",
    "horizon": "weeks",
-   "thesis": "OCBC was the standout among SG banks this earnings season, posting record banking operations profit (+16% YoY) and record 9M26 net profit, while DBS and UOB both missed and saw target cuts. OCBC's share price held up far better today (-0.7% vs -2.1% to -2.5% for peers), showing the market is already differentiating. With analyst consensus implying ~13% upside and a positive earnings surprise freshly priced in, OCBC looks like the relative-strength play within a weak sector.",
-   "news": "OCBC reported Q3 net profit of S$2.04bn, up 3% YoY, with record banking operations profit of S$1.90bn (+16%) and record 9M26 net profit of S$6.24bn (+10%), announced Nov 6.",
-   "risks": "OCBC is still down 14% from its 52-week high and trading below its 50-day average, so it remains exposed to broad SGX/bank-sector weakness and risk-off sentiment regardless of company-specific strength; a market-wide risk-off continuation could drag it down with peers.",
+   "thesis": "OCBC beat Q3 estimates with record banking-ops profit (+16% YoY) and raised full-year guidance on loans, income and credit costs, yet the stock is still down -4.4% over 1m and -11.6% over 3m and fell again on results day — a disconnect between improving fundamentals and price action that looks like a buying opportunity as the market digests the numbers over the coming weeks.",
+   "news": "OCBC Q3 2026 net profit S$2.04bn (+3% YoY), record banking-ops profit, raised 2026 guidance (2026-11-06, Yahoo Finance SG).",
+   "risks": "Sector-wide NIM compression or a broader SG bank sell-off could keep OCBC down regardless of its own beat; stock is -14% from 52w high and volatility is elevated (20% annualized), so near-term downside follow-through is possible before reversion.",
    "source_urls": [
     "https://sg.finance.yahoo.com/news/ocbc-posts-higher-quarterly-profit-040223931.html"
    ],
    "priceAtPick": 27.73
   },
   {
-   "symbol": "BRK-B",
+   "symbol": "C6L.SI",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "SIA just confirmed its new A350 cabin retrofit is delayed again to H2 2027 due to certification issues, compounding an already weak analyst picture (only 1 buy vs 10 hold/3 sell, consensus target basically at spot with 0.3% implied upside). The stock has still run up +5.8% over the past month and sits above both MAs, leaving it priced for good news into Nov 11 results with little analyst conviction to support further upside.",
+   "news": "SIA delays new First/Business Class cabin introduction to H2 2027 on A350 certification issues (2026-11-06, CNBC).",
+   "risks": "Q3 results (Nov 11) could beat on strong travel demand/fuel costs, and airlines have shown resilience to retrofit-timeline noise in the past; a positive earnings surprise would invalidate the short quickly given the small market-implied move (~2%).",
+   "source_urls": [
+    "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html"
+   ],
+   "priceAtPick": 6.95
+  },
+  {
+   "symbol": "U11.SI",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "UOB missed Q3 estimates alongside DBS, but unlike DBS has materially weaker analyst support (only 3 buy vs 10 hold/3 sell) and worse technicals — down -12.5% over 3m, still -6.8% below its 200-day average versus DBS's +5.1% above. The earnings-miss narrative plus lack of a 'buying opportunity' consensus (which analysts specifically flagged for DBS) suggests UOB underperforms its SG bank peers near-term.",
+   "news": "DBS and UOB miss Q3 earnings estimates; brokers cut targets but see buying opportunity specifically in DBS after the slide (2026-11-06, Business Times).",
+   "risks": "Broad SG bank rally (e.g., if OCBC's strong quarter lifts sentiment sector-wide) could drag UOB up regardless of relative weakness; high short-term volume (rel_volume 1.98x) shows the stock is already being actively repriced, which could resolve either direction.",
+   "source_urls": [
+    "https://www.businesstimes.com.sg/companies-markets/analysts-cut-dbs-target-price-lower-2027-earnings-see-buying-opportunity-after-share-price-slide"
+   ],
+   "priceAtPick": 36.88
+  },
+  {
+   "symbol": "D05.SI",
+   "stance": "long",
+   "conviction": "low",
+   "horizon": "months",
+   "thesis": "DBS missed Q3 estimates and fell -2.1% on the day, but unlike UOB it retains strong analyst support (10 buy/6 hold/1 sell, three brokers with targets S$79.50-86.80) and multiple commentators explicitly framed the post-results slide as a buying opportunity. Longer-term trend (+18.6% 6m, +25.5% 1y) remains intact despite the recent pullback.",
+   "news": "Analysts cut DBS target prices for lower 2027 earnings but see buying opportunity after the share price slide (2026-11-06, Business Times).",
+   "risks": "This is a lower-conviction, contrarian call against a fresh earnings miss and a -9.4% 3m trend; if NIM pressure or credit-cost guidance deteriorates further at the next update, the stock could keep grinding lower before any bounce.",
+   "source_urls": [
+    "https://www.businesstimes.com.sg/companies-markets/analysts-cut-dbs-target-price-lower-2027-earnings-see-buying-opportunity-after-share-price-slide"
+   ],
+   "priceAtPick": 69.72
+  },
+  {
+   "symbol": "NVDA",
    "stance": "long",
    "conviction": "medium",
-   "horizon": "months",
-   "thesis": "Berkshire is acting as a defensive haven amid the tech-led selloff — it's near its 52-week high (-1.2% from it) and up 13.1% over the past month even as SPY and QQQ fell sharply, reflecting low beta (0.36) and limited AI/data-centre exposure. With earnings due Nov 7, continued insurance/operating strength could reinforce this relative-strength trend as investors rotate out of high-beta tech into quality defensives.",
-   "news": "No company-specific catalyst reported; move reflects broad rotation away from AI/tech names amid the Nov 5-6 selloff (market_summary), with Berkshire reporting earnings Nov 7.",
-   "risks": "Consensus analyst target is actually slightly below current price (implied upside -2.9%, though coverage is thin with only 3 analysts), so this is a momentum/defensive-rotation thesis rather than a value call; a weak earnings print on Nov 7 or a broad market recovery that reignites risk appetite could stall the rally.",
+   "horizon": "weeks",
+   "thesis": "Nvidia's new Fleet Intelligence tracking requirement for Southeast Asian cloud partners is a compliance/anti-smuggling measure, not a new demand or export restriction — arguably reduces regulatory tail risk rather than adding to it. The stock already absorbed a brutal month (-19%) and is rebounding (+2.8% today) off oversold levels (-22% from 52w high, -15% vs 50-day MA) heading into Nov 17 earnings, with analysts still overwhelmingly bullish (59 buy/2 hold/1 sell).",
+   "news": "Nvidia requires SE Asia cloud partners to enroll in Fleet Intelligence chip-tracking to fight smuggling of banned processors to China (2026-11-06, Bloomberg).",
+   "risks": "High beta (1.59) and volatility (38% annualized) mean this is a volatile trade; any fresh China-demand headline or disappointing guidance into the Nov 17 print could reverse the bounce quickly, and the extreme analyst-target implied upside (75%) likely reflects stale estimates that haven't caught up to the de-rating.",
    "source_urls": [
-    "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-6-2026/"
+    "https://www.bloomberg.com/news/articles/2026-11-06/nvidia-boosts-chip-tracking-in-southeast-asia-to-fight-smuggling"
    ],
-   "priceAtPick": 572.33
+   "priceAtPick": 186.64
+  },
+  {
+   "symbol": "BN4.SI",
+   "stance": "long",
+   "conviction": "low",
+   "horizon": "months",
+   "thesis": "Keppel has sold off hard (-9.9% 1m, -28.2% from 52w high, at its 52w low) on no specific adverse news in this dataset, while analysts remain heavily bullish (12 buy/2 hold/1 sell) with 34.5% implied upside to consensus target — the gap between price action and analyst view is unusually wide, suggesting a potential value/mean-reversion setup, though the lack of a fresh catalyst keeps conviction low.",
+   "news": "No company-specific news item in this cycle; call is based purely on technical oversold readings (price at 52-week low, elevated rel_volume 2.57x) against a still-bullish analyst base.",
+   "risks": "This is a thin-news, purely technical/valuation call — if the heavy relative volume reflects real negative information not yet reported (e.g., a review or operational issue), the stock could keep falling and analyst targets could be cut before any rebound.",
+   "source_urls": [],
+   "priceAtPick": 9.45
   }
  ],
  "sources": [
   {
-   "url": "https://electrek.co/2026/11/06/tesla-ending-cybertruck-production-sales-10-percent-plan/",
-   "title": "Tesla to end Cybertruck production as sales stall at ~10% of plan",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-06/nvidia-boosts-chip-tracking-in-southeast-asia-to-fight-smuggling",
+   "title": "Nvidia Boosts Chip Tracking in Southeast Asia to Fight Smuggling - Bloomberg",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.autoevolution.com/news/the-cybertruck-may-have-looked-like-the-future-but-will-soon-be-history-musk-confirms-278056.html",
-   "title": "The Tesla Cybertruck May Have Looked Like the Future, but Will Soon Be History, Musk Confirms - autoevolution",
+   "url": "https://aiweekly.co/alerts/nvidia-ties-southeast-asia-ncp-status-to-chip-location-tracking",
+   "title": "Nvidia Ties Southeast Asia NCP Status to Chip Location Tracking",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.bnnbloomberg.ca/business/company-news/2026/11/06/tesla-to-wind-down-cybertruck-production-after-years-of-poor-sales-in-few-markets/",
-   "title": "Tesla to wind down Cybertruck production after years of poor sales in few markets",
+   "url": "https://www.techrepublic.com/article/news-nvidia-ai-chip-tracking-apac-singapore-china/",
+   "title": "Nvidia Tightens AI Chip Tracking in Southeast Asia as China Smuggling Concerns Grow",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tomshardware.com/tech-industry/big-tech/nvidia-tightens-tracking-of-ai-gpus-in-southeast-asia-as-chinese-chip-smuggling-draws-scrutiny-report-claims-cloud-providers-must-join-monitoring-program-to-qualify-for-official-partner-status",
+   "title": "Nvidia tightens tracking of AI GPUs in Southeast Asia as Chinese chip smuggling draws scrutiny, report claims — cloud providers must join monitoring program to qualify for official partner status",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://rallies.ai/news/nvidia-reportedly-boosts-chip-tracking-in-southeast-asia-to-fight-smuggling-e8671df2fad8d2e7",
+   "title": "Nvidia reportedly boosts chip tracking in Southeast Asia to fight smuggling - NVDA News",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://kantan.news/news/nvidia-mandates-ai-chip-tracking-in-southeast-asia",
+   "title": "Nvidia Mandates AI Chip Tracking in Southeast Asia",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://superpowerdaily.com/posts/nvidia-reportedly-requires-gpu-tracking-for-southeast-asian-cloud-partner-status",
+   "title": "Nvidia reportedly requires GPU tracking for Southeast Asian cloud partner status",
+   "age": null
+  },
+  {
+   "url": "https://huggingnews.com/tech/nvidia-now-requires-ai-chip-tracking-for-southeast-asian-cloud-partners-0382e694",
+   "title": "Nvidia Now Requires AI Chip Tracking for Southeast Asian Cloud Partners",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/nvidia-stock-faces-tighter-chip-tracking-in-southeast-asia/70471001",
+   "title": "Nvidia stock faces tighter chip tracking in Southeast Asia",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/nvidia-stock-tightens-chip-tracking-as-southeast-asia-risk-grows/70470093",
+   "title": "Nvidia stock tightens chip tracking as Southeast Asia risk grows",
    "age": "0 days ago"
   },
   {
@@ -89,13 +135,8 @@
    "age": null
   },
   {
-   "url": "https://www.carscoops.com/2308891/tesla-to-end-cybertruck-production-2027/",
-   "title": "Telsa's Cybertruck Has Only Months To Live - CarScoops",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://techcrunch.com/2026/11/06/tesla-will-stop-making-the-cybertruck-in-2027/",
-   "title": "Tesla will stop making the Cybertruck in 2027",
+   "url": "https://www.dezeen.com/2026/11/06/tesla-cybertruck-production-discontinuation/",
+   "title": "Tesla \"winding down\" production of Cybertruck next year",
    "age": "0 days ago"
   },
   {
@@ -104,8 +145,18 @@
    "age": null
   },
   {
-   "url": "https://www.detroitnews.com/story/business/autos/2026/11/06/tesla-wind-down-cybertruck-production-after-years-poor-sales-in-few-markets/92639154007/",
-   "title": "Tesla to wind down Cybertruck production after years of poor sales in few markets",
+   "url": "https://techcrunch.com/2026/11/06/tesla-will-stop-making-the-cybertruck-in-2027",
+   "title": "Tesla will stop making the Cybertruck in 2027",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://electrek.co/2026/11/06/tesla-ending-cybertruck-production-sales-10-percent-plan/",
+   "title": "Tesla to end Cybertruck production as sales stall at ~10% of plan",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://abcnews.com/Business/wireStory/production-teslas-cybertruck-wind-allure-escaping-potential-buyers-137912249",
+   "title": "Tesla's Cybertruck heads for an exit after years of hype and division - ABC News",
    "age": "0 days ago"
   },
   {
@@ -114,159 +165,24 @@
    "age": null
   },
   {
-   "url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-5-2026/",
-   "title": "Nvidia Stock (NVDA) Falls 3.2% as Chip Stocks Slide (Nov 4)",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-3-2026/",
-   "title": "Nvidia Stock (NVDA) Falls 1.3% as Chip Stocks Slide (Nov 2)",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.heygotrade.com/en/news/nvidia-nvda-stock-news-november-6-2026/",
-   "title": "Nvidia Stock (NVDA) Falls 9.3% as AI Chip Stocks Slide (Nov 5)",
+   "url": "https://tech-insider.org/tesla-cybertruck-wind-down-giga-texas-cybercab-2027-2026/",
+   "title": "Tesla Ends Cybertruck Production for Cybercab [2026]",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.fool.com/coverage/stock-market-today/2026/11/05/stock-market-today-nov-5-nvidia-slides-on-ai-chip-selloff-as-election-uncertainty-weighs/",
-   "title": "Stock Market Today, Nov. 5: Nvidia Slides on AI Chip Selloff as Election Uncertainty Weighs",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://invezz.com/ng/news/2026/11/05/nvidia-stock-plunges-8percent-as-ai-spending-fears-and-financing-risks-mount/",
-   "title": "Nvidia stock plunges 8% as AI spending fears and financing risks mount",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.fxleaders.com/news/2026/11/05/nvidia-nvda-stock-plunges-nearly-8-as-broad-ai-and-chip-sell-off-erases-over-1000-nasdaq-points/",
-   "title": "Nvidia (NVDA) Stock Plunges Nearly 8% as Broad AI and Chip Sell-Off Erases Over 1,000 Nasdaq Points - Forex News by FX Leaders",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.stocktitan.net/articles/why-ai-stocks-are-down-today-nvidia-back-to-start-of-2026",
-   "title": "AI Stocks Fall Again as Nvidia Dips Below Where It Started the Year",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://journalarta.com/en/2026/11/06/nvidia-nvda-stock-on-thursday-falls-9-26-rsi-oversold/",
-   "title": "Nvidia (NVDA) Stock: $181.60, Down 9.26% Nov 5 — JournalArta Global",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://coincentral.com/nvidia-nvda-stock-falls-9-as-washington-data-center-fears-hit-chip-sector",
-   "title": "Nvidia (NVDA) Stock Falls 9% as Washington Data Center Fears Hit Chip Sector - CoinCentral",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.poems.com.sg/stock-research/UOB.SG/",
-   "title": "UOB Share Target Price S$38.00 - Stock Analyst Research",
-   "age": "44 days ago"
-  },
-  {
-   "url": "https://www.dbs.com.sg/treasures/aics/templatedata/article/equity/data/en/DBSV/012014/UOB_SP.xml",
-   "title": "UOB",
-   "age": "18 days ago"
-  },
-  {
-   "url": "https://littlebigreddot.com/dbs-rated-a-buy-ahead-of-its-third-quarter-results-on-5-november-2026/",
-   "title": "DBS rated a buy ahead of its third-quarter results on 5 November 2026",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.moomoo.com/community/feed/ocbc-bank-o39-sg-dbs-d05-sg-uob-u11-sg-117397325479942",
-   "title": "$OCBC Bank (O39.SG)$$DBS (D05.SG)$$UOB (U11.SG)$ [Share Link... - moomoo Community",
-   "age": "30 days ago"
-  },
-  {
-   "url": "https://www.redhot.sg/analysts-cut-dbs-target-price-on-lower-2027-earnings-but-see-buying-opportunity-after-share-price-slide-736457.html",
-   "title": "Analysts cut DBS target price on lower 2027 earnings, but see buying opportunity after share price slide - Red Hot Singapore",
+   "url": "https://techcrunch.com/2023/10/18/tesla-cybertruck-deliveries-set-for-nov-30",
+   "title": "tesla cybertruck deliveries set for nov 30",
    "age": null
-  },
-  {
-   "url": "https://www.minichart.com.sg/2026/10/19/singapore-banks-in-focus-as-mark-to-market-losses-weigh-on-earnings/",
-   "title": "Singapore Banks in Focus as Mark-to-Market Losses Weigh on Earnings",
-   "age": "18 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/dbs-keeps-hold-rating-as-uob-stock-heads-toward-november-4-results/70397572",
-   "title": "DBS keeps Hold rating as UOB stock heads toward November 4 results",
-   "age": "14 days ago"
-  },
-  {
-   "url": "https://tradingview.com/symbols/SWB-DEVL/forecast",
-   "title": "Price target",
-   "age": null
-  },
-  {
-   "url": "https://investing.com/news/company-news/ubs-cuts-dbs-group-stock-rating-on-limited-price-target-upside-93CH-3519566",
-   "title": "🐂 Not all bull runs are created equal. November’s AI picks include 5 stocks up +20% eachUnlock Stocks",
-   "age": null
-  },
-  {
-   "url": "https://mainlymiles.com/2026/05/10/delayed-singapore-airlines-new-first-and-business-class/",
-   "title": "Delayed: Singapore Airlines' new First and Business Class cabins - Mainly Miles",
-   "age": "180 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html",
-   "title": "Singapore Airlines reveals new business and first class seats",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://milelion.com/2026/05/05/confirmed-singapore-airlines-new-first-and-business-class-seats-delayed-to-2027/",
-   "title": "Confirmed: Singapore Airlines' new First and Business Class seats delayed to 2027 - The MileLion",
-   "age": "185 days ago"
-  },
-  {
-   "url": "https://mainlymiles.com/2026/11/06/singapore-airlines-unveils-new-first-business-class/",
-   "title": "Singapore Airlines unveils new First and Business Class, now delayed to 2H 2027 - Mainly Miles",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://livefromalounge.com/singapore-airlines-new-a350-first-and-business-class-seats-pushed-to-2027-launch/",
-   "title": "Singapore Airlines’ new A350 First and Business Class Seats pushed to 2027 launch - Live From A Lounge",
-   "age": "184 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/List_of_Airbus_A380_operators",
-   "title": "List of Airbus A380 operators",
-   "age": null
-  },
-  {
-   "url": "https://aviationa2z.com/index.php/2026/05/05/singapore-airlines-delays-new-a350-first-and-business-class-to-2027/",
-   "title": "Singapore Airlines Delays New A350 First and Business Class to 2027 - Aviation A2Z",
-   "age": "185 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Singapore_Airlines_fleet",
-   "title": "Singapore Airlines fleet",
-   "age": null
-  },
-  {
-   "url": "https://ftnnews.com/travel-news/aviation/singapore-airlines-delays-launch-of-new-first-business-class-seats-on-airbus-a350-due-to-supply-chain-constraints/",
-   "title": "Singapore Airlines A350 New Cabins Delayed to 2027",
-   "age": "183 days ago"
   },
   {
    "url": "https://growbeansprout.com/ocbc-3q26-profit-dividend",
    "title": "OCBC reports 3% rise in 3Q26 net profit and upgrades 2026 guidance: Our Quick Take - Growbeansprout.com",
-   "age": "0 days ago"
+   "age": "1 days ago"
   },
   {
-   "url": "https://sg.finance.yahoo.com/news/ocbc-q3-profit-rises-3-001057075.html",
-   "title": "OCBC Q3 profit rises 3% as expected on lending strength",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.finews.asia/finance/45171-ocbc-result-9m-2026",
-   "title": "OCBC posts record nine-month profit",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.theedgesingapore.com/capital/results/ocbc-only-local-bank-met-expectations-3q",
-   "title": "OCBC is the only local bank that met expectations in 3Q",
-   "age": "0 days ago"
+   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
+   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "93 days ago"
   },
   {
    "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
@@ -284,25 +200,130 @@
    "age": "0 days ago"
   },
   {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-bank-reports-higher-q3-profit-lifts-loan-outlook/70470357",
+   "title": "OCBC stock: Bank reports higher Q3 profit, lifts loan outlook",
+   "age": "0 days ago"
+  },
+  {
    "url": "https://www.tipranks.com/stocks/ovchf/earnings",
    "title": "www.tipranks.com",
+   "age": null
+  },
+  {
+   "url": "https://www.tradingview.com/symbols/SWB-OCBA",
+   "title": "SWB OCBA",
    "age": null
   },
   {
    "url": "https://www.tipranks.com/stocks/SG:O39/earnings",
    "title": "www.tipranks.com",
    "age": null
+  },
+  {
+   "url": "https://www.stockopedia.com/share-prices/dbs-group-SGX:D05/",
+   "title": "DBS group Share Price, Forecast & Financials (SGX:D05)",
+   "age": "127 days ago"
+  },
+  {
+   "url": "https://www.poems.com.sg/stock-research/DBS.SG/",
+   "title": "DBS Share Target Price S$79.00 - Stock Analyst Research",
+   "age": "44 days ago"
+  },
+  {
+   "url": "https://www.moomoo.com/sg/articles/dbs-share-price-target",
+   "title": "DBS Share Price Target & Forecast 2026: Buy or Sell in Singapore?",
+   "age": "267 days ago"
+  },
+  {
+   "url": "https://tradersunion.com/currencies/forecast/d05-sgd/",
+   "title": "DBS Group (D05/SGD) Stock Price Prediction for 2026, 2030-2040",
+   "age": null
+  },
+  {
+   "url": "https://littlebigreddot.com/dbs-rated-a-buy-ahead-of-its-third-quarter-results-on-5-november-2026/",
+   "title": "DBS rated a buy ahead of its third-quarter results on 5 November 2026",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://stockscan.io/stocks/DBSDF/forecast",
+   "title": "DBSDF - DBS Group Holdings Ltd Stock Price Forecast 2026, 2027, 2030 to 2050 - StockScan",
+   "age": null
+  },
+  {
+   "url": "https://longbridge.com/en/quote/D05.SG",
+   "title": "DBS (D05.SG) Stock Price, Quote & News",
+   "age": "159 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgs-international-raises-dbs-group-stock-target-to-sgd-79-50/70421001",
+   "title": "CGS International raises DBS Group stock target to SGD 79.50",
+   "age": "10 days ago"
+  },
+  {
+   "url": "https://tradingview.com/symbols/SWB-DEVL/forecast",
+   "title": "Price target",
+   "age": null
+  },
+  {
+   "url": "https://www.marketbeat.com/stocks/OTCMKTS/DBSDY/congress-trades",
+   "title": "congress trades",
+   "age": null
+  },
+  {
+   "url": "https://mainlymiles.com/2026/05/10/delayed-singapore-airlines-new-first-and-business-class/",
+   "title": "Delayed: Singapore Airlines' new First and Business Class cabins - Mainly Miles",
+   "age": "180 days ago"
+  },
+  {
+   "url": "https://simpleflying.com/only-132-seats-singapore-airlines-ultra-premium-a350-900ulrs/",
+   "title": "Only 132 Seats: Singapore Airlines Goes Ultra-Premium On Airbus A350-900ULRs.",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2026/11/06/singapore-airlines-unveils-new-first-business-class/",
+   "title": "Singapore Airlines unveils new First and Business Class, now delayed to 2H 2027 - Mainly Miles",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.thestar.com.my/business/business-news/2026/11/06/singapore-airlines-to-splash-us16bil-on-luxury-long-haul-cabins-as-rivals-up-their-game",
+   "title": "Singapore Airlines to splash US$1.6bil on luxury long-haul cabins as rivals up their game",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://aviationa2z.com/index.php/2026/05/05/singapore-airlines-delays-new-a350-first-and-business-class-to-2027/",
+   "title": "Singapore Airlines Delays New A350 First and Business Class to 2027 - Aviation A2Z",
+   "age": "185 days ago"
+  },
+  {
+   "url": "https://aviationa2z.com/index.php/2026/09/02/singapore-airlines-delays-s1-1-billion-a350-cabin-makeover-to-2027-amid-seat-certification/",
+   "title": "Singapore Airlines Delays S$1.1 Billion A350 Cabin Makeover to 2027 Amid Seat Certification - Aviation A2Z",
+   "age": "66 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Singapore_Airlines_fleet",
+   "title": "Singapore Airlines fleet",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/List_of_Airbus_A380_operators",
+   "title": "List of Airbus A380 operators",
+   "age": null
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Airbus_A350",
+   "title": "Airbus A350",
+   "age": null
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 50412,
-  "output": 6148,
+  "input": 49895,
+  "output": 6453,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1583
+  "costUsd": 0.1651
  },
- "createdAt": "2026-11-06T13:01:07.692Z"
+ "createdAt": "2026-11-07T00:51:37.275Z"
 }
