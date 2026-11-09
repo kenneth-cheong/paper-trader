@@ -1,397 +1,430 @@
 {
- "market_summary": "Global markets face mixed sentiment as tech giants navigate regulatory pressures and forecasts shift. Nvidia tightened chip tracking in Southeast Asia to combat smuggling concerns, while Tesla announced winding down Cybertruck production by mid-2027 to focus on Cybercab robotaxis. Singapore's banking sector showed resilience with OCBC beating earnings estimates; DBS and UOB missed expectations but analysts see buying opportunities after recent sell-offs. US equity markets await inflation data and earnings clarity. Singapore Airlines faces further delays on its S$2 billion cabin retrofit programme, now pushed to H2 2027 due to aircraft certification issues.",
+ "market_summary": "<cite index=\"1-1,2-3\">Nvidia's board launched an independent investigation after CEO Jensen Huang admitted to having an affair with a woman suspected of being a Chinese spy",
  "items": [
   {
    "symbols": [
     "NVDA"
    ],
-   "date": "2026-11-06",
-   "headline": "Nvidia requires Southeast Asian cloud partners to enroll in Fleet Intelligence chip tracking system",
-   "summary": "<cite index=\"1-3\">Nvidia requires customers in Southeast Asia to enroll in its Fleet Intelligence system tracking AI accelerators' location to become official Nvidia Cloud Partners</cite>, as <cite index=\"2-3\">US officials believe Chinese firms have bought billions of dollars of banned Nvidia processors through Southeast Asian smuggling networks</cite>.",
-   "type": "product",
-   "tone": "mixed",
-   "source_url": "https://www.bloomberg.com/news/articles/2026-11-06/nvidia-boosts-chip-tracking-in-southeast-asia-to-fight-smuggling"
-  },
-  {
-   "symbols": [
-    "TSLA"
-   ],
-   "date": "2026-11-06",
-   "headline": "Tesla to wind down Cybertruck production mid-2027 for Cybercab robotaxi production",
-   "summary": "<cite index=\"12-4,12-5\">Cybertruck production will be winding down to make room for the Cybercab, starting mid-2027</cite>. <cite index=\"16-8,16-9\">Tesla sold 20,237 Cybertrucks last year, down about half from prior year, with sales through September down 28%</cite>.",
-   "type": "product",
+   "date": "2026-11-08",
+   "headline": "Nvidia Board Launches Investigation into CEO Jensen Huang's Relationship with Alleged Chinese Spy",
+   "summary": "<cite index=",
+   "type": "legal",
    "tone": "negative",
-   "source_url": "https://www.dezeen.com/2026/11/06/tesla-cybertruck-production-discontinuation/"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "date": "2026-11-06",
-   "headline": "OCBC posts Q3 2026 net profit of S$2.04 billion, up 3% YoY; upgrades 2026 guidance",
-   "summary": "<cite index=\"23-1\">OCBC posted net profit of S$2.04 billion for Q3 2026, a 3% increase from S$1.98 billion a year earlier</cite>. <cite index=\"20-7,20-8\">Banking Operations profit reached record S$1.90 billion, up 16% YoY, while net interest income rose 4% to S$2.31 billion, the highest in six quarters</cite>. <cite index=\"20-12\">OCBC upgraded 2026 guidance on loan growth, total income and credit costs</cite>.",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://sg.finance.yahoo.com/news/ocbc-posts-higher-quarterly-profit-040223931.html"
+   "source_url": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/"
   },
   {
    "symbols": [
     "D05.SI",
+    "O39.SI",
     "U11.SI"
    ],
    "date": "2026-11-06",
-   "headline": "DBS and UOB miss Q3 earnings estimates amid analyst target cuts; OCBC beats expectations",
-   "summary": "<cite index=\"22-2,22-3\">DBS and UOB miss Q3 earnings estimates as Singapore banking heavyweights fell during results week amid renewed caution on earnings outlook</cite>. <cite index=\"33-4\">Three brokers rate DBS a buy with targets of S$79.50 to S$86.80</cite>, suggesting analysts still see upside despite recent weakness.",
+   "headline": "DBS and UOB Miss Q3 Earnings Forecasts; OCBC Beats as Only Singapore Bank to Outperform",
+   "summary": "<cite index=",
    "type": "earnings",
    "tone": "mixed",
-   "source_url": "https://www.businesstimes.com.sg/companies-markets/analysts-cut-dbs-target-price-lower-2027-earnings-see-buying-opportunity-after-share-price-slide"
+   "source_url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/"
+  },
+  {
+   "symbols": [
+    "D05.SI",
+    "O39.SI",
+    "U11.SI"
+   ],
+   "date": "2026-11-06",
+   "headline": "DBS Chairman Peter Seah to Retire End of 2026; Anthony Lim to Assume Role",
+   "summary": "<cite index=",
+   "type": "management",
+   "tone": "mixed",
+   "source_url": "https://www.thestar.com.my/business/business-news/2026/11/09/dbs-and-uob-shares-slide-after-weak-3q-results"
+  },
+  {
+   "symbols": [
+    "D05.SI",
+    "U11.SI",
+    "O39.SI"
+   ],
+   "date": "2026-11-06",
+   "headline": "Singapore Banks Face Tougher 2027 Outlook as Margin Pressures Mount and Growth Slows",
+   "summary": "<cite index=",
+   "type": "macro",
+   "tone": "negative",
+   "source_url": "https://www.redhot.sg/after-years-of-robust-growth-a-tough-2027-ahead-for-singapore-banks-analysts-736731.html"
   },
   {
    "symbols": [
     "C6L.SI"
    ],
    "date": "2026-11-06",
-   "headline": "Singapore Airlines delays new A350 cabin retrofit to H2 2027 due to seat certification issues",
-   "summary": "<cite index=\"41-1,41-8\">Singapore Airlines delays new First and Business Class to H2 2027; both new seats are certified on 777-9 but still await A350 certification</cite>. <cite index=\"42-4,42-6,42-7\">Unveiling arrives amid persistent delays; A350 certification delay pushed back introduction by about half a year</cite>.",
+   "headline": "Singapore Airlines Unveils S$2 Billion Cabin Overhaul with New Premium and Economy Seats",
+   "summary": "<cite index=",
    "type": "product",
-   "tone": "negative",
+   "tone": "positive",
    "source_url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html"
   },
   {
    "symbols": [
-    "Z74.SI"
+    "NVDA",
+    "AAPL",
+    "MSFT",
+    "AMZN"
    ],
    "date": "2026-11-05",
-   "headline": "Ex-ST Engineering and Singtel executive Low Ka Hoe to become Netlink NBN Trust CEO",
-   "summary": "Low Ka Hoe, a former executive at ST Engineering and Singtel, will succeed Tong Yew Heng as CEO of Netlink NBN Trust, signalling management transition at the Singapore telecommunications infrastructure provider.",
-   "type": "management",
-   "tone": "mixed",
-   "source_url": "https://www.businesstimes.com.sg/companies-markets/ex-st-engineering-singtel-executive-low-ka-hoe-succeed-tong-yew-heng-netlink-nbn-trust-ceo"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "date": "2026-11-06",
-   "headline": "Google executive Donald Harrison resigns from SpaceX board",
-   "summary": "A Google executive has resigned from SpaceX's board, reflecting ongoing separation between the two companies amid various tech industry board dynamics and strategic considerations.",
-   "type": "management",
-   "tone": "mixed",
-   "source_url": "https://www.channelnewsasia.com/business/google-executive-donald-harrison-resigns-spacex-board-6532446"
+   "headline": "Tech Sell-Off Wipes $2.5 Trillion from Markets; Nasdaq 100 Falls 6.36% in Worst Day Since March 2020",
+   "summary": "<cite index=",
+   "type": "macro",
+   "tone": "negative",
+   "source_url": "https://www.cnn.com/2026/11/05/investing/tech-heavy-nasdaq-plunges"
   }
  ],
  "sources": [
   {
-   "url": "https://www.bloomberg.com/news/articles/2026-11-06/nvidia-boosts-chip-tracking-in-southeast-asia-to-fight-smuggling",
-   "title": "Nvidia Boosts Chip Tracking in Southeast Asia to Fight Smuggling - Bloomberg",
+   "url": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/",
+   "title": "Nvidia will investigate CEO Jensen Huang’s relationship with possible Chinese spy",
    "age": "0 days ago"
   },
   {
-   "url": "https://aiweekly.co/alerts/nvidia-ties-southeast-asia-ncp-status-to-chip-location-tracking",
-   "title": "Nvidia Ties Southeast Asia NCP Status to Chip Location Tracking",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-08/nvidia-board-to-probe-spying-case-after-ceo-jensen-huang-admits-infidelity",
+   "title": "Nvidia Board to Probe Spying Case After CEO Jensen Huang Admits Infidelity - Bloomberg",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.techrepublic.com/article/news-nvidia-ai-chip-tracking-apac-singapore-china/",
-   "title": "Nvidia Tightens AI Chip Tracking in Southeast Asia as China Smuggling Concerns Grow",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-08/read-the-memos-from-nvidia-s-board-and-ceo-jensen-huang",
+   "title": "Read the Statements From Nvidia’s Board and CEO Jensen Huang - Bloomberg",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.tomshardware.com/tech-industry/big-tech/nvidia-tightens-tracking-of-ai-gpus-in-southeast-asia-as-chinese-chip-smuggling-draws-scrutiny-report-claims-cloud-providers-must-join-monitoring-program-to-qualify-for-official-partner-status",
-   "title": "Nvidia tightens tracking of AI GPUs in Southeast Asia as Chinese chip smuggling draws scrutiny, report claims — cloud providers must join monitoring program to qualify for official partner status",
+   "url": "https://www.axios.com/2026/11/08/nvidia-ceo-jensen-huang-admits-affair-board-to-launch-investigation",
+   "title": "Nvidia CEO Jensen Huang admits affair, board to launch investigation",
    "age": "0 days ago"
   },
   {
-   "url": "https://rallies.ai/news/nvidia-reportedly-boosts-chip-tracking-in-southeast-asia-to-fight-smuggling-e8671df2fad8d2e7",
-   "title": "Nvidia reportedly boosts chip tracking in Southeast Asia to fight smuggling - NVDA News",
+   "url": "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-investigation-china-spy.html",
+   "title": "Nvidia investigates CEO Jensen Huang's relationship with alleged Chinese spy",
    "age": "0 days ago"
   },
   {
-   "url": "https://kantan.news/news/nvidia-mandates-ai-chip-tracking-in-southeast-asia",
-   "title": "Nvidia Mandates AI Chip Tracking in Southeast Asia",
+   "url": "https://www.cnbc.com/2026/11/08/jensen-huang-nvidia-china-spy-congress.html",
+   "title": "Nvidia CEO Jensen Huang faces bipartisan congressional scrutiny over reported China spy link",
    "age": "0 days ago"
   },
   {
-   "url": "https://superpowerdaily.com/posts/nvidia-reportedly-requires-gpu-tracking-for-southeast-asian-cloud-partner-status",
-   "title": "Nvidia reportedly requires GPU tracking for Southeast Asian cloud partner status",
+   "url": "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-email-board-of-directors-statement.html",
+   "title": "Read Huang's email to his staff and statement from Nvidia's board of directors",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000019/q4fy26pr.htm",
+   "title": "NVIDIA CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://huggingnews.com/tech/nvidia-now-requires-ai-chip-tracking-for-southeast-asian-cloud-partners-0382e694",
-   "title": "Nvidia Now Requires AI Chip Tracking for Southeast Asian Cloud Partners",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/nvidia-stock-faces-tighter-chip-tracking-in-southeast-asia/70471001",
-   "title": "Nvidia stock faces tighter chip tracking in Southeast Asia",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/nvidia-stock-tightens-chip-tracking-as-southeast-asia-risk-grows/70470093",
-   "title": "Nvidia stock tightens chip tracking as Southeast Asia risk grows",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Tesla_Cybertruck",
-   "title": "Tesla Cybertruck",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000038/a2026-annualxreportxwebxfi.pdf",
+   "title": "NVIDIA CORP - Form ARS - FY2026",
    "age": null
   },
   {
-   "url": "https://www.dezeen.com/2026/11/06/tesla-cybertruck-production-discontinuation/",
-   "title": "Tesla \"winding down\" production of Cybertruck next year",
+   "url": "https://www.thestar.com.my/business/business-news/2026/11/09/dbs-and-uob-shares-slide-after-weak-3q-results",
+   "title": "DBS and UOB shares slide after weak 3Q results",
    "age": "0 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Tesla_Cybercab",
-   "title": "Tesla Cybercab",
-   "age": null
-  },
-  {
-   "url": "https://techcrunch.com/2026/11/06/tesla-will-stop-making-the-cybertruck-in-2027",
-   "title": "Tesla will stop making the Cybertruck in 2027",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://electrek.co/2026/11/06/tesla-ending-cybertruck-production-sales-10-percent-plan/",
-   "title": "Tesla to end Cybertruck production as sales stall at ~10% of plan",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://abcnews.com/Business/wireStory/production-teslas-cybertruck-wind-allure-escaping-potential-buyers-137912249",
-   "title": "Tesla's Cybertruck heads for an exit after years of hype and division - ABC News",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/1318605/000162828026003837/exhibit991.htm",
-   "title": "Tesla, Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://tech-insider.org/tesla-cybertruck-wind-down-giga-texas-cybercab-2027-2026/",
-   "title": "Tesla Ends Cybertruck Production for Cybercab [2026]",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://techcrunch.com/2023/10/18/tesla-cybertruck-deliveries-set-for-nov-30",
-   "title": "tesla cybertruck deliveries set for nov 30",
-   "age": null
-  },
-  {
-   "url": "https://growbeansprout.com/ocbc-3q26-profit-dividend",
-   "title": "OCBC reports 3% rise in 3Q26 net profit and upgrades 2026 guidance: Our Quick Take - Growbeansprout.com",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sg:o39/earnings",
-   "title": "OCBC (O39) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "93 days ago"
   },
   {
    "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
    "title": "DBS and UOB Miss, OCBC Beats: What Q3 2026 Results Say About Singapore Banks",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
+   "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://thekopinotes.com/articles/news/uob-q3-2026-results-dividend/",
+   "title": "UOB Q3 2026 Results: 182% Profit Surge But Misses Forecasts",
    "age": "0 days ago"
   },
   {
-   "url": "https://time.news/ocbc-q3-profit-rises-3-to-s2-04-billion-beats-expectations/",
-   "title": "OCBC Q3 Profit Rises 3% to S$2.04 Billion, Beats Expectations - Time News",
+   "url": "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/",
+   "title": "OCBC Q3 2026: Singapore’s Only Bank to Beat Estimates",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://thekopinotes.com/articles/news/singapore-banks-october-2026-selloff/",
+   "title": "DBS, OCBC & UOB: October 2026 Bank Selloff — Buy the Dip or Wait for Q3 Results? - The Kopi Notes",
+   "age": "30 days ago"
+  },
+  {
+   "url": "https://longbridge.com/topics/100000000976115",
+   "title": "🔥 Singapore Banking Trio 3Q26: Who Took The Lead?My earlier guess was wrong for this quarter😔. DBS did not shine as br…",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://sg.headtopics.com/news/dbs-ocbc-uob-shares-drop-after-q3-results-sats-hit-by-89654032",
+   "title": "DBS, OCBC, UOB shares drop after Q3 results; SATS hit by work pass concerns: Markets this week",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-reaches-record-nine-month-profit-as-q3-earnings-rise/70468430",
-   "title": "OCBC stock reaches record nine-month profit as Q3 earnings rise",
+   "url": "https://www.itiger.com/hans/news/1189208007",
+   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
+   "age": null
+  },
+  {
+   "url": "https://www.researchandmarkets.com/reports/5834984/singapore-banks-market-summary-competitive",
+   "title": "Singapore Banks Market Summary, Competitive Analysis and Forecast to 2027",
+   "age": null
+  },
+  {
+   "url": "https://www.minichart.com.sg/2026/06/09/singapore-banks-outlook-2026-2027-dbs-ocbc-uob-earnings-dividend-yields-sector-upgrade-explained/",
+   "title": "Singapore Banks Outlook 2026-2027: DBS, OCBC, UOB Earnings, Dividend Yields & Sector Upgrade Explained",
+   "age": "153 days ago"
+  },
+  {
+   "url": "https://www.minichart.com.sg/2026/06/09/singapore-banks-sector-outlook-2026-2027-dbs-ocbc-uob-upgraded-amid-strong-nii-roe-dividend-growth/",
+   "title": "Singapore Banks Sector Outlook 2026-2027: DBS, OCBC, UOB Upgraded Amid Strong NII, ROE & Dividend Growth",
+   "age": "153 days ago"
+  },
+  {
+   "url": "https://www.redhot.sg/after-years-of-robust-growth-a-tough-2027-ahead-for-singapore-banks-analysts-736731.html",
+   "title": "After years of robust growth, a tough 2027 ahead for Singapore banks: Analysts - Red Hot Singapore",
+   "age": null
+  },
+  {
+   "url": "https://www.world-today-news.com/singapore-banks-face-tough-2027-outlook-following-share-sell-off/",
+   "title": "Singapore banks face tough 2027 outlook following share sell-off - World Today News",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://sg.headtopics.com/news/singapore-banks-face-earnings-pressure-and-slower-growth-in-89630354",
+   "title": "Singapore Banks Face Earnings Pressure And Slower Growth In 2027",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://spglobal.com/ratings/en/research/articles/230314-singapore-banks-2023-outlook-a-strong-start-with-some-fade-12665557",
+   "title": "230314 singapore banks 2023 outlook a strong start with some fade 12665557",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/news/1107310869",
+   "title": "Banks’ Profits To Remain ‘Stable’ This 2025",
+   "age": null
+  },
+  {
+   "url": "https://tradingeconomics.com/united-states/stock-market",
+   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
+   "age": "807 days ago"
+  },
+  {
+   "url": "https://www.kucoin.com/news/insight/AAPL/6aef75a9abae5e0007c55e20",
+   "title": "US Stock Market",
+   "age": null
+  },
+  {
+   "url": "https://robinhood.com/us/en/prediction-markets/financial/events/nasdaq-100-futures-price-on-november-9-2026-nov-09-2026/",
+   "title": "November 9, 2026: Nasdaq 100 futures price on November 9, 2026 Prediction Market",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-bank-reports-higher-q3-profit-lifts-loan-outlook/70470357",
-   "title": "OCBC stock: Bank reports higher Q3 profit, lifts loan outlook",
+   "url": "https://x.com/marketsday/status/2119116419304493302",
+   "title": "Markets Today on X: \"US Stock Market",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://equityclock.com/",
+   "title": "The market is likely going to need some time to repair.  We'll tell you when seasonal tendencies suggest stocks should become reinvigorated.",
+   "age": "746 days ago"
+  },
+  {
+   "url": "https://public.com/prediction-markets/s-p-price-range-on-nov-9-2026-at-4pm-est-6bfx067?sourceScreen=prediction_markets_event_page",
+   "title": "S&P price range on Nov 9, 2026 at 4pm EST? Odds & Predictions - Public.com",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.tipranks.com/stocks/ovchf/earnings",
-   "title": "www.tipranks.com",
+   "url": "https://www.schwab.com/learn/story/stock-market-update-open",
+   "title": "Stocks Mixed, Yields Up on Surging U.S. Job Growth",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Nasdaq",
+   "title": "Nasdaq",
    "age": null
   },
   {
-   "url": "https://www.tradingview.com/symbols/SWB-OCBA",
-   "title": "SWB OCBA",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/SG:O39/earnings",
-   "title": "www.tipranks.com",
-   "age": null
-  },
-  {
-   "url": "https://www.stockopedia.com/share-prices/dbs-group-SGX:D05/",
-   "title": "DBS group Share Price, Forecast & Financials (SGX:D05)",
-   "age": "127 days ago"
-  },
-  {
-   "url": "https://www.poems.com.sg/stock-research/DBS.SG/",
-   "title": "DBS Share Target Price S$79.00 - Stock Analyst Research",
-   "age": "44 days ago"
-  },
-  {
-   "url": "https://www.moomoo.com/sg/articles/dbs-share-price-target",
-   "title": "DBS Share Price Target & Forecast 2026: Buy or Sell in Singapore?",
-   "age": "267 days ago"
-  },
-  {
-   "url": "https://tradersunion.com/currencies/forecast/d05-sgd/",
-   "title": "DBS Group (D05/SGD) Stock Price Prediction for 2026, 2030-2040",
-   "age": null
-  },
-  {
-   "url": "https://littlebigreddot.com/dbs-rated-a-buy-ahead-of-its-third-quarter-results-on-5-november-2026/",
-   "title": "DBS rated a buy ahead of its third-quarter results on 5 November 2026",
+   "url": "https://www.cnn.com/2026/11/05/investing/tech-heavy-nasdaq-plunges",
+   "title": "Stock markets plunge as massive tech sell-off wipes $2.5 trillion",
    "age": "3 days ago"
   },
   {
-   "url": "https://stockscan.io/stocks/DBSDF/forecast",
-   "title": "DBSDF - DBS Group Holdings Ltd Stock Price Forecast 2026, 2027, 2030 to 2050 - StockScan",
-   "age": null
+   "url": "https://milelion.com/2026/11/06/live-blog-singapore-airlines-unveils-next-generation-seats-and-cabin-experience/",
+   "title": "Live Blog: Singapore Airlines unveils next-generation seats and cabin experience - The MileLion",
+   "age": "2 days ago"
   },
   {
-   "url": "https://longbridge.com/en/quote/D05.SG",
-   "title": "DBS (D05.SG) Stock Price, Quote & News",
-   "age": "159 days ago"
+   "url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html",
+   "title": "Singapore Airlines reveals new business and first class seats",
+   "age": "1 days ago"
   },
   {
-   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/cgs-international-raises-dbs-group-stock-target-to-sgd-79-50/70421001",
-   "title": "CGS International raises DBS Group stock target to SGD 79.50",
-   "age": "10 days ago"
+   "url": "https://aviationweek.com/air-transport/interiors-connectivity/singapore-airlines-unveils-15-billion-cabin-overhaul-across",
+   "title": "Singapore Airlines Unveils $1.5 Billion Cabin Overhaul Across Classes",
+   "age": "1 days ago"
   },
   {
-   "url": "https://tradingview.com/symbols/SWB-DEVL/forecast",
-   "title": "Price target",
-   "age": null
+   "url": "https://ftnnews.com/travel-news/aviation/singapore-airlines-travel-upgrades-2026/",
+   "title": "Singapore Airlines Upgrades Bring New Seats and Dining",
+   "age": "39 days ago"
   },
   {
-   "url": "https://www.marketbeat.com/stocks/OTCMKTS/DBSDY/congress-trades",
-   "title": "congress trades",
-   "age": null
+   "url": "https://milelion.com/2026/11/06/unveiled-singapore-airlines-new-first-business-premium-economy-and-economy-seats/",
+   "title": "Unveiled: Singapore Airlines' new First, Business, Premium Economy and Economy seats - The MileLion",
+   "age": "1 days ago"
   },
   {
-   "url": "https://mainlymiles.com/2026/05/10/delayed-singapore-airlines-new-first-and-business-class/",
-   "title": "Delayed: Singapore Airlines' new First and Business Class cabins - Mainly Miles",
-   "age": "180 days ago"
+   "url": "https://www.thestreet.com/travel/singapore-airlines-is-switching-up-all-the-seats",
+   "title": "Singapore Airlines is seriously upping its seats - TheStreet",
+   "age": "2 days ago"
   },
   {
-   "url": "https://simpleflying.com/only-132-seats-singapore-airlines-ultra-premium-a350-900ulrs/",
-   "title": "Only 132 Seats: Singapore Airlines Goes Ultra-Premium On Airbus A350-900ULRs.",
-   "age": "0 days ago"
+   "url": "https://www.headforpoints.com/2026/11/06/singapore-airlines-new-first-and-business-class-cabins/",
+   "title": "FIRST LOOK: Singapore Airlines' new First and business class cabins are hit and miss",
+   "age": "1 days ago"
   },
   {
-   "url": "https://mainlymiles.com/2026/11/06/singapore-airlines-unveils-new-first-business-class/",
-   "title": "Singapore Airlines unveils new First and Business Class, now delayed to 2H 2027 - Mainly Miles",
-   "age": "0 days ago"
+   "url": "https://simpleflying.com/singapore-airlines-new-first-business-class-suites-boeing-777-9/",
+   "title": "Singapore Airlines Unveils All-New First & Business Class Suites For Its Boeing 777-9",
+   "age": "2 days ago"
   },
   {
-   "url": "https://www.thestar.com.my/business/business-news/2026/11/06/singapore-airlines-to-splash-us16bil-on-luxury-long-haul-cabins-as-rivals-up-their-game",
-   "title": "Singapore Airlines to splash US$1.6bil on luxury long-haul cabins as rivals up their game",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://aviationa2z.com/index.php/2026/05/05/singapore-airlines-delays-new-a350-first-and-business-class-to-2027/",
-   "title": "Singapore Airlines Delays New A350 First and Business Class to 2027 - Aviation A2Z",
-   "age": "185 days ago"
-  },
-  {
-   "url": "https://aviationa2z.com/index.php/2026/09/02/singapore-airlines-delays-s1-1-billion-a350-cabin-makeover-to-2027-amid-seat-certification/",
-   "title": "Singapore Airlines Delays S$1.1 Billion A350 Cabin Makeover to 2027 Amid Seat Certification - Aviation A2Z",
-   "age": "66 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Singapore_Airlines_fleet",
-   "title": "Singapore Airlines fleet",
-   "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/List_of_Airbus_A380_operators",
-   "title": "List of Airbus A380 operators",
-   "age": null
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Airbus_A350",
-   "title": "Airbus A350",
+   "url": "https://www.singaporeair.com/en_UK/ch/corporate/newsroom/press-release",
+   "title": "Featured News Release",
    "age": null
   }
  ],
  "leads": [
   {
    "symbols": [
-    "NVDA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-07T00:15:52Z",
-   "headline": "Nvidia (NVDA) Tightens Chip Tracking In Southeast Asia",
-   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-nvda-tightens-chip-tracking-001552079.html"
-  },
-  {
-   "symbols": [
+    "AAPL",
+    "MSFT",
+    "NVDA",
     "AMZN"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-07T00:11:40Z",
-   "headline": "How Earnings Upgrades At Intuitive Surgical Stock Have Changed Its Investment Story",
-   "url": "https://finance.yahoo.com/healthcare/articles/earnings-upgrades-intuitive-surgical-stock-001140435.html"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "source": "channelnewsasia.com",
-   "pubDate": "2026-11-06T23:48:17Z",
-   "headline": "Google executive Donald Harrison resigns from SpaceX board",
-   "url": "https://www.channelnewsasia.com/business/google-executive-donald-harrison-resigns-spacex-board-6532446"
-  },
-  {
-   "symbols": [
-    "AAPL",
-    "MSFT",
-    "AMZN",
-    "BRK-B"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-06T23:41:36Z",
-   "headline": "Dow Jones Futures: Market Needs Repair But Sandisk, Micron Look Broken; Apple, Amazon, Microsoft Strong",
-   "url": "https://finance.yahoo.com/m/283e1bd9-349e-390b-a32b-b4ed9a9034f3/dow-jones-futures%3A-market.html"
-  },
-  {
-   "symbols": [
-    "TSLA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-06T23:33:10Z",
-   "headline": "Musk's futuristic Cybertruck rolls toward exit",
-   "url": "https://finance.yahoo.com/technology/articles/musks-futuristic-cybertruck-rolls-toward-143948079.html"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
-   "source": "thestreet.com",
-   "pubDate": "2026-11-06T23:30:00Z",
-   "headline": "Google-backed miner reveals $710M profit, operating loss surges 257%",
-   "url": "https://www.thestreet.com/crypto/markets/google-backed-miners-710-million-profit-masks-operating-losses"
-  },
-  {
-   "symbols": [
-    "TSLA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-06T23:15:00Z",
-   "headline": "Tesla’s Self-Driving Is an American Marvel",
-   "url": "https://finance.yahoo.com/m/befb5162-b4fe-32f1-9b11-f06e7cce8aed/tesla%E2%80%99s-self-driving-is-an.html"
+   "pubDate": "2026-11-09T00:49:19Z",
+   "headline": "Dow Jones Futures Rise, Techs Slide A Nvidia Probes CEO Jensen Huang Spying Case",
+   "url": "https://finance.yahoo.com/m/283e1bd9-349e-390b-a32b-b4ed9a9034f3/dow-jones-futures-rise%2C-techs.html"
   },
   {
    "symbols": [
     "NVDA"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-06T23:02:00Z",
-   "headline": "IonQ Wants to Be the Nvidia of Quantum. Its Latest Numbers Back Up the Swagger.",
-   "url": "https://finance.yahoo.com/m/daf77303-800e-3e89-88c8-ad99c3913f9c/ionq-wants-to-be-the-nvidia.html"
+   "pubDate": "2026-11-09T00:07:37Z",
+   "headline": "Nvidia CEO Jensen Huang's image tarnished by board investigation and affair, analysts say",
+   "url": "https://finance.yahoo.com/technology/articles/nvidia-ceo-jensen-huangs-image-000737077.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-08T23:59:30Z",
+   "headline": "Nvidia CEO Jensen Huang’s confession engulfs chip giant in spying controversy",
+   "url": "https://www.businesstimes.com.sg/companies-markets/nvidia-ceo-jensen-huangs-confession-engulfs-chip-giant-spying-controversy"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "channelnewsasia.com",
+   "pubDate": "2026-11-08T23:53:13Z",
+   "headline": "Trump calls Nvidia's Huang 'honorable,' says he has not discussed allegations with him",
+   "url": "https://www.channelnewsasia.com/business/trump-calls-nvidias-huang-honorable-says-he-has-not-discussed-allegations-him-6534881"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-08T23:43:49Z",
+   "headline": "Nvidia Board Launches Probe In CEO Jensen Huang Spying Case",
+   "url": "https://finance.yahoo.com/m/7d4c4e40-eb01-324f-b03d-99c6800c4248/nvidia-board-launches-probe.html"
+  },
+  {
+   "symbols": [
+    "Z74.SI",
+    "C6L.SI"
+   ],
+   "source": "thesmartinvestor.com.sg",
+   "pubDate": "2026-11-08T23:30:00Z",
+   "headline": "Singtel, SATS, SIA: Temasek-Linked Blue Chips to Watch This Week",
+   "url": "https://thesmartinvestor.com.sg/singtel-sats-sia-temasek-linked-blue-chips-to-watch-this-week/"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-08T23:30:00Z",
+   "headline": "Nvidia Stock Faces New Pressure as Board Investigates Huang’s Links to Alleged Spy",
+   "url": "https://finance.yahoo.com/m/09a7b85b-f39c-346a-88bc-f818668a56a9/nvidia-stock-faces-new.html"
+  },
+  {
+   "symbols": [
+    "TSLA"
+   ],
+   "source": "fool.com",
+   "pubDate": "2026-11-08T23:20:00Z",
+   "headline": "Here's What a $1,000 Investment in Tesla Stock Could Be Worth in 5 Years",
+   "url": "https://www.fool.com/investing/2026/11/08/heres-what-a-1000-investment-in-tesla-stock-could/"
+  },
+  {
+   "symbols": [
+    "BRK-B"
+   ],
+   "source": "247wallst.com",
+   "pubDate": "2026-11-08T23:13:00Z",
+   "headline": "Warren Buffett’s Coca-Cola Shares Now Pay Back Two-Thirds of What He Paid, Every Single Year",
+   "url": "https://247wallst.com/investing/2026/11/08/warren-buffett-96-credits-coke-for-his-long-life-his-848-million-coke-check-carries-a-warning-for-a-72-year-old-widow-holding-4000-shares-heres-what-the-numbers-say/"
+  },
+  {
+   "symbols": [
+    "D05.SI",
+    "O39.SI",
+    "U11.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-08T10:52:21Z",
+   "headline": "DBS, OCBC, UOB’s big sell-off: Was it their Q3 numbers or a broader market de-rating?",
+   "url": "https://www.businesstimes.com.sg/opinion-features/dbs-ocbc-uobs-big-sell-was-it-their-q3-numbers-or-broader-market-de-rating"
+  },
+  {
+   "symbols": [
+    "D05.SI",
+    "O39.SI",
+    "U11.SI"
+   ],
+   "source": "straitstimes.com",
+   "pubDate": "2026-11-08T04:00:00Z",
+   "headline": "DBS, OCBC, UOB shares drop after Q3 results; SATS hit by work pass concerns: Markets this week",
+   "url": "https://www.straitstimes.com/business/global-tech-fallout-after-us-democrats-victory-dbs-ocbc-oub-shares-drop-markets-this-week"
+  },
+  {
+   "symbols": [
+    "Z74.SI"
+   ],
+   "source": "straitstimes.com",
+   "pubDate": "2026-11-07T08:17:34Z",
+   "headline": "Ex-ST Engineering, Singtel exec Low Ka Hoe to succeed Tong Yew Heng as Netlink NBN Trust CEO",
+   "url": "https://www.straitstimes.com/business/companies-markets/ex-st-engineering-singtel-exec-low-ka-hoe-to-succeed-tong-yew-heng-as-netlink-nbn-trust-ceo"
+  },
+  {
+   "symbols": [
+    "D05.SI",
+    "U11.SI"
+   ],
+   "source": "channelnewsasia.com",
+   "pubDate": "2026-11-07T01:03:51Z",
+   "headline": "After years of robust growth, a tough 2027 ahead for Singapore banks: Analysts",
+   "url": "https://www.channelnewsasia.com/singapore/dbs-uob-ocbc-banks-earnings-outlook-6531376"
   },
   {
    "symbols": [
@@ -410,63 +443,17 @@
    "pubDate": "2026-11-06T08:28:10Z",
    "headline": "Singapore Airlines is seriously upping its seat quality",
    "url": "https://www.thestreet.com/travel/singapore-airlines-is-switching-up-all-the-seats"
-  },
-  {
-   "symbols": [
-    "D05.SI",
-    "U11.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-06T07:42:14Z",
-   "headline": "Analysts cut DBS target price on lower 2027 earnings, but see buying opportunity after share price slide",
-   "url": "https://www.businesstimes.com.sg/companies-markets/analysts-cut-dbs-target-price-lower-2027-earnings-see-buying-opportunity-after-share-price-slide"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "source": "cnbc.com",
-   "pubDate": "2026-11-06T05:36:10Z",
-   "headline": "The world's best airline is updating its business and first-class experience",
-   "url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-06T05:30:00Z",
-   "headline": "Singapore Airlines’ new planes and seats delayed again due to certification issues",
-   "url": "https://www.businesstimes.com.sg/singapore/singapore-airlines-new-planes-and-seats-delayed-again-due-certification-issues"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "source": "sg.finance.yahoo.com",
-   "pubDate": "2026-11-06T04:02:23Z",
-   "headline": "OCBC Posts Higher Quarterly Profit on Stronger Net Interest Income",
-   "url": "https://sg.finance.yahoo.com/news/ocbc-posts-higher-quarterly-profit-040223931.html"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-06T00:37:48Z",
-   "headline": "Stocks to watch: OCBC, IHH Healthcare, FLCT, SingPost, Koh Brothers Eco Engineering",
-   "url": "https://www.businesstimes.com.sg/companies-markets/stocks-watch-ocbc-ihh-healthcare-flct-singpost-koh-brothers-eco-engineering"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 40179,
-  "output": 1809,
+  "input": 40638,
+  "output": 1156,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.0992
+  "costUsd": 0.0964
  },
- "createdAt": "2026-11-07T00:51:37.275Z"
+ "createdAt": "2026-11-09T01:01:50.113Z"
 }
