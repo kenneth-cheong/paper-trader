@@ -1,142 +1,114 @@
 {
- "market_summary": "<cite index=\"1-1,2-3\">Nvidia's board launched an independent investigation after CEO Jensen Huang admitted to having an affair with a woman suspected of being a Chinese spy",
+ "market_summary": "<cite index=\"46-3,46-4,46-5\">Markets tumbled Thursday after Democratic sweep in the US midterm elections sparked fears of tighter AI regulation and slower data center investment, with the Nasdaq falling 5.5%, S&P 500 losing 4.4%, and Dow dropping 3.4%—the worst one-day losses since April 2025.",
  "items": [
+  {
+   "symbols": [
+    "D05.SI",
+    "O39.SI",
+    "U11.SI"
+   ],
+   "date": "2026-11-06",
+   "headline": "OCBC beats Q3 estimates; DBS and UOB miss earnings expectations",
+   "summary": "<cite index=",
+   "type": "earnings",
+   "tone": "mixed",
+   "source_url": "https://thesmartinvestor.com.sg/ocbc-beats-expectations-while-dbs-and-uob-miss-what-happened-in-3q-2026/"
+  },
   {
    "symbols": [
     "NVDA"
    ],
    "date": "2026-11-08",
-   "headline": "Nvidia Board Launches Investigation into CEO Jensen Huang's Relationship with Alleged Chinese Spy",
+   "headline": "Nvidia board launches investigation into CEO Jensen Huang over affair with alleged Chinese spy",
    "summary": "<cite index=",
    "type": "legal",
    "tone": "negative",
-   "source_url": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/"
+   "source_url": "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-investigation-china-spy.html"
   },
   {
    "symbols": [
-    "D05.SI",
-    "O39.SI",
-    "U11.SI"
+    "NVDA"
+   ],
+   "date": "2026-11-08",
+   "headline": "Jensen Huang admits affair in letter to Nvidia employees; company to investigate security concerns",
+   "summary": "<cite index=",
+   "type": "management",
+   "tone": "negative",
+   "source_url": "https://www.washingtonpost.com/technology/2026/11/08/read-jensen-huangs-letter-nvidia-about-his-affair-with-suspected-chinese-spy/"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "date": "2026-11-05",
+   "headline": "Google announces $17 billion Wyoming data center investment as AI capex concerns weigh on stock",
+   "summary": "<cite index=",
+   "type": "other",
+   "tone": "mixed",
+   "source_url": "https://finance.yahoo.com/energy/articles/google-spending-17-billion-wyoming-192629782.html"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "date": "2026-11-09",
+   "headline": "Alphabet's $75.7 billion data-center credit backstops draw lender scrutiny as AI financing concerns grow",
+   "summary": "<cite index=",
+   "type": "other",
+   "tone": "negative",
+   "source_url": "https://www.tikr.com/blog/alphabet-has-75-7-billion-of-data-center-backstops-lenders-just-started-doubting-them"
+  },
+  {
+   "symbols": [
+    "GOOGL",
+    "NVDA"
+   ],
+   "date": "2026-11-09",
+   "headline": "Google introduces TPU 8t and TPU 8i chips to compete with Nvidia in AI processor market",
+   "summary": "<cite index=",
+   "type": "product",
+   "tone": "mixed",
+   "source_url": "https://finance.yahoo.com/technology/ai/articles/google-escalates-nvidia-rivalry-specialized-123000247.html"
+  },
+  {
+   "symbols": [
+    "SPY",
+    "QQQ"
+   ],
+   "date": "2026-11-08",
+   "headline": "US equity markets stabilize Friday after violent week; semiconductor stocks rebound 4.2% on buying opportunity",
+   "summary": "<cite index=",
+   "type": "macro",
+   "tone": "mixed",
+   "source_url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---asian-chipmakers-rebound-and-brent-holds-below-usd-100---9-november-2026-09112026"
+  },
+  {
+   "symbols": [
+    "ES3.SI"
    ],
    "date": "2026-11-06",
-   "headline": "DBS and UOB Miss Q3 Earnings Forecasts; OCBC Beats as Only Singapore Bank to Outperform",
+   "headline": "Singapore banks' Q3 results weigh on STI; mixed bank earnings signal NIM pressures persist",
    "summary": "<cite index=",
    "type": "earnings",
    "tone": "mixed",
-   "source_url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/"
-  },
-  {
-   "symbols": [
-    "D05.SI",
-    "O39.SI",
-    "U11.SI"
-   ],
-   "date": "2026-11-06",
-   "headline": "DBS Chairman Peter Seah to Retire End of 2026; Anthony Lim to Assume Role",
-   "summary": "<cite index=",
-   "type": "management",
-   "tone": "mixed",
-   "source_url": "https://www.thestar.com.my/business/business-news/2026/11/09/dbs-and-uob-shares-slide-after-weak-3q-results"
-  },
-  {
-   "symbols": [
-    "D05.SI",
-    "U11.SI",
-    "O39.SI"
-   ],
-   "date": "2026-11-06",
-   "headline": "Singapore Banks Face Tougher 2027 Outlook as Margin Pressures Mount and Growth Slows",
-   "summary": "<cite index=",
-   "type": "macro",
-   "tone": "negative",
-   "source_url": "https://www.redhot.sg/after-years-of-robust-growth-a-tough-2027-ahead-for-singapore-banks-analysts-736731.html"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "date": "2026-11-06",
-   "headline": "Singapore Airlines Unveils S$2 Billion Cabin Overhaul with New Premium and Economy Seats",
-   "summary": "<cite index=",
-   "type": "product",
-   "tone": "positive",
-   "source_url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html"
-  },
-  {
-   "symbols": [
-    "NVDA",
-    "AAPL",
-    "MSFT",
-    "AMZN"
-   ],
-   "date": "2026-11-05",
-   "headline": "Tech Sell-Off Wipes $2.5 Trillion from Markets; Nasdaq 100 Falls 6.36% in Worst Day Since March 2020",
-   "summary": "<cite index=",
-   "type": "macro",
-   "tone": "negative",
-   "source_url": "https://www.cnn.com/2026/11/05/investing/tech-heavy-nasdaq-plunges"
+   "source_url": "https://www.businesstimes.com.sg/opinion-features/dbs-ocbc-uobs-big-sell-was-it-their-q3-numbers-or-broader-market-de-rating"
   }
  ],
  "sources": [
   {
-   "url": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/",
-   "title": "Nvidia will investigate CEO Jensen Huang’s relationship with possible Chinese spy",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.bloomberg.com/news/articles/2026-11-08/nvidia-board-to-probe-spying-case-after-ceo-jensen-huang-admits-infidelity",
-   "title": "Nvidia Board to Probe Spying Case After CEO Jensen Huang Admits Infidelity - Bloomberg",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.bloomberg.com/news/articles/2026-11-08/read-the-memos-from-nvidia-s-board-and-ceo-jensen-huang",
-   "title": "Read the Statements From Nvidia’s Board and CEO Jensen Huang - Bloomberg",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.axios.com/2026/11/08/nvidia-ceo-jensen-huang-admits-affair-board-to-launch-investigation",
-   "title": "Nvidia CEO Jensen Huang admits affair, board to launch investigation",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-investigation-china-spy.html",
-   "title": "Nvidia investigates CEO Jensen Huang's relationship with alleged Chinese spy",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/08/jensen-huang-nvidia-china-spy-congress.html",
-   "title": "Nvidia CEO Jensen Huang faces bipartisan congressional scrutiny over reported China spy link",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-email-board-of-directors-statement.html",
-   "title": "Read Huang's email to his staff and statement from Nvidia's board of directors",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000019/q4fy26pr.htm",
-   "title": "NVIDIA CORP - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000038/a2026-annualxreportxwebxfi.pdf",
-   "title": "NVIDIA CORP - Form ARS - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.thestar.com.my/business/business-news/2026/11/09/dbs-and-uob-shares-slide-after-weak-3q-results",
-   "title": "DBS and UOB shares slide after weak 3Q results",
-   "age": "0 days ago"
-  },
-  {
    "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
    "title": "DBS and UOB Miss, OCBC Beats: What Q3 2026 Results Say About Singapore Banks",
-   "age": "2 days ago"
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://thesmartinvestor.com.sg/ocbc-beats-expectations-while-dbs-and-uob-miss-what-happened-in-3q-2026/",
+   "title": "OCBC Beats Expectations While DBS and UOB Miss: What Happened in 3Q 2026?",
+   "age": "3 days ago"
   },
   {
    "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
    "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
-   "age": "5 days ago"
+   "age": "6 days ago"
   },
   {
    "url": "https://thekopinotes.com/articles/news/uob-q3-2026-results-dividend/",
@@ -146,22 +118,12 @@
   {
    "url": "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/",
    "title": "OCBC Q3 2026: Singapore’s Only Bank to Beat Estimates",
-   "age": "1 days ago"
+   "age": "2 days ago"
   },
   {
-   "url": "https://thekopinotes.com/articles/news/singapore-banks-october-2026-selloff/",
-   "title": "DBS, OCBC & UOB: October 2026 Bank Selloff — Buy the Dip or Wait for Q3 Results? - The Kopi Notes",
-   "age": "30 days ago"
-  },
-  {
-   "url": "https://longbridge.com/topics/100000000976115",
-   "title": "🔥 Singapore Banking Trio 3Q26: Who Took The Lead?My earlier guess was wrong for this quarter😔. DBS did not shine as br…",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://sg.headtopics.com/news/dbs-ocbc-uob-shares-drop-after-q3-results-sats-hit-by-89654032",
-   "title": "DBS, OCBC, UOB shares drop after Q3 results; SATS hit by work pass concerns: Markets this week",
-   "age": "0 days ago"
+   "url": "https://www.nouvelles-du-monde.com/les-banques-de-singapour-affichent-des-resultats-contrastes-au-t3-2026/",
+   "title": "Les banques de Singapour affichent des résultats contrastés au T3 2026 - Nouvelles Du Monde",
+   "age": "2 days ago"
   },
   {
    "url": "https://www.itiger.com/hans/news/1189208007",
@@ -169,184 +131,308 @@
    "age": null
   },
   {
-   "url": "https://www.researchandmarkets.com/reports/5834984/singapore-banks-market-summary-competitive",
-   "title": "Singapore Banks Market Summary, Competitive Analysis and Forecast to 2027",
+   "url": "https://www.itiger.com/hant/news/1189208007",
+   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
    "age": null
   },
   {
-   "url": "https://www.minichart.com.sg/2026/06/09/singapore-banks-outlook-2026-2027-dbs-ocbc-uob-earnings-dividend-yields-sector-upgrade-explained/",
-   "title": "Singapore Banks Outlook 2026-2027: DBS, OCBC, UOB Earnings, Dividend Yields & Sector Upgrade Explained",
-   "age": "153 days ago"
-  },
-  {
-   "url": "https://www.minichart.com.sg/2026/06/09/singapore-banks-sector-outlook-2026-2027-dbs-ocbc-uob-upgraded-amid-strong-nii-roe-dividend-growth/",
-   "title": "Singapore Banks Sector Outlook 2026-2027: DBS, OCBC, UOB Upgraded Amid Strong NII, ROE & Dividend Growth",
-   "age": "153 days ago"
-  },
-  {
-   "url": "https://www.redhot.sg/after-years-of-robust-growth-a-tough-2027-ahead-for-singapore-banks-analysts-736731.html",
-   "title": "After years of robust growth, a tough 2027 ahead for Singapore banks: Analysts - Red Hot Singapore",
+   "url": "https://www.itiger.com/hant/news/2509047468",
+   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus",
    "age": null
   },
   {
-   "url": "https://www.world-today-news.com/singapore-banks-face-tough-2027-outlook-following-share-sell-off/",
-   "title": "Singapore banks face tough 2027 outlook following share sell-off - World Today News",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://sg.headtopics.com/news/singapore-banks-face-earnings-pressure-and-slower-growth-in-89630354",
-   "title": "Singapore Banks Face Earnings Pressure And Slower Growth In 2027",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://spglobal.com/ratings/en/research/articles/230314-singapore-banks-2023-outlook-a-strong-start-with-some-fade-12665557",
-   "title": "230314 singapore banks 2023 outlook a strong start with some fade 12665557",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/news/1107310869",
-   "title": "Banks’ Profits To Remain ‘Stable’ This 2025",
-   "age": null
-  },
-  {
-   "url": "https://tradingeconomics.com/united-states/stock-market",
-   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
-   "age": "807 days ago"
-  },
-  {
-   "url": "https://www.kucoin.com/news/insight/AAPL/6aef75a9abae5e0007c55e20",
-   "title": "US Stock Market",
-   "age": null
-  },
-  {
-   "url": "https://robinhood.com/us/en/prediction-markets/financial/events/nasdaq-100-futures-price-on-november-9-2026-nov-09-2026/",
-   "title": "November 9, 2026: Nasdaq 100 futures price on November 9, 2026 Prediction Market",
+   "url": "https://www.aljazeera.com/news/2026/11/8/us-chipmaker-nvidia-investigates-ceo-jensen-huang-over-affair",
+   "title": "US chipmaker Nvidia investigates CEO Jensen Huang over affair",
    "age": "0 days ago"
   },
   {
-   "url": "https://x.com/marketsday/status/2119116419304493302",
-   "title": "Markets Today on X: \"US Stock Market",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://equityclock.com/",
-   "title": "The market is likely going to need some time to repair.  We'll tell you when seasonal tendencies suggest stocks should become reinvigorated.",
-   "age": "746 days ago"
-  },
-  {
-   "url": "https://public.com/prediction-markets/s-p-price-range-on-nov-9-2026-at-4pm-est-6bfx067?sourceScreen=prediction_markets_event_page",
-   "title": "S&P price range on Nov 9, 2026 at 4pm EST? Odds & Predictions - Public.com",
+   "url": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/",
+   "title": "Nvidia will investigate CEO Jensen Huang’s relationship with possible Chinese spy",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.schwab.com/learn/story/stock-market-update-open",
-   "title": "Stocks Mixed, Yields Up on Surging U.S. Job Growth",
-   "age": "2 days ago"
+   "url": "https://www.cnn.com/2026/11/08/business/nvidia-investigation-ceo-jensen-huang",
+   "title": "Nvidia CEO Jensen Huang admits affair as company launches investigation into foreign spy accusations",
+   "age": "0 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Nasdaq",
-   "title": "Nasdaq",
+   "url": "https://www.washingtonpost.com/technology/2026/11/08/read-jensen-huangs-letter-nvidia-about-his-affair-with-suspected-chinese-spy/",
+   "title": "Read Jensen Huang’s letter to Nvidia about his affair with suspected Chinese spy - The Washington Post",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.nbcnews.com/tech/tech-news/nvidia-ceo-jensen-huang-investigation-rcna608148",
+   "title": "Nvidia opens investigation after CEO Jensen Huang’s affair with alleged Chinese spy",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.axios.com/2026/11/08/nvidia-ceo-jensen-huang-admits-affair-board-to-launch-investigation",
+   "title": "Nvidia CEO Jensen Huang admits affair, board to launch investigation",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.washingtonpost.com/business/2026/11/08/nvidia-opens-investigation-into-ceo-over-relationship-with-suspected-chinese-spy/",
+   "title": "Nvidia board to investigate CEO over relationship with suspected Chinese spy - The Washington Post",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-investigation-china-spy.html",
+   "title": "Nvidia investigates CEO Jensen Huang's relationship with alleged Chinese spy",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tmz.com/2026/11/08/nvidia-investigates-ceo-jensen-huang-alleged-chinese-spy-plot/",
+   "title": "Nvidia CEO Jensen Huang Admits Affair, Company Probing Alleged Chinese Recruitment Plot, Report",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Nvidia_GTC",
+   "title": "Nvidia GTC",
    "age": null
   },
   {
-   "url": "https://www.cnn.com/2026/11/05/investing/tech-heavy-nasdaq-plunges",
-   "title": "Stock markets plunge as massive tech sell-off wipes $2.5 trillion",
-   "age": "3 days ago"
+   "url": "https://financefeeds.com/google-stock-alphabets-15-billion-malaysia-bet-faces-ai-capex-backlash/",
+   "title": "Google Stock: Alphabet’s $15 Billion Malaysia Bet Faces AI Capex Backlash",
+   "age": "0 days ago"
   },
   {
-   "url": "https://milelion.com/2026/11/06/live-blog-singapore-airlines-unveils-next-generation-seats-and-cabin-experience/",
-   "title": "Live Blog: Singapore Airlines unveils next-generation seats and cabin experience - The MileLion",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html",
-   "title": "Singapore Airlines reveals new business and first class seats",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://aviationweek.com/air-transport/interiors-connectivity/singapore-airlines-unveils-15-billion-cabin-overhaul-across",
-   "title": "Singapore Airlines Unveils $1.5 Billion Cabin Overhaul Across Classes",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://ftnnews.com/travel-news/aviation/singapore-airlines-travel-upgrades-2026/",
-   "title": "Singapore Airlines Upgrades Bring New Seats and Dining",
-   "age": "39 days ago"
-  },
-  {
-   "url": "https://milelion.com/2026/11/06/unveiled-singapore-airlines-new-first-business-premium-economy-and-economy-seats/",
-   "title": "Unveiled: Singapore Airlines' new First, Business, Premium Economy and Economy seats - The MileLion",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.thestreet.com/travel/singapore-airlines-is-switching-up-all-the-seats",
-   "title": "Singapore Airlines is seriously upping its seats - TheStreet",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.headforpoints.com/2026/11/06/singapore-airlines-new-first-and-business-class-cabins/",
-   "title": "FIRST LOOK: Singapore Airlines' new First and business class cabins are hit and miss",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://simpleflying.com/singapore-airlines-new-first-business-class-suites-boeing-777-9/",
-   "title": "Singapore Airlines Unveils All-New First & Business Class Suites For Its Boeing 777-9",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/ch/corporate/newsroom/press-release",
-   "title": "Featured News Release",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000071/goog-20260630.htm",
+   "title": "Alphabet Inc. - Form 10-Q - FY2026",
    "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000048/goog-20260331.htm",
+   "title": "Alphabet Inc. - Form 10-Q - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/energy/articles/google-spending-17-billion-wyoming-192629782.html",
+   "title": "Google Is Spending $17 Billion on a Wyoming Data Center and Says It Will Pay for 100% of Its Power",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.datacenterdynamics.com/en/news/google-increases-2026-capex-195-205bn-as-it-accelerates-ai-data-center-buildout/",
+   "title": "Google increases 2026 capex to $195-205bn as it accelerates AI data center buildout - DCD",
+   "age": "11 days ago"
+  },
+  {
+   "url": "https://www.tikr.com/blog/alphabet-has-75-7-billion-of-data-center-backstops-lenders-just-started-doubting-them",
+   "title": "Alphabet Has $75.7 Billion of Data-Center Backstops. Lenders Just Started Doubting Them",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://tech-insider.org/google-crusoe-wyoming-ai-campus-neocloud-vs-hyperscaler-17b-2026/",
+   "title": "Google Wyoming Data Center: $17B Crusoe Deal [2026]",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://winbuzzer.com/2026/10/30/alphabet-could-pay-other-companies-data-center-bills-xcxwbn/",
+   "title": "How Alphabet Could End up Paying Other Companies’ Data-Center Bills",
+   "age": "10 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-11-06/google-takes-over-wyoming-data-center-that-crusoe-had-pitched",
+   "title": "Google Takes Over Wyoming Data Center That Crusoe Had Pitched - Bloomberg",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.ad-hoc-news.de/boerse/news/unternehmensnachrichten/alphabet-closes-6-billion-bond-sale-as-google-maps-out-first-wyoming-data-center/70477827",
+   "title": "Alphabet Closes €6 Billion Bond Sale as Google Maps Out First Wyoming Data Center",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-11-09/google-escalates-nvidia-rivalry-with-new-versions-of-its-tpu-systems",
+   "title": "Google Escalates Nvidia Rivalry With New Versions of Its TPU Systems - Bloomberg",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/sectors/technology/article/google-announces-2-ai-chips-as-competition-with-nvidia-heats-up-120011883.html",
+   "title": "Google announces 2 AI chips as competition with Nvidia heats up",
+   "age": "201 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/ai/articles/googles-house-ai-chip-strategy-142500134.html",
+   "title": "Google's In-House AI Chip Strategy Could Be a Bigger Threat to Nvidia Than Investors Think. Here's Why.",
+   "age": "119 days ago"
+  },
+  {
+   "url": "https://www.fool.com/investing/2026/07/12/googles-in-house-ai-chip-strategy-could-be-a-bigge/",
+   "title": "Google's In-House AI Chip Strategy Could Be a Bigger Threat to Nvidia Than Investors Think. Here's Why.",
+   "age": "119 days ago"
+  },
+  {
+   "url": "https://dev.to/atec-systems/google-challenges-nvidias-ai-business-with-in-house-chips-126j",
+   "title": "Google Challenges NVIDIA’s AI Business with In-House Chips - DEV Community",
+   "age": "36 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2025/11/25/nvidia-says-its-gpus-are-a-generation-ahead-of-googles-ai-chips.html",
+   "title": "Nvidia says its GPUs are a 'generation ahead' of Google's AI chips",
+   "age": "348 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/features/2026-04-20/google-eyes-new-chips-to-speed-up-ai-results-challenging-nvidia",
+   "title": "Google Eyes New Chips to Speed Up AI Results, Challenging Nvidia - Bloomberg",
+   "age": "203 days ago"
+  },
+  {
+   "url": "https://baptistaresearch.com/google-vs-nvidia-ai-chips-meta-cloud-tpu-shift/",
+   "title": "Google vs Nvidia AI Chips: Silicon War Begins - Baptista Research",
+   "age": "324 days ago"
+  },
+  {
+   "url": "https://chipchatter.substack.com/p/how-googles-ai-chips-stack-up-against",
+   "title": "How do Google's AI chips stack up against Nvidia's?",
+   "age": null
+  },
+  {
+   "url": "https://www.home.saxo/en-mena/content/articles/options/the-spike-settles-the-curve-stays-inverted---options-brief---9-november-2026-09112026",
+   "title": "The spike settles the curve stays inverted - Options Brief - 9 November 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.stockopedia.com/content/daily-stock-market-report-mon-9th-nov-2026-agenda-1060378/",
+   "title": "Daily Stock Market Report (Mon 9th Nov 2026) - Agenda",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---asian-chipmakers-rebound-and-brent-holds-below-usd-100---9-november-2026-09112026",
+   "title": "Market Quick Take - Asian chipmakers rebound and Brent holds below USD 100 - 9 November 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://fool.com/investing/2026/11/09/if-invest-5000-qqq-day-it-launched-how-much-today",
+   "title": "If You'd Invested $5,000 in QQQ the Day It Launched, Here's What You'd Have Today",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://nexusresearchreports.substack.com/p/nexus-technology-morning-note-8d1",
+   "title": "NEXUS Technology Morning Note - by Adam Reisboard",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.benzinga.com/markets/equities/26/11/63024253/stock-market-today-dow-sp-500-futures-rise-despite-nvidia-sell-off-over-jensen-huang-controversy-nvda-oxy-ceg-in-focus",
+   "title": "Stock Market Today: Dow, S&P 500 Futures Rise Despite Nvidia Sell-Off Over Jensen Huang Controversy — NVD - Benzinga",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://investing.com/news/stock-market-news/dow-jones-nasdaq-sp-500-preview-inflation-data-earnings-loom-after-ai-rout-5011066",
+   "title": "Dow Jones, Nasdaq, S&P 500 preview: Inflation data, earnings loom after AI rout By Investing.com",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://ng.investing.com/news/stock-market-news/dow-jones-nasdaq-sp-500-preview-inflation-data-earnings-loom-after-ai-rout-2793001",
+   "title": "Dow Jones, Nasdaq, S&P 500 preview: Inflation data, earnings loom after AI rout By Investing.com",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://getleveraged.com/reviews/9-11-26/",
+   "title": "Financial Market Review",
+   "age": "0 days ago"
   }
  ],
  "leads": [
   {
    "symbols": [
-    "AAPL",
-    "MSFT",
-    "NVDA",
-    "AMZN"
+    "NVDA"
    ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-09T00:49:19Z",
-   "headline": "Dow Jones Futures Rise, Techs Slide A Nvidia Probes CEO Jensen Huang Spying Case",
-   "url": "https://finance.yahoo.com/m/283e1bd9-349e-390b-a32b-b4ed9a9034f3/dow-jones-futures-rise%2C-techs.html"
+   "source": "cnbc.com",
+   "pubDate": "2026-11-09T12:47:30Z",
+   "headline": "Nvidia's CEO turmoil gives newly empowered Democrats fresh ammunition in pursuit of oversight",
+   "url": "https://www.cnbc.com/2026/11/09/nvidia-jensen-huang-affair-congress-scrutiny.html"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "source": "tikr.com",
+   "pubDate": "2026-11-09T12:44:41Z",
+   "headline": "Alphabet Has $75.7 Billion of Data-Center Backstops. Lenders Just Started Doubting Them",
+   "url": "https://www.tikr.com/blog/alphabet-has-75-7-billion-of-data-center-backstops-lenders-just-started-doubting-them?tlnk=yf-261109-7m64wc2q"
   },
   {
    "symbols": [
     "NVDA"
    ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-09T00:07:37Z",
-   "headline": "Nvidia CEO Jensen Huang's image tarnished by board investigation and affair, analysts say",
-   "url": "https://finance.yahoo.com/technology/articles/nvidia-ceo-jensen-huangs-image-000737077.html"
+   "source": "cnbc.com",
+   "pubDate": "2026-11-09T12:44:04Z",
+   "headline": "What is Megaspeed? The Nvidia chip buyer in the spotlight after Jensen Huang’s affair",
+   "url": "https://www.cnbc.com/2026/11/09/megaspeed-nvidia-jensen-huang-alice-huang.html"
   },
   {
    "symbols": [
     "NVDA"
    ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-08T23:59:30Z",
-   "headline": "Nvidia CEO Jensen Huang’s confession engulfs chip giant in spying controversy",
-   "url": "https://www.businesstimes.com.sg/companies-markets/nvidia-ceo-jensen-huangs-confession-engulfs-chip-giant-spying-controversy"
+   "source": "247wallst.com",
+   "pubDate": "2026-11-09T12:40:17Z",
+   "headline": "Buy, Sell, or Hold? Monday’s Top Upgrades and Downgrades: Advanced Micro Devices, Airbnb, DraftKings, L3 Harris Technologies, Molson-Coors, Nvidia, Take-Two Interactive, Uber Technologies, and More",
+   "url": "https://247wallst.com/investing/2026/11/09/buy-sell-or-hold-mondays-top-upgrades-and-downgrades-advanced-micro-devices-airbnb-draftkings-l3-harris-technologies-molson-coors-nvidia-take-two-interactive-uber-technologies-and-more/"
   },
   {
    "symbols": [
     "NVDA"
+   ],
+   "source": "uk.finance.yahoo.com",
+   "pubDate": "2026-11-09T12:40:06Z",
+   "headline": "Nvidia braces for $200bn hit over ‘Chinese spy’ affair",
+   "url": "https://uk.finance.yahoo.com/news/nvidia-braces-200bn-hit-over-124006594.html"
+  },
+  {
+   "symbols": [
+    "GOOGL"
    ],
    "source": "channelnewsasia.com",
-   "pubDate": "2026-11-08T23:53:13Z",
-   "headline": "Trump calls Nvidia's Huang 'honorable,' says he has not discussed allegations with him",
-   "url": "https://www.channelnewsasia.com/business/trump-calls-nvidias-huang-honorable-says-he-has-not-discussed-allegations-him-6534881"
+   "pubDate": "2026-11-09T12:39:49Z",
+   "headline": "Google to introduce two variants of in-house chips, Bloomberg News reports",
+   "url": "https://www.channelnewsasia.com/business/google-introduce-two-variants-in-house-chips-bloomberg-news-reports-6536191"
   },
   {
    "symbols": [
-    "NVDA"
+    "NVDA",
+    "GOOGL"
    ],
    "source": "finance.yahoo.com",
-   "pubDate": "2026-11-08T23:43:49Z",
-   "headline": "Nvidia Board Launches Probe In CEO Jensen Huang Spying Case",
-   "url": "https://finance.yahoo.com/m/7d4c4e40-eb01-324f-b03d-99c6800c4248/nvidia-board-launches-probe.html"
+   "pubDate": "2026-11-09T12:30:00Z",
+   "headline": "Google Escalates Nvidia Rivalry With Specialized Versions of AI Chips",
+   "url": "https://finance.yahoo.com/technology/ai/articles/google-escalates-nvidia-rivalry-specialized-123000247.html"
+  },
+  {
+   "symbols": [
+    "META"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-09T12:30:00Z",
+   "headline": "Meta Critical Minerals Accepts Invitation to Join Critical Minerals Consortium at the U.S. Military Academy at West Point",
+   "url": "https://finance.yahoo.com/energy/articles/meta-critical-minerals-accepts-invitation-123000016.html"
+  },
+  {
+   "symbols": [
+    "BN4.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-09T07:00:00Z",
+   "headline": "Keppel’s real AI story isn’t the humanoid robot",
+   "url": "https://www.businesstimes.com.sg/companies-markets/keppels-real-ai-story-isnt-humanoid-robot"
+  },
+  {
+   "symbols": [
+    "Z74.SI"
+   ],
+   "source": "thesmartinvestor.com.sg",
+   "pubDate": "2026-11-09T05:17:45Z",
+   "headline": "Smart Look At The Week Ahead: Singtel, Starhub, Sea Limited, Cisco and CoreWeave",
+   "url": "https://thesmartinvestor.com.sg/smart-look-at-the-week-ahead-singtel-starhub-sea-limited-cisco-and-coreweave/"
+  },
+  {
+   "symbols": [
+    "D05.SI",
+    "O39.SI",
+    "U11.SI"
+   ],
+   "source": "thesmartinvestor.com.sg",
+   "pubDate": "2026-11-09T03:30:00Z",
+   "headline": "OCBC Beats Expectations While DBS and UOB Miss: What Happened in 3Q 2026?",
+   "url": "https://thesmartinvestor.com.sg/ocbc-beats-expectations-while-dbs-and-uob-miss-what-happened-in-3q-2026/"
   },
   {
    "symbols": [
@@ -357,33 +443,6 @@
    "pubDate": "2026-11-08T23:30:00Z",
    "headline": "Singtel, SATS, SIA: Temasek-Linked Blue Chips to Watch This Week",
    "url": "https://thesmartinvestor.com.sg/singtel-sats-sia-temasek-linked-blue-chips-to-watch-this-week/"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-08T23:30:00Z",
-   "headline": "Nvidia Stock Faces New Pressure as Board Investigates Huang’s Links to Alleged Spy",
-   "url": "https://finance.yahoo.com/m/09a7b85b-f39c-346a-88bc-f818668a56a9/nvidia-stock-faces-new.html"
-  },
-  {
-   "symbols": [
-    "TSLA"
-   ],
-   "source": "fool.com",
-   "pubDate": "2026-11-08T23:20:00Z",
-   "headline": "Here's What a $1,000 Investment in Tesla Stock Could Be Worth in 5 Years",
-   "url": "https://www.fool.com/investing/2026/11/08/heres-what-a-1000-investment-in-tesla-stock-could/"
-  },
-  {
-   "symbols": [
-    "BRK-B"
-   ],
-   "source": "247wallst.com",
-   "pubDate": "2026-11-08T23:13:00Z",
-   "headline": "Warren Buffett’s Coca-Cola Shares Now Pay Back Two-Thirds of What He Paid, Every Single Year",
-   "url": "https://247wallst.com/investing/2026/11/08/warren-buffett-96-credits-coke-for-his-long-life-his-848-million-coke-check-carries-a-warning-for-a-72-year-old-widow-holding-4000-shares-heres-what-the-numbers-say/"
   },
   {
    "symbols": [
@@ -415,45 +474,17 @@
    "pubDate": "2026-11-07T08:17:34Z",
    "headline": "Ex-ST Engineering, Singtel exec Low Ka Hoe to succeed Tong Yew Heng as Netlink NBN Trust CEO",
    "url": "https://www.straitstimes.com/business/companies-markets/ex-st-engineering-singtel-exec-low-ka-hoe-to-succeed-tong-yew-heng-as-netlink-nbn-trust-ceo"
-  },
-  {
-   "symbols": [
-    "D05.SI",
-    "U11.SI"
-   ],
-   "source": "channelnewsasia.com",
-   "pubDate": "2026-11-07T01:03:51Z",
-   "headline": "After years of robust growth, a tough 2027 ahead for Singapore banks: Analysts",
-   "url": "https://www.channelnewsasia.com/singapore/dbs-uob-ocbc-banks-earnings-outlook-6531376"
-  },
-  {
-   "symbols": [
-    "Z74.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-06T11:47:40Z",
-   "headline": "Ex-ST Engineering, Singtel executive Low Ka Hoe to succeed Tong Yew Heng as Netlink NBN Trust CEO",
-   "url": "https://www.businesstimes.com.sg/companies-markets/ex-st-engineering-singtel-executive-low-ka-hoe-succeed-tong-yew-heng-netlink-nbn-trust-ceo"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "source": "thestreet.com",
-   "pubDate": "2026-11-06T08:28:10Z",
-   "headline": "Singapore Airlines is seriously upping its seat quality",
-   "url": "https://www.thestreet.com/travel/singapore-airlines-is-switching-up-all-the-seats"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 40638,
-  "output": 1156,
+  "input": 41519,
+  "output": 1557,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.0964
+  "costUsd": 0.0993
  },
- "createdAt": "2026-11-09T01:01:50.113Z"
+ "createdAt": "2026-11-09T13:01:13.024Z"
 }
