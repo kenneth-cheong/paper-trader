@@ -1,171 +1,103 @@
 {
- "market_summary": "Singapore bank earnings diverged sharply this week: OCBC beat estimates while DBS and UOB missed, with UOB showing the weakest price momentum despite a huge YoY profit jump. US tech is being whipsawed by idiosyncratic headlines — Nvidia is under a political/legal cloud (CEO scandal, FBI/Congressional scrutiny) layered on top of an already steep technical breakdown ahead of Nov 17 earnings, while Alphabet has been sold off hard on valuation worries even as consensus targets still imply large upside. Broader US indices (SPY/QQQ) rallied today, showing risk appetite is still intact for mega-caps outside the Nvidia/Alphabet idiosyncratic stories. Berkshire's aggressive buybacks signal management confidence even as underlying insurance earnings softened.",
+ "market_summary": "Markets staged a sharp relief rally Monday (S&P +2.4%, Nasdaq100 +3.4%) as falling oil prices eased inflation fears after last week's selloff, with Tuesday's open hinging on the October CPI print. Nvidia is the standout loser, down ~4.3% and -22% over the month after CEO Jensen Huang's scandal/espionage-linked investigation disclosure, a governance overhang that lands right before its Nov 17 earnings. Singapore banks (DBS/OCBC/UOB, ~44% of STI) are rebounding off oversold levels (all 3 up 1-3% today) even as they turn more selective on AI-related lending, while SIA is investing S$2bn in cabin upgrades ahead of its Nov 11 results. Big-cap US tech (AAPL, MSFT) is riding the broad risk-on bounce, though valuations for AAPL look full versus consensus targets.",
  "picks": [
   {
    "symbol": "NVDA",
    "stance": "short",
    "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Nvidia has a serious, fresh political/legal overhang (CEO personal scandal plus alleged China espionage ties) on top of an already-deteriorating technical picture (-22.5% in 1m, -25.3% off 52w high, below both the 50- and 200-day averages). Headline risk into the Nov 17 earnings date raises the chance of continued volatile downside before any fundamental re-rating, regardless of how bullish sell-side analysts remain long-term.",
-   "news": "Nov 8-9 2026: Nvidia board launched an independent investigation after CEO Jensen Huang admitted infidelity and was reportedly the target of a foreign intelligence effort; House Republicans are demanding answers over his ties to a China-linked businesswoman; Trump said the FBI is investigating; shares fell 4.2% on the news.",
-   "risks": "If the investigation clears Huang quickly or Washington scrutiny fades, the stock could snap back sharply given it is already 25% off highs and analysts see 80%+ upside to consensus targets — a short squeeze is a real risk, especially around the Nov 17 earnings print if results beat.",
+   "thesis": "Nvidia is in a confirmed downtrend (-22% 1m, -18.4% vs 50dMA) and now carries a fresh governance/reputational overhang from the CEO scandal, with an unresolved board investigation. Rel. volume is nearly 4x normal, showing heavy distribution. Earnings on Nov 17 add a binary risk catalyst while sentiment is impaired, making further downside or at least continued volatility likely before any fundamental re-rating.",
+   "news": "Board investigation launched into CEO Jensen Huang after he admitted an affair with an alleged Chinese spy (2026-11-08); stock lost ~$200B in market value Monday on the disclosure (2026-11-08/09).",
+   "risks": "Chip fundamentals/demand remain extremely strong; if the investigation clears Huang quickly or earnings on Nov 17 beat materially, shares could snap back hard given how beaten down they already are and the extreme analyst upside (83% to consensus target).",
    "source_urls": [
-    "https://www.cnbc.com/2026/11/09/nvidia-jensen-huang-china-spy-trump-lobbying.html",
-    "https://www.yahoo.com/news/politics/articles/nvidia-ceo-faces-house-scrutiny-211650426.html",
-    "https://www.yahoo.com/news/politics/articles/trump-says-fbi-investigating-nvidia-222507663.html"
+    "https://www.bloomberg.com/news/articles/2026-11-08/nvidia-board-to-probe-spying-case-after-ceo-jensen-huang-admits-infidelity"
    ],
    "priceAtPick": 178.67
+  },
+  {
+   "symbol": "MSFT",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "Microsoft is leading the tech rally (+2.75% Monday) and is actively lobbying against a proposed Chinese-transceiver ban that would hit AI data-center buildouts, signaling it is protecting its capex-heavy AI infrastructure plans. Price is solidly above both 50- and 200-day averages (+5.4%/+23.8%) and analyst consensus still implies ~17% upside with near-unanimous buy ratings (53 of 58).",
+   "news": "Microsoft pushing Trump administration to halt FCC ban on Chinese optical transceivers used in AI data centers (2026-11-10); shares +2.75% in Monday's broad tech rally (2026-11-10).",
+   "risks": "If the transceiver ban proceeds and raises data-center costs, or if the broader risk-on rally fades once CPI data disappoints, MSFT could give back recent gains given its already-elevated valuation versus 1-month return.",
+   "source_urls": [
+    "https://ca.investing.com/news/stock-market-news/microsoft-pushes-trump-to-halt-chinese-data-center-component-ban-reuters-4946013",
+    "https://www.marketalleys.com/post/marketalleys-daily-brief-2026-11-10"
+   ],
+   "priceAtPick": 545.18
   },
   {
    "symbol": "O39.SI",
    "stance": "long",
    "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "OCBC was the only one of the three Singapore banks to beat Q3 estimates (profit +3% YoY vs consensus), and the stock reacted with a strong +3.4% day move, outperforming DBS and UOB which both missed. With a reasonable implied upside to consensus target (~8%) and 9 of 17 analysts at buy, the earnings beat should support a continued relative-strength trade versus its weaker peers over the next few weeks.",
-   "news": "Nov 8 2026: OCBC reported Q3 2026 net profit of S$2.04bn, up 3% YoY, beating analyst estimates — the only SG bank to do so this quarter.",
-   "risks": "All three SG banks are down 8-11% off 52-week highs on broader rate/margin concerns, and OCBC still screens -11.2% below its 52w high; if sector-wide net interest margin pressure or AI-loan-exposure worries (flagged Nov 9) intensify, even the earnings winner could get dragged down with peers.",
+   "thesis": "OCBC jumped 3.1% today and has the strongest 1-year return (+57%) of the three local banks while still trading 11% below its 52-week high, suggesting room to continue closing that gap as banks rebound from last month's pullback. It's trading comfortably above its 200-day average (+10.8%) despite a soft month, indicating the longer trend remains intact.",
+   "news": "Singapore banks (OCBC, UOB, DBS) staying selective but still actively courting AI/data-center financing deals amid strong regional demand (2026-11-09); OCBC +3.1% today in the broad market bounce (2026-11-10).",
+   "risks": "If credit concerns around debt-funded AI infrastructure spending escalate, or if the rebound is just a one-day beta bounce tied to the general market relief rally rather than bank-specific strength, gains could reverse quickly.",
    "source_urls": [
-    "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/",
     "https://www.businesstimes.com.sg/companies-markets/highly-selective-singapore-banks-see-strong-ai-financing-demand-stay-alert-debt-risks"
    ],
-   "priceAtPick": 28.67
+   "priceAtPick": 28.6
   },
   {
    "symbol": "U11.SI",
    "stance": "short",
-   "conviction": "medium",
+   "conviction": "low",
    "horizon": "weeks",
-   "thesis": "UOB missed Q3 profit expectations (S$1.25bn vs S$1.38bn forecast) despite a headline 182% YoY jump, and it is clearly the weakest of the three SG banks on price action: -7.7% in 1m, -12.1% in 3m, -18% off its 52-week high, trading below both its 50- and 200-day moving averages. Analyst sentiment is also the most lukewarm of the three (only 4 of 16 at buy, 10 at hold), suggesting continued relative underperformance versus DBS/OCBC.",
-   "news": "Nov 8 2026: UOB reported Q3 net profit of S$1.25bn, up 182% YoY but missing the S$1.38bn consensus forecast, extending a weak multi-month price trend.",
-   "risks": "The 182% YoY profit surge is a big number that could attract bargain-hunters given UOB is now the cheapest-looking SG bank and sits furthest below its consensus target (11.9% implied upside); any dovish rate read-through or sector-wide re-rating would hurt this short.",
+   "thesis": "UOB is the clear laggard among the three Singapore banks: worst 3-month return (-10.9%), below both its 50- and 200-day moving averages, and the most balanced analyst view (only 4 buys vs 10 holds). Today's 1.4% bounce lagged peers' 3.1% and 0.9% gains, suggesting relative weakness persists even in a risk-on tape.",
+   "news": "Singapore banks turning selective on AI-related financing amid debt-risk concerns (2026-11-09), a sector-wide theme that may weigh more on UOB given its softer recent momentum and higher relative volume (1.59x) signalling distribution.",
+   "risks": "Banks often move together on rate/macro themes; if UOB's Q3 results (referenced in sector commentary) beat expectations or NIM trends improve, this laggard could quickly catch up to peers, especially as its analyst consensus still implies 10.4% upside.",
    "source_urls": [
-    "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/"
+    "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
+    "https://www.businesstimes.com.sg/companies-markets/highly-selective-singapore-banks-see-strong-ai-financing-demand-stay-alert-debt-risks"
    ],
-   "priceAtPick": 36.87
+   "priceAtPick": 37.38
   },
   {
-   "symbol": "GOOGL",
+   "symbol": "BN4.SI",
    "stance": "long",
    "conviction": "low",
    "horizon": "months",
-   "thesis": "Alphabet has been sold off aggressively (-17.3% 1m, -28.4% off 52w high) on valuation worries, including a sharp single-day 12.6% drop in late October, but the stock bounced +2% most recently and the consensus analyst target still implies ~39% upside with 53 of 58 analysts rating it buy. This looks like a potential oversold bounce/value opportunity, though the thesis is speculative given the news is primarily about concerns rather than a clear positive catalyst.",
-   "news": "Nov 9 2026 commentary: Alphabet stock down 8.8% YTD and 20%+ off its mid-October close amid persistent valuation concerns, despite an analyst base that remains overwhelmingly bullish on the name; one firm (Citizens) downgraded to Market Perform on Oct 29.",
-   "risks": "If the valuation concerns driving the sell-off are rooted in a genuine deceleration in ad or cloud growth (not covered in detail here), the stock could continue grinding lower rather than mean-revert; this is a lower-conviction, contrarian call given the news is thin on a positive catalyst.",
+   "thesis": "Keppel rallied 3.3% today and screens as deeply oversold, trading 25.9% below its 52-week high with a very bullish analyst base (12 buy, 2 hold, 1 sell) and consensus target implying 30% upside. This looks like a potential mean-reversion/value setup after a rough 3-6 months, though there's no fresh company-specific catalyst in the news flow to confirm a turn.</br>",
+   "news": "No stock-specific news item was found for Keppel in this cycle; today's +3.3% move appears tied to the broad market risk-on rally rather than a company catalyst (2026-11-10).",
+   "risks": "Lack of a specific catalyst means this is a lower-conviction, momentum/valuation-only call; continued weakness in its underlying business (reflected in -13.6% 3m return and elevated volatility of 25%) could mean the stock keeps underperforming rather than reverting.",
    "source_urls": [
-    "https://www.trefis.com/stock/googl/articles/623220/can-you-make-money-off-alphabet-stock-now/2026-11-06"
+    "https://www.marketalleys.com/post/marketalleys-daily-brief-2026-11-10"
    ],
-   "priceAtPick": 288.15
+   "priceAtPick": 9.76
   }
  ],
  "sources": [
   {
-   "url": "https://www.thestar.com.my/business/business-news/2025/11/06/singapore-bank-uob039s-third-quarter-net-profit-slumps-72-misses-forecast",
-   "title": "Singapore banks DBS, UOB flag margin pressure; Q3 earnings diverge",
-   "age": "368 days ago"
-  },
-  {
-   "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
-   "title": "DBS and UOB Miss, OCBC Beats: What Q3 2026 Results Say About Singapore Banks",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
-   "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
-   "age": "6 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/",
-   "title": "OCBC Q3 2026: Singapore’s Only Bank to Beat Estimates",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/singapore-banks-q3-2026-valuation-buy/",
-   "title": "Singapore Banks After Q3 2026: Are DBS, OCBC & UOB Cheap Enough to Buy? - The Kopi Notes",
+   "url": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/",
+   "title": "Nvidia will investigate CEO Jensen Huang’s relationship with possible Chinese spy",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.itiger.com/hant/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
+   "url": "https://www.washingtonpost.com/business/2026/11/08/nvidia-opens-investigation-into-ceo-over-relationship-with-suspected-chinese-spy/",
+   "title": "Nvidia board to investigate CEO over relationship with suspected Chinese spy - The Washington Post",
+   "age": "1 days ago"
   },
   {
-   "url": "https://www.itiger.com/hans/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
+   "url": "https://www.cnn.com/2026/11/08/business/nvidia-investigation-ceo-jensen-huang",
+   "title": "Nvidia CEO Jensen Huang admits affair as company launches investigation into foreign spy accusations",
+   "age": "1 days ago"
   },
   {
-   "url": "https://www.tradingview.com/symbols/SWB-OCBA",
-   "title": "SWB OCBA",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/news/2534124171",
-   "title": "Singapore's 3 Big Banks Have Reported Earnings: Here's What You Need to Know",
-   "age": null
-  },
-  {
-   "url": "https://www.heygotrade.com/en/us-stock/googl/",
-   "title": "Alphabet Inc Class A - Google (GOOGL) Stock Price: Nov 6 Close $284.78",
-   "age": null
-  },
-  {
-   "url": "https://www.heygotrade.com/en/us-stock/goog/",
-   "title": "Alphabet Inc Class C - Google (GOOG) Stock Price: Nov 6 Close $283.93",
-   "age": null
-  },
-  {
-   "url": "https://stockanalysis.com/stocks/goog/history/",
-   "title": "Alphabet (GOOG) Stock Price History 2014-2026",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://twelvedata.com/markets/880619/stock/nasdaq/goog/historical-data",
-   "title": "Alphabet Inc. Class C Common Stock (GOOG) - Historical data, historical prices (daily)",
-   "age": "32 days ago"
-  },
-  {
-   "url": "https://stockanalysis.com/stocks/googl/",
-   "title": "Alphabet (GOOGL) Stock Price, Chart & News",
-   "age": "14 days ago"
-  },
-  {
-   "url": "https://www.trefis.com/stock/googl/articles/623220/can-you-make-money-off-alphabet-stock-now/2026-11-06",
-   "title": "Can You Make Money Off Alphabet Stock Now?",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.investing.com/equities/google-inc-historical-data",
-   "title": "Alphabet Inc. (GOOGL) Historical Prices - Investing.com",
-   "age": "309 days ago"
-  },
-  {
-   "url": "https://www.macrotrends.net/stocks/charts/GOOGL/alphabet/stock-price-history",
-   "title": "Alphabet - 15 Year Stock Price History",
-   "age": "111 days ago"
-  },
-  {
-   "url": "https://www.macrotrends.net/stocks/charts/GOOG/alphabet/stock-price-history",
-   "title": "Alphabet - 15 Year Stock Price History",
-   "age": "381 days ago"
-  },
-  {
-   "url": "https://www.macroaxis.com/alphabet-inc-class-c-stock-price",
-   "title": "Alphabet (GOOG) Historical Prices & Price History",
-   "age": "85 days ago"
-  },
-  {
-   "url": "https://www.yahoo.com/news/politics/articles/nvidia-ceo-faces-house-scrutiny-211650426.html",
-   "title": "Nvidia CEO Faces House Scrutiny Over Alleged China Spy Link",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.newsweek.com/nvidia-jensen-huang-china-timeline-alice-huang-12690761",
-   "title": "Nvidia's Jensen Huang and China: Timeline as CEO Faces Scrutiny Over Affair - Newsweek",
+   "url": "https://www.bloomberg.com/news/articles/2026-11-08/nvidia-board-to-probe-spying-case-after-ceo-jensen-huang-admits-infidelity",
+   "title": "Nvidia Board to Probe Spying Case After CEO Jensen Huang Admits Infidelity - Bloomberg",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/11/09/nvidia-jensen-huang-affair-congress-scrutiny.html",
-   "title": "Nvidia's CEO turmoil gives newly empowered Democrats fresh ammunition in pursuit of oversight",
+   "url": "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-investigation-china-spy.html",
+   "title": "Nvidia investigates CEO Jensen Huang's relationship with alleged Chinese spy",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.nbcnews.com/tech/tech-news/nvidia-ceo-jensen-huang-investigation-rcna608148",
+   "title": "Nvidia opens investigation after CEO Jensen Huang’s affair with alleged Chinese spy",
    "age": "0 days ago"
   },
   {
@@ -174,109 +106,149 @@
    "age": "0 days ago"
   },
   {
-   "url": "https://www.yahoo.com/news/politics/articles/trump-says-fbi-investigating-nvidia-222507663.html",
-   "title": "Trump says FBI is investigating Nvidia CEO Jensen Huang’s relationship with alleged Chinese spy",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.staradvertiser.com/2026/11/09/breaking-news/trump-huang-ties-face-scrutiny-after-nvidia-intelligence-probe/",
-   "title": "Trump-Huang ties face scrutiny after Nvidia intelligence probe",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.semafor.com/article/11/09/2026/nvidia-ceo-is-in-congress-sights-after-spy-scandal",
-   "title": "Nvidia CEO is in Congress’ sights after spy scandal",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/technology/article/analysts-say-nvidia-ceo-unlikely-to-be-ousted-over-affair-but-raise-questions-about-companys-future-165238577.html",
-   "title": "Analysts says Nvidia CEO unlikely to be ousted over affair, but raise questions about company’s future",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Jensen_Huang",
-   "title": "Jensen Huang",
-   "age": null
-  },
-  {
-   "url": "https://www.freedom969.com/politics/trumps-close-ties-to-nvidias-huang-scrutinized-after-foreign-intelligence-concerns",
-   "title": "Trump’s close ties to Nvidia’s Huang scrutinized after foreign intelligence concerns - Freedom 96.9",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001067983/000119312526202243/brka-20260331.htm",
-   "title": "BERKSHIRE HATHAWAY INC - Form 10-Q - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001067983/000119312526452412/brka-20260930.htm",
-   "title": "BERKSHIRE HATHAWAY INC - Form 10-Q - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://gvwire.com/2026/11/07/berkshire-hathaway-accelerates-stock-buybacks-operating-profit-falls/",
-   "title": "Berkshire's Stock Buybacks in Third Quarter - GV Wire",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.insurancejournal.com/news/national/2026/11/09/891933.htm",
-   "title": "Berkshire Hathaway Boosts Buybacks as Operating Income Slips",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.investing.com/news/stock-market-news/berkshire-hathaway-speeds-up-stock-buybacks-though-profit-falls-5010390",
-   "title": "Berkshire Hathaway speeds up stock buybacks, though profit falls By Reuters",
+   "url": "https://www.axios.com/2026/11/08/nvidia-ceo-jensen-huang-admits-affair-board-to-launch-investigation",
+   "title": "Nvidia CEO Jensen Huang admits affair, board to launch investigation",
    "age": "1 days ago"
   },
   {
-   "url": "https://www.detroitnews.com/story/business/2026/11/07/berkshire-hathaway-accelerates-stock-buybacks-operating-profit-falls/92659895007/",
-   "title": "Berkshire Hathaway accelerates stock buybacks, operating profit falls",
-   "age": "2 days ago"
+   "url": "https://www.aljazeera.com/news/2026/11/9/why-is-nvidias-jensen-huang-at-the-centre-of-a-us-china-spy-scandal",
+   "title": "Why is Nvidia’s Jensen Huang at the centre of a US-China spy scandal?",
+   "age": "1 days ago"
   },
   {
-   "url": "https://www.gurufocus.com/news/9185585/berkshire-hathaway-stocks-slip-101-despite-96-billion-buyback-surge",
-   "title": "Berkshire Hathaway Stocks Slip 1.01% Despite $9.6 Billion Buyback Surge",
+   "url": "https://en.wikipedia.org/wiki/Nvidia_GTC",
+   "title": "Nvidia GTC",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/news/stock-market-today-nov-10-markets-await-the-consumer-inflation-report",
+   "title": "Stock Market Today, Nov. 10: Markets Await the Consumer Inflation Report - TipRanks.com",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.fool.com/investing/2026/11/09/berkshire-kept-buying-back-stock-as-shares-hit-records-heres-what-the-price-it-paid-tells-you/",
-   "title": "Berkshire Kept Buying Back Stock as Shares Hit Records. Here’s What the Price It Paid Tells You.",
+   "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-nov-10-2026",
+   "title": "Stock Market Today (Nov. 10, 2026): S&P 500 futures edge higher ahead of key inflation report - TheStreet",
    "age": "0 days ago"
   },
   {
-   "url": "https://247wallst.com/cards/brk-a-xpost-01m6v8f3tqp1a1hapegpwmqkzd",
-   "title": "Berkshire Hathaway's $9.6 billion buyback signals a sharp change in strategy",
-   "age": "2 days ago"
+   "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-10-dow-sp-500-nasdaq-inflation-data-cpi-090627830.html",
+   "title": "Stock market today: Dow, S&P 500, Nasdaq trade mixed ahead of key inflation data",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.asiae.co.kr/en/article/distribution/2026110916073255791",
-   "title": "Singapore Airlines Invests KRW 2.13 Trillion, Unveils Next-Generation Cabin Seats - The Asia Business Daily",
+   "url": "https://www.bnnbloomberg.ca/markets/dow-jones/2026/11/10/world-shares-rise-after-technology-shares-advance-on-wall-street-ahead-of-us-inflation-data/",
+   "title": "Stock market news: World shares rise after U.S. tech shares advance",
    "age": "0 days ago"
+  },
+  {
+   "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---wall-street-rebounds-and-brent-slides-below-usd-92---10-november-2026-10112026",
+   "title": "Market Quick Take - Wall Street rebounds and Brent slides below USD 92 - 10 November 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.kucoin.com/news/flash/u-s-stocks-rally-on-nov-10-nasdaq-hits-3-month-high",
+   "title": "U.S. stocks rally on November 10, Nasdaq reaches 3-month high",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://investrade.com/morning-preview-november-10-2026/",
+   "title": "Morning Preview: November 10, 2026 - Investrade",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.marketalleys.com/post/marketalleys-daily-brief-2026-11-10",
+   "title": "MarketAlleys Daily Brief — 2026-11-10",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.marketalleys.com/post/marketalleys-premarket-brief-2026-11-10",
+   "title": "US Premarket Brief — 2026-11-10",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/news/stock-market-today-jan-2-164540630.html",
+   "title": "stock market today jan 2 164540630",
+   "age": null
+  },
+  {
+   "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
+   "title": "DBS and UOB Miss, OCBC Beats: What Q3 2026 Results Say About Singapore Banks",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/United_Overseas_Bank",
+   "title": "United Overseas Bank",
+   "age": null
+  },
+  {
+   "url": "https://nextgenprodman.substack.com/p/ai-agents-in-singapore-banking-where",
+   "title": "AI Agents in Singapore Banking: Where We Actually Stand",
+   "age": "177 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Tan_Teck_Long",
+   "title": "Tan Teck Long",
+   "age": null
+  },
+  {
+   "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
+   "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
+   "age": "7 days ago"
+  },
+  {
+   "url": "https://www.redhot.sg/highly-selective-singapore-banks-see-strong-ai-financing-demand-but-stay-alert-to-debt-risks-737546.html",
+   "title": "‘Highly selective’: Singapore banks see strong AI financing demand but stay alert to debt risks - Red Hot Singapore",
+   "age": null
+  },
+  {
+   "url": "https://blog.maxthon.com/2026/01/08/singapores-ai-banking-transformation-a-comprehensive-case-study/",
+   "title": "Singapore's AI Banking Transformation: A Comprehensive Case Study - Maxthon",
+   "age": "306 days ago"
+  },
+  {
+   "url": "https://www.tradingview.com/symbols/SWB-OCBA",
+   "title": "SWB OCBA",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hant/news/1171937414",
+   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
+   "age": null
+  },
+  {
+   "url": "https://centreforaviation.com/news/singapore-airlines-to-invest-usd15bn-in-long-haul-aircraft-seating-1378960",
+   "title": "Singapore Airlines to invest USD1.5bn in long haul aircraft seating",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.ttgasia.com/2026/11/10/singapore-airlines-unveils-s2-billion-longhaul-cabin-overhaul/",
+   "title": "Singapore Airlines unveils S$2 billion longhaul cabin overhaul",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.flightglobal.com/airlines/2026/11/singapore-airlines-unveils-biggest-cabin-product-investment-to-date/",
+   "title": "Singapore Airlines unveils $1.6bn cabin product overhaul - FlightGlobal",
+   "age": "3 days ago"
   },
   {
    "url": "https://www.aviationbusinessme.com/news/singapore-airlines-2bn-next-gener",
    "title": "Singapore Airlines Unveils $1.6 Bn Cabin Overhaul",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html",
-   "title": "Singapore Airlines reveals new business and first class seats",
-   "age": "2 days ago"
+   "age": "1 days ago"
   },
   {
    "url": "https://aviationweek.com/air-transport/interiors-connectivity/singapore-airlines-unveils-15-billion-cabin-overhaul-across",
    "title": "Singapore Airlines Unveils $1.5 Billion Cabin Overhaul Across Classes",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://milelion.com/2026/11/06/unveiled-singapore-airlines-new-first-business-premium-economy-and-economy-seats/",
+   "title": "Unveiled: Singapore Airlines' new First, Business, Premium Economy and Economy seats - The MileLion",
    "age": "2 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Goh_Choon_Phong",
-   "title": "Goh Choon Phong",
-   "age": null
-  },
-  {
-   "url": "https://www.thestar.com.my/business/business-news/2026/11/06/singapore-airlines-to-splash-us16bil-on-luxury-long-haul-cabins-as-rivals-up-their-game",
-   "title": "Singapore Airlines to splash US$1.6bil on luxury long-haul cabins as rivals up their game",
-   "age": "3 days ago"
+   "url": "https://www.travelandtourworld.com/news/article/ndwmvnd8546g/",
+   "title": "Singapore Airlines Previews 1.1 Billion-Dollar Cabins as Changi Enforces New SAF Rules and Capella Ranks Top Five - Travel And Tour World",
+   "age": "1 days ago"
   },
   {
    "url": "https://www.forbes.com/sites/michaelgoldstein/2026/11/08/singapore-airlines-voted-best-in-the-world-announces-all-new-cabins/",
@@ -284,25 +256,70 @@
    "age": "1 days ago"
   },
   {
-   "url": "https://www.world-today-news.com/singapore-airlines-unveils-s2-billion-cabin-upgrade-with-new-first-and-business-class-seats/",
-   "title": "Singapore Airlines Unveils S$2 Billion Cabin Upgrade With New First and Business Class Seats - World Today News",
-   "age": "3 days ago"
+   "url": "https://aviationjeta.com/singapore-airlines-new-long-haul-cabins/",
+   "title": "Singapore Airlines Unveils Next-Generation Long-Haul Cabin Products",
+   "age": "2 days ago"
   },
   {
-   "url": "https://www.travelerstoday.com/articles/61237/20261108/singapore-airlines-s2bn-cabin-overhaul-new-business-class-wont-fly-another-year.htm",
-   "title": "Singapore Airlines' S$2bn Cabin Overhaul: New Business Class Won't Fly for Another Year",
-   "age": "1 days ago"
+   "url": "https://www.singaporeair.com/en_UK/hk/corporate/newsroom/press-release/2024/October-December/ne1124-241104/",
+   "title": "Singapore Airlines To Elevate Premium Travel Experience With S$1.1 Billion Airbus A350 Cabin Retrofit Programme",
+   "age": null
+  },
+  {
+   "url": "https://fourweekmba.com/ai-microsoft-said-to-oppose-ban-on-china-optics-60-of-revenue/",
+   "title": "Microsoft Said to Oppose Ban on China Optics, 60% of Revenue - FourWeekMBA",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://cryptobriefing.com/microsoft-urges-trump-scrap-chinese-transceiver-ban/",
+   "title": "Microsoft urges Trump to scrap planned ban on Chinese AI data center technology",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://ca.investing.com/news/stock-market-news/microsoft-pushes-trump-to-halt-chinese-data-center-component-ban-reuters-4946013",
+   "title": "Microsoft pushes Trump to halt Chinese data center component ban: Reuters By Investing.com",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tradingpedia.com/2026/11/10/microsoft-lobbies-us-against-ban-on-chinese-ai-hardware/",
+   "title": "Microsoft Lobbies US Against Ban on Chinese AI Hardware",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://jawlah.co/en/67932",
+   "title": "Microsoft presses US administration to block ban on Chinese data center technology",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/TP-Link",
+   "title": "TP-Link",
+   "age": null
+  },
+  {
+   "url": "https://newsbytesapp.com/news/business/microsoft-urges-us-to-ban-chinese-optical-transceivers-over-security/tldr",
+   "title": "Microsoft urges US to ban Chinese optical transceivers over security",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://mlq.ai/news/microsoft-is-pressing-the-trump-administration-to-drop-an-expected-ban-on-chinese-optical-transceivers-for-data-centers-reuters-reports/",
+   "title": "Microsoft is pressing the Trump administration to drop an expected ban on Chinese optical transceivers for data centers, Reuters reports",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://gokhshtein.com/news/2026-11-10-msft-microsoft-warns-chinese-component-ban-could-halt-us-ai",
+   "title": "Microsoft Warns China Transceiver Ban Threatens AI Data Center Roadmap",
+   "age": "0 days ago"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 51014,
-  "output": 5929,
+  "input": 50011,
+  "output": 5646,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1583
+  "costUsd": 0.1548
  },
- "createdAt": "2026-11-10T01:14:45.318Z"
+ "createdAt": "2026-11-10T13:01:14.842Z"
 }
