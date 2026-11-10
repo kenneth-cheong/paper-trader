@@ -1,16 +1,38 @@
 {
- "market_summary": "<cite index=\"37-4,39-5\">US stocks rebounded sharply on November 9, with the S&P 500 rising 2.35% and the Nasdaq 2.74%",
+ "market_summary": "<cite index=\"2-1,2-2,2-3,2-4\">Singapore's three big banks delivered mixed Q3 2026 results: DBS reported a 5% year-on-year profit decline to S$2.81 billion missing expectations, UOB reported a 182% surge to S$1.25 billion but missed the S$1.38 billion forecast, and OCBC was the only winner with S$2.04 billion profit up 3% year-on-year beating analyst estimates",
  "items": [
   {
    "symbols": [
-    "NVDA"
+    "D05.SI"
    ],
-   "date": "2026-11-09",
-   "headline": "Nvidia CEO Jensen Huang under investigation over alleged Chinese intelligence ties; stock falls 4%",
-   "summary": "<cite index=",
-   "type": "legal",
+   "date": "2026-11-08",
+   "headline": "DBS Q3 2026 profit down 5% YoY to S$2.81 billion, misses forecast",
+   "summary": "<cite index=\"2-3\">DBS reported third-quarter net profit of S$2.81 billion, a 5% year-on-year decline missing analysts' expectations of S$2.95 billion</cite>.",
+   "type": "earnings",
    "tone": "negative",
-   "source_url": "https://www.cnbc.com/2026/11/09/nvidia-jensen-huang-china-spy-trump-lobbying.html"
+   "source_url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/"
+  },
+  {
+   "symbols": [
+    "U11.SI"
+   ],
+   "date": "2026-11-08",
+   "headline": "UOB Q3 2026 profit surges 182% but misses forecast at S$1.25 billion",
+   "summary": "<cite index=\"2-2\">UOB reported a 182% year-on-year increase in third-quarter net profit to S$1.25 billion, although this missed analysts' expectations of S$1.38 billion</cite>.",
+   "type": "earnings",
+   "tone": "mixed",
+   "source_url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/"
+  },
+  {
+   "symbols": [
+    "O39.SI"
+   ],
+   "date": "2026-11-08",
+   "headline": "OCBC Q3 2026 net profit beats at S$2.04 billion, up 3% YoY",
+   "summary": "<cite index=\"4-3\">OCBC reported Q3 2026 net profit of S$2.04 billion — up 3% year-on-year and the only Singapore bank to beat analyst estimates this quarter</cite>.",
+   "type": "earnings",
+   "tone": "positive",
+   "source_url": "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/"
   },
   {
    "symbols": [
@@ -18,41 +40,107 @@
     "O39.SI",
     "U11.SI"
    ],
-   "date": "2026-11-06",
-   "headline": "Singapore bank earnings: OCBC beats estimates while DBS and UOB miss Q3 2026",
-   "summary": "<cite index=",
-   "type": "earnings",
+   "date": "2026-11-09",
+   "headline": "Singapore banks see strong AI financing demand but remain cautious on debt risks",
+   "summary": "<cite index=\"2-5\">UOB said AI-related financing accounts for less than 5% of its loan book, while DBS had about S$14.6 billion in data centre-related exposures, including S$8.98 billion in outstanding loans</cite>.",
+   "type": "other",
    "tone": "mixed",
-   "source_url": "https://thesmartinvestor.com.sg/ocbc-beats-expectations-while-dbs-and-uob-miss-what-happened-in-3q-2026/"
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/highly-selective-singapore-banks-see-strong-ai-financing-demand-stay-alert-debt-risks"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "date": "2026-11-09",
+   "headline": "Nvidia CEO Jensen Huang's ties to China spark Washington scrutiny; board launches investigation",
+   "summary": "<cite index=\"21-3,21-4\">In November 8 email, Huang acknowledged infidelity to his wife; Nvidia's board announced independent investigation into reports CEO was target of foreign intelligence effort</cite>. <cite index=\"21-9\">Trump said FBI is looking into the matter</cite>.",
+   "type": "legal",
+   "tone": "negative",
+   "source_url": "https://www.cnbc.com/2026/11/09/nvidia-jensen-huang-china-spy-trump-lobbying.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "date": "2026-11-09",
+   "headline": "House Republicans demand answers from Nvidia CEO over China spy allegation",
+   "summary": "<cite index=\"20-1,20-2\">Three powerful House Republicans are pressing Nvidia CEO Jensen Huang for answers about ties to businesswoman suspected of spying for China; congressional scrutiny follows NY Times report of 'close' relationship with Alice Huang</cite>.",
+   "type": "legal",
+   "tone": "negative",
+   "source_url": "https://www.yahoo.com/news/politics/articles/nvidia-ceo-faces-house-scrutiny-211650426.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "date": "2026-11-09",
+   "headline": "Nvidia shares fall 4.2% as CEO scandal compounds Washington pressure",
+   "summary": "<cite index=\"24-9\">Shares of Nvidia closed down 4.2% in Monday's trading</cite>. <cite index=\"27-9\">Bernstein analyst Stacy Rasgon pointed out that the incident will increase scrutiny of Nvidia in Washington</cite>.",
+   "type": "other",
+   "tone": "negative",
+   "source_url": "https://www.yahoo.com/news/politics/articles/trump-says-fbi-investigating-nvidia-222507663.html"
   },
   {
    "symbols": [
     "BRK-B"
    ],
-   "date": "2026-11-07",
-   "headline": "Berkshire Hathaway accelerates stock buybacks to $9.6 billion in Q3, but operating profit falls",
-   "summary": "<cite index=",
+   "date": "2026-11-09",
+   "headline": "Berkshire Hathaway accelerates Q3 buybacks to S$9.6 billion, signaling belief in own valuation",
+   "summary": "<cite index=\"32-5,32-6\">Berkshire accelerated stock repurchases in Q3 as new CEO Greg Abel showed greater willingness to use its cash hoard than Warren Buffett, buying back S$9.6 billion of stock in quarter, on top of S$4.8 billion earlier in year</cite>.",
    "type": "other",
-   "tone": "mixed",
-   "source_url": "https://www.cnbc.com/2026/11/07/berkshire-hathaway-q3-2026-earnings-buybacks.html"
+   "tone": "positive",
+   "source_url": "https://www.fool.com/investing/2026/11/09/berkshire-kept-buying-back-stock-as-shares-hit-records-heres-what-the-price-it-paid-tells-you/"
+  },
+  {
+   "symbols": [
+    "BRK-B"
+   ],
+   "date": "2026-11-09",
+   "headline": "Berkshire Q3 operating profit falls 6% to S$12.71 billion as insurance underwriting weakens",
+   "summary": "<cite index=\"34-3,34-6\">Berkshire reported lower third-quarter profit with operating earnings down 6% to S$12.71 billion and profit from insurance declined 26%, with underwriting down 43%</cite>.",
+   "type": "earnings",
+   "tone": "negative",
+   "source_url": "https://www.insurancejournal.com/news/national/2026/11/09/891933.htm"
   },
   {
    "symbols": [
     "C6L.SI"
    ],
    "date": "2026-11-06",
-   "headline": "Singapore Airlines unveils S$2 billion cabin product overhaul across all passenger classes",
-   "summary": "<cite index=",
+   "headline": "Singapore Airlines invests S$2 billion in next-generation cabin seats and amenities",
+   "summary": "<cite index=\"41-3,41-4\">Singapore Airlines is rolling out new onboard seating as part of over S$2 billion investment to keep up with rivals, with cornerstone being new premium cabin seats for long-haul flights progressively debuting on Airbus A350 planes in mid-2027</cite>.",
    "type": "product",
    "tone": "positive",
-   "source_url": "https://www.businesstimes.com.sg/international/sias-s2-billion-new-cabin-seats-draw-both-praise-and-flak"
+   "source_url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html"
+  },
+  {
+   "symbols": [
+    "C6L.SI"
+   ],
+   "date": "2026-11-06",
+   "headline": "Singapore Airlines unveils largest double bed and sliding doors in industry-first cabin redesign",
+   "summary": "<cite index=\"44-1,44-2\">Airline unveiled new cabins in all four travel classes in biggest overhaul in history with new seats due second half 2027; in first class, centre seats convert into what Singapore Airlines calls largest double bed in commercial aviation</cite>.",
+   "type": "product",
+   "tone": "positive",
+   "source_url": "https://www.thestar.com.my/business/business-news/2026/11/06/singapore-airlines-to-splash-us16bil-on-luxury-long-haul-cabins-as-rivals-up-their-game"
+  },
+  {
+   "symbols": [
+    "GOOGL"
+   ],
+   "date": "2026-11-09",
+   "headline": "Alphabet stock down 8.8% year-to-date as valuation concerns persist",
+   "summary": "<cite index=\"15-4,15-5\">Alphabet stock closed at S$282.57 on November 5, 2026, 20.1% below October 13 close; worst decline in single session Oct 29 when shares lost 12.6%</cite>.",
+   "type": "analyst",
+   "tone": "negative",
+   "source_url": "https://www.trefis.com/stock/googl/articles/623220/can-you-make-money-off-alphabet-stock-now/2026-11-06"
   }
  ],
  "sources": [
   {
-   "url": "https://thesmartinvestor.com.sg/ocbc-beats-expectations-while-dbs-and-uob-miss-what-happened-in-3q-2026/",
-   "title": "OCBC Beats Expectations While DBS and UOB Miss: What Happened in 3Q 2026?",
-   "age": "3 days ago"
+   "url": "https://www.thestar.com.my/business/business-news/2025/11/06/singapore-bank-uob039s-third-quarter-net-profit-slumps-72-misses-forecast",
+   "title": "Singapore banks DBS, UOB flag margin pressure; Q3 earnings diverge",
+   "age": "368 days ago"
   },
   {
    "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
@@ -95,48 +183,108 @@
    "age": null
   },
   {
-   "url": "https://www.cnbc.com/2026/11/08/jensen-huang-nvidia-china-spy-congress.html",
-   "title": "Nvidia CEO Jensen Huang faces bipartisan congressional scrutiny over reported China spy link",
-   "age": "1 days ago"
+   "url": "https://www.heygotrade.com/en/us-stock/googl/",
+   "title": "Alphabet Inc Class A - Google (GOOGL) Stock Price: Nov 6 Close $284.78",
+   "age": null
   },
   {
-   "url": "https://www.cnbc.com/2026/11/09/nvidia-jensen-huang-chinese-spy-investigation.html",
-   "title": "Nvidia stock falls 4% as scrutiny turns to Jensen Huang’s affair with alleged Chinese spy",
+   "url": "https://www.heygotrade.com/en/us-stock/goog/",
+   "title": "Alphabet Inc Class C - Google (GOOG) Stock Price: Nov 6 Close $283.93",
+   "age": null
+  },
+  {
+   "url": "https://stockanalysis.com/stocks/goog/history/",
+   "title": "Alphabet (GOOG) Stock Price History 2014-2026",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://twelvedata.com/markets/880619/stock/nasdaq/goog/historical-data",
+   "title": "Alphabet Inc. Class C Common Stock (GOOG) - Historical data, historical prices (daily)",
+   "age": "32 days ago"
+  },
+  {
+   "url": "https://stockanalysis.com/stocks/googl/",
+   "title": "Alphabet (GOOGL) Stock Price, Chart & News",
+   "age": "14 days ago"
+  },
+  {
+   "url": "https://www.trefis.com/stock/googl/articles/623220/can-you-make-money-off-alphabet-stock-now/2026-11-06",
+   "title": "Can You Make Money Off Alphabet Stock Now?",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.investing.com/equities/google-inc-historical-data",
+   "title": "Alphabet Inc. (GOOGL) Historical Prices - Investing.com",
+   "age": "309 days ago"
+  },
+  {
+   "url": "https://www.macrotrends.net/stocks/charts/GOOGL/alphabet/stock-price-history",
+   "title": "Alphabet - 15 Year Stock Price History",
+   "age": "111 days ago"
+  },
+  {
+   "url": "https://www.macrotrends.net/stocks/charts/GOOG/alphabet/stock-price-history",
+   "title": "Alphabet - 15 Year Stock Price History",
+   "age": "381 days ago"
+  },
+  {
+   "url": "https://www.macroaxis.com/alphabet-inc-class-c-stock-price",
+   "title": "Alphabet (GOOG) Historical Prices & Price History",
+   "age": "85 days ago"
+  },
+  {
+   "url": "https://www.yahoo.com/news/politics/articles/nvidia-ceo-faces-house-scrutiny-211650426.html",
+   "title": "Nvidia CEO Faces House Scrutiny Over Alleged China Spy Link",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://www.newsweek.com/nvidia-jensen-huang-china-timeline-alice-huang-12690761",
+   "title": "Nvidia's Jensen Huang and China: Timeline as CEO Faces Scrutiny Over Affair - Newsweek",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.abc.net.au/news/2026-11-10/nvidia-share-price-falls-ceo-jensen-huang-investigated/107366868",
-   "title": "Nvidia CEO Jensen Huang sued by shareholders over ties with suspected Chinese spy - ABC News",
+   "url": "https://www.cnbc.com/2026/11/09/nvidia-jensen-huang-affair-congress-scrutiny.html",
+   "title": "Nvidia's CEO turmoil gives newly empowered Democrats fresh ammunition in pursuit of oversight",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-investigation-china-spy.html",
-   "title": "Nvidia investigates CEO Jensen Huang's relationship with alleged Chinese spy",
+   "url": "https://www.washingtonpost.com/technology/2026/11/09/what-know-about-nvidia-scandal-ceo-jensen-huang/",
+   "title": "What to know about the Nvidia scandal and CEO Jensen Huang - The Washington Post",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.npr.org/2026/11/08/nx-s1-6034036/nvidia-launches-investigation-into-ceos-alleged-relationship-with-chinese-spy",
-   "title": "Nvidia launches investigation into CEO’s alleged relationship with Chinese spy : NPR",
+   "url": "https://www.yahoo.com/news/politics/articles/trump-says-fbi-investigating-nvidia-222507663.html",
+   "title": "Trump says FBI is investigating Nvidia CEO Jensen Huang’s relationship with alleged Chinese spy",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.cnn.com/2026/11/08/business/nvidia-investigation-ceo-jensen-huang",
-   "title": "Nvidia CEO Jensen Huang admits affair as company launches investigation into foreign spy accusations",
+   "url": "https://www.staradvertiser.com/2026/11/09/breaking-news/trump-huang-ties-face-scrutiny-after-nvidia-intelligence-probe/",
+   "title": "Trump-Huang ties face scrutiny after Nvidia intelligence probe",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.aljazeera.com/news/2026/11/9/why-is-nvidias-jensen-huang-at-the-centre-of-a-us-china-spy-scandal",
-   "title": "Why is Nvidia’s Jensen Huang at the centre of a US-China spy scandal?",
+   "url": "https://www.semafor.com/article/11/09/2026/nvidia-ceo-is-in-congress-sights-after-spy-scandal",
+   "title": "Nvidia CEO is in Congress’ sights after spy scandal",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.nbcnews.com/tech/tech-news/nvidia-ceo-jensen-huang-investigation-rcna608148",
-   "title": "Nvidia opens investigation after CEO Jensen Huang’s affair with alleged Chinese spy",
+   "url": "https://finance.yahoo.com/technology/article/analysts-say-nvidia-ceo-unlikely-to-be-ousted-over-affair-but-raise-questions-about-companys-future-165238577.html",
+   "title": "Analysts says Nvidia CEO unlikely to be ousted over affair, but raise questions about company’s future",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.banking.senate.gov/newsroom/minority/senators-warren-and-banks-probe-nvidia-ceo-on-upcoming-trip-to-peoples-republic-of-china",
-   "title": "July 11, 2025",
+   "url": "https://en.wikipedia.org/wiki/Jensen_Huang",
+   "title": "Jensen Huang",
+   "age": null
+  },
+  {
+   "url": "https://www.freedom969.com/politics/trumps-close-ties-to-nvidias-huang-scrutinized-after-foreign-intelligence-concerns",
+   "title": "Trump’s close ties to Nvidia’s Huang scrutinized after foreign intelligence concerns - Freedom 96.9",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001067983/000119312526202243/brka-20260331.htm",
+   "title": "BERKSHIRE HATHAWAY INC - Form 10-Q - FY2026",
    "age": null
   },
   {
@@ -150,14 +298,9 @@
    "age": "2 days ago"
   },
   {
-   "url": "https://abcnews.com/Business/wireStory/berkshire-hathaway-buys-back-96-billion-stock-profits-137939982",
-   "title": "Berkshire Hathaway buys back $9.6B of its own stock but profits decline - ABC News",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://uk.finance.yahoo.com/news/berkshire-hathaway-steps-buybacks-operating-134809102.html",
-   "title": "Berkshire Hathaway steps up buybacks as operating profit falls",
-   "age": "2 days ago"
+   "url": "https://www.insurancejournal.com/news/national/2026/11/09/891933.htm",
+   "title": "Berkshire Hathaway Boosts Buybacks as Operating Income Slips",
+   "age": "0 days ago"
   },
   {
    "url": "https://www.investing.com/news/stock-market-news/berkshire-hathaway-speeds-up-stock-buybacks-though-profit-falls-5010390",
@@ -170,23 +313,33 @@
    "age": "2 days ago"
   },
   {
+   "url": "https://www.gurufocus.com/news/9185585/berkshire-hathaway-stocks-slip-101-despite-96-billion-buyback-surge",
+   "title": "Berkshire Hathaway Stocks Slip 1.01% Despite $9.6 Billion Buyback Surge",
+   "age": "0 days ago"
+  },
+  {
    "url": "https://www.fool.com/investing/2026/11/09/berkshire-kept-buying-back-stock-as-shares-hit-records-heres-what-the-price-it-paid-tells-you/",
    "title": "Berkshire Kept Buying Back Stock as Shares Hit Records. Here’s What the Price It Paid Tells You.",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.cnbc.com/2026/11/07/berkshire-hathaway-q3-2026-earnings-buybacks.html",
-   "title": "Berkshire Hathaway more than doubles buybacks in third quarter as earnings decline",
+   "url": "https://247wallst.com/cards/brk-a-xpost-01m6v8f3tqp1a1hapegpwmqkzd",
+   "title": "Berkshire Hathaway's $9.6 billion buyback signals a sharp change in strategy",
    "age": "2 days ago"
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/1067983/000156459022028282/brka-10q_20220630.htm",
-   "title": "BERKSHIRE HATHAWAY INC - Form 10-Q - FY2022",
-   "age": null
+   "url": "https://www.asiae.co.kr/en/article/distribution/2026110916073255791",
+   "title": "Singapore Airlines Invests KRW 2.13 Trillion, Unveils Next-Generation Cabin Seats - The Asia Business Daily",
+   "age": "0 days ago"
   },
   {
-   "url": "https://milelion.com/2026/11/06/unveiled-singapore-airlines-new-first-business-premium-economy-and-economy-seats/",
-   "title": "Unveiled: Singapore Airlines' new First, Business, Premium Economy and Economy seats - The MileLion",
+   "url": "https://www.aviationbusinessme.com/news/singapore-airlines-2bn-next-gener",
+   "title": "Singapore Airlines Unveils $1.6 Bn Cabin Overhaul",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/11/06/singapore-airlines-new-first-business-class-a350-starlink.html",
+   "title": "Singapore Airlines reveals new business and first class seats",
    "age": "2 days ago"
   },
   {
@@ -195,84 +348,29 @@
    "age": "2 days ago"
   },
   {
-   "url": "https://www.travelmonitor.com.au/singapore-airlines-unveils-s2-billion-long-haul-cabins/",
-   "title": "Singapore Airlines unveils S$2 billion long-haul cabins - Travel Monitor",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://aviationtoday.in/civilaviation/airlines/singapore-airlines-introduces-new-long-haul-cabins-with-s2-billion-investment/",
-   "title": "Singapore Airlines Introduces New Long Haul Cabins With S$2 Billion Investment",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://iconicmnl.com/singapore-airlines-next-generation-long-haul-cabins-and-new-aircraft-seats/",
-   "title": "Singapore Airlines Invests Over S$2 Billion in Next-Generation Long-Haul Cabins and New Aircraft Seats - Iconic MNL",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://singaporeair.com/en_UK/kh/corporate/newsroom/press-release/2018/January-March/ne1218-180328",
-   "title": "Singapore Airlines Unveils New Regional Cabin Products",
+   "url": "https://en.wikipedia.org/wiki/Goh_Choon_Phong",
+   "title": "Goh Choon Phong",
    "age": null
   },
   {
-   "url": "https://singaporeair.com/en_UK/sa/corporate/newsroom/press-release/2021/October-December/ne2321-211116",
-   "title": "Singapore Airlines Unveils All-New Narrowbody Aircraft Cabin Products",
-   "age": null
+   "url": "https://www.thestar.com.my/business/business-news/2026/11/06/singapore-airlines-to-splash-us16bil-on-luxury-long-haul-cabins-as-rivals-up-their-game",
+   "title": "Singapore Airlines to splash US$1.6bil on luxury long-haul cabins as rivals up their game",
+   "age": "3 days ago"
   },
   {
-   "url": "https://www.malaymail.com/amp/news/travel/2013/07/10/singapore-airlines-upgrades-cabins-amid-stiff-rivalry/492953",
-   "title": "www.malaymail.com",
-   "age": null
+   "url": "https://www.forbes.com/sites/michaelgoldstein/2026/11/08/singapore-airlines-voted-best-in-the-world-announces-all-new-cabins/",
+   "title": "Singapore Airlines, Named Best In The World By Skytrax, Announces All-New Cabins",
+   "age": "1 days ago"
   },
   {
-   "url": "https://singaporeair.com/zh_CN/sg/corporate/newsroom/press-release/2017/October-December/ne2117-171102",
-   "title": "Singapore Airlines' New Cabin Products To Redefine Premium Air Travel",
-   "age": null
+   "url": "https://www.world-today-news.com/singapore-airlines-unveils-s2-billion-cabin-upgrade-with-new-first-and-business-class-seats/",
+   "title": "Singapore Airlines Unveils S$2 Billion Cabin Upgrade With New First and Business Class Seats - World Today News",
+   "age": "3 days ago"
   },
   {
-   "url": "https://tradingeconomics.com/united-states/stock-market",
-   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
-   "age": "808 days ago"
-  },
-  {
-   "url": "https://news.sbs.co.kr/english/article.do?news_id=N1008838153",
-   "title": "Morning Wide: Today's Major News (November 10, 2026)",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/09/stock-market-today-live-updates.html",
-   "title": "Stock market today: Live updates",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://coinpaper.com/38565/stock-market-today-dow-jumps-540-points-s-and-p-500-rallies-as-oil-crashes-5",
-   "title": "Stock Market Today: Dow Jumps 540 Points, S&P 500 Rallies as Oil Crashes 5%",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://journalarta.com/en/2026/11/10/stock-market-today-sp-500-surges-2-35-to-7549-94-and-nasdaq-jumps-2-74-as-oil-falls-and-vix-drops/",
-   "title": "Stock Market Today: S&P 500 Up 2.35%, Nasdaq Up 2.74% — JournalArta Global",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnn.com/markets",
-   "title": "Stock Market Data",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.nyse.com/index",
-   "title": "The New York Stock Exchange",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/news/stock-market-today-jan-2-164540630.html",
-   "title": "stock market today jan 2 164540630",
-   "age": null
-  },
-  {
-   "url": "https://seekingalpha.com/news/3430413-arconic-not-currently-involved-in-any-sales-talks-wsj",
-   "title": "Top Stocks for 2026",
-   "age": null
+   "url": "https://www.travelerstoday.com/articles/61237/20261108/singapore-airlines-s2bn-cabin-overhaul-new-business-class-wont-fly-another-year.htm",
+   "title": "Singapore Airlines' S$2bn Cabin Overhaul: New Business Class Won't Fly for Another Year",
+   "age": "1 days ago"
   }
  ],
  "leads": [
@@ -422,12 +520,12 @@
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 40466,
-  "output": 913,
+  "input": 40515,
+  "output": 2503,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.095
+  "costUsd": 0.103
  },
- "createdAt": "2026-11-10T01:01:24.664Z"
+ "createdAt": "2026-11-10T01:14:45.318Z"
 }
