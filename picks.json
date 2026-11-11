@@ -1,83 +1,90 @@
 {
- "market_summary": "Markets staged a sharp relief rally Monday (S&P +2.4%, Nasdaq100 +3.4%) as falling oil prices eased inflation fears after last week's selloff, with Tuesday's open hinging on the October CPI print. Nvidia is the standout loser, down ~4.3% and -22% over the month after CEO Jensen Huang's scandal/espionage-linked investigation disclosure, a governance overhang that lands right before its Nov 17 earnings. Singapore banks (DBS/OCBC/UOB, ~44% of STI) are rebounding off oversold levels (all 3 up 1-3% today) even as they turn more selective on AI-related lending, while SIA is investing S$2bn in cabin upgrades ahead of its Nov 11 results. Big-cap US tech (AAPL, MSFT) is riding the broad risk-on bounce, though valuations for AAPL look full versus consensus targets.",
+ "market_summary": "Markets are in a risk-off mood: hotter-than-expected October CPI (0.4% vs 0.3% expected) sent the 10-year Treasury yield briefly above 5% on Nov 10, crushing rate-hike-sensitive tech and high-multiple growth names (S&P -0.4%, Nasdaq -0.7% on Tue). Nvidia is the standout casualty, down ~9.5% in a day and nearly $470B over two sessions after CEO Jensen Huang admitted an affair with a suspected Chinese spy, triggering a board investigation just before its Nov 17 earnings. In Singapore, Q3 bank earnings diverged sharply — OCBC beat while DBS and UOB missed — against a backdrop of NIM pressure, even as STI financials rallied on the day. Mega-cap tech earnings (Apple, Meta) were largely strong on fundamentals, but macro/rate fears and single-name scandal risk are currently overriding fundamentals in US tech.",
  "picks": [
   {
    "symbol": "NVDA",
    "stance": "short",
    "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Nvidia is in a confirmed downtrend (-22% 1m, -18.4% vs 50dMA) and now carries a fresh governance/reputational overhang from the CEO scandal, with an unresolved board investigation. Rel. volume is nearly 4x normal, showing heavy distribution. Earnings on Nov 17 add a binary risk catalyst while sentiment is impaired, making further downside or at least continued volatility likely before any fundamental re-rating.",
-   "news": "Board investigation launched into CEO Jensen Huang after he admitted an affair with an alleged Chinese spy (2026-11-08); stock lost ~$200B in market value Monday on the disclosure (2026-11-08/09).",
-   "risks": "Chip fundamentals/demand remain extremely strong; if the investigation clears Huang quickly or earnings on Nov 17 beat materially, shares could snap back hard given how beaten down they already are and the extreme analyst upside (83% to consensus target).",
+   "thesis": "Nvidia is in the middle of an unresolved governance crisis (CEO affair with a suspected Chinese spy, board investigation ongoing) that has already wiped ~$470B in two sessions. Stock is down 9.5% in a single day with 3.9x normal volume, and earnings land Nov 17 — a high-risk event while the scandal narrative is still developing and rate-hike fears are hitting high-multiple AI names hardest. Momentum and headline risk both point lower into the print.",
+   "news": "CEO Jensen Huang admitted an affair with a suspected Chinese spy; board launched an investigation (Nov 8), stock fell 4.3% that day, then another 5.5% on Nov 10 as fallout deepened, for a combined ~$470B two-day wipeout; separately, hot CPI on Nov 10 pushed Fed hike odds up sharply, pressuring AI/data-center valuations (Cramer warning, Nov 10).",
+   "risks": "Board could quickly clear Huang or install reassuring governance changes; a strong Nov 17 earnings beat/guide could override the scandal narrative; analyst consensus target still implies ~93% upside, so a short squeeze on any positive headline is a real risk.",
    "source_urls": [
-    "https://www.bloomberg.com/news/articles/2026-11-08/nvidia-board-to-probe-spying-case-after-ceo-jensen-huang-admits-infidelity"
+    "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-investigation-china-spy.html",
+    "https://www.businesstimes.com.sg/international/global/nvidia-heads-us470-billion-two-day-wipeout-ceo-affair-fallout-deepens"
    ],
-   "priceAtPick": 178.67
+   "priceAtPick": 168.89
   },
   {
-   "symbol": "MSFT",
+   "symbol": "META",
    "stance": "long",
-   "conviction": "medium",
+   "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Microsoft is leading the tech rally (+2.75% Monday) and is actively lobbying against a proposed Chinese-transceiver ban that would hit AI data-center buildouts, signaling it is protecting its capex-heavy AI infrastructure plans. Price is solidly above both 50- and 200-day averages (+5.4%/+23.8%) and analyst consensus still implies ~17% upside with near-unanimous buy ratings (53 of 58).",
-   "news": "Microsoft pushing Trump administration to halt FCC ban on Chinese optical transceivers used in AI data centers (2026-11-10); shares +2.75% in Monday's broad tech rally (2026-11-10).",
-   "risks": "If the transceiver ban proceeds and raises data-center costs, or if the broader risk-on rally fades once CPI data disappoints, MSFT could give back recent gains given its already-elevated valuation versus 1-month return.",
+   "thesis": "Meta posted standout Q3 ad momentum (26% YoY revenue growth, ad impressions +10%, price/ad +14%) and the stock jumped 5.1% on the day with analysts still seeing ~32% upside to consensus target. Despite a rough past month (-10.8%) tied to broader tech de-rating, the underlying ad business is accelerating, which should support a recovery as rate-fear-driven selling fades.",
+   "news": "Meta Q3 2026 earnings (Nov 5) showed core advertising revenue up 26% YoY to $64.6B with rising ad prices and volumes; shares rallied +5.1% most recently as the market digested the strength.",
+   "risks": "If Treasury yields keep climbing on hawkish Fed repricing, high-beta/high-multiple names like Meta (beta 1.25, 41% annualized vol) could get hit again regardless of fundamentals; AI capex spending concerns could also resurface.",
    "source_urls": [
-    "https://ca.investing.com/news/stock-market-news/microsoft-pushes-trump-to-halt-chinese-data-center-component-ban-reuters-4946013",
-    "https://www.marketalleys.com/post/marketalleys-daily-brief-2026-11-10"
+    "https://finance.yahoo.com/markets/stocks/articles/apple-alphabet-meta-3-big-230000891.html"
    ],
-   "priceAtPick": 545.18
+   "priceAtPick": 641.39
   },
   {
    "symbol": "O39.SI",
    "stance": "long",
    "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "OCBC jumped 3.1% today and has the strongest 1-year return (+57%) of the three local banks while still trading 11% below its 52-week high, suggesting room to continue closing that gap as banks rebound from last month's pullback. It's trading comfortably above its 200-day average (+10.8%) despite a soft month, indicating the longer trend remains intact.",
-   "news": "Singapore banks (OCBC, UOB, DBS) staying selective but still actively courting AI/data-center financing deals amid strong regional demand (2026-11-09); OCBC +3.1% today in the broad market bounce (2026-11-10).",
-   "risks": "If credit concerns around debt-funded AI infrastructure spending escalate, or if the rebound is just a one-day beta bounce tied to the general market relief rally rather than bank-specific strength, gains could reverse quickly.",
+   "horizon": "months",
+   "thesis": "OCBC beat Q3 2026 consensus with S$2.04B net profit while peers DBS and UOB missed, and the stock responded with the sharpest gain in the trio (+3.1%) on nearly 2x normal volume — a sign the market is rewarding the earnings differentiation. Longer-term uptrend (+57% over 1Y, +10.8% above 200-day MA) remains intact despite a recent pullback, and there's additional optionality from Singapore's growing role as an Asian gold-trading hub.",
+   "news": "OCBC Q3 2026 beat consensus (Nov 6) while DBS and UOB missed, widening the performance gap among Singapore banks; separate Nov 9 report flagged growing institutional interest in Singapore as an Asian gold hub, a tailwind for OCBC's wealth/precious metals franchise.",
+   "risks": "Sector-wide NIM compression from potential rate cuts could still weigh on OCBC's margins even if it's outperforming peers; a broader SGX risk-off move (STI financials are volatile, rel. volume elevated) could drag it down with the group.",
    "source_urls": [
-    "https://www.businesstimes.com.sg/companies-markets/highly-selective-singapore-banks-see-strong-ai-financing-demand-stay-alert-debt-risks"
+    "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/",
+    "https://www.straitstimes.com/business/interest-by-financial-institutions-in-asian-gold-hubs-like-spore-dbs-survey"
    ],
    "priceAtPick": 28.6
   },
   {
    "symbol": "U11.SI",
    "stance": "short",
-   "conviction": "low",
-   "horizon": "weeks",
-   "thesis": "UOB is the clear laggard among the three Singapore banks: worst 3-month return (-10.9%), below both its 50- and 200-day moving averages, and the most balanced analyst view (only 4 buys vs 10 holds). Today's 1.4% bounce lagged peers' 3.1% and 0.9% gains, suggesting relative weakness persists even in a risk-on tape.",
-   "news": "Singapore banks turning selective on AI-related financing amid debt-risk concerns (2026-11-09), a sector-wide theme that may weigh more on UOB given its softer recent momentum and higher relative volume (1.59x) signalling distribution.",
-   "risks": "Banks often move together on rate/macro themes; if UOB's Q3 results (referenced in sector commentary) beat expectations or NIM trends improve, this laggard could quickly catch up to peers, especially as its analyst consensus still implies 10.4% upside.",
+   "conviction": "medium",
+   "horizon": "months",
+   "thesis": "UOB missed Q3 2026 consensus, the weakest of the three Singapore banks, and its price action confirms the underperformance: worst 1-month (-6.5%), 3-month (-10.9%) and from-52w-high (-16.8%) readings among the local banks, trading below both its 50- and 200-day moving averages. Analyst sentiment has also cooled, with a notably higher hold/sell mix (9 hold, 2 sell out of 16) versus OCBC and DBS.",
+   "news": "UOB missed Q3 2026 estimates (reported Nov 6) amid sector-wide NIM pressure, underperforming OCBC which beat.",
+   "risks": "UOB still has a positive implied upside to consensus target (+10.4%) and any rebound in regional rate-cut expectations or bank sector re-rating could lift all three SGX banks together, including UOB.",
    "source_urls": [
-    "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
-    "https://www.businesstimes.com.sg/companies-markets/highly-selective-singapore-banks-see-strong-ai-financing-demand-stay-alert-debt-risks"
+    "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/"
    ],
    "priceAtPick": 37.38
+  },
+  {
+   "symbol": "QQQ",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "Hotter-than-expected October CPI pushed the 10-year yield above 5% and collapsed December rate-cut odds (CME FedWatch down to 3% from 21%), a direct headwind for the high-multiple, long-duration tech names that dominate QQQ. The Nasdaq-100 is already down 10.2% over the past month and sits 11.2% below its 52-week high, with Nvidia's ongoing scandal adding an idiosyncratic drag to a major index constituent right before its Nov 17 earnings.",
+   "news": "October CPI came in at 0.4% vs 0.3% expected (Nov 10), triggering a surge in Treasury yields and a sharp repricing of Fed hike odds; Nasdaq fell 0.7% the same day amid the broader tech-led selloff.",
+   "risks": "A one-day 2.8% bounce already occurred, suggesting markets may be looking past the CPI print quickly; strong mega-cap earnings (Meta, Apple) could offset macro weakness and drive QQQ higher despite rate concerns.",
+   "source_urls": [
+    "https://www.cnn.com/2026/11/10/investing/bond-yields-inflation-fed",
+    "https://startupfortune.com/treasury-yields-jump-after-hot-october-cpi-with-a-december-fed-hike-now-priced-in/"
+   ],
+   "priceAtPick": 674.76
   },
   {
    "symbol": "BN4.SI",
    "stance": "long",
    "conviction": "low",
    "horizon": "months",
-   "thesis": "Keppel rallied 3.3% today and screens as deeply oversold, trading 25.9% below its 52-week high with a very bullish analyst base (12 buy, 2 hold, 1 sell) and consensus target implying 30% upside. This looks like a potential mean-reversion/value setup after a rough 3-6 months, though there's no fresh company-specific catalyst in the news flow to confirm a turn.</br>",
-   "news": "No stock-specific news item was found for Keppel in this cycle; today's +3.3% move appears tied to the broad market risk-on rally rather than a company catalyst (2026-11-10).",
-   "risks": "Lack of a specific catalyst means this is a lower-conviction, momentum/valuation-only call; continued weakness in its underlying business (reflected in -13.6% 3m return and elevated volatility of 25%) could mean the stock keeps underperforming rather than reverting.",
-   "source_urls": [
-    "https://www.marketalleys.com/post/marketalleys-daily-brief-2026-11-10"
-   ],
+   "thesis": "Keppel has very strong analyst support (12 buy, 2 hold, 1 sell; +30.2% implied upside to consensus target) despite poor recent momentum (-7.2% 1m, -13.6% 3m, 25.9% below 52w high), suggesting the market may be overly pessimistic relative to fundamentals. The 3.3% single-day pop on elevated volume could be the start of a bounce off oversold technical levels.",
+   "news": "No fresh company-specific catalyst identified in the latest news gathering; this is a valuation/analyst-gap view based on price stats alone, so conviction is low and should be treated as speculative given the lack of recent news confirmation.",
+   "risks": "Elevated volatility (25.1% annualized, beta 1.15) and no specific positive catalyst mean the stock could continue its downtrend if broader SGX sentiment stays weak; without a known catalyst, the analyst-target gap could simply reflect stale targets rather than genuine upside.",
+   "source_urls": [],
    "priceAtPick": 9.76
   }
  ],
  "sources": [
   {
-   "url": "https://techcrunch.com/2026/11/08/nvidia-says-its-investigating-ceo-jensen-huangs-relationship-with-possible-chinese-spy/",
-   "title": "Nvidia will investigate CEO Jensen Huang’s relationship with possible Chinese spy",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.washingtonpost.com/business/2026/11/08/nvidia-opens-investigation-into-ceo-over-relationship-with-suspected-chinese-spy/",
-   "title": "Nvidia board to investigate CEO over relationship with suspected Chinese spy - The Washington Post",
+   "url": "https://www.washingtonpost.com/technology/2026/11/08/read-jensen-huangs-letter-nvidia-about-his-affair-with-suspected-chinese-spy/",
+   "title": "Read Jensen Huang’s letter to Nvidia about his affair with suspected Chinese spy - The Washington Post",
    "age": "1 days ago"
   },
   {
@@ -86,88 +93,38 @@
    "age": "1 days ago"
   },
   {
+   "url": "https://www.washingtonpost.com/business/2026/11/08/nvidia-opens-investigation-into-ceo-over-relationship-with-suspected-chinese-spy/",
+   "title": "Nvidia board to investigate CEO over relationship with suspected Chinese spy - The Washington Post",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.nbcnews.com/tech/tech-news/nvidia-ceo-jensen-huang-investigation-rcna608148",
+   "title": "Nvidia opens investigation after CEO Jensen Huang’s affair with alleged Chinese spy",
+   "age": "1 days ago"
+  },
+  {
    "url": "https://www.bloomberg.com/news/articles/2026-11-08/nvidia-board-to-probe-spying-case-after-ceo-jensen-huang-admits-infidelity",
    "title": "Nvidia Board to Probe Spying Case After CEO Jensen Huang Admits Infidelity - Bloomberg",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.axios.com/2026/11/08/nvidia-ceo-jensen-huang-admits-affair-board-to-launch-investigation",
+   "title": "Nvidia CEO Jensen Huang admits affair, board to launch investigation",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/11/10/nvidia-ceo-jensen-huang-china-spy-scandal.html",
+   "title": "Op-ed: In Nvidia CEO Jensen Huang's alleged China spy scandal, there's plenty of blame to go around",
    "age": "0 days ago"
   },
   {
    "url": "https://www.cnbc.com/2026/11/08/nvidia-jensen-huang-investigation-china-spy.html",
    "title": "Nvidia investigates CEO Jensen Huang's relationship with alleged Chinese spy",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.nbcnews.com/tech/tech-news/nvidia-ceo-jensen-huang-investigation-rcna608148",
-   "title": "Nvidia opens investigation after CEO Jensen Huang’s affair with alleged Chinese spy",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.washingtonpost.com/technology/2026/11/09/what-know-about-nvidia-scandal-ceo-jensen-huang/",
-   "title": "What to know about the Nvidia scandal and CEO Jensen Huang - The Washington Post",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.axios.com/2026/11/08/nvidia-ceo-jensen-huang-admits-affair-board-to-launch-investigation",
-   "title": "Nvidia CEO Jensen Huang admits affair, board to launch investigation",
    "age": "1 days ago"
   },
   {
-   "url": "https://www.aljazeera.com/news/2026/11/9/why-is-nvidias-jensen-huang-at-the-centre-of-a-us-china-spy-scandal",
-   "title": "Why is Nvidia’s Jensen Huang at the centre of a US-China spy scandal?",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Nvidia_GTC",
-   "title": "Nvidia GTC",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/news/stock-market-today-nov-10-markets-await-the-consumer-inflation-report",
-   "title": "Stock Market Today, Nov. 10: Markets Await the Consumer Inflation Report - TipRanks.com",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-nov-10-2026",
-   "title": "Stock Market Today (Nov. 10, 2026): S&P 500 futures edge higher ahead of key inflation report - TheStreet",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-november-10-dow-sp-500-nasdaq-inflation-data-cpi-090627830.html",
-   "title": "Stock market today: Dow, S&P 500, Nasdaq trade mixed ahead of key inflation data",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.bnnbloomberg.ca/markets/dow-jones/2026/11/10/world-shares-rise-after-technology-shares-advance-on-wall-street-ahead-of-us-inflation-data/",
-   "title": "Stock market news: World shares rise after U.S. tech shares advance",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.home.saxo/en-mena/content/articles/macro/market-quick-take---wall-street-rebounds-and-brent-slides-below-usd-92---10-november-2026-10112026",
-   "title": "Market Quick Take - Wall Street rebounds and Brent slides below USD 92 - 10 November 2026",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.kucoin.com/news/flash/u-s-stocks-rally-on-nov-10-nasdaq-hits-3-month-high",
-   "title": "U.S. stocks rally on November 10, Nasdaq reaches 3-month high",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://investrade.com/morning-preview-november-10-2026/",
-   "title": "Morning Preview: November 10, 2026 - Investrade",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.marketalleys.com/post/marketalleys-daily-brief-2026-11-10",
-   "title": "MarketAlleys Daily Brief — 2026-11-10",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.marketalleys.com/post/marketalleys-premarket-brief-2026-11-10",
-   "title": "US Premarket Brief — 2026-11-10",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/news/stock-market-today-jan-2-164540630.html",
-   "title": "stock market today jan 2 164540630",
+   "url": "https://fortune.com/tag/nvidia/page/7",
+   "title": "fortune.com",
    "age": null
   },
   {
@@ -176,38 +133,38 @@
    "age": "4 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/United_Overseas_Bank",
-   "title": "United Overseas Bank",
-   "age": null
-  },
-  {
-   "url": "https://nextgenprodman.substack.com/p/ai-agents-in-singapore-banking-where",
-   "title": "AI Agents in Singapore Banking: Where We Actually Stand",
-   "age": "177 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/Tan_Teck_Long",
-   "title": "Tan Teck Long",
-   "age": null
-  },
-  {
    "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
    "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
    "age": "7 days ago"
   },
   {
-   "url": "https://www.redhot.sg/highly-selective-singapore-banks-see-strong-ai-financing-demand-but-stay-alert-to-debt-risks-737546.html",
-   "title": "‘Highly selective’: Singapore banks see strong AI financing demand but stay alert to debt risks - Red Hot Singapore",
-   "age": null
+   "url": "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/",
+   "title": "OCBC Q3 2026: Singapore’s Only Bank to Beat Estimates",
+   "age": "3 days ago"
   },
   {
-   "url": "https://blog.maxthon.com/2026/01/08/singapores-ai-banking-transformation-a-comprehensive-case-study/",
-   "title": "Singapore's AI Banking Transformation: A Comprehensive Case Study - Maxthon",
-   "age": "306 days ago"
+   "url": "https://thekopinotes.com/articles/news/singapore-banks-q3-2026-valuation-buy/",
+   "title": "Singapore Banks After Q3 2026: Are DBS, OCBC & UOB Cheap Enough to Buy? - The Kopi Notes",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.nouvelles-du-monde.com/les-banques-de-singapour-affichent-des-resultats-contrastes-au-t3-2026/",
+   "title": "Les banques de Singapour affichent des résultats contrastés au T3 2026 - Nouvelles Du Monde",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://longbridge.com/topics/100000000976115",
+   "title": "🔥 Singapore Banking Trio 3Q26: Who Took The Lead?My earlier guess was wrong for this quarter😔. DBS did not shine as br…",
+   "age": "3 days ago"
   },
   {
    "url": "https://www.tradingview.com/symbols/SWB-OCBA",
    "title": "SWB OCBA",
+   "age": null
+  },
+  {
+   "url": "https://www.spglobal.com/market-intelligence/en/news-insights/articles/2024/11/singapore-banks-q3-profits-to-increase-yoy-on-slower-margin-squeeze-fee-growth-86076293",
+   "title": "Featured Topics",
    "age": null
   },
   {
@@ -216,110 +173,150 @@
    "age": null
   },
   {
-   "url": "https://centreforaviation.com/news/singapore-airlines-to-invest-usd15bn-in-long-haul-aircraft-seating-1378960",
-   "title": "Singapore Airlines to invest USD1.5bn in long haul aircraft seating",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.ttgasia.com/2026/11/10/singapore-airlines-unveils-s2-billion-longhaul-cabin-overhaul/",
-   "title": "Singapore Airlines unveils S$2 billion longhaul cabin overhaul",
+   "url": "https://bnnbloomberg.ca/markets/dow-jones/2026/11/10/wall-street-mixed-in-early-trading-ahead-of-a-new-peek-at-inflation",
+   "title": "Markets today: U.S. stocks slip after report on inflation",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.flightglobal.com/airlines/2026/11/singapore-airlines-unveils-biggest-cabin-product-investment-to-date/",
-   "title": "Singapore Airlines unveils $1.6bn cabin product overhaul - FlightGlobal",
-   "age": "3 days ago"
+   "url": "https://cnbc.com/2026/11/10/stock-market-today-live-updates.html",
+   "title": "Stock market today: Live updates",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.aviationbusinessme.com/news/singapore-airlines-2bn-next-gener",
-   "title": "Singapore Airlines Unveils $1.6 Bn Cabin Overhaul",
-   "age": "1 days ago"
+   "url": "https://www.tradinghours.com/markets/nyse",
+   "title": "NYSE Market Hours & Holidays 2026 - 2028 - TradingHours.com",
+   "age": "26 days ago"
   },
   {
-   "url": "https://aviationweek.com/air-transport/interiors-connectivity/singapore-airlines-unveils-15-billion-cabin-overhaul-across",
-   "title": "Singapore Airlines Unveils $1.5 Billion Cabin Overhaul Across Classes",
-   "age": "3 days ago"
+   "url": "https://www.abc.net.au/news/2026-11-11/asx-markets-business-live-news-nov-11/107370848",
+   "title": "Markets live updates: CBA profit rises but late home loan payments edge up, ASX down - ABC News",
+   "age": "0 days ago"
   },
   {
-   "url": "https://milelion.com/2026/11/06/unveiled-singapore-airlines-new-first-business-premium-economy-and-economy-seats/",
-   "title": "Unveiled: Singapore Airlines' new First, Business, Premium Economy and Economy seats - The MileLion",
-   "age": "2 days ago"
+   "url": "https://coinpaper.com/38618/stock-market-today-s-and-p-500-drops-after-inflation-hits-0-4-and-fed-official-warns-of-bigger-rate-hike",
+   "title": "Stock Market Today: S&P 500 Drops After Inflation Hits 0.4% and Fed Official Warns of Bigger Rate Hike",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.travelandtourworld.com/news/article/ndwmvnd8546g/",
-   "title": "Singapore Airlines Previews 1.1 Billion-Dollar Cabins as Changi Enforces New SAF Rules and Capella Ranks Top Five - Travel And Tour World",
-   "age": "1 days ago"
+   "url": "https://fvbb.com/ns/global-market-today-asian-stocks-rise-on/329946",
+   "title": "Global Market Today: Asian stocks rise on CoreWeave results, bonds drop",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.forbes.com/sites/michaelgoldstein/2026/11/08/singapore-airlines-voted-best-in-the-world-announces-all-new-cabins/",
-   "title": "Singapore Airlines, Named Best In The World By Skytrax, Announces All-New Cabins",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://aviationjeta.com/singapore-airlines-new-long-haul-cabins/",
-   "title": "Singapore Airlines Unveils Next-Generation Long-Haul Cabin Products",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.singaporeair.com/en_UK/hk/corporate/newsroom/press-release/2024/October-December/ne1124-241104/",
-   "title": "Singapore Airlines To Elevate Premium Travel Experience With S$1.1 Billion Airbus A350 Cabin Retrofit Programme",
+   "url": "https://www.itiger.com/hans/news/2482784955",
+   "title": "Stock Market News for Nov 11, 2024",
    "age": null
   },
   {
-   "url": "https://fourweekmba.com/ai-microsoft-said-to-oppose-ban-on-china-optics-60-of-revenue/",
-   "title": "Microsoft Said to Oppose Ban on China Optics, 60% of Revenue - FourWeekMBA",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://cryptobriefing.com/microsoft-urges-trump-scrap-chinese-transceiver-ban/",
-   "title": "Microsoft urges Trump to scrap planned ban on Chinese AI data center technology",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://ca.investing.com/news/stock-market-news/microsoft-pushes-trump-to-halt-chinese-data-center-component-ban-reuters-4946013",
-   "title": "Microsoft pushes Trump to halt Chinese data center component ban: Reuters By Investing.com",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.tradingpedia.com/2026/11/10/microsoft-lobbies-us-against-ban-on-chinese-ai-hardware/",
-   "title": "Microsoft Lobbies US Against Ban on Chinese AI Hardware",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://jawlah.co/en/67932",
-   "title": "Microsoft presses US administration to block ban on Chinese data center technology",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://en.wikipedia.org/wiki/TP-Link",
-   "title": "TP-Link",
+   "url": "https://finance.yahoo.com/news/major-us-stock-indexes-fared-184709776.html",
+   "title": "How major US stock indexes fared Friday, 11/28/2025",
    "age": null
   },
   {
-   "url": "https://newsbytesapp.com/news/business/microsoft-urges-us-to-ban-chinese-optical-transceivers-over-security/tldr",
-   "title": "Microsoft urges US to ban Chinese optical transceivers over security",
+   "url": "https://algotradealert.substack.com/p/stock-market-update-monday-november-448",
+   "title": "Daily Stock Market Update",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/a8-kex991q4202609262026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-alphabet-meta-3-big-230000891.html",
+   "title": "Apple, Alphabet, and Meta: 3 Big Takeaways from Recent Earnings",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://www.marketbeat.com/stocks/NASDAQ/AAPL/earnings/",
+   "title": "Apple (AAPL) Earnings Date and Reports 2026 $AAPL",
+   "age": "9 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/article/apple-just-made-twice-as-much-free-cash-as-microsoft-meta-alphabet-and-amazon-combined-chart-of-the-day-110000928.html",
+   "title": "Apple just made twice as much free cash as Microsoft, Meta, Alphabet and Amazon combined: Chart of the Day",
+   "age": "7 days ago"
+  },
+  {
+   "url": "https://www.euronews.com/2026/11/03/apple-earnings-beat-expectations-but-rising-chip-costs-worry-investors",
+   "title": "Apple earnings beat expectations, but rising chip costs worry investors",
+   "age": "7 days ago"
+  },
+  {
+   "url": "https://www.factset.com/earningsinsight",
+   "title": "Copyright © 2026 FactSet Research Systems Inc. All rights reserved.",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://247wallst.com/investing/2026/11/03/apple-retreats-4-despite-earnings-beat-as-memory-costs-squeeze-margin-outlook-microsoft-dips-meta-holds-steady/",
+   "title": "Apple Retreats 4% Despite Earnings Beat as Memory Costs Squeeze Margin Outlook; Microsoft Dips, Meta Holds Steady - 24/7 Wall St.",
+   "age": "7 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/apple-earnings-beat-expectations-rising-061643776.html",
+   "title": "Apple earnings beat expectations, but rising chip costs worry investors",
+   "age": "7 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/quote/AAPL/",
+   "title": "Apple Inc. (AAPL) Stock Price, News, Quote & History - Yahoo Finance",
    "age": "0 days ago"
   },
   {
-   "url": "https://mlq.ai/news/microsoft-is-pressing-the-trump-administration-to-drop-an-expected-ban-on-chinese-optical-transceivers-for-data-centers-reuters-reports/",
-   "title": "Microsoft is pressing the Trump administration to drop an expected ban on Chinese optical transceivers for data centers, Reuters reports",
+   "url": "https://abc17news.com/money/cnn-business-consumer/2026/11/10/bond-yields-surge-most-in-19-months-as-traders-brace-for-fed-rate-hikes/",
+   "title": "Bond yields surge most in 19 months as traders brace for Fed rate hikes - ABC17NEWS",
    "age": "0 days ago"
   },
   {
-   "url": "https://gokhshtein.com/news/2026-11-10-msft-microsoft-warns-chinese-component-ban-could-halt-us-ai",
-   "title": "Microsoft Warns China Transceiver Ban Threatens AI Data Center Roadmap",
+   "url": "https://tradingeconomics.com/united-states/government-bond-yield",
+   "title": "US 10 Year Treasury Note Yield - Quote - Chart - Historical Data - News",
+   "age": "796 days ago"
+  },
+  {
+   "url": "https://www.cnn.com/2026/11/10/investing/bond-yields-inflation-fed",
+   "title": "Bond yields surge most in 19 months as traders brace for Fed rate hikes",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://edition.cnn.com/2026/11/10/investing/bond-yields-inflation-fed",
+   "title": "Bond yields surge most in 19 months as traders brace for Fed rate hikes",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/amp/2026/11/03/us-treasury-yields-bonds.html",
+   "title": "Treasury yields rise as investors weigh midterm vote, jobs data and Iran tensions",
+   "age": "7 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/11/10/us-bonds-treasurys-yields.html",
+   "title": "10-year Treasury yield races back to 5% as inflation data, Waller comments drive rate hike expectations",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://startupfortune.com/treasury-yields-jump-after-hot-october-cpi-with-a-december-fed-hike-now-priced-in/",
+   "title": "Treasury yields jump after hot October CPI, with a December Fed hike now priced in - Startup Fortune",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnbc.com/2026/11/05/treasury-yields-bonds-interest-rates.html",
+   "title": "Treasury yields: traders look ahead to jobs data",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://localnews8.com/money/cnn-business-consumer/2026/11/10/bond-yields-surge-most-in-19-months-as-traders-brace-for-fed-rate-hikes/",
+   "title": "Bond yields surge most in 19 months as traders brace for Fed rate hikes - LocalNews8.com - KIFI",
    "age": "0 days ago"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 50011,
-  "output": 5646,
+  "input": 48148,
+  "output": 5838,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1548
+  "costUsd": 0.1564
  },
- "createdAt": "2026-11-10T13:01:14.842Z"
+ "createdAt": "2026-11-11T01:01:32.419Z"
 }
