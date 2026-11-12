@@ -1,132 +1,130 @@
 {
- "market_summary": "Markets are whipsawing on a hot October CPI print that pushed Treasury yields higher, with the S&P 500 and Nasdaq selling off Tuesday before a tech-led futures rebound Wednesday. Nvidia is the epicenter of volatility — down over 25% in a month on a Baird downgrade (PT cut to $200 from $500) and fresh reputational/legal headline risk tied to its CEO, with earnings due Nov 17. In Singapore, bank Q3 results were mixed: OCBC beat and hit a record nine-month profit while DBS and UOB missed, dragging the STI down 2.2% for the week; SIA posted a strong Q2 but H1 profit nearly halved on jet fuel costs.",
+ "market_summary": "Markets are being whipsawed by an idiosyncratic shock at Nvidia (board reportedly preparing to oust CEO Jensen Huang amid affair allegations, stock -9% after hours on Nov 11), which is dragging on tech/semis sentiment just days before Nvidia's own earnings (Nov 17). In Singapore, bank earnings diverged sharply - OCBC beat Q3 estimates while DBS and UOB missed on weaker trading income and margin pressure, and both remain in technical downtrends (below 50/200-day averages). Singapore Airlines posted a 44% profit decline on surging jet fuel costs tied to Middle East conflict, yet the stock has still rallied 9% over the past month, leaving it stretched relative to depressed earnings. Apple continues to benefit from a strong Q4 beat and fresh analyst upgrades, holding near 52-week highs. Overall, dispersion is high: idiosyncratic single-stock risk (NVDA, SIA) matters more right now than broad index direction.",
  "picks": [
   {
    "symbol": "NVDA",
    "stance": "short",
    "conviction": "high",
    "horizon": "days",
-   "thesis": "Nvidia has become a battleground stock: a rare sell-side downgrade (Baird to Neutral, PT slashed from $500 to $200) alongside Morgan Stanley pulling it as a Top Pick, plus a serious reputational/espionage-adjacent headline about the CEO, have combined with a stretched prior run-up to produce a sharp breakdown. Price is down 5.5% today alone on 3x normal volume, -25% in a month, and trading well below its 50/200-day averages — classic momentum-breakdown signature. Earnings on Nov 17 add binary event risk into an already de-risking market structure.",
-   "news": "Baird cut NVDA to Neutral with PT to $200 from $500 citing 2027 demand visibility and supply constraints (2026-11-11); Morgan Stanley removed it as a Top Pick on a stop-loss trigger after a 25% decline (2026-11-11); reports of a CEO personal/reputational scandal with national-security overtones hit the stock the same day (2026-11-11).",
-   "risks": "Nvidia remains the most-loved name on the Street (58 buys vs 3 holds/1 sell) and any reassuring Nov 17 earnings beat or guidance could trigger a violent short-covering rally; the CEO-scandal story could also prove overstated or quickly resolved.",
+   "thesis": "Governance crisis (potential CEO removal) is a fresh, material negative catalyst layered on top of an already-weak technical picture (down 23% in a month, 20% below its 50-day average, relative volume 3x normal). Even if Huang stays, the uncertainty itself is bearish into the Nov 17 earnings date, and sell-side is already starting to trim targets (Baird cut target 500→200 on Nov 11).",
+   "news": "Nvidia board reportedly preparing to oust CEO Jensen Huang over affairs including one involving a suspected Chinese spy; shares fell >9% after hours (CNBC, 2026-11-11). Baird downgraded Outperform→Neutral, target 500→200 same day.",
+   "risks": "If the board denies/clarifies the story quickly or Huang is retained, the stock could snap back hard given how beaten down it already is (57 of 62 analysts still rate it Buy with huge implied upside). Earnings on Nov 17 could also surprise positively and overwhelm the governance headline.",
    "source_urls": [
-    "https://www.investing.com/news/stock-market-news/nvidia-stock-gets-a-rare-wall-street-downgrade-on-supply-issues-5018471",
-    "https://decrypt.co/382991/nvidia-sheds-430b-in-two-days-as-jensen-huang-faces-calls-to-resign"
+    "https://www.cnbc.com/2026/11/11/nvidia-jensen-huang-affair-employee.html"
    ],
-   "priceAtPick": 168.89
+   "priceAtPick": 173.73
+  },
+  {
+   "symbol": "C6L.SI",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "SIA's H1 net profit fell 44% on an 87% YoY jump in jet fuel costs from Middle East conflict escalation, yet the stock has rallied 9.3% over the past month and trades above its consensus analyst target (implied upside is actually negative, -2.3%), with only 1 of 13 analysts rating it Buy. The disconnect between deteriorating fundamentals and a resilient share price looks unsustainable if fuel costs stay elevated.",
+   "news": "SIA Group H1 FY2026/27 net profit fell 43.9% to S$134m despite record S$11.3b revenue, driven by an 86.7% YoY jump in jet fuel prices tied to West Asia conflict (Malay Mail, 2026-11-11).",
+   "risks": "A ceasefire or de-escalation in the Middle East could quickly ease fuel costs and remove the main earnings drag; strong travel demand/record revenue could also keep sentiment positive regardless of margins.",
+   "source_urls": [
+    "https://www.malaymail.com/news/singapore/2026/11/11/singapore-airlines-first-half-profit-plunges-44pc-to-s134m-on-higher-fuel-costs/242889"
+   ],
+   "priceAtPick": 7.17
+  },
+  {
+   "symbol": "U11.SI",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "months",
+   "thesis": "UOB is the weakest of the three Singapore banks technically (down 7.2% over 1 month, 9.2% below its 50-day average and 5% below its 200-day average) and sentiment is the most negative of the group (9 of 16 analysts at Hold, only 5 Buy). While UOB itself hasn't reported yet this cycle in the news feed, the read-through from DBS's Q3 miss (trading income down 65% on volatile equity markets) suggests sector-wide margin/trading headwinds that likely also pressure UOB.",
+   "news": "DBS Q3 net profit fell 5% to S$2.81b, missing estimates, as markets trading income fell 65% amid volatile equity conditions (Bloomberg, 2026-11-05); OCBC was the only SG bank to beat Q3 estimates (Time, 2026-11-06), implying UOB/DBS faced a tougher backdrop.",
+   "risks": "This is an indirect, sector read-through rather than UOB-specific news, so there's a real chance UOB's own results differ; a rebound in regional equity trading volumes or lower-for-longer narrative on rates could lift all SG banks together.",
+   "source_urls": [
+    "https://www.bloomberg.com/news/articles/2026-11-04/dbs-profit-misses-estimates-on-trading-income-names-lim-chair",
+    "https://time.news/ocbc-q3-profit-rises-3-to-s2-04-billion-beats-expectations/"
+   ],
+   "priceAtPick": 37.58
   },
   {
    "symbol": "O39.SI",
    "stance": "long",
    "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "OCBC was the only one of the three Singapore banks to beat Q3 estimates, posting a record nine-month net profit of S$6.24bn, up 10% y/y, while DBS and UOB both missed. This earnings-quality divergence, combined with OCBC still trading ~10.7% below its 52-week high and above its 200-day average, supports relative outperformance versus peer banks over the coming weeks as the market digests the Q3 season.",
-   "news": "OCBC Q3 2026 net profit of S$2.04bn beat the S$2.01bn consensus and record 9M profit of S$6.24bn, up 10% y/y (2026-11-06).",
-   "risks": "Banks are trading on compressed trading-income and rate-sensitive margins; a further leg down in regional rates or a broad STI selloff (STI -2.2% last week) could drag OCBC down with the sector regardless of its earnings beat.",
+   "horizon": "months",
+   "thesis": "OCBC was the only one of the three Singapore banks to beat Q3 estimates, with record banking operating profit on strong loan growth and trading income - the opposite of the margin/trading pressure that hit DBS and UOB. This relative earnings resilience should support OCBC outperforming its SG bank peers even as the whole sector sits below its 52-week highs.",
+   "news": "OCBC posted Q3 net profit of S$2.04b, up 3% YoY, beating the S$2.00b consensus, with record banking profit of S$1.90b (Time, 2026-11-06).",
+   "risks": "OCBC is still down ~9% from its 52-week high and trades below its 50-day average, so broader SG bank sector weakness (rate cuts, equity market volatility) could still drag it down regardless of its relative earnings strength.",
    "source_urls": [
-    "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/"
+    "https://time.news/ocbc-q3-profit-rises-3-to-s2-04-billion-beats-expectations/"
    ],
    "priceAtPick": 28.82
   },
   {
-   "symbol": "D05.SI",
-   "stance": "short",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "DBS missed Q3 consensus with net profit down 5% y/y to S$2.81bn, driven by a 65% collapse in markets trading income — a clear earnings quality problem. The stock is already underperforming, down 5.9% versus its 50-day average and -7.2% over the past month, suggesting the market is still repricing lower after the miss.",
-   "news": "DBS Q3 2026 net profit fell 5% to S$2.81bn, missing the ~S$2.90bn consensus, with markets trading income down 65% (2026-11-03).",
-   "risks": "DBS retains a strong consensus buy skew (11 buy/5 hold/1 sell) with 10%+ implied upside to target; any stabilization in trading income or a dividend/buyback announcement could quickly reverse the post-earnings weakness.",
-   "source_urls": [
-    "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/"
-   ],
-   "priceAtPick": 70.97
-  },
-  {
-   "symbol": "U11.SI",
-   "stance": "short",
-   "conviction": "low",
-   "horizon": "weeks",
-   "thesis": "UOB's Q3 profit missed consensus by a wide margin (S$1.25bn vs S$1.38bn expected) and fell 15% q/q, triggering an immediate ~5% share price drop. Momentum remains weak — the stock is down 7.2% over the month, 9.9% over three months, and trading below both its 50- and 200-day averages, reflecting ongoing disappointment with the bank's trajectory despite a flattering year-on-year comparison.",
-   "news": "UOB Q3 2026 profit of S$1.25bn missed the S$1.38bn consensus and fell 15% q/q; shares fell ~5% on the results (2026-11-04).",
-   "risks": "Analyst base is split (5 buy/9 hold/2 sell) with ~10% implied upside to target, and any dividend surprise or guidance reset at the next update could support the stock; low conviction given mixed sell-side views.",
-   "source_urls": [
-    "https://thekopinotes.com/articles/news/uob-q3-2026-results-dividend/"
-   ],
-   "priceAtPick": 37.58
-  },
-  {
-   "symbol": "BN4.SI",
+   "symbol": "AAPL",
    "stance": "long",
-   "conviction": "low",
+   "conviction": "medium",
    "horizon": "months",
-   "thesis": "Keppel is signaling it will return 10-15% of asset-monetisation proceeds (already ~S$940m realized, another ~S$600m targeted by year end) as special dividends, a shareholder-friendly catalyst layered on top of a heavily discounted valuation — analysts see ~28% upside to consensus target with 12 of 15 rating it a buy. The stock's weak recent momentum (down ~5% over a month, 24.8% below 52-week high) may already price in much of the bad news, leaving room for a re-rating once a specific special dividend is declared.",
-   "news": "Keppel plans to pay out 10-15% of asset monetisation proceeds as FY2026 special dividends, though none has been declared yet; ~S$940m already realized with ~S$600m more targeted by end-2026 (2026-11-11).",
-   "risks": "No special dividend has actually been declared yet, so this is a show-me story; continued macro weakness in Singapore property/industrials or delays in monetisation could keep the stock range-bound or falling further given its current downtrend (below both 50- and 200-day averages).",
+   "thesis": "Apple posted a solid fiscal Q4 beat (revenue +12% YoY, EPS beat) with record iPhone and Services revenue, and just received a fresh analyst upgrade (China Renaissance Hold→Buy, target 425). The stock is near its 52-week high and well above its 50- and 200-day averages, showing a durable uptrend that contrasts with the volatility hitting other mega-cap tech names (NVDA, GOOGL, META) this week.",
+   "news": "Apple Q4 FY2026 revenue $114.5b (+12% YoY), EPS $2.10 beat $1.99 consensus, record iPhone and Services revenue (SEC 8-K, 2026-11-02); China Renaissance upgraded to Buy on 2026-11-11.",
+   "risks": "Apple's own consensus price target (344.6) is now slightly below the current price, meaning further upside may be limited near-term, and any broad tech-sector selloff triggered by the NVDA governance scandal could still drag Apple down with it despite its relative strength.",
    "source_urls": [
-    "https://thesmartinvestor.com.sg/3-temasek-linked-sgx-stocks-rewarding-investors-with-special-dividends/"
+    "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/a8-kex991q4202609262026.htm"
    ],
-   "priceAtPick": 9.91
+   "priceAtPick": 355.63
+  },
+  {
+   "symbol": "QQQ",
+   "stance": "short",
+   "conviction": "low",
+   "horizon": "days",
+   "thesis": "The Nasdaq-100 is heavily weighted toward mega-cap tech including Nvidia, Microsoft, Alphabet and Meta, several of which are showing fresh weakness (NVDA governance scandal, MSFT -4.4% in a day, GOOGL down 17% over a month). QQQ is already 9% below its 52-week high and below both its 50- and 200-day averages, and incremental bad news from any single mega-cap can disproportionately weigh on the index over the next few trading sessions, especially heading into Nvidia's Nov 17 earnings.",
+   "news": "Nvidia board turmoil reported Nov 11 (CNBC); Microsoft shares fell 4.4% same session per price data, reflecting broad mega-cap tech weakness.",
+   "risks": "This is a low-conviction, short-horizon tactical view based on sector composition rather than QQQ-specific news; a quick resolution of the Nvidia situation or strong earnings from other components could reverse the index quickly, and QQQ is a diversified basket that can absorb single-stock shocks.",
+   "source_urls": [
+    "https://www.cnbc.com/2026/11/11/nvidia-jensen-huang-affair-employee.html"
+   ],
+   "priceAtPick": 690.38
   }
  ],
  "sources": [
   {
-   "url": "https://www.investing.com/news/stock-market-news/nvidia-stock-gets-a-rare-wall-street-downgrade-on-supply-issues-5018471",
-   "title": "Nvidia stock gets a rare Wall Street downgrade on supply issues By Investing.com",
+   "url": "https://sg.news.yahoo.com/nvidia-preparing-oust-ceo-jensen-002910603.html",
+   "title": "Nvidia preparing to oust CEO Jensen Huang: US media - Yahoo News Singapore",
    "age": "0 days ago"
   },
   {
-   "url": "https://uk.investing.com/news/stock-market-news/nvidia-stock-gets-a-rare-wall-street-downgrade-on-supply-issues-4974400",
-   "title": "Nvidia stock gets a rare Wall Street downgrade on supply issues By Investing.com",
+   "url": "https://sg.finance.yahoo.com/news/nvidia-preparing-oust-ceo-jensen-223546395.html",
+   "title": "Nvidia is preparing to oust CEO Jensen Huang, WSJ reports",
    "age": "0 days ago"
   },
   {
-   "url": "https://uk.investing.com/news/stock-market-news/baird-downgrades-nvidia-stock-rating-on-data-center-visibility-93CH-4974356",
-   "title": "Baird downgrades Nvidia stock rating on data center visibility By Investing.com",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/instant-view-nvidia-preparing-oust-231904289.html",
+   "title": "Instant View: Nvidia is preparing to oust CEO Jensen Huang, WSJ reports",
    "age": "0 days ago"
   },
   {
-   "url": "https://ph.investing.com/news/stock-market-news/nvidia-stock-gets-a-rare-wall-street-downgrade-on-supply-issues-2692088",
-   "title": "Nvidia stock gets a rare Wall Street downgrade on supply issues By Investing.com",
+   "url": "https://sfstandard.com/2026/11/11/jensen-huang-reportedly-fired-nvidia-board-affair-direct-report-alleged/",
+   "title": "Reports: Nvidia CEO Jensen Huang to be ousted after affairs with spy, subordinate",
    "age": "0 days ago"
   },
   {
-   "url": "https://au.investing.com/news/stock-market-news/nvidia-stock-gets-a-rare-wall-street-downgrade-on-supply-issues-4761888",
-   "title": "Nvidia stock gets a rare Wall Street downgrade on supply issues By Investing.com",
+   "url": "https://fortune.com/2026/11/11/nvidia-oust-jensen-huang-spy-affairs/",
+   "title": "Report: Nvidia preparing to oust CEO Jensen Huang after affair with woman U.S. officials deemed a Chinese spy",
    "age": "0 days ago"
   },
   {
-   "url": "https://ca.investing.com/news/stock-market-news/nvidia-stock-gets-a-rare-wall-street-downgrade-on-supply-issues-4949654",
-   "title": "Wall Street analysts turn cautious on Nvidia amid supply issues, Huang uncertainty By Investing.com",
+   "url": "https://www.cnbc.com/2026/11/11/nvidia-jensen-huang-affair-employee.html",
+   "title": "Nvidia prepares to oust Jensen Huang, WSJ reports — stock sinks",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000052/nvda-20260426.htm",
-   "title": "NVIDIA CORP - Form 10-Q - FY2026",
+   "url": "https://en.wikipedia.org/wiki/Nvidia_GTC",
+   "title": "Nvidia GTC",
    "age": null
   },
   {
-   "url": "https://cryptobriefing.com/baird-cuts-nvidia-price-target-to-200-cites-ai-slowdown-concerns/",
-   "title": "Baird cuts Nvidia price target to $200, cites AI slowdown concerns",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.newsbytesapp.com/news/business/baird-cuts-nvidia-target-to-200-and-downgrades-to-neutral/tldr",
-   "title": "Baird cuts NVIDIA target to $200 and downgrades to neutral",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.alphaspread.com/security/sgx/c6l/investor-relations/earnings-call/q2-2026",
-   "title": "C6L Q2-2026 Earnings Call - Alpha Spread",
+   "url": "https://en.wikipedia.org/wiki/Jensen_Huang",
+   "title": "Jensen Huang",
    "age": null
   },
   {
-   "url": "https://finance.yahoo.com/quote/SIA1.F/earnings/SIA1.F-Q2-2026-earnings_call-363918.html",
-   "title": "Singapore Airlines Ltd. R (SIA1.F) Q2 FY2026 earnings call transcript",
-   "age": null
-  },
-  {
-   "url": "https://finance.yahoo.com/quote/SINGF/earnings/SINGF-Q2-2026-earnings_call-363918.html",
-   "title": "Singapore Airlines Ltd. (SINGF) Q2 FY2026 earnings call transcript",
+   "url": "https://fortune.com/tag/nvidia/page/7",
+   "title": "fortune.com",
    "age": null
   },
   {
@@ -135,49 +133,54 @@
    "age": "0 days ago"
   },
   {
-   "url": "https://www.bloomberg.com/news/articles/2026-11-11/singapore-air-returns-to-profit-as-strong-demand-counters-costs",
-   "title": "Singapore Air Returns to Profit on Travel, Cargo Demand - Bloomberg",
+   "url": "https://www.asiaone.com/money/singapore-airlines-fy2026-2027-first-half-results",
+   "title": "SIA posts record $11.3b half-year revenue, but profits fall 43.9% amid high jet fuel prices, Money News - AsiaOne",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.singaporeair.com/content/dam/sia/web-assets/pdfs/about-us/information-for-investors/financial-results/slide-q2fy2526.pdf",
-   "title": "SIA Group Analyst/Media Briefing",
-   "age": "362 days ago"
+   "url": "https://www.flightglobal.com/airlines/2026/11/sia-half-year-profit-declines-as-cost-pressures-weigh-on-revenue-gains/",
+   "title": "SIA half-year profit declines as cost pressures weigh on revenue gains - FlightGlobal",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.minichart.com.sg/2026/11/11/singapore-airlines-1h-fy2026-27-record-s11-30bn-revenue-net-profit-falls-43-9-as-jet-fuel-surges-86-7/",
-   "title": "Singapore Airlines 1H FY2026/27: Record S$11.30bn Revenue, Net Profit Falls 43.9% as Jet Fuel Surges 86.7%",
+   "url": "https://asia.nikkei.com/business/transportation/singapore-airlines-takes-44-profit-hit-in-1st-half-on-soaring-fuel-costs",
+   "title": "Singapore Airlines takes 44% profit hit in 1st half on soaring fuel costs - Nikkei Asia",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Vistara",
+   "title": "Vistara",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/singy/earnings",
-   "title": "www.tipranks.com",
+   "url": "https://www.thestar.com.my/business/business-news/2026/11/11/singapore-airlines039-interim-profit-nearly-halves-on-higher-fuel-costs",
+   "title": "Singapore Airlines' interim profit nearly halves on higher fuel costs",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Singapore_Airlines",
+   "title": "Singapore Airlines",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/stocks/sg:c6l/stock-analysis",
-   "title": "stock analysis",
-   "age": null
+   "url": "https://aviationtoday.in/civilaviation/airlines/singapore-airlines-profit-falls-43-9-as-fuel-costs-surge-amid-record-s11-3b-revenue/",
+   "title": "Singapore Airlines Profit Falls 43.9% As Fuel Costs Surge Amid Record S$11.3B Revenue",
+   "age": "0 days ago"
   },
   {
-   "url": "https://www.thestar.com.my/business/business-news/2026/11/09/dbs-and-uob-shares-slide-after-weak-3q-results",
-   "title": "DBS and UOB shares slide after weak 3Q results",
-   "age": "2 days ago"
+   "url": "https://www.klsescreener.com/v2/news/view/1825743/Singapore_Airlines_039_first_half_profit_drops_43_9pct_despite_record_RM35_9bil_revenue",
+   "title": "Singapore Airlines' first-half profit drops 43.9pct despite record RM35.9bil revenue",
+   "age": "0 days ago"
   },
   {
-   "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
-   "title": "DBS and UOB Miss, OCBC Beats: What Q3 2026 Results Say About Singapore Banks",
-   "age": "5 days ago"
+   "url": "https://sg.finance.yahoo.com/news/learn-why-bull-case-ocbc-191708686.html",
+   "title": "Learn Why The Bull Case For OCBC Bank Shares Could Change Following Q3 Earnings Results",
+   "age": "0 days ago"
   },
   {
-   "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
-   "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
-   "age": "8 days ago"
-  },
-  {
-   "url": "https://thekopinotes.com/articles/news/uob-q3-2026-results-dividend/",
-   "title": "UOB Q3 2026 Results: 182% Profit Surge But Misses Forecasts",
-   "age": "2 days ago"
+   "url": "https://growbeansprout.com/ocbc-3q26-profit-dividend",
+   "title": "OCBC reports 3% rise in 3Q26 net profit and upgrades 2026 guidance: Our Quick Take - Growbeansprout.com",
+   "age": "6 days ago"
   },
   {
    "url": "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/",
@@ -185,125 +188,135 @@
    "age": "4 days ago"
   },
   {
-   "url": "https://thekopinotes.com/articles/news/singapore-banks-q3-2026-valuation-buy/",
-   "title": "Singapore Banks After Q3 2026: Are DBS, OCBC & UOB Cheap Enough to Buy? - The Kopi Notes",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://sg.headtopics.com/news/dbs-ocbc-uob-shares-drop-after-q3-results-sats-hit-by-89654032",
-   "title": "DBS, OCBC, UOB shares drop after Q3 results; SATS hit by work pass concerns: Markets this week",
-   "age": "3 days ago"
-  },
-  {
-   "url": "https://www.spglobal.com/market-intelligence/en/news-insights/articles/2023/10/singapore-banks-net-income-growth-to-level-off-in-q3-2023-as-margins-peak-78034499",
-   "title": "Featured Topics",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hans/news/1189208007",
-   "title": "DBS, OCBC Expected To Post Mixed Q1 2025 Earnings: Analysts",
-   "age": null
-  },
-  {
-   "url": "https://pro.thestreet.com/stock-market-today",
-   "title": "Stock Market Today",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://upstox.com/news/market-news/us-stocks/dow-jones-s-and-p-500-nasdaq-futures-hint-positive-opening-on-nov-11-core-weave-tech-stocks-in-focus/article-203309/",
-   "title": "Dow Jones, S&P 500, Nasdaq futures hint positive opening on Nov 11; CoreWeave, tech stocks in focus",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/10/stock-market-today-live-updates.html",
-   "title": "Stock market today: Live updates",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.benzinga.com/markets/equities/26/11/63132394/stock-market-today-dow-jones-sp-500-futures-rise-as-bessent-urges-us-china-to-de-risk-crwv-rgti-fnv-in-focus",
-   "title": "Stock Market Today: Dow Jones, S&P 500 Futures Rise as Bessent Urges US-China to 'De-Risk' — CRWV, RGTI, - Benzinga",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://investrade.com/morning-preview-november-11-2026/",
-   "title": "Morning Preview: November 11, 2026 - Investrade",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://nordfx.com/market-news/market-pulse-november-11-2026",
-   "title": "Market Pulse",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://journalarta.com/en/2026/11/11/stock-market-today-sp-500-slips-0-38-to-7520-93-and-nasdaq-falls-0-74-as-10-year-yield-rises-to-4-98/",
-   "title": "Stock Market Today: S&P 500 Slips 0.38%, Nasdaq Falls 0.74% — JournalArta Global",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://trefis.com/stock/spy/articles/624200/s-p-500-down-on-hot-cpi-sell-or-hold/2026-11-11",
-   "title": "S&P 500 Down On Hot CPI. Sell Or Hold?",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/news/live/stock-market-today-sp-500-dow-rise-to-end-a-rocky-month-nasdaq-snaps-7-month-win-streak-180355656.html",
-   "title": "Stock market today: S&P 500, Dow rise to end a rocky month, Nasdaq snaps 7-month win streak",
-   "age": null
-  },
-  {
-   "url": "https://thesmartinvestor.com.sg/3-temasek-linked-sgx-stocks-rewarding-investors-with-special-dividends/",
-   "title": "3 Temasek-Linked SGX Stocks Rewarding Investors With Special Dividends",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://sg.news.yahoo.com/3-temasek-linked-sgx-stocks-093000997.html",
-   "title": "3 Temasek-Linked SGX Stocks Rewarding Investors With Special Dividends - Yahoo News Singapore",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.digrin.com/stocks/detail/A7RU.SI/",
-   "title": "Keppel Infrastructure Trust (A7RU.SI) Dividends",
-   "age": null
-  },
-  {
-   "url": "https://www.keppel.com/investor-relations/financial-results-and-business-updates/",
-   "title": "Financial Results & Business Updates - Keppel - Global asset manager and operator creating solutions for a sustainable future",
-   "age": "84 days ago"
-  },
-  {
-   "url": "https://growbeansprout.com/quote/BN4.SI/dividend",
-   "title": "Keppel Ltd. (BN4.SI) Dividends - Growbeansprout.com",
+   "url": "https://time.news/ocbc-q3-profit-rises-3-to-s2-04-billion-beats-expectations/",
+   "title": "OCBC Q3 Profit Rises 3% to S$2.04 Billion, Beats Expectations - Time News",
    "age": "5 days ago"
   },
   {
-   "url": "https://growbeansprout.com/quote/K71U.SI/dividend",
-   "title": "Keppel REIT (K71U.SI) Dividends - Growbeansprout.com",
-   "age": "9 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-reaches-record-nine-month-profit-as-q3-earnings-rise/70468430",
+   "title": "OCBC stock reaches record nine-month profit as Q3 earnings rise",
+   "age": "5 days ago"
   },
   {
-   "url": "https://links.sgx.com/FileOpen/Keppel%20-%20Proposed%20Special%20Dividend.ashx?App=Announcement&FileID=874196",
-   "title": "1 This Announcement is not for release, ...",
-   "age": "281 days ago"
+   "url": "https://www.ad-hoc-news.de/boerse/news/corporate-news/ocbc-stock-bank-reports-higher-q3-profit-lifts-loan-outlook/70470357",
+   "title": "OCBC stock: Bank reports higher Q3 profit, lifts loan outlook",
+   "age": "5 days ago"
   },
   {
-   "url": "https://www.minichart.com.sg/2026/02/04/keppel-ltd-announces-proposed-special-dividend-in-cash-and-keppel-reit-units-to-reward-shareholders-in-2026/",
-   "title": "Keppel Ltd. Announces Proposed Special Dividend in Cash and Keppel REIT Units to Reward Shareholders in 2026",
-   "age": "279 days ago"
-  },
-  {
-   "url": "https://www.itiger.com/hans/news/1157657446",
-   "title": "4 Temasek-Owned Singapore Blue-Chip Stocks with Solid Long-Term Prospects",
+   "url": "https://www.tipranks.com/stocks/ovchf/earnings",
+   "title": "www.tipranks.com",
    "age": null
+  },
+  {
+   "url": "https://www.tradingview.com/symbols/SWB-OCBA",
+   "title": "SWB OCBA",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/SG:O39/earnings",
+   "title": "www.tipranks.com",
+   "age": null
+  },
+  {
+   "url": "https://www.dzrh.com.ph/post/singapores-dbs-third-quarter-net-profit-falls-5percent-on-year-misses-forecasts",
+   "title": "Singapore's DBS third-quarter net profit falls 5% on year, misses forecasts",
+   "age": "7 days ago"
+  },
+  {
+   "url": "https://www.manilatimes.net/2026/11/06/business/foreign-business/singapores-dbs-warns-of-global-uncertainty/2463263",
+   "title": "Singapore’s DBS warns of global uncertainty",
+   "age": "6 days ago"
+  },
+  {
+   "url": "https://www.dbs.com/media/news-list.page",
+   "title": "News List",
+   "age": "275 days ago"
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-11-04/dbs-profit-misses-estimates-on-trading-income-names-lim-chair",
+   "title": "DBS Profit Misses Estimates on Trading Drop, Names Lim Chair - Bloomberg",
+   "age": "6 days ago"
+  },
+  {
+   "url": "https://www.dbs.com/media/default.page",
+   "title": "Recent Press Release, Press Room",
+   "age": "98 days ago"
+  },
+  {
+   "url": "https://www.dbs.com/default.page",
+   "title": "DBS: Trusted as the World’s Best Bank",
+   "age": "42 days ago"
+  },
+  {
+   "url": "https://www.thestar.com.my/business/business-news/2026/11/05/singapore039s-dbs-flags-uncertain-outlook-as-market-volatility-drives-q3-profit-miss",
+   "title": "Singapore's DBS flags uncertain outlook as market volatility drives Q3 profit miss",
+   "age": "6 days ago"
+  },
+  {
+   "url": "https://www.thesingaporeaninvestor.sg/2026/11/05/dbs-group-holdings-limited-sgx-d05-3q-9m-fy2026-business-update-review/",
+   "title": "DBS Group Holdings Limited (SGX: D05): 3Q & 9M FY2026 Business Update Review",
+   "age": "6 days ago"
+  },
+  {
+   "url": "https://en.wikipedia.org/wiki/Peter_Seah",
+   "title": "Peter Seah",
+   "age": null
+  },
+  {
+   "url": "https://www.marketbeat.com/stocks/NASDAQ/AAPL/earnings/",
+   "title": "Apple (AAPL) Earnings Date and Reports 2026 $AAPL",
+   "age": "10 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/a8-kex991q4202609262026.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/article/apple-just-made-twice-as-much-free-cash-as-microsoft-meta-alphabet-and-amazon-combined-chart-of-the-day-110000928.html",
+   "title": "Apple just made twice as much free cash as Microsoft, Meta, Alphabet and Amazon combined: Chart of the Day",
+   "age": "8 days ago"
+  },
+  {
+   "url": "https://www.trefis.com/stock/aapl/articles/621479/apple-earnings-ahead-what-past-reactions-say-about-the-stock/2026-10-30",
+   "title": "Apple Earnings Ahead: What Past Reactions Say About The Stock",
+   "age": "12 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000026/aapl-20260926.htm",
+   "title": "Apple Inc. - Form 10-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000024/aapl-20261102.htm",
+   "title": "Apple Inc. - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0000320193/000032019326000020/aapl-20260627.htm",
+   "title": "Apple Inc. - Form 10-Q - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://sentisense.ai/blog/big-tech-earnings-this-week/",
+   "title": "Big Tech Earnings This Week: Microsoft, Alphabet and Amazon Report on October 28 and 29, 2026",
+   "age": "5 days ago"
+  },
+  {
+   "url": "https://247wallst.com/investing/2026/11/06/apple-vs-alphabet-the-midterms-just-separated-them-from-the-mag-7-pack/",
+   "title": "Apple Vs. Alphabet: The Midterms Just Separated Them from The Mag 7 Pack - 24/7 Wall St.",
+   "age": "5 days ago"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 52264,
-  "output": 7078,
+  "input": 48261,
+  "output": 5775,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1655
+  "costUsd": 0.1552
  },
- "createdAt": "2026-11-11T13:01:18.099Z"
+ "createdAt": "2026-11-12T01:01:26.431Z"
 }
