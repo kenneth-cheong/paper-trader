@@ -1,82 +1,85 @@
 {
- "market_summary": "Markets are digesting a shock leadership crisis at Nvidia (CEO Jensen Huang resigned abruptly on Nov 12 amid a scandal, with CFO Colette Kress stepping in as interim CEO), triggering a wave of same-day analyst downgrades and a stock slide, even as broader US futures/indices (SPY, QQQ) stabilized and bounced the next session. In Singapore, bank earnings were mixed (OCBC beat, DBS and UOB missed) while Singtel posted a strong H1 beat with raised guidance and Singapore Airlines' profit nearly halved despite record revenue, even as its share price kept rallying. Rate-sensitive and growth tech (GOOGL, AAPL) are seeing a modest bounce after recent drawdowns, while mega-cap growth sentiment overall remains shaky given Meta and Microsoft's recent pullbacks.",
+ "market_summary": "Markets are jittery after Nvidia founder Jensen Huang's abrupt resignation amid a personal scandal wiped $450B off its market cap and triggered a wave of analyst downgrades, dragging US indices and tech-heavy benchmarks lower alongside rising Treasury yields (~5.1%) and Iran-related geopolitical risk. In Singapore, bank earnings diverged sharply - OCBC beat on record profit while DBS and UOB missed on NIM compression - and Singtel rallied on raised FY2027 guidance even as SIA's profit nearly halved on surging fuel costs despite record revenue. Overall risk sentiment is cautious heading into NVDA's Nov 17 earnings and US PPI data, with elevated volatility in event-driven names.",
  "picks": [
   {
    "symbol": "NVDA",
    "stance": "short",
    "conviction": "high",
-   "horizon": "weeks",
-   "thesis": "CEO Jensen Huang's abrupt resignation amid scandal has triggered a near-unprecedented single-day wave of sell-side downgrades (at least 9 firms cutting ratings/targets on Nov 12), signaling a serious loss of confidence in leadership continuity right as the stock already sits -30% from its 52w high and -27% over 1 month. With Q3 earnings due Nov 17, volatility and further de-rating risk are elevated while an interim CFO-CEO transition creates strategic uncertainty into a critical AI capex cycle.",
-   "news": "Nvidia CEO Jensen Huang resigned on 2026-11-12 following an affairs scandal; CFO Colette Kress named interim CEO; shares fell 4.3% and at least 9 banks downgraded ratings/cut targets same day (SEC 8-K filing and PBS NewsHour, 2026-11-12).",
-   "risks": "Nvidia fundamentals and AI demand remain intact; if Kress stabilizes the narrative quickly or Nov 17 earnings beat strongly, the stock could snap back sharply given how oversold it already is (analyst consensus target still implies +86% upside, reflecting prior bullishness that may reassert).",
+   "horizon": "days",
+   "thesis": "CEO scandal has triggered a confidence crisis: nine sell-side downgrades hit in a single day (Nov 12), stock is down 4.3% on the day and nearly 25% over the month on 4.5x normal volume. Leadership vacuum (interim CFO-CEO) plus an earnings report in 4 days creates a high-risk window for further downside before the dust settles.",
+   "news": "Jensen Huang resigned as CEO on 2026-11-12 after reports of an extramarital affair involving an alleged Chinese spy; CFO Colette Kress named interim CEO. Nine analysts cut ratings/targets the same day (Melius, Craig-Hallum, StoneX, William Blair, Keybanc, Bernstein, Evercore, Oppenheimer, Baird).",
+   "risks": "Stock is already down ~30% from 52-week highs and extremely oversold; a stabilizing management statement, reassurance from major customers (Singtel already said deliveries are unaffected), or a strong Nov 17 earnings beat could spark a sharp short-covering rally.",
    "source_urls": [
     "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000082/nvidiaannouncesceotransiti.htm",
-    "https://www.pbs.org/newshour/nation/what-we-know-after-jensen-huangs-resignation-as-nvidias-ceo"
+    "https://www.businesstimes.com.sg/companies-markets/singtel-says-nvidia-ceo-jensen-huangs-exit-has-not-hit-its-ai-chip-deliveries"
    ],
    "priceAtPick": 166.19
   },
   {
    "symbol": "Z74.SI",
    "stance": "long",
-   "conviction": "medium",
+   "conviction": "high",
    "horizon": "weeks",
-   "thesis": "Singtel's underlying H1 FY2027 net profit rose 10% to S$1.49bn and management raised full-year guidance, yet the stock barely moved (+0.2%), suggesting the market hasn't fully priced the improved outlook. Analyst sentiment is overwhelmingly positive (13 buy / 2 hold / 0 sell) with consensus target implying ~26% upside, and the stock trades well below its 52-week high.",
-   "news": "Singtel reported H1 FY2027 underlying net profit up 10% to S$1.49bn and raised FY2027 guidance, reported 2026-11-12 (Business Times); note headline net profit fell due to lack of one-off divestment gains versus prior year.",
-   "risks": "Headline net profit fell 55% y/y due to the absence of prior-year divestment gains, which could cause near-term confusion or a negative reaction if investors focus on the headline figure rather than underlying growth; regional telco competition and associate (Bharti, Telkomsel) weakness could also cap upside.",
+   "thesis": "Singtel raised FY2027 EBIT guidance to mid-to-high single digits on the back of 10% H1 underlying profit growth, driven by NCS, Digital InfraCo and Optus. Management also explicitly confirmed no disruption to AI chip deliveries despite the Nvidia CEO shakeup, removing a key overhang. Analyst sentiment is overwhelmingly positive (13 buy/2 hold out of 16) with ~28% implied upside to consensus target.",
+   "news": "Singtel H1 underlying profit +10% to S$1.49B and raised FY2027 guidance (2026-11-13); separately confirmed Nvidia CEO exit has not hit AI chip deliveries (2026-11-13).",
+   "risks": "Reported net profit actually fell 55% due to non-repeat of divestment gains, which could be misread negatively; stock already saw elevated volume (3.3x normal) on earnings day which could mean the reaction is already priced in, and broader market weakness could cap gains.",
    "source_urls": [
-    "https://www.businesstimes.com.sg/companies-markets/singtel-h1-net-profit-falls-55-s1-54-billion-lack-divestment-gains-underlying-profit-10"
+    "https://technode.global/2026/11/13/singtel-raises-ebit-guidance-as-underlying-profit-up-10-percent-to-1-16-billion-in-first-half/",
+    "https://www.businesstimes.com.sg/companies-markets/singtel-says-nvidia-ceo-jensen-huangs-exit-has-not-hit-its-ai-chip-deliveries"
    ],
-   "priceAtPick": 4.15
+   "priceAtPick": 4.11
   },
   {
    "symbol": "C6L.SI",
    "stance": "short",
    "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "Singapore Airlines' H1 FY2026/27 profit fell 43.9% to S$134m despite record revenue, pointing to margin compression from costs/competition, yet the stock has rallied +11.2% over the past month and sits near its 52-week high. Analyst consensus is tepid (1 buy, 10 hold, 3 sell) with an implied downside of -3.3% to target, suggesting the rally has outpaced fundamentals.",
-   "news": "SIA reported H1 FY2026/27 profit down 43.9% y/y to S$134m on record revenue, reported 2026-11-11 (AsiaOne).",
-   "risks": "Elevated travel demand, fuel cost relief, or a favorable dividend/buyback announcement could extend the rally; low analyst coverage conviction on the short side (only 3 sells) means consensus doesn't strongly support a sharp drop.",
+   "thesis": "SIA's H1 profit plunged 44% as jet fuel costs surged 86.7% amid Middle East conflict, yet the stock is still up 9.5% over the past month and trades above both its 50- and 200-day moving averages. Analyst sentiment is weak (only 1 buy vs 10 hold/3 sell) with consensus target implying slightly negative upside, suggesting the share price has run ahead of deteriorating fundamentals.",
+   "news": "SIA reported record H1 revenue of S$11.3B but net profit fell 44% to S$134M as fuel bill rose 56% to S$4B on Middle East-driven price spikes (2026-11-11).",
+   "risks": "Fuel prices could ease if Middle East tensions de-escalate, and strong passenger volume growth (+5% to 21.8M) shows demand resilience that could support the stock despite margin pressure.",
    "source_urls": [
-    "https://www.asiaone.com/money/singapore-airlines-fy2026-2027-first-half-results"
+    "https://karryon.com.au/industry-news/airline/singapore-airlines-h1fy27/"
    ],
-   "priceAtPick": 7.25
-  },
-  {
-   "symbol": "GOOGL",
-   "stance": "long",
-   "conviction": "medium",
-   "horizon": "weeks",
-   "thesis": "Alphabet has pulled back sharply (-25.8% from 52w high, -15.6% over 1 month) despite near-unanimous bullish analyst coverage (53 buy, 5 hold, 0 sell) and a consensus target implying +34% upside. The stock jumped +3.9% in the latest session, potentially marking the start of a reversal from oversold technical levels (price well below both 50- and 200-day moving averages).",
-   "news": "No fresh company-specific catalyst in the provided news; move reflects a broader growth-stock de-rating also seen in Meta, offset by one recent analyst note (Citizens Market Outperform→Market Perform on 2026-10-29, now 10+ trading days old).",
-   "risks": "If the sell-off in high-multiple AI/growth names (mirroring Nvidia's leadership-driven slide) continues, GOOGL could retest lows; regulatory/antitrust overhangs for Alphabet remain a persistent risk not captured in this news set.",
-   "source_urls": [
-    "https://www.cnbc.com/2026/11/12/stock-market-today-live-updates.html"
-   ],
-   "priceAtPick": 298.7
+   "priceAtPick": 7.16
   },
   {
    "symbol": "U11.SI",
    "stance": "short",
-   "conviction": "low",
+   "conviction": "medium",
    "horizon": "weeks",
-   "thesis": "UOB missed Q3 2026 earnings expectations (vs. OCBC which beat), and it is the weakest of the three Singapore banks technically — down 16% from its 52-week high, trading below both its 50- and 200-day moving averages, with the most negative 1-month and 3-month returns of the group. Analyst sentiment is also the most lukewarm (5 buy, 9 hold, 2 sell).",
-   "news": "UOB missed Q3 2026 earnings expectations while OCBC beat, reported 2026-11-06/11 (thefinance.sg sector roundup).",
-   "risks": "This is sector-wide weakness shared with DBS/OCBC tied to broader rate and margin pressure, not UOB-specific; a rebound in regional banking sentiment or a dividend surprise could lift the stock alongside peers.",
+   "thesis": "UOB missed Q3 estimates on continued net interest margin compression from rising deposit costs, and unlike DBS/OCBC it trades below its 200-day moving average (-4.6%) signaling a weaker longer-term trend. Analyst sentiment is the most lukewarm of the three banks (5 buy/9 hold/2 sell) and the stock is down 8%+ over both 1-month and 3-month windows.",
+   "news": "UOB Q3 2026 profit missed expectations amid NIM compression from rising deposit costs and elevated funding expenses (2026-11-04); shares slid alongside DBS after weak 3Q results (2026-11-09).",
+   "risks": "Banking sector could re-rate broadly if rate-cut expectations shift, or if NIM pressure proves transitory; being the laggard also means it could see mean-reversion buying if sentiment stabilizes.",
    "source_urls": [
-    "https://thefinance.sg/2026/11/11/dbs-vs-ocbc-vs-uob-which-singapore-bank-stands-out-for-income-after-the-pullback-and-3q-2026-results/"
+    "https://www.thestar.com.my/business/business-news/2026/11/09/dbs-and-uob-shares-slide-after-weak-3q-results"
    ],
-   "priceAtPick": 37.77
+   "priceAtPick": 37.75
   },
   {
-   "symbol": "BN4.SI",
+   "symbol": "O39.SI",
    "stance": "long",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "OCBC was the only major Singapore bank to beat Q3 estimates, posting 3% YoY profit growth to a record 9-month net profit of S$6.24B, in contrast to DBS and UOB misses on NIM pressure. This relative outperformance plus still-reasonable valuation (7.1% implied upside, trading above its 200-day MA) makes it the preferred pick within the beaten-down SG banking sector.",
+   "news": "OCBC Q3 2026 net profit rose 3% YoY to S$2.04B, beating forecasts, with 9-month profit at a record S$6.24B, up 10% YoY (2026-11-06).",
+   "risks": "Sector-wide pressure on margins could still weigh on OCBC in coming quarters, and the stock is down 9.6% over 3 months and 11.6% off its 52-week high, showing it isn't immune to the broader bank sell-off.",
+   "source_urls": [
+    "https://thefinance.sg/2026/11/09/ocbc-beats-expectations-while-dbs-and-uob-miss-what-happened-in-3q-2026/"
+   ],
+   "priceAtPick": 28.53
+  },
+  {
+   "symbol": "QQQ",
+   "stance": "short",
    "conviction": "low",
-   "horizon": "months",
-   "thesis": "Keppel has been heavily sold off (-24.9% from 52w high, -11.5% over 3 months, trading well below both moving averages) yet retains a strongly bullish analyst base (12 buy, 2 hold, 1 sell) with consensus target implying ~28.5% upside, the highest in the SGX watchlist. This looks like a value/contrarian setup if the broader market stabilizes.",
-   "news": "No fresh company-specific catalyst in the provided news; this view rests mainly on technical oversold conditions and analyst target gap.",
-   "risks": "News is thin here — without a fresh catalyst, the stock could remain range-bound or drift lower further if broader SGX/REIT-adjacent sentiment stays weak; this is a lower-conviction, valuation-based call rather than an event-driven one.",
-   "source_urls": [],
-   "priceAtPick": 9.89
+   "horizon": "days",
+   "thesis": "Nasdaq-100 is heavily weighted toward mega-cap tech including Nvidia, and faces headwinds from the Nvidia leadership crisis, rising Treasury yields near 5.1%, an 85%-priced-in December Fed hike, and Iran-related geopolitical risk. QQQ is already down 5.6% over the month and trading below its 50-day MA, suggesting momentum is negative into a risk-heavy week with NVDA earnings on Nov 17.",
+   "news": "US markets fell Nov 12 on Nvidia CEO exit, Iran tensions, and Fed hike expectations with Nasdaq -0.39%; futures only modestly higher Nov 13 ahead of PPI data (2026-11-13).",
+   "risks": "A benign PPI print or dovish Fed signals could spark a relief rally; this is a low-conviction, broad macro hedge rather than a company-specific view, and QQQ's mega-cap diversification (MSFT, AAPL, AMZN) limits pure NVDA contagion.",
+   "source_urls": [
+    "https://www.tipranks.com/news/stock-market-today-nov-13-u-s-stocks-wobble-ahead-of-ppi-data"
+   ],
+   "priceAtPick": 688.17
   }
  ],
  "sources": [
@@ -96,8 +99,8 @@
    "age": "0 days ago"
   },
   {
-   "url": "https://variety.com/2026/biz/news/nvidia-ceo-jensen-huang-resigns-affairs-alleged-chinese-spy-1236945653/",
-   "title": "Nvidia CEO Jensen Huang Resigns After Multiple Affairs, Including With Alleged Chinese Spy",
+   "url": "https://www.cnn.com/2026/11/11/business/live-news/nvidia-jensen-huang-investigation-fallout",
+   "title": "Jensen Huang summoned to testify before Congress after resigning as Nvidia CEO",
    "age": "0 days ago"
   },
   {
@@ -111,164 +114,74 @@
    "age": "0 days ago"
   },
   {
-   "url": "https://finance.yahoo.com/technology/live/nvidia-live-updates-following-jensen-huangs-resignation-as-ceo-allegations-of-a-third-affair-emerge-195535310.html",
-   "title": "Nvidia live updates: Following Jensen Huang's resignation as CEO, allegations of a third affair emerge",
+   "url": "https://variety.com/2026/biz/news/nvidia-ceo-jensen-huang-resigns-affairs-alleged-chinese-spy-1236945653/",
+   "title": "Nvidia CEO Jensen Huang Resigns After Multiple Affairs, Including With Alleged Chinese Spy",
    "age": "0 days ago"
   },
   {
-   "url": "https://www.cnn.com/2026/11/11/business/live-news/nvidia-jensen-huang-investigation-fallout",
-   "title": "Nvidia CEO Jensen Huang resigns after mounting scandal upends US tech giant",
+   "url": "https://www.aljazeera.com/news/2026/11/12/why-did-nvidia-ceo-jensen-huang-resign-and-who-is-colette-kress",
+   "title": "Why did Nvidia CEO Jensen Huang resign, and who is Colette Kress?",
    "age": "0 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Nvidia_GTC",
-   "title": "Nvidia GTC",
+   "url": "https://nvidianews.nvidia.com/news/nvidia-announces-ceo-transition",
+   "title": "NVIDIA Announces CEO Transition",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://fortune.com/2026/11/13/jensen-huang-nvidia-elon-musk-hire-honor/",
+   "title": "Jensen Huang is out at Nvidia. Elon Musk says hiring him would be 'an honor'",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.telecomtv.com/content/digital-platforms-services/singtel-posts-h1-fy26-net-profit-of-s-3-40bn-54274/",
+   "title": "Singtel posts H1 FY26 net profit of S$3.40bn, Digital Platforms and Services",
+   "age": "366 days ago"
+  },
+  {
+   "url": "https://www.thestar.com.my/business/business-news/2026/11/13/singtel-posts-biggest-gain-since-august-on-h1-profit-rise-upgraded-annual-outlook",
+   "title": "Singtel posts biggest gain since August on H1 profit rise, upgraded annual outlook",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.singtel.com/about-us/media-centre/news-releases/singtel-H1FY26",
+   "title": "Singtel posts H1 FY26 net profit of S$3.40 billion; underlying profit up 14% to S$1.35 billion",
+   "age": "366 days ago"
+  },
+  {
+   "url": "https://www.communicationstoday.co.in/singtel-posts-h1-fy26-net-profit-of-s3-40-billion/",
+   "title": "Singtel posts H1 FY26 net profit of S$3.40 billion",
+   "age": "365 days ago"
+  },
+  {
+   "url": "https://technode.global/2026/11/13/singtel-raises-ebit-guidance-as-underlying-profit-up-10-percent-to-1-16-billion-in-first-half/",
+   "title": "Singtel raises EBIT guidance as underlying profit up 10 percent to $1.16 billion in first half - TNGlobal",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://cdn1.singteldigital.com/content/dam/singtel/investorRelations/financialResults/2026/h1fy26/NR-H1FY26.pdf",
+   "title": "Singapore Telecommunications Limited Company registration number: 199201624D",
+   "age": "367 days ago"
+  },
+  {
+   "url": "https://sg.headtopics.com/news/singtel-h1-net-profit-falls-55-as-divestment-gains-fade-89805828",
+   "title": "Singtel H1 Net Profit Falls 55% as Divestment Gains Fade, Underlying Profit Rises 10%",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.itiger.com/news/2512108240",
+   "title": "Singtel's 3QFY2025 Earnings Up 183.4% Y-O-Y Driven By Exceptional Gains Plus Operational Improvements",
    "age": null
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Jensen_Huang",
-   "title": "Jensen Huang",
-   "age": null
-  },
-  {
-   "url": "https://www.bloomberg.com/news/articles/2026-11-12/stock-market-today-dow-s-p-live-updates",
-   "title": "Stock Market Today: Dow, S&P Live Updates for November 13 - Bloomberg",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://tradingeconomics.com/united-states/stock-market",
-   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
-   "age": "811 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-today-p-131416924.html",
-   "title": "US Stock Market Today: S&P 500 Futures Rebound On Stubborn Inflation Higher-For-Longer Risk",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/12/stock-market-today-live-updates.html",
-   "title": "Stock futures inch higher after market dips amid Nvidia woes: Live updates",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.tradingview.com/news/te_news:597029:0-us-futures-rise-as-november-trading-begins/",
-   "title": "US Futures Rise as November Trading Begins — TradingView News",
-   "age": "11 days ago"
-  },
-  {
-   "url": "https://investrade.com/morning-preview-november-11-2026/",
-   "title": "Morning Preview: November 11, 2026 - Investrade",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.bloomberg.com/markets/stocks/futures",
-   "title": "Futures - Bloomberg - Bloomberg Markets",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://tradingeconomics.com/united-states/stock-market/news/505586",
-   "title": "US Futures Steady as November Draws to a Close",
-   "age": null
-  },
-  {
-   "url": "https://tradingeconomics.com/united-states/stock-market/news/512127",
-   "title": "US Futures Waver",
-   "age": null
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sg:z74/earnings",
-   "title": "Singtel (Z74) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "90 days ago"
-  },
-  {
-   "url": "https://www.tipranks.com/stocks/sngnf/earnings",
-   "title": "Singtel (SNGNF) Earnings Dates, Call Summary & Reports - TipRanks.com",
-   "age": "30 days ago"
-  },
-  {
-   "url": "https://finimize.com/content/singtel-raised-its-forecast-after-a-strong-first-half",
-   "title": "Singtel Raised Its Forecast After A Strong First Half - Finimize",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.theedgesingapore.com/capital/results/singtel-1qfy2027-earnings-down-716-y-o-y-prior-year-gains-lapse",
-   "title": "Singtel 1QFY2027 earnings down 71.6% y-o-y in absence of exceptional gains",
-   "age": "91 days ago"
-  },
-  {
-   "url": "https://www.moomoo.com/community/feed/singtel-earnings-before-interest-and-tax-growth-ahead-of-fy27-117108464812038",
-   "title": "SingTel",
-   "age": "87 days ago"
-  },
-  {
-   "url": "https://sg.finance.yahoo.com/news/singtel-1qfy2027-earnings-down-71-154749965.html",
-   "title": "Singtel 1QFY2027 earnings down 71.6% y-o-y as prior-year gains lapse",
-   "age": "92 days ago"
-  },
-  {
-   "url": "https://sg.news.yahoo.com/singtel-sats-sia-temasek-linked-233000803.html",
-   "title": "Singtel, SATS, SIA: Temasek-Linked Blue Chips to Watch This Week - Yahoo News Singapore",
-   "age": "4 days ago"
-  },
-  {
-   "url": "https://cdn2.singteldigital.com/content/dam/singtel/investorRelations/financialResults/2027/q1fy27/Biz_Update.pdf",
-   "title": "Singteldigital",
-   "age": null
-  },
-  {
-   "url": "https://www.newsquawk.com/headlines/pre-market-taiwan-and-singapore-stocks-news-earnings-from-hon-hai-2317-tt-and-singapore-telecommunications-st-sp",
-   "title": "PRE-MARKET TAIWAN AND SINGAPORE STOCKS NEWS: Earnings from Hon Hai (2317 TT) and Singapore Telecommunications (ST SP)",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.asiaone.com/money/singapore-airlines-fy2026-2027-first-half-results",
-   "title": "SIA posts record $11.3b half-year revenue, but profits fall 43.9% amid high jet fuel prices, Money News - AsiaOne",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.malaymail.com/news/singapore/2026/11/11/singapore-airlines-first-half-profit-plunges-44pc-to-s134m-on-higher-fuel-costs/242889",
-   "title": "Singapore Airlines first-half profit plunges 44pc to S$134m on higher fuel costs",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.malaymail.com/news/money/2026/11/12/sia-flies-record-218-million-passengers-but-pricey-fuel-eats-into-earnings/242906",
-   "title": "SIA flies record 21.8 million passengers, but pricey fuel eats into earnings",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://aninews.in/news/business/air-india-makes-tangible-progress-in-transformation-but-turnaround-will-take-time-singapore-airlines20261111173110/",
-   "title": "Air India makes tangible progress in transformation, but turnaround will take time: Singapore Airlines",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://aviationweek.com/air-transport/airlines-lessors/singapore-airlines-back-profit-despite-fuel-shock-air-india-drag",
-   "title": "Singapore Airlines Back To Profit Despite Fuel Shock, Air India Drag",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.connectedtoindia.com/singapore-airlines-group-posts-record-h1-revenue-of-sgd-11-3-billion-but-jet-fuel-price-hits-net-profit/",
-   "title": "Singapore Airlines group posts record H1 revenue of SGD 11.3 billion, but jet fuel price hits net profit - Connected to India News I Singapore l UAE l UK l USA l NRI",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://www.klsescreener.com/v2/news/view/1825743/singapore-airlines-039-first-half-profit-drops-43-9pct-despite-record-rm35-9bil-revenue",
-   "title": "Singapore Airlines' first-half profit drops 43.9pct despite record RM35.9bil revenue",
-   "age": "1 days ago"
-  },
-  {
-   "url": "https://english.news.cn/asiapacific/20261111/81b7116a54384ed192cb735ad4193ae7/c.html",
-   "title": "Singapore Airlines Group H1 net profit falls 43.9 pct on higher fuel costs-Xinhua",
-   "age": "2 days ago"
-  },
-  {
-   "url": "https://www.singaporeair.com/content/dam/sia/web-assets/pdfs/Press_Release/NR-0126.pdf",
-   "title": "NR 0126",
+   "url": "https://www.business-standard.com/article/companies/singtel-s-annual-profit-plunges-65-takes-1-3-bn-hit-on-airtel-snag-120052800205_1.html",
+   "title": "Monday, January 05, 2026 | 04:51 PM ISTहिंदी में पढें",
    "age": null
   },
   {
    "url": "https://www.thestar.com.my/business/business-news/2026/11/09/dbs-and-uob-shares-slide-after-weak-3q-results",
    "title": "DBS and UOB shares slide after weak 3Q results",
-   "age": "3 days ago"
+   "age": "4 days ago"
   },
   {
    "url": "https://growbeansprout.com/dbs-ocbc-uob-3q26-results-nov-2026",
@@ -276,9 +189,9 @@
    "age": "1 days ago"
   },
   {
-   "url": "https://thefinance.sg/2026/11/09/ocbc-beats-expectations-while-dbs-and-uob-miss-what-happened-in-3q-2026/",
-   "title": "OCBC Beats Expectations While DBS and UOB Miss: What Happened in 3Q 2026? - TheFinance.sg",
-   "age": "2 days ago"
+   "url": "https://thefinance.sg/2026/11/06/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
+   "title": "DBS and UOB Miss, OCBC Beats: What Q3 2026 Results Say About Singapore Banks - TheFinance.sg",
+   "age": "6 days ago"
   },
   {
    "url": "https://thefinance.sg/2026/11/11/dbs-vs-ocbc-vs-uob-which-singapore-bank-stands-out-for-income-after-the-pullback-and-3q-2026-results/",
@@ -286,40 +199,130 @@
    "age": "1 days ago"
   },
   {
-   "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
-   "title": "DBS and UOB Miss, OCBC Beats: What Q3 2026 Results Say About Singapore Banks",
-   "age": "6 days ago"
+   "url": "https://thefinance.sg/2026/11/09/ocbc-beats-expectations-while-dbs-and-uob-miss-what-happened-in-3q-2026/",
+   "title": "OCBC Beats Expectations While DBS and UOB Miss: What Happened in 3Q 2026? - TheFinance.sg",
+   "age": "3 days ago"
   },
   {
    "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
    "title": "DBS Q3 2026 Results: S$2.95B Profit, S$0.75 Dividend",
-   "age": "9 days ago"
+   "age": "10 days ago"
   },
   {
-   "url": "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/",
-   "title": "OCBC Q3 2026: Singapore’s Only Bank to Beat Estimates",
-   "age": "5 days ago"
-  },
-  {
-   "url": "https://www.itiger.com/hant/news/2509047468",
-   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus",
+   "url": "https://www.itiger.com/news/1171937414",
+   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
    "age": null
   },
   {
-   "url": "https://www.itiger.com/news/2490281759",
-   "title": "Year-in-Review: 8 Singapore Companies That Raised Their Dividends in 2024",
+   "url": "https://www.tradingview.com/symbols/SWB-OCBA",
+   "title": "SWB OCBA",
    "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hant/news/1171937414",
+   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
+   "age": null
+  },
+  {
+   "url": "https://www.tickmill.com/blog/daily-market-outlook-november-13-2026",
+   "title": "Daily Market Outlook: November 13, 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://tradingeconomics.com/united-states/stock-market",
+   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
+   "age": "812 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/stocks/articles/stock-market-news-nov-13-081500049.html",
+   "title": "Stock Market News for Nov 13, 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/news/stock-market-today-nov-13-u-s-stocks-wobble-ahead-of-ppi-data",
+   "title": "Stock Market Today, Nov. 13: U.S. Stocks Wobble Ahead of PPI Data - TipRanks.com",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/markets/live/stock-market-today-friday-november-13-dow-sp-500-nasdaq-nvidia-110151154.html",
+   "title": "Stock market today: Dow, S&P 500, Nasdaq futures edge higher as Nvidia tumult deepens",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://investrade.com/morning-preview-november-13-2026/",
+   "title": "Morning Preview: November 13, 2026 - Investrade",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.stocktitan.net/articles/stock-market-today-live-november-13-2026",
+   "title": "Stocks Edge Higher in the Stock Market Today Live, November 13, 2026, as Cerebras Jumps Before Inflation Data",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://nordfx.com/market-news/market-pulse-november-13-2026",
+   "title": "Market Pulse",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.benzinga.com/markets/equities/26/11/63231225/stock-market-today-dow-jones-sp-500-futures-rise-nvidia-ceo-exit-remains-in-focus-csco-amat-nu-in-focus",
+   "title": "Stock Market Today: Dow Jones, S&P 500 Futures Rise, Nvidia CEO Exit Remains in Focus — CSCO, AMAT, NU in - Benzinga",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://karryon.com.au/industry-news/airline/singapore-airlines-h1fy27/",
+   "title": "Singapore Airlines posts record $12.9B half-year revenue as fuel costs bite into profit",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/en_UK/us/corporate/newsroom/press-release/",
+   "title": "News releases",
+   "age": "55 days ago"
+  },
+  {
+   "url": "https://www.businesstravelnewseurope.com/Air-Travel/singapore-airlines-reports-record-revenues-despite-high-fuel-costs",
+   "title": "Singapore Airlines Achieves Record Revenues",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/singapore-air-returns-profit-travel-022742479.html",
+   "title": "Singapore Air returns to profit on travel, cargo demand",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.cimbusinessevents.com.au/singapore-airlines-profits-slide-as-fuel-costs-soar/",
+   "title": "Singapore Airlines profits slide as fuel costs soar CIM Business Events",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://mainlymiles.com/2026/11/06/singapore-airlines-unveils-new-first-business-class/",
+   "title": "Singapore Airlines unveils new First and Business Class, now delayed to 2H 2027 - Mainly Miles",
+   "age": "6 days ago"
+  },
+  {
+   "url": "https://theaviationhub.co.uk/singapore-airlines-new-suites-november-2026-unveil/",
+   "title": "Singapore Airlines New First and Business Class Suites: November 2026 Unveil Confirmed",
+   "age": "10 days ago"
+  },
+  {
+   "url": "https://www.travelandtourworld.com/news/article/as6c6ahxeszi/",
+   "title": "Singapore Airlines is Open to New Business Class Seat Colours for a Better Journey Singapore Airlines is Open to New Business Class Seat Colours for a Better Journey",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.travelandtourworld.com/news/article/ebwrf31ufchm/",
+   "title": "Singapore Airlines Breaks Revenue Records as Soaring Fuel Costs Crush Profits - Travel And Tour World",
+   "age": "0 days ago"
   }
  ],
  "model": "claude-sonnet-5",
  "newsModel": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 48534,
-  "output": 5005,
+  "input": 50380,
+  "output": 7292,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1517
+  "costUsd": 0.1689
  },
- "createdAt": "2026-11-13T01:01:27.071Z"
+ "createdAt": "2026-11-13T13:01:16.502Z"
 }
