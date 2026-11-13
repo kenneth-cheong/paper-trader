@@ -1,125 +1,115 @@
 {
- "market_summary": "Tech stocks tumbled on November 12 as Nvidia's board met to potentially oust CEO Jensen Huang following reports of extramarital affairs, raising major uncertainty at the world's dominant AI chipmaker. Nvidia shares fell 8% in extended trading and over 7% in European markets, erasing roughly $600 billion in market value since the investigation was announced. Elsewhere, Alphabet's Google Cloud surged 103% to $30.7 billion in Q3 revenue with operating margins expanding dramatically to 36.2%, driving consolidated revenue up 25% with 13 consecutive quarters of double-digit growth. Singapore's banking sector showed mixed Q3 results: OCBC beat estimates with 3% profit growth, while DBS and UOB missed forecasts as net interest margins compressed. Singapore Exchange reported October derivatives at six-month highs with securities turnover up 32% year-on-year, while Singapore Airlines continues absorbing losses on its Air India investment.",
+ "market_summary": "<cite index=\"1-1\">Nvidia CEO Jensen Huang resigned immediately on November 12, 2026, with CFO Colette Kress appointed as interim CEO",
  "items": [
   {
    "symbols": [
     "NVDA"
    ],
    "date": "2026-11-12",
-   "headline": "Nvidia board met to decide whether to oust CEO Jensen Huang over alleged affairs",
-   "summary": "<cite index=\"5-1\">Nvidia's board met on Wednesday to decide whether to oust CEO Jensen Huang following reports of two extramarital affairs involving its dominant AI chipmaker</cite>. <cite index=\"5-4,5-5\">Nvidia's stock slid around 7% in early Frankfurt trading on Thursday, with the company having lost about $600 billion in market value since the board announced its investigation</cite>.",
+   "headline": "Nvidia CEO Jensen Huang resigns following affairs scandal",
+   "summary": "<cite index=",
    "type": "management",
    "tone": "negative",
-   "source_url": "https://www.cnbc.com/2026/11/12/nvidia-nvda-jensen-huang-second-affair.html"
+   "source_url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000082/nvidiaannouncesceotransiti.htm"
   },
   {
    "symbols": [
-    "GOOGL"
+    "NVDA"
    ],
-   "date": "2026-10-28",
-   "headline": "Alphabet's Google Cloud revenues doubled to $30.7 billion in Q3 2026 with operating margins expanding to 36.2%",
-   "summary": "<cite index=\"19-4\">Google Cloud delivered record growth as revenues increased 103% to $30.7 billion, led by strong growth in Google Cloud Platform across enterprise AI infrastructure and enterprise AI solutions</cite>. <cite index=\"23-1\">Google Cloud operating income more than tripled year over year with operating margin increasing from 23.7% to 36.2%</cite>.",
+   "date": "2026-11-12",
+   "headline": "Nvidia shares fall 4.3% as market reacts to CEO resignation",
+   "summary": "<cite index=",
+   "type": "other",
+   "tone": "negative",
+   "source_url": "https://www.pbs.org/newshour/nation/what-we-know-after-jensen-huangs-resignation-as-nvidias-ceo"
+  },
+  {
+   "symbols": [
+    "SPY",
+    "QQQ"
+   ],
+   "date": "2026-11-12",
+   "headline": "US stock futures rebound after Nvidia shares slump",
+   "summary": "<cite index=",
+   "type": "macro",
+   "tone": "mixed",
+   "source_url": "https://www.cnbc.com/2026/11/12/stock-market-today-live-updates.html"
+  },
+  {
+   "symbols": [
+    "Z74.SI"
+   ],
+   "date": "2026-11-12",
+   "headline": "Singtel H1 FY2027 underlying net profit rises 10% to S$1.49 billion; raises FY2027 guidance",
+   "summary": "<cite index=",
    "type": "earnings",
    "tone": "positive",
-   "source_url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000080/googexhibit991q32026.htm"
-  },
-  {
-   "symbols": [
-    "O39.SI"
-   ],
-   "date": "2026-11-06",
-   "headline": "OCBC beats Q3 2026 expectations with 3% profit growth as only Singapore bank to meet estimates",
-   "summary": "<cite index=\"38-1\">OCBC was the only one to meet expectations in 3Q26, with net profit rising 3% year-on-year to S$2.04 billion</cite>. <cite index=\"38-2\">DBS reported a 5% year-on-year decline in 3Q26 net profit, while UOB's 3Q26 profit also came in below expectations</cite>.",
-   "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/"
-  },
-  {
-   "symbols": [
-    "D05.SI"
-   ],
-   "date": "2026-11-07",
-   "headline": "DBS Q3 2026 net profit declined 5% year-on-year, missing analyst expectations",
-   "summary": "<cite index=\"40-2\">DBS Q3 2026 net profit dipped 2% to S$2.95 billion</cite> with broader results showing DBS among banks facing net interest margin pressure and earnings headwinds in the quarter.",
-   "type": "earnings",
-   "tone": "negative",
-   "source_url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/"
-  },
-  {
-   "symbols": [
-    "U11.SI"
-   ],
-   "date": "2026-11-04",
-   "headline": "UOB Q3 2026 profit missed expectations as earnings pressured by margin compression",
-   "summary": "<cite index=\"41-13\">UOB reported S$1.25 billion profit for Q3 2026, missing expectations</cite>, marking the second major Singapore bank to underperform forecasts in a weak quarter for the sector.",
-   "type": "earnings",
-   "tone": "negative",
-   "source_url": "https://thekopinotes.com/articles/news/ocbc-q3-2026-beats-guidance/"
+   "source_url": "https://www.businesstimes.com.sg/companies-markets/singtel-h1-net-profit-falls-55-s1-54-billion-lack-divestment-gains-underlying-profit-10"
   },
   {
    "symbols": [
     "C6L.SI"
    ],
-   "date": "2026-11-12",
-   "headline": "Singapore Airlines' Air India investment carrying value falls to S$799.9 million from S$1.135 billion in six months",
-   "summary": "<cite index=\"12-1,12-2,12-3\">As of March 31, 2026, Singapore Airlines' Air India investment carrying value was SGD 1.135 billion, declining to SGD 799.9 million by September 30, 2026, representing a reduction of approximately SGD 334.7 million in just six months</cite>.",
-   "type": "earnings",
-   "tone": "negative",
-   "source_url": "https://livefromalounge.com/air-india-lower-losses-in-first-half-of-fy2027/"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
    "date": "2026-11-11",
-   "headline": "SGX October securities turnover rose 32% year-on-year to S$44.8 billion with derivatives reaching six-month highs",
-   "summary": "<cite index=\"30-1\">Securities turnover rose 32% year on year and 6% month on month to S$44.8 billion, while derivatives daily average volume increased 17% month on month and 8% year on year to 1.6 million contracts, its highest level since April</cite>.",
+   "headline": "Singapore Airlines reports H1 FY2026/27 profit falls 43.9% to S$134 million despite record revenue",
+   "summary": "<cite index=",
    "type": "earnings",
-   "tone": "positive",
-   "source_url": "https://www.tipranks.com/news/company-announcements/sgx-october-turnover-rises-as-derivatives-reach-six-month-high"
+   "tone": "negative",
+   "source_url": "https://www.asiaone.com/money/singapore-airlines-fy2026-2027-first-half-results"
   },
   {
    "symbols": [
-    "MSFT",
-    "AAPL",
-    "AMZN",
-    "TSLA",
-    "BRK-B",
-    "SPY",
-    "QQQ"
+    "D05.SI",
+    "O39.SI",
+    "U11.SI"
    ],
-   "date": "2026-11-12",
-   "headline": "US technology stocks fall sharply as Nvidia's CEO crisis triggers broad tech selloff",
-   "summary": "Nvidia's uncertainty over CEO Jensen Huang's future pressured the broader technology sector on November 12. Major US tech indices declined alongside Asian markets as investors reassessed risk in AI-dependent mega-cap stocks amid broader macro uncertainty.",
-   "type": "macro",
-   "tone": "negative",
-   "source_url": "https://www.cnbc.com/2026/11/12/jensen-huang-nvidia-affair-ceo.html"
+   "date": "2026-11-06",
+   "headline": "OCBC beats Q3 2026 earnings expectations; DBS and UOB miss",
+   "summary": "<cite index=",
+   "type": "earnings",
+   "tone": "mixed",
+   "source_url": "https://thefinance.sg/2026/11/11/dbs-vs-ocbc-vs-uob-which-singapore-bank-stands-out-for-income-after-the-pullback-and-3q-2026-results/"
   }
  ],
  "sources": [
   {
-   "url": "https://www.cnbc.com/2026/11/11/nvidia-jensen-huang-affair-employee.html",
-   "title": "Nvidia board meeting to decide CEO Jensen Huang’s fate stretches into evening",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/video/2026/11/12/nvidia-jensen-huang-board-meeting-affairs.html",
-   "title": "Nvidia board to decide on CEO Jensen Huang's future",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/11/12/nvidia-nvda-jensen-huang-second-affair.html",
-   "title": "Nvidia stock falls 8% as investors await Jensen Huang’s fate",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000038/a2026-annualxreportxwebxfi.pdf",
-   "title": "NVIDIA CORP - Form ARS - FY2026",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000082/nvidiaannouncesceotransiti.htm",
+   "title": "NVIDIA CORP - Form 8-K - FY2026",
    "age": null
   },
   {
-   "url": "https://finance.yahoo.com/news/nvidia-preparing-oust-ceo-jensen-223546395.html",
-   "title": "Nvidia board weighs CEO Huang's future as leadership crisis deepens",
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000082/nvda-20261111.htm",
+   "title": "NVIDIA CORP - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.pbs.org/newshour/nation/what-we-know-after-jensen-huangs-resignation-as-nvidias-ceo",
+   "title": "What we know after Jensen Huang's resignation as Nvidia's CEO",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://variety.com/2026/biz/news/nvidia-ceo-jensen-huang-resigns-affairs-alleged-chinese-spy-1236945653/",
+   "title": "Nvidia CEO Jensen Huang Resigns After Multiple Affairs, Including With Alleged Chinese Spy",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.washingtonpost.com/technology/2026/11/12/nvidia-board-weighs-jensen-huangs-future-after-affair-with-allege-chinese-spy/",
+   "title": "Jensen Huang resigns as Nvidia CEO after affair with alleged spy - The Washington Post",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.aljazeera.com/news/2026/11/12/ai-titan-jensen-huang-out-as-nvidia-ceo",
+   "title": "Nvidia CEO Jensen Huang resigns amid spy scandal and market loss",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/technology/live/nvidia-live-updates-following-jensen-huangs-resignation-as-ceo-allegations-of-a-third-affair-emerge-195535310.html",
+   "title": "Nvidia live updates: Following Jensen Huang's resignation as CEO, allegations of a third affair emerge",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.cnn.com/2026/11/11/business/live-news/nvidia-jensen-huang-investigation-fallout",
+   "title": "Nvidia CEO Jensen Huang resigns after mounting scandal upends US tech giant",
    "age": "0 days ago"
   },
   {
@@ -128,169 +118,169 @@
    "age": null
   },
   {
-   "url": "https://www.technology.org/2026/11/12/nvidia-board-meeting-oust-ceo-jensen-huang/",
-   "title": "Nvidia Board Weighs Ousting CEO Jensen Huang",
+   "url": "https://en.wikipedia.org/wiki/Jensen_Huang",
+   "title": "Jensen Huang",
+   "age": null
+  },
+  {
+   "url": "https://www.bloomberg.com/news/articles/2026-11-12/stock-market-today-dow-s-p-live-updates",
+   "title": "Stock Market Today: Dow, S&P Live Updates for November 13 - Bloomberg",
    "age": "0 days ago"
   },
   {
-   "url": "https://fortune.com/tag/nvidia/page/7",
-   "title": "fortune.com",
-   "age": null
+   "url": "https://tradingeconomics.com/united-states/stock-market",
+   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
+   "age": "811 days ago"
   },
   {
-   "url": "https://fortune.com/tag/jensen-huang/page/4",
-   "title": "fortune.com",
-   "age": null
+   "url": "https://finance.yahoo.com/markets/stocks/articles/us-stock-market-today-p-131416924.html",
+   "title": "US Stock Market Today: S&P 500 Futures Rebound On Stubborn Inflation Higher-For-Longer Risk",
+   "age": "1 days ago"
   },
   {
-   "url": "https://www.asianhospitality.com/singapore-airlines-air-india-investment-782m-loss/",
-   "title": "Singapore Airlines’ Air India Stake Suffers $782M Loss - Asian Hospitality",
-   "age": "86 days ago"
-  },
-  {
-   "url": "https://www.cnbc.com/2026/05/15/singapore-airlines-hurt-by-air-india-losses-investment-could-pay-off.html",
-   "title": "Singapore Airlines hurt by Air India losses; investment could pay off",
-   "age": "181 days ago"
-  },
-  {
-   "url": "https://livefromalounge.com/air-india-lower-losses-in-first-half-of-fy2027/",
-   "title": "Air India reducees losses in the first half of FY2027 - Live From A Lounge",
+   "url": "https://www.cnbc.com/2026/11/12/stock-market-today-live-updates.html",
+   "title": "Stock futures inch higher after market dips amid Nvidia woes: Live updates",
    "age": "0 days ago"
   },
   {
-   "url": "https://en.wikipedia.org/wiki/Corporate_affairs_of_Singapore_Airlines",
-   "title": "Corporate affairs of Singapore Airlines",
-   "age": null
+   "url": "https://www.tradingview.com/news/te_news:597029:0-us-futures-rise-as-november-trading-begins/",
+   "title": "US Futures Rise as November Trading Begins — TradingView News",
+   "age": "11 days ago"
   },
   {
-   "url": "https://aviationa2z.com/index.php/2026/08/12/singapore-airlines-takes-nearly-sg1-billion-loss-on-air-india-investment/",
-   "title": "Singapore Airlines Takes Nearly SG$1 Billion Loss on Air India Investment - Aviation A2Z",
-   "age": "92 days ago"
+   "url": "https://investrade.com/morning-preview-november-11-2026/",
+   "title": "Morning Preview: November 11, 2026 - Investrade",
+   "age": "1 days ago"
   },
   {
-   "url": "https://www.whalesbook.com/news/English/transportation/Singapore-Airlines-Keeps-Air-India-Stake-Value-After-Review/6a606ae1fe1c9287f47a967e",
-   "title": "Singapore Airlines Keeps Air India Stake Value After Review",
-   "age": "113 days ago"
-  },
-  {
-   "url": "https://lapaasvoice.com/singapore-airlines-air-india-investment-takes-a-beating-as-profitability-remains-elusive",
-   "title": "Singapore Airlines’ Air India Investment Takes a Beating as Profitability Remains Elusive - Lapaas Voice",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://www.cbinsights.com/investor/singapore-airlines",
-   "title": "Predict your next investment",
-   "age": null
-  },
-  {
-   "url": "https://seekingalpha.com/article/4761410-singapore-airlines-too-inconsistent-for-investment",
-   "title": "Singapore Airlines: Too Inconsistent For Investment",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000080/googexhibit991q32026.htm",
-   "title": "Alphabet Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000012/googexhibit991q42025.htm",
-   "title": "Alphabet Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000084/goog-20260930.htm",
-   "title": "Alphabet Inc. - Form 10-Q - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.sec.gov/Archives/edgar/data/0001652044/000165204426000066/googexhibit991q22026.htm",
-   "title": "Alphabet Inc. - Form 8-K - FY2026",
-   "age": null
-  },
-  {
-   "url": "https://www.alpha-sense.com/earnings/goog/",
-   "title": "Alphabet Inc Earnings - Analysis & Highlights for Q3 2026",
-   "age": "13 days ago"
-  },
-  {
-   "url": "https://fourweekmba.com/google-revenue-breakdown/",
-   "title": "Google Revenue Breakdown 2026: Search, YouTube, Cloud",
-   "age": "6 days ago"
-  },
-  {
-   "url": "https://finance.yahoo.com/markets/stocks/articles/alphabet-inc-goog-q3-2026-050953011.html",
-   "title": "Alphabet Inc (GOOG) Q3 2026 Earnings Call Highlights: Cloud Revenue Doubles, Gemini Hits 1 ...",
-   "age": "14 days ago"
-  },
-  {
-   "url": "https://www.fool.com/investing/2026/11/10/sundar-pichai-just-delivered-stunning-news-about-g/",
-   "title": "Sundar Pichai Just Delivered Stunning News About Google Cloud",
+   "url": "https://www.bloomberg.com/markets/stocks/futures",
+   "title": "Futures - Bloomberg - Bloomberg Markets",
    "age": "2 days ago"
   },
   {
-   "url": "https://www.globaldatacenterhub.com/p/alphabet-q3-2026-earnings-google-cloud-ai-capex",
-   "title": "Alphabet Q3 2026 Earnings: Google Cloud, TPUs and AI Capex",
+   "url": "https://tradingeconomics.com/united-states/stock-market/news/505586",
+   "title": "US Futures Steady as November Draws to a Close",
+   "age": null
+  },
+  {
+   "url": "https://tradingeconomics.com/united-states/stock-market/news/512127",
+   "title": "US Futures Waver",
+   "age": null
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/sg:z74/earnings",
+   "title": "Singtel (Z74) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "90 days ago"
+  },
+  {
+   "url": "https://www.tipranks.com/stocks/sngnf/earnings",
+   "title": "Singtel (SNGNF) Earnings Dates, Call Summary & Reports - TipRanks.com",
+   "age": "30 days ago"
+  },
+  {
+   "url": "https://finimize.com/content/singtel-raised-its-forecast-after-a-strong-first-half",
+   "title": "Singtel Raised Its Forecast After A Strong First Half - Finimize",
    "age": "0 days ago"
   },
   {
-   "url": "https://sg.news.yahoo.com/sgx-reports-securities-market-turnover-190045748.html",
-   "title": "SGX reports securities market turnover value of $26.9 bil in October, 36% higher y-o-y but 11.4% lower m-o-m - Yahoo News Singapore",
-   "age": "734 days ago"
+   "url": "https://www.theedgesingapore.com/capital/results/singtel-1qfy2027-earnings-down-716-y-o-y-prior-year-gains-lapse",
+   "title": "Singtel 1QFY2027 earnings down 71.6% y-o-y in absence of exceptional gains",
+   "age": "91 days ago"
   },
   {
-   "url": "https://links.sgx.com/FileOpen/SGX%20Monthly%20Statistics%20Report%20Update_Oct%202025.ashx?App=Announcement&FileID=866582",
-   "title": "Singapore Exchange Market Statistics Report October 2025",
+   "url": "https://www.moomoo.com/community/feed/singtel-earnings-before-interest-and-tax-growth-ahead-of-fy27-117108464812038",
+   "title": "SingTel",
+   "age": "87 days ago"
+  },
+  {
+   "url": "https://sg.finance.yahoo.com/news/singtel-1qfy2027-earnings-down-71-154749965.html",
+   "title": "Singtel 1QFY2027 earnings down 71.6% y-o-y as prior-year gains lapse",
+   "age": "92 days ago"
+  },
+  {
+   "url": "https://sg.news.yahoo.com/singtel-sats-sia-temasek-linked-233000803.html",
+   "title": "Singtel, SATS, SIA: Temasek-Linked Blue Chips to Watch This Week - Yahoo News Singapore",
+   "age": "4 days ago"
+  },
+  {
+   "url": "https://cdn2.singteldigital.com/content/dam/singtel/investorRelations/financialResults/2027/q1fy27/Biz_Update.pdf",
+   "title": "Singteldigital",
    "age": null
   },
   {
-   "url": "https://www.tipranks.com/news/company-announcements/sgx-october-turnover-rises-as-derivatives-reach-six-month-high",
-   "title": "SGX October Turnover Rises as Derivatives Reach Six-Month High - TipRanks.com",
+   "url": "https://www.newsquawk.com/headlines/pre-market-taiwan-and-singapore-stocks-news-earnings-from-hon-hai-2317-tt-and-singapore-telecommunications-st-sp",
+   "title": "PRE-MARKET TAIWAN AND SINGAPORE STOCKS NEWS: Earnings from Hon Hai (2317 TT) and Singapore Telecommunications (ST SP)",
    "age": "0 days ago"
   },
   {
-   "url": "https://links.sgx.com/FileOpen/20251111%20SGX%20Group%20reports%20strong%20October%20market%20performance%20driven%20by%20institutional%20inflows.ashx?App=Announcement&FileID=866581",
-   "title": "Sgx",
+   "url": "https://www.asiaone.com/money/singapore-airlines-fy2026-2027-first-half-results",
+   "title": "SIA posts record $11.3b half-year revenue, but profits fall 43.9% amid high jet fuel prices, Money News - AsiaOne",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.malaymail.com/news/singapore/2026/11/11/singapore-airlines-first-half-profit-plunges-44pc-to-s134m-on-higher-fuel-costs/242889",
+   "title": "Singapore Airlines first-half profit plunges 44pc to S$134m on higher fuel costs",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.malaymail.com/news/money/2026/11/12/sia-flies-record-218-million-passengers-but-pricey-fuel-eats-into-earnings/242906",
+   "title": "SIA flies record 21.8 million passengers, but pricey fuel eats into earnings",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://aninews.in/news/business/air-india-makes-tangible-progress-in-transformation-but-turnaround-will-take-time-singapore-airlines20261111173110/",
+   "title": "Air India makes tangible progress in transformation, but turnaround will take time: Singapore Airlines",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://aviationweek.com/air-transport/airlines-lessors/singapore-airlines-back-profit-despite-fuel-shock-air-india-drag",
+   "title": "Singapore Airlines Back To Profit Despite Fuel Shock, Air India Drag",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.connectedtoindia.com/singapore-airlines-group-posts-record-h1-revenue-of-sgd-11-3-billion-but-jet-fuel-price-hits-net-profit/",
+   "title": "Singapore Airlines group posts record H1 revenue of SGD 11.3 billion, but jet fuel price hits net profit - Connected to India News I Singapore l UAE l UK l USA l NRI",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.klsescreener.com/v2/news/view/1825743/singapore-airlines-039-first-half-profit-drops-43-9pct-despite-record-rm35-9bil-revenue",
+   "title": "Singapore Airlines' first-half profit drops 43.9pct despite record RM35.9bil revenue",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://english.news.cn/asiapacific/20261111/81b7116a54384ed192cb735ad4193ae7/c.html",
+   "title": "Singapore Airlines Group H1 net profit falls 43.9 pct on higher fuel costs-Xinhua",
+   "age": "2 days ago"
+  },
+  {
+   "url": "https://www.singaporeair.com/content/dam/sia/web-assets/pdfs/Press_Release/NR-0126.pdf",
+   "title": "NR 0126",
    "age": null
   },
   {
-   "url": "https://www.minichart.com.sg/2025/11/11/sgx-group-reports-robust-october-2025-performance-driven-by-institutional-inflows-strong-derivatives-and-asean-market-connectivity-12/",
-   "title": "SGX Group Reports Robust October 2025 Performance Driven by Institutional Inflows, Strong Derivatives, and ASEAN Market Connectivity 12",
-   "age": "366 days ago"
-  },
-  {
-   "url": "https://www.itiger.com/hant/news/2502781690",
-   "title": "SGX Hits Record Derivatives Volume in 2024",
-   "age": null
-  },
-  {
-   "url": "https://www.malaymail.com/news/money/2018/01/19/singapore-exchange-sees-pick-up-in-market-activity-posts-flat-q2-profit/1557847",
-   "title": "www.malaymail.com",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hans/news/2502781690",
-   "title": "SGX Hits Record Derivatives Volume in 2024",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/news/2502781690",
-   "title": "SGX Hits Record Derivatives Volume in 2024",
-   "age": null
+   "url": "https://www.thestar.com.my/business/business-news/2026/11/09/dbs-and-uob-shares-slide-after-weak-3q-results",
+   "title": "DBS and UOB shares slide after weak 3Q results",
+   "age": "3 days ago"
   },
   {
    "url": "https://growbeansprout.com/dbs-ocbc-uob-3q26-results-nov-2026",
    "title": "DBS vs OCBC vs UOB: Which Singapore bank stands out for income after the pullback and 3Q 2026 results - Growbeansprout.com",
-   "age": "0 days ago"
-  },
-  {
-   "url": "https://thefinance.sg/2026/11/11/dbs-vs-ocbc-vs-uob-which-singapore-bank-stands-out-for-income-after-the-pullback-and-3q-2026-results/",
-   "title": "DBS vs OCBC vs UOB: Which Singapore bank stands out for income after the pullback and 3Q 2026 results - TheFinance.sg",
-   "age": "0 days ago"
+   "age": "1 days ago"
   },
   {
    "url": "https://thefinance.sg/2026/11/09/ocbc-beats-expectations-while-dbs-and-uob-miss-what-happened-in-3q-2026/",
    "title": "OCBC Beats Expectations While DBS and UOB Miss: What Happened in 3Q 2026? - TheFinance.sg",
    "age": "2 days ago"
+  },
+  {
+   "url": "https://thefinance.sg/2026/11/11/dbs-vs-ocbc-vs-uob-which-singapore-bank-stands-out-for-income-after-the-pullback-and-3q-2026-results/",
+   "title": "DBS vs OCBC vs UOB: Which Singapore bank stands out for income after the pullback and 3Q 2026 results - TheFinance.sg",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://drwealth.com/dbs-and-uob-miss-ocbc-beats-what-q3-2026-results-say-about-singapore-banks/",
+   "title": "DBS and UOB Miss, OCBC Beats: What Q3 2026 Results Say About Singapore Banks",
+   "age": "6 days ago"
   },
   {
    "url": "https://thekopinotes.com/articles/news/dbs-q3-2026-results-uob-ocbc-preview/",
@@ -303,23 +293,13 @@
    "age": "5 days ago"
   },
   {
-   "url": "https://www.itiger.com/news/1171937414",
-   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
+   "url": "https://www.itiger.com/hant/news/2509047468",
+   "title": "Upcoming Earnings Reports: DBS, OCBC, and UOB in Focus",
    "age": null
   },
   {
-   "url": "https://www.tradingview.com/symbols/SWB-OCBA",
-   "title": "SWB OCBA",
-   "age": null
-  },
-  {
-   "url": "https://www.itiger.com/hant/news/1171937414",
-   "title": "DBS, OCBC, and UOB’s STI Weight Rises to 54.3% in 2024",
-   "age": null
-  },
-  {
-   "url": "https://www.spglobal.com/market-intelligence/en/news-insights/articles/2022/3/singapore-banks-may-pause-hunt-for-overseas-deals-to-digest-recent-acquisitions-69033134",
-   "title": "1 Mar, 2022",
+   "url": "https://www.itiger.com/news/2490281759",
+   "title": "Year-in-Review: 8 Singapore Companies That Raised Their Dividends in 2024",
    "age": null
   }
  ],
@@ -328,74 +308,129 @@
    "symbols": [
     "NVDA"
    ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-12T12:58:54Z",
-   "headline": "3 challenges for Nvidia if Jensen Huang is removed as CEO",
-   "url": "https://finance.yahoo.com/markets/article/3-challenges-for-nvidia-if-jensen-huang-is-removed-as-ceo-125854580.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-12T12:54:18Z",
-   "headline": "Long-dated US debt rises as Nvidia woes revive haven demand",
-   "url": "https://www.businesstimes.com.sg/companies-markets/capital-markets-currencies/long-dated-us-debt-rises-nvidia-woes-revive-haven-demand"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "247wallst.com",
-   "pubDate": "2026-11-12T12:47:00Z",
-   "headline": "WSJ Says Nvidia Is Preparing to Oust Jensen Huang Over Alleged Affairs; Here’s How Much 2,000 Shares Have Lost Over the Last Month",
-   "url": "https://247wallst.com/investing/2026/11/12/wsj-says-nvidia-is-preparing-to-oust-jensen-huang-over-alleged-affairs-heres-how-much-2000-shares-have-lost-over-the-last-month/"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-12T12:46:59Z",
-   "headline": "Dow Jones Futures: Techs Fall As Nvidia Board Mulls Ousting CEO Jensen Huang; CoreWeave Rival Nebius Dives On Results",
-   "url": "https://finance.yahoo.com/m/672e6ef4-2ba3-319b-b948-a356a7f1fcbe/dow-jones-futures%3A-techs-fall.html"
-  },
-  {
-   "symbols": [
-    "NVDA"
-   ],
-   "source": "cnbc.com",
-   "pubDate": "2026-11-12T12:43:32Z",
-   "headline": "‘A dark day for Nvidia’: Here’s what analysts are saying as markets brace for news on Huang's fate",
-   "url": "https://www.cnbc.com/2026/11/12/jensen-huang-nvidia-affair-ceo.html"
-  },
-  {
-   "symbols": [
-    "GOOGL"
-   ],
    "source": "fool.com",
-   "pubDate": "2026-11-12T12:35:00Z",
-   "headline": "Alphabet's Cloud Business Doubled, but the Stock Plunged. Here's What a $5,000 Investment Could Be Worth by 2030.",
-   "url": "https://www.fool.com/investing/2026/11/12/alphabets-cloud-business-doubled-but-the-stock-plu/"
+   "pubDate": "2026-11-13T00:50:02Z",
+   "headline": "Chipotle Mexican Grill vs. Coca-Cola: Which Stock Is a Buy After the Nvidia Sell-Off?",
+   "url": "https://www.fool.com/coverage/better-buy/2026/11/12/chipotle-mexican-grill-vs-coca-cola-which-stock-is-a-buy-after-the-nvidia-sell-off/"
   },
   {
    "symbols": [
     "NVDA",
     "TSLA"
    ],
-   "source": "247wallst.com",
-   "pubDate": "2026-11-12T12:33:00Z",
-   "headline": "If Nvidia’s Board Fires Jensen Huang, Is His Ultimate ‘Revenge’ Pairing Up With Elon Musk to Build Terafab?",
-   "url": "https://247wallst.com/investing/2026/11/12/if-nvidias-board-fires-jensen-huang-is-his-ultimate-revenge-pairing-up-with-elon-musk-to-build-terafab/"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-13T00:46:38Z",
+   "headline": "Dow Jones Futures Rise After Market Weathers Nvidia CEO Huang's Exit, Surging Yields; SpaceX-Tesla Merger Deal Close",
+   "url": "https://finance.yahoo.com/m/4a3dff17-3e8e-33ca-823f-8ac12eff6a4a/dow-jones-futures-rise-after.html"
+  },
+  {
+   "symbols": [
+    "Z74.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-13T00:40:42Z",
+   "headline": "Stocks to watch: Singtel, ST Engineering, Genting Singapore, Golden Agri, CDG, Food Empire",
+   "url": "https://www.businesstimes.com.sg/companies-markets/stocks-watch-singtel-st-engineering-genting-singapore-golden-agri-cdg-food-empire"
   },
   {
    "symbols": [
     "NVDA"
    ],
-   "source": "independent.co.uk",
-   "pubDate": "2026-11-12T12:32:06Z",
-   "headline": "Alice Huang, alleged spy at centre of Nvidia scandal, said to be back in China",
-   "url": "https://www.independent.co.uk/tech/nvidia-huang-affair-scandal-beijing-b3083768.html"
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-13T00:39:52Z",
+   "headline": "U.S. stock futures rise after Nvidia CEO exit spooks Wall St",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/u-stock-futures-rise-nvidia-003952316.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-13T00:34:45Z",
+   "headline": "Jensen Huang forfeits US$108 million in unvested Nvidia equity after resigning amid scandal",
+   "url": "https://www.businesstimes.com.sg/companies-markets/telcos-media-tech/jensen-huang-forfeits-us108-million-unvested-nvidia-equity-after-resigning-amid-scandal"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-13T00:20:18Z",
+   "headline": "Nvidia Is Not a Normal Company Having a CEO Issue: Everson",
+   "url": "https://finance.yahoo.com/video/nvidia-not-normal-company-having-002018707.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-13T00:20:03Z",
+   "headline": "Nvidia Stock Shock Puts These AI Infrastructure Chip Shares In Focus",
+   "url": "https://finance.yahoo.com/technology/ai/articles/nvidia-stock-shock-puts-ai-002003788.html"
+  },
+  {
+   "symbols": [
+    "NVDA"
+   ],
+   "source": "fool.com",
+   "pubDate": "2026-11-13T00:20:02Z",
+   "headline": "Who Will Replace Jensen Huang? Here's What Prediction Markets Think.",
+   "url": "https://www.fool.com/investing/2026/11/12/who-will-replace-jensen-huang-here-s-what-prediction-markets-think/"
+  },
+  {
+   "symbols": [
+    "NVDA",
+    "TSLA"
+   ],
+   "source": "stocktwits.com",
+   "pubDate": "2026-11-13T00:19:00Z",
+   "headline": "S&P 500, Dow, Nasdaq Futures Recover After Markets End Lower On Jensen Huang’s Exit, Oil Price Pressure — CRWV, CBRS, NVDA, TSLA In Focus",
+   "url": "https://stocktwits.com/news-articles/markets/equity/s-and-p-500-dow-nasdaq-futures-recover-after-markets-end-lower-on-jensen-huang-s-exit-oil-price-pressure-crwv-cbrs-nvda-tsla-in-focus/cNbbkHFR9OI"
+  },
+  {
+   "symbols": [
+    "Z74.SI"
+   ],
+   "source": "businesstimes.com.sg",
+   "pubDate": "2026-11-13T00:11:19Z",
+   "headline": "Singtel H1 net profit falls 55% to S$1.54 billion on lack of divestment gains; underlying profit up 10%",
+   "url": "https://www.businesstimes.com.sg/companies-markets/singtel-h1-net-profit-falls-55-s1-54-billion-lack-divestment-gains-underlying-profit-10"
+  },
+  {
+   "symbols": [
+    "S68.SI"
+   ],
+   "source": "thesmartinvestor.com.sg",
+   "pubDate": "2026-11-12T23:30:00Z",
+   "headline": "3 SGX Next 50 Stocks More than Doubling the STI’s Return YTD",
+   "url": "https://thesmartinvestor.com.sg/3-sgx-next-50-stocks-more-than-doubling-the-stis-return-ytd/"
+  },
+  {
+   "symbols": [
+    "C6L.SI"
+   ],
+   "source": "finance.yahoo.com",
+   "pubDate": "2026-11-12T19:14:24Z",
+   "headline": "Does Singapore Airlines (SGX:C6L) Trade At A Premium For Good Reason?",
+   "url": "https://finance.yahoo.com/markets/stocks/articles/does-singapore-airlines-sgx-c6l-191424563.html"
+  },
+  {
+   "symbols": [
+    "D05.SI"
+   ],
+   "source": "tikr.com",
+   "pubDate": "2026-11-12T17:51:26Z",
+   "headline": "DBS’s $290 Oracle Target Still Implies 126% Upside, Even After a Cut",
+   "url": "https://www.tikr.com/blog/dbss-290-oracle-target-still-implies-126-upside-even-after-a-cut?tlnk=yf-261112-cv8xpwhw"
+  },
+  {
+   "symbols": [
+    "Z74.SI"
+   ],
+   "source": "sg.finance.yahoo.com",
+   "pubDate": "2026-11-12T15:46:04Z",
+   "headline": "Singtel's 1HFY2027 earnings down 55% but excluding one-offs, underlying net profit is up 10%",
+   "url": "https://sg.finance.yahoo.com/news/singtels-1hfy2027-earnings-down-55-154604479.html"
   },
   {
    "symbols": [
@@ -405,71 +440,17 @@
    "pubDate": "2026-11-12T11:00:00Z",
    "headline": "New business-class seats, Air India plans among key takeaways from SIA’s first-half results briefing",
    "url": "https://www.straitstimes.com/business/companies-markets/new-business-class-seats-air-india-plans-among-key-takeaways-from-sias-first-half-results-briefing"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-12T10:24:11Z",
-   "headline": "SIA’s carrying value of its Air India investment down a further S$335 million",
-   "url": "https://www.businesstimes.com.sg/companies-markets/transport-logistics/sias-carrying-value-its-air-india-investment-down-further-s335-million"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "thesmartinvestor.com.sg",
-   "pubDate": "2026-11-12T06:30:00Z",
-   "headline": "3 SGX REITs Boosting Their DPU by 10% (or More!)",
-   "url": "https://thesmartinvestor.com.sg/3-sgx-reits-boosting-their-dpu-by-10-or-more/"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-12T06:23:43Z",
-   "headline": "Special dividend for SIA’s 80th anniversary? CEO says extra payout will need board’s nod",
-   "url": "https://www.businesstimes.com.sg/companies-markets/transport-logistics/special-dividend-sias-80th-anniversary-ceo-says-extra-payout-will-need-boards-nod"
-  },
-  {
-   "symbols": [
-    "C6L.SI"
-   ],
-   "source": "channelnewsasia.com",
-   "pubDate": "2026-11-12T04:19:00Z",
-   "headline": "Commentary: Why Singapore Airlines should welcome the backlash over new business class seats",
-   "url": "https://www.channelnewsasia.com/commentary/singapore-airlines-business-class-colour-yellow-grey-sia-6544871"
-  },
-  {
-   "symbols": [
-    "S68.SI"
-   ],
-   "source": "businesstimes.com.sg",
-   "pubDate": "2026-11-12T03:14:38Z",
-   "headline": "SGX derivatives daily trading volume hits six-month high in October; securities turnover rises 32%",
-   "url": "https://www.businesstimes.com.sg/companies-markets/sgx-derivatives-daily-trading-volume-hits-six-month-high-october-securities-turnover-rises-32"
-  },
-  {
-   "symbols": [
-    "Z74.SI"
-   ],
-   "source": "finance.yahoo.com",
-   "pubDate": "2026-11-12T02:22:44Z",
-   "headline": "Why Telefonaktiebolaget LM Ericsson (OM:ERIC B) Shares Climbed After Its Latest Update",
-   "url": "https://finance.yahoo.com/markets/stocks/articles/why-telefonaktiebolaget-lm-ericsson-om-022244269.html"
   }
  ],
  "via": "search",
  "model": "claude-haiku-4-5-20251001",
  "usage": {
-  "input": 39970,
-  "output": 2041,
+  "input": 39818,
+  "output": 1119,
   "searches": 5,
   "cacheWrite": 0,
   "cacheRead": 0,
-  "costUsd": 0.1002
+  "costUsd": 0.0954
  },
- "createdAt": "2026-11-12T13:01:07.868Z"
+ "createdAt": "2026-11-13T01:01:27.071Z"
 }
