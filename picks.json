@@ -1,0 +1,323 @@
+{
+ "market_summary": "Markets are in a tech-led risk-off phase: the Nasdaq (-2.5%), S&P 500 (-1.9%) and the PHLX Semiconductor Index (-5.3%) all sold off hard on 16 Nov as Nvidia fell 4-6% into its 17 Nov earnings amid an unresolved CEO vacuum (board has ruled out Jensen Huang's return) and a wave of sell-side downgrades. Singapore's STI is on a third straight losing day (~5,180), dragging local banks and tech-adjacent names lower even as some defensives (REITs, SIA, consumer staples) hold up better. New US chip export curbs are the proximate catalyst, and NVDA's print after the close tonight is the single biggest near-term swing factor for global risk appetite. Positioning into NVDA earnings is binary and volatile; the broader theme is a rotation out of high-beta AI/semis into cash and defensives.",
+ "picks": [
+  {
+   "symbol": "QQQ",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "days",
+   "thesis": "Nasdaq-100 is in a confirmed downtrend (-9.1% 1m, -7.8% vs MA50, -12.9% from 52w high) driven by AI/semi derating. With NVDA reporting tonight and the whole semiconductor complex under pressure, QQQ offers a diversified way to express continued tech weakness without single-name earnings risk, and relative volume is already elevated (0.83x but rising selloff intensity).",
+   "news": "US equities fell sharply on 16 Nov with Nasdaq -2.4/-2.5%, S&P -1.9%, Dow -1.4%, PHLX Semiconductor Index -5.3%, led by Nvidia's 4-6% drop ahead of its earnings (FXStreet, BusinessTimes, 16-17 Nov 2026).",
+   "risks": "A strong NVDA beat/guide tonight could spark a broad relief rally across tech; QQQ is also oversold short-term and prone to a technical bounce.",
+   "source_urls": [
+    "https://www.google.com/finance/",
+    "https://www.fxstreet.com/news/nvidia-earnings-preview-the-first-big-test-after-jensen-huangs-exit-202611160603"
+   ],
+   "priceAtPick": 661.75
+  },
+  {
+   "symbol": "NVDA",
+   "stance": "short",
+   "conviction": "medium",
+   "horizon": "days",
+   "thesis": "Nvidia is down ~35% from its October peak, below its 50- and 200-day moving averages, and has seen nine sell-side rating/target cuts in the last week (Melius, Craig-Hallum, StoneX, William Blair, Keybanc, Bernstein, Evercore, Oppenheimer, Baird) following Jensen Huang's exit as CEO and the board's decision to rule out his return. Leadership uncertainty plus a very high bar on ~$109B revenue consensus into tonight's print creates asymmetric downside risk if guidance disappoints, even though consensus price targets still imply large theoretical upside.",
+   "news": "Nvidia reports Q3 FY2027 earnings after the close on 17 Nov with interim CEO Colette Kress; the board ruled out Huang's comeback on 16 Nov, shares closed at $156.10, lowest since June 2025 (FXStreet, BusinessTimes, 16-17 Nov 2026).",
+   "risks": "This is a binary earnings event — a beat-and-raise with reassurance on leadership continuity could trigger a sharp short squeeze given how beaten-down the stock already is and still-bullish analyst base (47 buy ratings).",
+   "source_urls": [
+    "https://www.fxstreet.com/news/nvidia-earnings-preview-the-first-big-test-after-jensen-huangs-exit-202611160603",
+    "https://www.businesstimes.com.sg/international/global/nvidia-rules-out-ex-ceo-jensen-huangs-comeback-campaign-his-return-grows"
+   ],
+   "priceAtPick": 156.14
+  },
+  {
+   "symbol": "U11.SI",
+   "stance": "short",
+   "conviction": "low",
+   "horizon": "weeks",
+   "thesis": "UOB is the weakest of the three SGX banks technically: -10.3% over 1 month, -9.1% vs its 50-day MA and -5.5% vs its 200-day MA (the only one of the three below its 200-day average), with a flat 6-month return versus double-digit gains for DBS/OCBC. Analyst sentiment is also more mixed (5 buy/9 hold/2 sell) than peers, suggesting relative underperformance could continue as the STI extends its three-day losing streak.",
+   "news": "Singapore's STI has fallen for three straight sessions to just above 5,180, with weak sentiment expected to persist as regional tech selloff spills over (RTTNews, 16 Nov 2026).",
+   "risks": "SG banks remain structurally well-capitalized with attractive yields; a relief rally in regional equities or dovish rate signals could lift all three banks together, compressing this relative-value short.",
+   "source_urls": [
+    "https://www.rttnews.com/3715185/losing-streak-may-continue-for-singapore-stock-market.aspx"
+   ],
+   "priceAtPick": 37.38
+  },
+  {
+   "symbol": "C38U.SI",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "weeks",
+   "thesis": "CapitaLand Integrated Commercial Trust is one of the few names on the watchlist in positive territory during the current selloff (+0.4% on a day the STI fell), with the lowest beta (0.59) and lowest annualized volatility (14.8%) on the list, a +5.4% 1-month return, and strong analyst support (14 buy/2 hold, 12.6% implied upside). It looks like a natural defensive/income rotation target as capital flees high-beta AI/tech exposure.",
+   "news": "Singapore market has fallen three straight sessions as tech/AI selloff dominates sentiment, pushing flows toward defensives (RTTNews, 16 Nov 2026).",
+   "risks": "As a REIT, CICT is rate-sensitive; a hawkish repricing of rate expectations or weak Singapore retail/office fundamentals would undercut the defensive thesis.",
+   "source_urls": [
+    "https://www.rttnews.com/3715185/losing-streak-may-continue-for-singapore-stock-market.aspx"
+   ],
+   "priceAtPick": 2.34
+  },
+  {
+   "symbol": "BRK-B",
+   "stance": "long",
+   "conviction": "medium",
+   "horizon": "months",
+   "thesis": "Berkshire Hathaway is acting as a classic flight-to-quality vehicle during the AI-led drawdown: +0.5% on a day the S&P fell 1.9%, trading at its 52-week high, with the lowest beta on the watchlist (0.38) and strong 1-year (+15.5%) and 6-month (+22.8%) returns. As investors de-risk from mega-cap tech/AI concentration, diversified, cash-rich, low-beta names like Berkshire should continue to outperform on a relative basis.",
+   "news": "Broad tech/semiconductor selloff on 16 Nov (Nasdaq -2.4-2.5%, PHLX Semis -5.3%) is driving rotation away from high-beta AI exposure (Google Finance, FXStreet, 16 Nov 2026).",
+   "risks": "Analyst coverage is thin (n=3) and consensus target is actually below the current price (implied downside -4.8%), so this is a momentum/defensive-rotation call rather than a value call; a broad market snap-back led by tech could see BRK-B underperform on a relative basis.",
+   "source_urls": [
+    "https://www.google.com/finance/"
+   ],
+   "priceAtPick": 592.85
+  },
+  {
+   "symbol": "BN4.SI",
+   "stance": "long",
+   "conviction": "low",
+   "horizon": "months",
+   "thesis": "Keppel has been heavily sold off (-27.5% from its 52-week high, -15.6% over 3 months, -10.1% vs its 50-day MA) yet retains the most bullish analyst skew on the watchlist (12 buy/2 hold/1 sell, 33% implied upside to consensus target), suggesting the selloff may be overdone relative to fundamentals rather than driven by company-specific news.",
+   "news": "No stock-specific catalyst identified; move appears tied to the broader SGX three-day decline and risk-off tone affecting higher-beta, industrial/infrastructure-linked names (RTTNews, 16 Nov 2026).",
+   "risks": "High beta (1.17) and high volatility (25.3%) mean Keppel will likely keep falling if the broader market selloff (especially in Asia/tech-linked capex names) continues; absence of a specific positive catalyst makes near-term timing uncertain.",
+   "source_urls": [
+    "https://www.rttnews.com/3715185/losing-streak-may-continue-for-singapore-stock-market.aspx"
+   ],
+   "priceAtPick": 9.55
+  }
+ ],
+ "sources": [
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000019/q4fy26pr.htm",
+   "title": "NVIDIA CORP - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.earningswhispers.com/stocks/NVDA",
+   "title": "Earnings Whispers",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.investing.com/equities/nvidia-corp-earnings",
+   "title": "NVIDIA (NVDA) Earnings Date & Report - Investing.com",
+   "age": "38 days ago"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/0001045810/000104581026000073/q2fy27pr.htm",
+   "title": "NVIDIA CORP - Form 8-K - FY2026",
+   "age": null
+  },
+  {
+   "url": "https://www.fxstreet.com/news/nvidia-earnings-preview-the-first-big-test-after-jensen-huangs-exit-202611160603",
+   "title": "Nvidia earnings preview: The first big test after Jensen Huang’s exit",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://roboforex.com/blog/analysis/nvidia-earnings-date-interim-ceo-scenarios/",
+   "title": "Nvidia Earnings Date: 17 November Scenarios, Interim CEO",
+   "age": "3 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/calendar/earnings?symbol=NVDA",
+   "title": "Company Earnings Calendar - Yahoo Finance",
+   "age": "180 days ago"
+  },
+  {
+   "url": "https://ecorpit.com/nvidia-earnings-17-november-2026-interim-ceo-gpu-buyers/",
+   "title": "NVIDIA earnings 17 Nov 2026: the $108B guide and GPU buyers",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://jorgai.com/blog/nvidia-q3-fy2027-earnings-november-17-2026-what-nvda-did-the-day-after-every-report-since-2010",
+   "title": "Nvidia Earnings Nov 17, 2026: NVDA After All 67 Reports",
+   "age": "15 days ago"
+  },
+  {
+   "url": "https://tradingeconomics.com/united-states/stock-market",
+   "title": "United States Stock Market Index - Quote - Chart - Historical Data - News",
+   "age": "815 days ago"
+  },
+  {
+   "url": "https://equityclock.com/2026/11/16/stock-market-outlook-for-november-17-2026/",
+   "title": "Rate, Dollar, and Crypto headwinds weighing on broader risk sentiment, causing investors to look to deleverage.",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.kiplinger.com/news/live/nvidia-earnings-live-updates-and-commentary-november-2026&gsessionid=WE67NPAyVLuFaOI7wVMbHIcuG4J44mPhSGhXpHk0dvG24MdQWC-tAQ",
+   "title": "Nvidia Earnings: Live Updates and Commentary November 2026",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.analyticsinsight.net/stocks/us-stock-market-today-nasdaq-futures-slide-as-nvidia-leads-ai-stock-selloff-ahead-of-earnings",
+   "title": "US Stock Market Today: Nasdaq Futures Slide as Nvidia Leads AI Stock Selloff Ahead of Earnings",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.google.com/finance/",
+   "title": "Google Finance - Stock Market Prices, Real-time Quotes & Business News",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finance.yahoo.com/news/stock-market-today-jan-13-175518039.html",
+   "title": "stock market today jan 13 175518039",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/news/stock-market-today-jan-2-164540630.html",
+   "title": "stock market today jan 2 164540630",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/news/live/stock-market-today-dow-sp-500-rise-toward-records-as-jobs-report-closes-out-big-first-week-of-2026-182145973.html",
+   "title": "Stock market today: Dow, S&P 500 jump to records, Nasdaq surges as stocks end 2026's first week with big gains",
+   "age": null
+  },
+  {
+   "url": "https://finance.yahoo.com/news/live/stock-market-today-dow-sp-500-nasdaq-futures-rise-as-wall-street-kicks-off-2026-081338666.html",
+   "title": "Stock market today: Dow, S&P 500 edge higher to kick off 2026, semiconductor stocks rally",
+   "age": null
+  },
+  {
+   "url": "https://www.tradinghours.com/markets/sgx",
+   "title": "SGX Market Hours & Holidays 2026 - 2027 - TradingHours.com",
+   "age": "168 days ago"
+  },
+  {
+   "url": "https://www.investing.com/markets/singapore",
+   "title": "Singapore Financial Markets - Investing.com",
+   "age": null
+  },
+  {
+   "url": "https://www.investing.com/indices/singapore-straits-time",
+   "title": "FTSE Straits Times Singapore Index Today (STI) - Investing.com",
+   "age": null
+  },
+  {
+   "url": "https://www.rttnews.com/3715185/losing-streak-may-continue-for-singapore-stock-market.aspx",
+   "title": "Losing Streak May Continue For Singapore Stock Market",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://vibiznews.com/index.php/2026/11/17/rekomendasi-harian-indeks-hang-seng-17-november-2026/",
+   "title": "Rekomendasi Harian Indeks Hang Seng 17 November 2026 - Vibiznews.com",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.business-standard.com/amp/article/news-cm/singapore-market-gains-0-6-122111700862_1.html",
+   "title": "Singapore Market gains 0.6%",
+   "age": null
+  },
+  {
+   "url": "https://www.business-standard.com/article/news-cm/singapore-market-gains-0-6-122111700862_1.html",
+   "title": "Wednesday, January 07, 2026 | 10:31 PM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://www.business-standard.com/article/news-cm/singapore-market-edges-up-ahead-of-u-s-midterm-elections-122110800874_1.html",
+   "title": "Sunday, January 18, 2026 | 08:26 AM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://www.business-standard.com/markets/capital-market-news/singapore-market-rises-1-05-124041800703_1.html",
+   "title": "Saturday, January 17, 2026 | 09:32 AM ISTहिंदी में पढें",
+   "age": null
+  },
+  {
+   "url": "https://www.pymnts.com/blockchain/2026/jpmorgan-and-dbs-launch-24-7-tokenized-transfer-solution/",
+   "title": "JPMorgan and DBS Launch 24/7 Tokenized Transfer Solution",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.coindesk.com/business/2026/11/16/j-p-morgan-and-dbs-let-clients-move-dollars-across-borders-on-weekends",
+   "title": "DBS and JPMorgan link blockchain deposit networks for 24/7 dollar transfers",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://tradersunion.com/news/cryptocurrency-news/show/4263305-dbs-jpmorgan-tokenized-deposit-transfer/",
+   "title": "DBS, JPMorgan link tokenized deposit networks for 24/7 U.S. dollar transfers",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://crypto.news/dbs-jpmorgan-24-7-tokenized-deposit-transfers/",
+   "title": "JPMorgan, DBS launch 24/7 tokenized dollar transfers between US and Singapore",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.crypto-news-flash.com/jpmorgan-dbs-tokenized-deposits-24-7-usd-payments/",
+   "title": "JPMorgan Links Tokenized Deposits With DBS for 24/7 USD Payments - Crypto News Flash",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://finance.biggo.com/news/8f725c37-4d96-4d28-a704-903de41c2bac",
+   "title": "JPMorgan, DBS Open Round-the-Clock Dollar Rails Between Singapore and New York — BigGo Finance",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://newscord.org/article/dbs-jpmorgans-kinexys-launch-247-tokenized-usd-deposit-transfers-between-singapo--Story_20261116_DBSJPMorgansKinexysl20ddd943",
+   "title": "DBS, JPMorgan’s Kinexys Launch 24/7 Tokenized USD Deposit Transfers Between Singapore and the U.S.: 10 outlets compared",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.mexc.com/news/163233",
+   "title": "www.mexc.com",
+   "age": null
+  },
+  {
+   "url": "https://www.mexc.com/news/162142",
+   "title": "www.mexc.com",
+   "age": null
+  },
+  {
+   "url": "https://www.marketscreener.com/news/singapore-airlines-passenger-traffic-rises-3-5-in-october-ce785eded08df321",
+   "title": "Singapore Airlines' Passenger Traffic Rises 3.5% in October",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.marketscreener.com/news/singapore-airlines-operating-statistics-october-opstats-oct25-ce7d5fd3d08cf521",
+   "title": "Singapore Airlines : Operating Statistics October (opstats oct25)",
+   "age": "364 days ago"
+  },
+  {
+   "url": "https://retailnews.asia/singapore-airlines-carried-3-7-million-passengers-in-october-as-traffic-rose-3-5",
+   "title": "Singapore Airlines Carried 3.7 Million Passengers in October as Traffic Rose 3.5%",
+   "age": "0 days ago"
+  },
+  {
+   "url": "https://www.minichart.com.sg/2026/11/16/sia-october-2026-operating-results-passenger-plf-rises-to-87-8-cargo-load-factor-up-5-6-pts/",
+   "title": "SIA October 2026 Operating Results: Passenger PLF Rises to 87.8%, Cargo Load Factor Up 5.6 pts",
+   "age": "1 days ago"
+  },
+  {
+   "url": "https://www.redhot.sg/sia-logs-3-5-rise-in-october-passenger-traffic-sees-healthy-demand-for-semiconductor-shipments-739901.html",
+   "title": "SIA logs 3.5% rise in October passenger traffic; sees ‘healthy’ demand for semiconductor shipments - Red Hot Singapore",
+   "age": null
+  },
+  {
+   "url": "https://www.itiger.com/hans/news/2484569632",
+   "title": "Singapore Airlines' Group Passenger Capacity, Passenger Traffic Increase in October",
+   "age": null
+  },
+  {
+   "url": "https://www.singaporeair.com/saar5/pdf/Investor-Relations/Operating-Stats/opstats-sep07.pdf",
+   "title": "opstats sep07",
+   "age": null
+  },
+  {
+   "url": "https://uk.marketscreener.com/quote/stock/SINGAPORE-AIRLINES-LIMITE-6491138/news/",
+   "title": "01-12 Navan Accelerates NDC Adoption with New Emirates Partnership CI",
+   "age": null
+  },
+  {
+   "url": "https://www.spglobal.com/energy/en/news-research/latest-news/refined-products/112224-cathay-pacifics-passenger-traffic-rises-10-mom-in-october-amid-higher-jet-fuel-prices",
+   "title": "Featured Topics",
+   "age": null
+  }
+ ],
+ "model": "claude-sonnet-5",
+ "newsModel": "claude-haiku-4-5-20251001",
+ "usage": {
+  "input": 48946,
+  "output": 6808,
+  "searches": 5,
+  "cacheWrite": 0,
+  "cacheRead": 0,
+  "costUsd": 0.1662
+ },
+ "createdAt": "2026-11-17T01:03:20.780Z"
+}
